@@ -1,0 +1,101 @@
+{% extends 'base.html'%}
+   {% block main%}
+
+<div class='div_Mae'>
+    <form class='campo_de_busca1' method="GET" action="{% url 'lista-venda-usuario' %}">
+        <h1> Vendas realizadas</h1>
+        {% if perms.fluxo_de_caixa.add_venda %}
+            <a href="{% url 'atualizar-pedido' %}">
+            <label style= " background-color: #6495ED; padding:3px; color:white; font-size:15px; border-radius: 5px;">Nova venda</label> </a>
+        {% endif %}
+        <input  type="search" id="venda" name="venda" placeholder="Número do cliente...">
+            <button  type="submit">Buscar</button>
+    </form>
+    <form class='campo_de_busca2' method="GET" action="{% url 'lista-venda-usuario' %}">
+        <input  type="date" id="dia" name="dia">
+            <button  type="submit">Filtrar</button>
+    </form>
+    <form class='campo_de_busca3' method="GET" action="{% url 'lista-venda-usuario' %}">
+        <select  type="search" id="mes" name="mes" required/>
+                <tr>
+                        <option value='{{today.month}}'> __Selecionar o mês__</option>
+                        <option value='1'> -Janeiro</option>
+                        <option value='2'> -Fevereiro</option>
+                        <option value='3'> -Março</option>
+                        <option value='4'> -Abril</option>
+                        <option value='5'> -Maio</option>
+                        <option value='6'> -Junho</option>
+                        <option value='7'> -Julho</option>
+                        <option value='8'> -Agosto</option>
+                        <option value='9'> -Setembro</option>
+                        <option value='10'> -Outubro</option>
+                        <option value='11'> -Novembro</option>
+                        <option value='12'> -Dezembor</option>
+                </tr>
+                 <br>
+        </select>
+        <button  type="submit">Filtrar</button>
+    </form>
+
+    <table class='table'>
+      <thead>
+        <tr>
+            <th>Cliente</th>
+            <th>Data</th>
+            <th>Descrição</th>
+            <th>Desconto</th>
+            <th>Valor</th>
+
+            {% if perms.fluxo_de_caixa.change_venda %}
+                <th >Pagar</th>
+            {%endif%}
+
+            {% if perms.fluxo_de_caixa.add_venda %}
+                <th >Editar</th>
+            {%endif%}
+
+            {% if perms.fluxo_de_caixa.delete_venda %}
+                <th >Excluira</th>
+            {%endif%}
+
+            <th>Situação do débito</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for venda in vendas %}
+            <tr>
+                <td>{{ venda.id }}</td>
+                <td>{{ venda.data_hora.date}}</td>
+                <td >{{ venda.descricao}}</td>
+                <td>${{ venda.total_desconto }}</td>
+                <td>${{ venda.valor }}</td>
+
+                {% if perms.fluxo_de_caixa.change_venda %}
+                <td> <a href="{% url 'edit-pedido' venda.id %} "> Pagar </a>  </td>
+                {%endif%}
+
+                {% if perms.fluxo_de_caixa.add_venda %}
+                <td> <a href="{% url 'edit-pedido' venda.id %} "> Editar </a>  </td>
+                {%endif%}
+
+                {% if perms.fluxo_de_caixa.delete_venda %}
+                <td>  <a href="{% url 'delete-pedido' venda.id %} ">Excluir</a> </td>
+                {%endif%}
+
+                <td>
+                    {% if venda.troco < 0  or venda.tipo_de_pagamento_id == None %}
+                        <label Style= 'color: red;'>Não pago </label %}
+                    {% else %}
+                        <label>Pago </label>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+</div>
+{% endblock %}
+
+
+
+

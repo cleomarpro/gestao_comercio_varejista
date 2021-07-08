@@ -1,0 +1,9 @@
+
+db.gestao_vendas
+venvgestao/
+*.sqlite3
+*.idea
+*pyc
+.DS_Store
+media
+.env

@@ -1,0 +1,7 @@
+<h2> Updating categoria: {{data}}</h2>
+
+<form action="{% url 'categoria_update' categoria.id%}" method="POST">
+    {% csrf_token%}
+    {{form.as_p}}
+    <button type="submit">Editar</button>
+</form>

@@ -1,0 +1,141 @@
+{% load static%}
+<!DOCTYPE html>
+
+<html lang= "pt-br" >
+
+<head>
+
+    <meta charcet="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>  VieWorld  </title>
+
+    <link rel="stylesheet" href= "{% static 'Style/caixa.css'%}">
+    <link rel="stylesheet" href= "{% static 'Style/formulario.css'%}">
+    <link rel="stylesheet" href= "{% static 'Style/meunuResponsivo.css'%}">
+    <link rel="stylesheet" href= "{% static 'Style/tabela.css'%}">
+    <link rel="stylesheet" href= "{% static 'Style/formAlerta.css'%}">
+    <link rel="stylesheet" href= "{% static 'Style/tabela_caixa.css'%}">
+    <link rel="stylesheet" href= "{% static 'Style/cupom_fiscal.css'%}">
+    <link rel="stylesheet" href= "{% static 'Style/caixa_movel.css'%}">
+    <link rel="stylesheet" href= "{% static 'Style/alerta_delete.css'%}">
+    <link rel="stylesheet" href= "{% static 'Style/campo_busca.css'%}">
+    <link rel="stylesheet" href= "{% static 'Style/relatorio.css'%}">
+    <link rel="stylesheet" href= "{% static 'Style/home.css'%}">
+
+    <meta charcet="UTF-8">
+    <meta name="cor" content="width=device-width,initial=scale=1">
+    <meta name="description" content="Rede SociL cor">
+    <meta name="keyWords" content="Rede SociL, vieworld, educação, memes,meme, noticias, facebook, instagram, pegadinhas, zueira,perguntas e respostas, perguntas,respostas, anuncio, anuncie">
+    <meta name="author" content="cor">
+
+</head>
+
+<body>
+
+ <!-- //// meunu ////-->
+    <h1 class="divCabesalho">Vieworld</h1>
+ <div class= "div_menu">
+    <label class="menu_label" for="chec"> <img src="https://bn1305files.storage.live.com/y4md2THlb_XJ9BluWJ-M0dMJMh1Jmb9Lptbxd4DQpmzNF3bpvNHd-xLk9lU2nR1Z1NcArXvxajan1iNpnEMA-NNawX37ap7ufrpO29pUHcMBeswVNiMV4cMsvvMaBKmNUNggKFVIN9JiT9elXeltM34axIiO0CkSxBRztUswIPHOlsjhVsLtsGi6QnzVVi3Wd7j?width=32&height=32&cropmode=none" width="32" height="32" /> </label >
+    <input class="menu_input" type="checkbox" id="chec" >
+    <nav class="menu">
+
+        <ul >
+            {%if user.is_authenticated%}
+                <li > <a style=" color: #CD0000;" href="http://gestao.vieworld.com.br/accounts/logout/">Sair</a> </li>
+                <label> <a href="http://gestao.vieworld.com.br/home/usuario/"> Olá {{user}} </a> </label>
+            {%else%}
+                <li > <a style=" color: blue;" href="http://gestao.vieworld.com.br/accounts/login/">Entra</a> </li>
+             {%endif%}
+             <br>
+                --------------------------- <br>
+                <li> <a href="http://gestao.vieworld.com.br/home">HOME</a> </li>
+                --------------------------- <br>
+            {% if perms.fluxo_de_caixa.add_venda %}
+                <li> <a href="http://gestao.vieworld.com.br/fluxo_de_caixa/atualizar-pedido/">-Nova Venda </a>  </li>
+            {%endif%}
+
+            {% if perms.fluxo_de_caixa.view_caixa %}
+                <li> <a href="http://gestao.vieworld.com.br/fluxo_de_caixa/caixa"> -Caixa</a> </li>
+                <li> <a href="http://gestao.vieworld.com.br/fluxo_de_caixa/"> -Vendas realizadas</a> </li>
+                <li> <a href="http://gestao.vieworld.com.br/fluxo_de_caixa/lista-venda-usuario"> -Vendas pagas</a> </li>
+            {%endif%}
+
+            {% if perms.fluxo_de_caixa.add_venda %}
+            <li> <a href="http://gestao.vieworld.com.br/fluxo_de_caixa/lista-venda-usuario"> -Minhas vendas</a> </li>
+            {%endif%}
+
+            {% if perms.produto.view_produto %}
+                <li> <a href="http://gestao.vieworld.com.br/produto/listar-produto"> -Consultar produtos</a> </li>
+            {%endif%}
+                --------------------------- <br>
+            <li> <a href="http://gestao.vieworld.com.br/financeiro/gastos-extras/">-Gastos extras</a></li>
+
+            {% if perms.financeiro.view_contas %}
+                <li> <a href="http://gestao.vieworld.com.br/financeiro/conta-areceber/">-Contas a receber</a></li>
+            {%endif%}
+
+            {% if perms.financeiro.change_contas %}
+                <li> <a href="http://gestao.vieworld.com.br/financeiro/conta-apagar/">-Contas a pagar</a></li>
+            {%endif%}
+                --------------------------- <br>
+            {% if perms.usuarios.add_usuarios %}
+                <li> <a href="http://gestao.vieworld.com.br/usuarios/novo-funcionario">-Novo funcionário</a></li>
+            {%endif%}
+
+            {% if perms.pessoa.add_cliente %}
+                <li> <a href="http://gestao.vieworld.com.br/pessoa/novo-cliente/">-Cliente</a></li>
+            {%endif%}
+
+            {% if perms.pessoa.add_fornecedor %}
+                <li> <a href="http://gestao.vieworld.com.br/pessoa/novo-fornecedor/">-Fornecedor</a></li>
+            {%endif%}
+                --------------------------- <br>
+            {% if perms.produto.view_produto %}
+                <li> <a href="http://gestao.vieworld.com.br/produto/validade-produtos/">-Validade dos produtos</a></li>
+            {%endif%}
+
+            {% if perms.produto.add_produto %}
+                <li> <a href="http://gestao.vieworld.com.br/produto/produto"> -Produto</a> </li>
+            {%endif%}
+
+            {% if perms.produto.add_promocao %}
+                <li> <a href="http://gestao.vieworld.com.br/produto/promocao"> -Promoção</a> </li>
+            {%endif%}
+
+            {% if perms.produto.add_categoria %}
+                <li> <a href="http://gestao.vieworld.com.br/produto/categoria/">-Categoria</a> </li>
+            {%endif%}
+
+            {% if perms.produto.add_entradamercadoria %}
+                <li> <a href="http://gestao.vieworld.com.br/produto/entrada-mercadoria/">-Entrada mercadoria</a></li>
+            {%endif%}
+                ---------------------------
+            {% if perms.produto.add_produto %}
+                <li> <a href="http://gestao.vieworld.com.br/financeiro/relatorio-produtos/">-Relatório por produto</a></li>
+                <li> <a href="http://gestao.vieworld.com.br/financeiro/relatorio-mensal/">-Relatório mensal</a></li>
+                <li> <a href="http://gestao.vieworld.com.br/financeiro/relatorio-anual/">-Relatório anual</a></li>
+                <li> <a href="http://gestao.vieworld.com.br/financeiro/relatorio-diario/">-Relatório diário</a></li>
+            {%endif%}
+
+            <br>
+            <br>
+        </ul>
+    </nav>
+</div>
+<div>
+          {% block main%}
+
+
+          {% endblock %}
+
+    <div class="row">
+            {% block extra %}
+            {% endblock %}
+    </div>
+</div>
+
+    {% block footer %}
+    {% endblock %}
+</body>
+</html>

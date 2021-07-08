@@ -1,0 +1,53 @@
+{% extends 'base.html'%}
+{% block main%}
+<!-- CDASTRO  DE PRODUTOS -->
+<div class='div_Mae'>
+    <form class='formulario' method="POST" >
+        {% csrf_token %}
+              <h1 > Novo saque</h1>
+
+        <label for="busca"> Descriçcão:</label>
+            <input style=" width:200px;" type="text" id="descricao" name="descricao"
+                placeholder="Descriçcão" >
+            <br>
+
+        <label for="busca"> Valor:</label>
+            <input style=" width:200px;" type="text" id="sacar" name="sacar"
+                placeholder="0,00" required/>
+            <br>
+
+            <button  type="submit">Sacar</button>
+
+    </form>
+    <br>
+    <form class='campo_de_busca1' method="GET" >
+        <label> Consultar extrado de </label>
+        <input  type="date" id="dia" name="dia" > <laabel>Até</laabel>
+        <input  type="date" id="dia2" name="dia2" >
+
+        <button  type="submit">Filtrar</button>
+    </form>
+    <table class="table">
+      <thead>
+        <tr>
+          <th >Descrição</th>
+          <th >Valor do saque</th>
+          <th >Caixa</th>
+          <th >Data do deposito</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        {% for sacar in sacar %}
+            <tr>
+                <td>{{ sacar.descricao }}</td>
+                <td>${{ sacar.sacar }}</td>
+                <td>{{ sacar.caixa.nome_do_caixa }}</td>
+                <td>{{ sacar.data_hora.date }}</td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+</div>
+{% endblock %}

@@ -1,0 +1,129 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lobster|Philosopher:400i&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Inria+Serif&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Courier+Prime&display=swap');
+
+.div_caixa_cabecalho{
+    height:280px;
+}
+.div_Mae{
+    margin-top:80px;
+    margin-right:220px;
+    margin-left:10px;
+}
+
+.divPainel{
+    background-color: #F0F8FF;
+    color:white;
+    position:fixed;
+    margin-left: 645px;
+    margin-top: -373px;
+    width: 450px;
+
+
+
+}
+.divPainel label{
+    font-size: 25px;
+    color:white;
+    margin: 2px;
+    width: 100%;
+    border: 1px solid #303131;
+    border-radius: 2px;
+    display: inline-block;
+}
+
+.div_Mae div{
+   width: 450px;
+
+}
+
+.caixaTitulo{
+    width: 100%;
+    background-color: #4F4F4F;
+    color:white;
+    font-family: 'Philosopher',  sans-serif;
+    font-size: 22px;
+    text-align: center;
+}
+
+.caixa{
+    background-color: #F0F8FF;
+    margin-left:185px;
+    width: 100%;
+    font-size: 18;
+}
+
+
+
+.caixa ul{
+    padding: 10px;
+    width: 450px;
+}
+
+.caixaVenda ul{
+    display: none;
+    padding: 10px;
+    width: 450px;
+}
+
+.caixa input{
+    width: 80px;
+    border: 1px solid #303131;
+    border-radius: 2px;
+    width: 75%;
+    margin: 5px;
+    font-size: 18px;
+}
+
+.caixa select{
+    width: 80px;
+    border: 1px solid #303131;
+    border-radius: 2px;
+    width: 75%;
+    margin: 5px;
+    font-size: 18px;
+}
+
+  .caixa label{
+    font-size: 20px;
+    margin: 5px;
+  }
+
+  .caixa h2{
+    background-color: #4F4F4F;
+    font-size: 30px;
+    width: 100%;
+
+  }
+
+ .caixa button{
+   margin-top:0px;
+   border: 1px solid #303131;
+   border-radius: 2px;
+   color:white;
+   width: 70%;
+   background-color: #4F4F4F;
+  }
+#bt_novo_pedido{
+   margin-top:-272px;
+   margin-left:330px;
+   border: 1px solid #303131;
+   border-radius: 5px;
+   color:black;
+   background-color: #00BFFF;
+   position:absolute;
+
+ }
+
+ .bt_deletar{
+   margin-left:220px;
+   border: 1px solid #303131;
+   border-radius: 10px;
+   color:white;
+   width: 420px;
+   margin-top:-20px;
+   background-color: red;
+   margin-bottom: 30px;
+  }

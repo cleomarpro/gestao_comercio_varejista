@@ -1,0 +1,34 @@
+{% load static%}
+<!DOCTYPE html>
+
+<html lang= "pt-br" >
+<head >
+    <meta charcet="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title> VieWorld  </title>
+
+    <link rel="stylesheet" href= "{% static 'Style/home.css'%}">
+
+    <meta charcet="UTF-8">
+    <meta name="cor" content="width=device-width,initial=scale=1">
+    <meta name="description" content="Rede SociL cor">
+   <!-- <meta name="keyWords" content="fluxo de caixa, gestão, controle de estoque"> -->
+    <meta name="author" content="cor">
+</head>
+<body>
+    <h1 class="cabesalho">Vieworld</h1>
+<div class="div_mae">
+    <div class="div_cabesalho2">
+       {%if user.is_authenticated%}
+                <label class='login'> <a href="http://gestao.vieworld.com.br/accounts/logout/"> Sair </a> </label>
+                <label class='usuario'>Olá {{user}} </label>
+            {%else%}
+                <label class='login'> <a href="http://gestao.vieworld.com.br/accounts/login/">Entra</a> </label>
+                <label class='usuario'> Faça logim para inicia</label>
+            {%endif%}
+
+   </div>
+
+</div>
+</body>
+</html>

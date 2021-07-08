@@ -1,0 +1,79 @@
+
+{% extends 'base.html' %}
+
+{% block main %}
+<div class='div_Mae'>
+
+    <form class='formulario' action="{% url 'promocao' %}" method="POST" >
+        {% csrf_token %}
+
+         <h1
+        <label style=" color:#EEE9E9;">Nova promoção</label>
+    </h1>
+
+        <label> Descrição:</label>
+            <input style=" width:200px;"  placeholder=" Descrição..." type="text"
+                id="descricao" name="descricao" value='{{ promUpdate.descricao}}' required/>
+                <br>
+        <label> Desconto a partir:</label>
+            <input style=" width:120px;" autofocus="autofocus" placeholder=" Digite a quantidade..."
+                type="text" id="quantidade_promocional" name="quantidade_promocional"
+                value='{{ promUpdate.quantidade_promocional}}' required/>
+            <br>
+        <label> Desconto promocional (%):</label>
+            <input style=" width:110px;"  placeholder=" 0,00%:" type="text"
+                id="desconto" name="desconto" value='{{ promUpdate.desconto}}' required/>
+                <br>
+        <label> Data de iníco:</label>
+            <input style=" width:150px;"type="date" id="myDate" name="data_inicio"
+                value='{{ promUpdate.data_inicio}}' required/>
+            <br>
+        <label> Data de termino:</label>
+            <input style=" width:150px;" type="date" id="data_termino"
+                name="data_termino"  value='{{ promUpdate.data_termino}}' required/>
+            <br>
+        <button type="submit"> salvar</button>
+    </form>
+
+
+<br>
+<!-- Tabela de produtos -->
+    <table class="table">
+     <thead>
+        <tr>
+          <th >Descrição </th>
+          <th >Desconto a partir</th>
+          <th >Desconto promocional</th>
+          <th >Data de iníco</th>
+          <th >Data de termino</th>
+          {% if perms.produto.change_promocao %}
+           <th > Editar</th>
+          {%endif%}
+
+          {% if perms.produto.delete_promocao %}
+           <th > Excluir</th>
+          {% endif %}
+        </tr>
+    </thead>
+        <tbody>
+            {% for promocao in promocao %}
+                <tr>
+                    <td>{{ promocao.descricao}}</td>
+                    <td>{{ promocao.quantidade_promocional | floatformat:2}}</td>
+                    <td>{{ promocao.desconto | floatformat:2}}%</td>
+                    <td>{{ promocao.data_inicio}}</td>
+                    <td>{{ promocao.data_termino}}</td>
+
+                    {% if perms.produto.change_promocao %}
+                        <td> <a href="{% url 'promocao-update' promocao.id %} ">Editar</a> </td>
+                    {% endif %}
+
+                    {% if perms.produto.delete_promocao %}
+                        <td> <a href="{% url 'promocao_delete' promocao.id %} ">Excluir</a> </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

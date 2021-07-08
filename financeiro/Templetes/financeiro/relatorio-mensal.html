@@ -1,0 +1,69 @@
+{% extends 'base.html'%}
+
+   {% block main%}
+
+<div class='div_Mae'>
+
+<form class='campo_de_filtro' method="GET" action="{% url 'relatorio_mensal' %}">
+
+                <select style=" width:150px;" type="select"  name="mes" id="mes"  >
+                <option value="{{MES}}" >Escolha um mês </option>
+                <option value="01" >Janeiro </option>
+                <option value="02" >Fevereiro</option>
+                <option value="03" >Março</option>
+                <option value="04" >Abril </option>
+                <option value="05" >Maio</option>
+                <option value="06" >Junio</option>
+                <option value="07" >Julho </option>
+                <option value="08" >Agosto</option>
+                <option value="09" >Setembro</option>
+                <option value="10" >Outubro </option>
+                <option value="11" >Novembroo</option>
+                <option value="12" >Dezembro</option>
+            </select >
+
+           <button  type="submit">Filtrar</button>
+
+</form >
+
+<h3 class='titulo_relatorio'> Relarório mensal</h3>
+
+<form class='relatorio'>
+
+    <label>Total investido: ${{invertimento.total_invertimento | floatformat:2}}</label>
+     <br>
+    <label>
+    <label>Total bruto das vendas: ${{vendas.total_venda | floatformat:2}} </label>
+      <a style='text-align: center;'>Por tipo de pagamento</a>
+      <br>
+    <label style='border: 1px solid #303131; border-radius:
+        5px; font-size:15px; padding: 5px; width: 180px;'>
+        Cédula:${{ cedula.total_venda_cedula | floatformat:2}} </label>
+    <label style='border: 1px solid #303131; border-radius:
+        5px; font-size:15px; padding: 5px; width: 180px;'>
+        Crédito: ${{ credito.total_venda_credito | floatformat:2}}</label>
+    <label style='border: 1px solid #303131; border-radius:
+        5px; font-size:15px; padding: 5px; width: 180px;'>
+        Débito: ${{ debito.total_venda_debito | floatformat:2}}</label>
+</label>
+     <br>
+    <label>Total de descontos: ${{desconto_po_mes.total_desconto | floatformat:2}} </label>
+    <br>
+    <label>Lucro obtido: ${{lucro_mensal | floatformat:2}}</label>
+
+     <h4> Outras observações</h4>
+
+     <label >Gastos extras: ${{gastos_extras.gastos | floatformat:2}}</label>
+    <br>
+    <label>Contas a receber: ${{Contas_mensal_a_receber.total_conta | floatformat:2}} </label>
+    <br>
+    <label>Contas a pagar: ${{Contas_mensal_a_pagar.total_conta | floatformat:2}} </label>
+      <br>
+
+</form>
+</div>
+{% endblock %}
+
+
+
+

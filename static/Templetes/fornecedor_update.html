@@ -1,0 +1,25 @@
+ {% extends 'base.html'%}
+
+{% block main%}
+
+
+
+
+<div class=divMae>
+    <div >
+
+        <form class='formulario' action="{% url 'cor_fornecedor_update' fornecedors.id%}" method="POST">
+            <ul>
+                <label class='cadastroTitulo'> O Que Gostaria de Fazer: {{data}}</label>
+                    {% csrf_token%}
+                    {{form.as_p}}
+                <button  type="submit">Editar</button>
+
+            </ul>
+        </form>
+         <a href="{% url 'cor_fornecedor_delete' fornecedors.id %}"> <button class='butaoDeletar' type="submit">Deletar </button> </a>
+
+    </div>
+</div>
+
+{% endblock %}

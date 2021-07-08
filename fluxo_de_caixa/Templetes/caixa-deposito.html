@@ -1,0 +1,66 @@
+{% extends 'base.html'%}
+{% block main%}
+
+<div class='div_Mae'>
+
+
+    <form class='formulario' method="POST">
+        {% csrf_token %}
+              <h1 > Novo Depósito</h1>
+         <label>Caixa:</label>
+         <label>{{ caixa.nome_do_caixa }}</label>
+         <br>
+         <label>Saldo em caixa:</label>
+         <label>${{ caixa.valor_atualizado }} </label>
+         <br>
+        <label for="busca"> Descriçcão:</label>
+            <input style=" width:200px;" type="text" id="descricao" name="descricao"
+                placeholder="Descriçcão" >
+            <br>
+
+        <label for="busca"> Valor:</label>
+            <input style=" width:200px;" type="text" id="depositar" name="depositar"
+                placeholder="0,00" required/>
+
+            <br>
+            <button  type="submit">Depositar</button>
+
+    </form>
+    <br>
+    <form class='campo_de_busca1' method="GET" >
+        <label> Consultar extrado de </label>
+        <input  type="date" id="dia" name="dia" > <laabel>Até</laabel>
+        <input  type="date" id="dia2" name="dia2" >
+
+        <button  type="submit">Filtrar</button>
+    </form>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th >Descrição</th>
+          <th >Valor depositado</th>
+          <th >Data do deposito</th>
+          <th >Usuário</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        {% for deposito in depositos %}
+            <tr>
+                <td>{{ deposito.descricao }}</td>
+                <td>${{ deposito.depositar }}</td>
+                <td>{{ deposito.data_hora.date }}</td>
+                <td>{{ deposito.user.username}}</td>
+
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+
+
+
+
+</div>
+{% endblock %}

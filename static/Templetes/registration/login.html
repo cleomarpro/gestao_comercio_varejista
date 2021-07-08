@@ -1,0 +1,65 @@
+{% load static%}
+<!DOCTYPE html>
+
+<html lang= "pt-br" >
+<head >
+    <meta charcet="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title> VieWorld  </title>
+
+    <link rel="stylesheet" href= "{% static 'Style/home.css'%}">
+
+    <meta charcet="UTF-8">
+    <meta name="cor" content="width=device-width,initial=scale=1">
+    <meta name="description" content="Rede SociL cor">
+   <!-- <meta name="keyWords" content="fluxo de caixa, gestão, controle de estoque"> -->
+    <meta name="author" content="cor">
+</head>
+<body>
+    <h1 class="cabesalho">Vieworld</h1>
+
+    <div class='div_mae'>
+        <h1 class="cabesalho">Vieworld</h1>
+        <form class='form_logim' method="post" action="{% url 'login' %}">
+            <br>
+            {% csrf_token %}
+
+            <h4 id='sub_titulo'> LOGIN</h4>
+
+            {% if form.errors %}
+            <p style='color:red;'>Usuário ou senha inválido!</p>
+            {% endif %}
+
+            {% if next %}
+
+            {% if user.is_authenticated %}
+                <p style='color: red;' > Você está sem permissão de acesso, por favor,
+                entre com um usuário autorizado ou  consulte o seu administrador!</p>
+            {% else %}
+
+                <p style='color: red;'>É necessário fazer login para acessar essa página!</p>
+            {% endif %}
+            {% endif %}
+
+            <label>Usuário:</label>
+                <td>{{ form.username }}</td>
+              <br>
+            <label>Senha:</label>
+                <td>{{ form.password }}</td>
+              <br>
+              <br>
+            <input id='bt_login' type="submit" value="Entrar">
+            <input type="hidden" name="next" value="{{ next }}">
+
+             {# Assumes you setup the password_reset view in your URLconf #}
+                <br>
+            <label><a href="{% url 'password_reset' %}">Esqueci minha senha!</a></label>
+            <br>
+            <label><a href="{% url 'novo-usuario' %}">Cadastre-se e conheça nossos serviços!</a></label>
+            <br>
+        </form>
+    </div>
+
+<body>
+</html>
+

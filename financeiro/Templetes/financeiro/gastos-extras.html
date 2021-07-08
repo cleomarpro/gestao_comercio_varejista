@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<div class='div_Mae'>
+    <form class='formulario' action="{% url 'gastos-extras' %}" method="POST" >
+         {% csrf_token %}
+    <h1
+        <label style=" color:#EEE9E9;">Anotar gastos</label>
+    </h1>
+            <label> Descrição:</label>
+            <input style=" width:150px;"  placeholder=" Descricão..." type="text" id="descricao" name="descricao" required/>
+             <br>
+            <label> Valor:</label>
+            <input style=" width:150px;"  placeholder="Valor..." type="text" id="valor" name="valor" required/>
+             <br>
+            <button type="submit"> salvar</button>
+    </form>
+        <br>
+<!-- formulário de filtro -->
+    <form class='campo_de_busca1' method="GET" action="{% url 'gastos-extras' %}">
+            <input type="date" id="dia" name="dia" >
+            <button type="submit">Pesquisar</button>
+    </form>
+
+    <form  class='campo_de_busca1' method="GET" action="{% url 'filtro_gastos_extras' %}">
+        <select  type="search" id="mes" name="mes"/>
+                <tr>
+                    <option value='{{today.month}}'> __Selecionar o mês__</option>
+                    <option value='1'> -Janeiro</option>
+                    <option value='2'> -Fevereiro</option>
+                    <option value='3'> -Março</option>
+                    <option value='4'> -Abril</option>
+                    <option value='5'> -Maio</option>
+                    <option value='6'> -Junho</option>
+                    <option value='7'> -Julho</option>
+                    <option value='8'> -Agosto</option>
+                    <option value='9'> -Setembro</option>
+                    <option value='10'> -Outubro</option>
+                    <option value='11'> -Novembro</option>
+                    <option value='12'> -Dezembor</option>
+                </tr>
+                 <br>
+        </select>
+
+        <select  type="search" id="ano" name="ano" />
+                <tr>
+                    <option value='{{today.month}}'> __Selecionar o ano__</option>
+                    <option value='2021'> -2021</option>
+                    <option value='2022'> -2022</option>
+                    <option value='2023'> -2023</option>
+                    <option value='2024'> -2024</option>
+                    <option value='2025'> -2025</option>
+                    <option value='2026'> -2026</option>
+                    <option value='2027'> -2027</option>
+                    <option value='2028'> -2028</option>
+                    <option value='2029'> -2029</option>
+                    <option value='2030'> -2030</option>
+                    <option value='2031'> -2031</option>
+                    <option value='2032'> -2032</option>
+                </tr>
+                 <br>
+        </select>
+
+            <button type="submit">Filtrar</button>
+    </form>
+
+    <table class="table">
+     <thead>
+        <tr>
+          <th >Descrição</th>
+          <th >Valor</th>
+          <th>Data</th>
+          {% if perms.financeiro.change_gastos_extras %}
+          <th >Editar</th>
+          {% endif%}
+          {% if perms.financeiro.delete_gastos_extras %}
+          <th >Excluir</th>
+          {% endif%}
+        </tr>
+    </thead>
+        <tbody>
+            {%for gastos_extras in gastos_extras %}
+                <tr>
+                    <td>{{ gastos_extras.descricao }}</td>
+                    <td>{{ gastos_extras.valor }}</td>
+                    <td>{{ gastos_extras.data_hora.date }}</td>
+
+                    {% if perms.financeiro.change_gastos_extras %}
+                    <td>
+                        <a href="{% url 'GastosExtras_update_cbv' gastos_extras.id %}">Editar</a>
+                    </td>
+                    {% endif%}
+
+                    {% if perms.financeiro.delete_gastos_extras %}
+                    <td>
+                        <a href="{% url 'gastos_extras_delete' gastos_extras.id %}">Excluir</a>
+                    </td>
+                    {% endif%}
+                </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

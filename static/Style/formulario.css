@@ -1,0 +1,118 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lobster|Philosopher:400i&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Inria+Serif&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Courier+Prime&display=swap');
+
+
+.divMae{
+    margin-top:80px;
+}
+.formulario{
+    background-color: #F0F8FF;
+    margin-left:185px;
+    width: 100%;
+    font-size:18px;
+
+}
+.formulario a{
+    position:absolute;
+    right:40px;
+}
+
+.bt_xx{
+    position:absolute;
+    margin-left:-10px;
+    margin-top:-47px~;
+}
+
+.bt_Novo{
+   margin-left:210px;
+   border: 1px solid #303131;
+   border-radius: 5px;
+   color:white;
+   width: 70px;
+   background-color: #4F4F4F;
+}
+  .formulario input{
+    border: 1px solid #303131;
+    border-radius: 2px;
+    margin:2px;
+    font-size: 15px;
+  }
+.formulario a{
+    text-decoration: none;
+  }
+   .formulario select{
+    border: 1px solid #303131;
+    border-radius: 2px;
+    margin:2px;
+    font-size: 15px;
+  }
+  .formulario label{
+    font-size: 18px;
+    padding: 0px;
+    margin:10px;
+    font-size: 20px;
+  }
+  .formulario h1{
+    background-color: #4F4F4F;
+    color:white;
+    font-size: 30px;
+    width: 100%;
+    border: 1px solid #303131;
+    border-radius: 5px;
+  }
+ .formulario button{
+   margin-top:10px;
+   border: 1px solid #303131;
+   border-radius: 2px;
+   color:white;
+   width: 30%;
+   background-color: #4F4F4F;
+   font-size:18px;
+  }
+
+ .bt_finalizar{
+    background-color: #4F4F4F;
+    margin-top:-5px;
+    border: 1px solid #303131;
+    border-radius: 10px;
+    color:white;
+    width: 150px;
+    position: fixed;
+    margin-left: -200px;
+    text-align: center;
+    padding:35px
+}
+@media (max-width: 768px) {
+.formulario{
+    width: 100%;
+    margin-left:0px;
+    font-size:10px;
+}
+.formulario input{
+    width: 60%;
+    font-size:10px;
+}
+
+.formulario select{
+    width: 60%;
+    font-size:10px;
+}
+
+.formulario label{
+    font-size:12px;
+}
+.formulario button{
+    font-size:18px;
+    width: 100%;
+}
+.formulario a{
+    right: 0px;
+}
+.bt_Novo{
+   margin-left:10px;
+}
+}
+

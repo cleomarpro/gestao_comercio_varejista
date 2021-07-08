@@ -1,0 +1,23 @@
+ {% extends 'base.html'%}
+
+{% block main%}
+
+
+<div class=divMae>
+    <div >
+
+
+        <form class='formAlerta'  method="POST">
+            <ul>
+                 <label>Mensagem Alerta! </label>   <p></p>
+                    <p></p>
+                 <li>Tem certeza que vai deletar? {{veiculo}} </li>   <p></p>
+                 {% csrf_token%}
+
+                <button style=" background-color: red;   width: 100px; !important; " type="submit"> Deletar </button>
+                <button style=" width: 150px; !important; "> <<< Voltar </button>
+            </ul>
+        </form>
+    </div>
+</div>
+{% endblock %}

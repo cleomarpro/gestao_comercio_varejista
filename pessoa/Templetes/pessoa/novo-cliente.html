@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<div class='div_Mae'>
+    <form class='formulario' action="{% url 'novo-cliente' %}" method="POST" >
+         {% csrf_token %}
+    <h1
+         style=" color:#EEE9E9;">Novo cliente</label>
+    </h1>
+             <br>
+            <label> Nome*:</label>
+                <input style=" width:250px;"  placeholder=" Nome..." type="text" id="nome" name="nome" required/>
+             <br>
+            <label> Segundo nome*:</label>
+                <input style=" width:200px;"  placeholder="Segundo nome..." type="text" id="segundo_nome" name="segundo_nome" required/>
+             <br>
+            <label> Cpf ou cnpj*:</label>
+                <input style=" width:200px;"  placeholder=" Cpf ou cnpj..." type="text" id="cpf_cnpj" name="cpf_cnpj" required/>
+             <br>
+            <label> Data de nascimento*:</label>
+                <input style=" width:180px;"  placeholder=" Data de nascimento.." type="date" id="data_de_nascimento" name="data_de_nascimento" required/>
+             <br>
+            <label> Sexo*:</label>
+            <select style=" width:150px;" type="text" id="sexo_id" name="sexo_id" required/>
+                <tr>
+                    <option value=''> __Sexo__</option>
+                    <option value="2">Feminino </option>
+                    <option value="1">Masculino  </option>
+                </tr>
+            </select>
+             <br>
+             <label> Nascionalidade*:</label>
+            <select style=" width:140px;" type="text" id="nascionalidade" name="nascionalidade" required/>
+                <tr>
+                    <option value=''> __Selecionar__</option>
+                    <option >Nacional </option>
+                    <option >Estrangeiro  </option>
+                </tr>
+            </select>
+             <br>
+
+             <label>Cep:</label>
+                <input style=" width:140px;"  placeholder=" Cep..." type="text" id="cep" name="cep" />
+             <br>
+
+            <label> Rua:</label>
+                <input style=" width:200px;"  placeholder=" Rua..." type="text" id="rua" name="rua" />
+
+
+            <label> Quadra:</label>
+                <input style=" width:80px;"  placeholder=" Quadra..." type="text" id="quadra" name="quadra" />
+                <br>
+            <label> Número:</label>
+                <input style=" width:80px;"  placeholder=" Número..." type="text" id="numero" name="numero" />
+
+            <label> Setor:</label>
+                <input style=" width:150px;"  placeholder=" Setor..." type="text" id="setor" name="setor" />
+            <br>
+
+            <label> Estado:</label>
+                <input style=" width:200px;"  placeholder=" Estado..." type="text" id="estado" name="estado" />
+             <br>
+
+            <label> Cidade:</label>
+                <input style=" width:200px;"  placeholder=" Cidade..." type="text" id="cidade" name="cidade" />
+             <br>
+
+            <label> Complemento:</label>
+                <input style=" width:180px;"  placeholder=" Complemento..." type="text" id="complemento" name="complemento" />
+             <br>
+            <label> Pais:</label>
+                <input style=" width:100px;"  placeholder=" Pais..." type="text" id="pais" name="pais" />
+
+            <label> Celular:</label>
+                <input style=" width:100px;"  placeholder=" Celular..." type="text" id="Celular" name="Celular" />
+             <br>
+
+            <label> Celular 2:</label>
+                <input style=" width:120px;"  placeholder=" Celular 2..." type="text" id="Celular2" name="Celular2" />
+
+
+            <label> Telefone:</label>
+                <input placeholder=" Telefone..." type="text" id="Telefone" name="Telefone" />
+             <br>
+            <label> E-mail:</label>
+                <input   placeholder=" E-mail..." type="text" id="email" name="email" />
+             <br>
+
+            <button  type="submit"> salvar</button>
+    </form>
+       <br>
+    <form class='campo_de_busca1' method="GET" action="{% url 'novo-cliente' %}">
+              <input  type="search" id="client" name="client" placeholder="Cpf ou cnpj...">
+              <button  type="submit">Pesquisar</button>
+    </form>
+    <table class="table">
+     <thead>
+        <tr>
+           <th >Nome</th>
+           <th >CPF/CNPJ</th>
+           <th >Data de Nascimento</th>
+           {% if perms.pessoa.change_cliente %}
+                <th >Editar</th>
+            {%endif%}
+
+            {% if perms.pessoa.delete_cliente %}
+                <th >Excluira</th>
+            {%endif%}
+        </tr>
+    </thead>
+        <tbody>
+            {%for cliente in cliente %}
+                <tr>
+                    <td>{{ cliente.nome }}</td>
+                    <td>{{ cliente.cpf_cnpj }}</td>
+                    <td>{{ cliente.data_de_nascimento }}</td>
+
+                    {% if perms.pessoa.change_cliente %}
+                    <td>   <a href="{% url 'cliente_update' cliente.id %}">Editar</a> </td>
+                    {%endif%}
+
+                    {% if perms.pessoa.delete_cliente %}
+                    <td> <a href="{% url 'cliente_delete' cliente.id %}">Excluir</a> </td>
+                    {%endif%}
+                </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

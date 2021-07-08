@@ -1,0 +1,12 @@
+       <h1 class="titulo">Vieworld</h1>
+
+
+<div class="div_principal">
+    <div class="contatos">
+       {%if user.is_authenticated%}
+                <label> <a href="http://www.vieworld.com.br/accounts/logout/">Sair</a> </label>
+                <label>Olá {{user}} </label>
+            {%else%}
+                <label> <a href="http://www.vieworld.com.br/accounts/login/">Entra</a> </label>
+             {%endif%}
+   </div>

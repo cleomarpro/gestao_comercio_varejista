@@ -1,0 +1,41 @@
+.div_alerta_delete{
+    width: 550px;
+    text-align: center;
+    margin-left: 35%;
+    margin-top: 100px;
+    background-color: #B5B5B5;
+    padding:20px;
+    border: 1px solid #696969;
+    border-radius: 5px;
+}
+.div_alerta_delete form{
+    padding:20px;
+    font-size:25px;
+}
+
+.label_mensagem{
+    color:#EE6363;
+}
+.div_alerta_delete button{
+    background-color: #696969;
+    padding:5px;
+    font-size:18px;
+    border: 1px solid #696969;
+    border-radius: 5px;
+     color:white;
+}
+.div_alerta_delete input{
+    background-color: #696969;
+    padding:5px;
+    font-size:18px;
+    border: 1px solid #696969;
+    border-radius: 5px;
+    color:white;
+}
+
+@media (max-width: 768px) {
+    .div_alerta_delete{
+        margin-left: 0%;
+        width: 100%;
+    }
+}

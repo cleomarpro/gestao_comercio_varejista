@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<div class='div_Mae'>
+    <form class='formulario' action="{% url 'novo-fornecedor' %}" method="POST" >
+         {% csrf_token %}
+    <h1
+         style=" color:#EEE9E9;">Novo Fornecedor</label>
+    </h1>
+             <br>
+            <label> Nome fantazia*:</label>
+                <input style=" width:200px;"  placeholder=" Nome..." type="text" id="nome_fantazia" name="nome_fantazia" required/>
+             <br>
+            <label> Cnpj*:</label>
+                <input style=" width:150;"  placeholder="Cnpj..." type="text" id="cnpj" name="cnpj" required/>
+             <br>
+            <label> Data de criação:</label>
+                <input style=" width:140px;"  placeholder=" Data de criação:" type="date" id="data_de_criacao" name="data_de_criacao" required/>
+                <br>
+             <label> Nascionalidade:</label>
+            <select style=" width:140px;" type="text" id="nascionalidade" name="nascionalidade" >
+                <tr>
+                    <option value=''> __Selecionar__</option>
+                    <option >Nacional </option>
+                    <option >Multinacional  </option>
+                </tr>
+            </select>
+             <br>
+
+             <label>Cep:</label>
+                <input style=" width:140px;"  placeholder=" Cep..." type="text" id="cep" name="cep" />
+             <br>
+
+            <label> Rua:</label>
+                <input style=" width:200px;"  placeholder=" Rua..." type="text" id="rua" name="rua" />
+
+
+            <label> Quadra:</label>
+                <input style=" width:80px;"  placeholder=" Quadra..." type="text" id="quadra" name="quadra" />
+                <br>
+            <label> Número:</label>
+                <input style=" width:80px;"  placeholder=" Número..." type="text" id="numero" name="numero" />
+
+            <label> Setor:</label>
+                <input style=" width:150px;"  placeholder=" Setor..." type="text" id="setor" name="setor" />
+            <br>
+
+            <label> Estado:</label>
+                <input style=" width:200px;"  placeholder=" Estado..." type="text" id="estado" name="estado" />
+             <br>
+
+            <label> Cidade:</label>
+                <input style=" width:200px;"  placeholder=" Cidade..." type="text" id="cidade" name="cidade" />
+             <br>
+
+            <label> Complemento:</label>
+                <input style=" width:180px;"  placeholder=" Complemento..." type="text" id="complemento" name="complemento" />
+             <br>
+            <label> Pais:</label>
+                <input style=" width:100px;"  placeholder=" Pais..." type="text" id="pais" name="pais" />
+
+            <label> Celular:</label>
+                <input style=" width:100px;"  placeholder=" Celular..." type="text" id="Celular" name="Celular" />
+             <br>
+
+            <label> Celular 2:</label>
+                <input style=" width:120px;"  placeholder=" Celular 2..." type="text" id="Celular2" name="Celular2" />
+
+
+            <label> Telefone:</label>
+                <input placeholder=" Telefone..." type="text" id="Telefone" name="Telefone" />
+             <br>
+            <label> E-mail:</label>
+                <input   placeholder=" E-mail..." type="text" id="email" name="email" />
+             <br>
+
+            <button  type="submit"> salvar</button>
+    </form>
+        <br>
+     <form class='campo_de_busca1' method="GET" action="{% url 'novo-fornecedor' %}">
+              <input  type="search" id="fornecedor" name="fornecedor" placeholder="Código do produto">
+              <button type="submit">Pesquisar</button>
+    </form>
+    <table class="table">
+     <thead>
+        <tr>
+            <th >Nome</th>
+            <th >CNPJ</th>
+            <th >Data de criação</th>
+        {% if perms.pessoa.change_fornecedor %}
+            <th >Editar</th>
+        {%endif%}
+
+        {% if perms.pessoa.delete_fornecedor %}
+            <th >Excluir</th>
+        {%endif%}
+        </tr>
+    </thead>
+        <tbody>
+            {%for fornecedor in fornecedor %}
+                <tr>
+                    <td>{{ fornecedor.nome_fantazia }}</td>
+                    <td>{{ fornecedor.cnpj }}</td>
+                    <td>{{ fornecedor.data_de_criacao }}</td>
+
+                    {% if perms.pessoa.change_fornecedor %}
+                        <td> <a href="{% url 'fornecedor_update' fornecedor.id %}">Editar</a> </td>
+                    {%endif%}
+
+                    {% if perms.pessoa.delete_fornecedor %}
+                        <td> <a href="{% url 'fornecedor_delete' fornecedor.id %}">Excluir</a> </td>
+                    {%endif%}
+                </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

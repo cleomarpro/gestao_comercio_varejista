@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<div class='div_Mae'>
+
+<!-- Formulário de cadastro de produtos -->
+      <!--  <a class="bt_Novo" href="#" onclick="document.getElementById('formulario').style.display='block';">
+            <label style= " background-color: #6495ED; padding:3px; color:white;
+                font-size:15px; border-radius: 5px;">Novo produto</label> </a> -->
+
+
+    <form  style="display:block;" id='formulario' class='formulario' action="{% url 'produto' %}" method="POST" >
+        {% csrf_token %}
+
+       <!--  <a class="bt_xx" class="" href="#" onclick="document.getElementById('formulario').style.display='none';">
+            <label style= " background-color: #6495ED; padding:3px; color:white;
+                font-size:15px; border-radius: 5px;">Esconder Formulário</label> </a> -->
+
+    <h1
+        <label style=" color:#EEE9E9;">Nova produtos</label>
+    </h1>
+            <label> Nome:</label>
+                <input style=" width:250px;"  placeholder=" Nome..." type="text"
+                    id="nome" name="nome" required/>
+            <br>
+            <label> Categoria:</label>
+                <select style=" width:200px;" type="search" id="categoria_id"
+                    name="categoria_id" required/>
+                    <tr>
+                        <option value=''> __Selecionar__</option>
+                    {% for categoria in categoria %}
+                            <option value='{{categoria.id}}'> {{categoria}}</option>
+                    {% endfor %}
+                    </tr>
+                </select>
+                <br>
+            <label> Promoção:</label>
+                <select style=" width:200px;" type="search" id="promocao"
+                    name="promocao" >
+                    <tr>
+                        <option value=''> __Selecionar__</option>
+                    {% for promocao in promocao %}
+                            <option value='{{promocao.id}}'> {{promocao.descricao}}</option>
+                    {% endfor %}
+                     </tr>
+                </select>
+
+                <br>
+            <label> Código do produto:</label>
+                <input style=" width:170px;"  placeholder=" Código do produto..." type="text"
+                    id="codigo" name="codigo"  required/>
+                 <br>
+            <label> Porcentagem de lucro:</label>
+                <input style=" width:127px;"  placeholder=" 00,00%" type="text"
+                    id="percentagem_de_lucro" name="percentagem_de_lucro" required/>
+                <br>
+            <label> Valor da compra:</label>
+                <input style=" width:150px;"  placeholder=" Valor da compra..."
+                    type="text" id="valor_compra" name="valor_compra" required/>
+                <br>
+                <button type="submit"> salvar</button>
+    </form>
+
+
+<!-- Mensagem de erro -->
+        {% if mensagen_de_erro %}
+        <div id="div_alerta" class="divAlerta">
+            <a href="#" onclick="document.getElementById('div_alerta').style.display='none';">
+            <input class="butao_X" type="button" value="X" autofocus="autofocus", accesskey="x"> </a>
+            <form class='formAlerta'>
+                <label> ALERTA!</label>
+                    <br>
+                    <label style=" color: #EE3B3B; ";> {{mensagen_de_erro}} </label>
+                    <br>
+                    <label> Verifica o cdigo e tente novamente!</label>
+                    <br>
+                    <label> Para feichar, pressione  ( Alt  + X ) !</label>
+                    <br>
+            </form>
+         </div>
+        {%endif%}
+<br>
+
+<!-- Formulário de busca de produtos -->
+    <form class='campo_de_busca1' method="GET" action="{% url 'produto' %}">
+
+              <input type="search" id="produt" name="produt" placeholder="Código do produto">
+              <button  type="submit">Pesquisar</button>
+    </form>
+
+    <form class='campo_de_busca2' method="GET" action="{% url 'filtro-categoria' %}">
+        <select  type="search" id="produt" name="produt" >
+            <tr >
+                <option value=''> __Filtrar por categoria__</option>
+            {% for categoria in categoria %}
+                    <option  value='{{categoria.id}}'> -{{categoria}}</option>
+            {% endfor %}
+             </tr>
+        </select>
+            <button  type="submit">Filtrar</button>
+    </form>
+
+<!-- Tabela de produtos -->
+    <table class="table">
+     <thead>
+        <tr>
+          <th >Nome</th>
+          <th >Categoria </th>
+          <th >Código</th>
+          <th >Valor da compra</th>
+          <th >Lucro estimado(%)</th>
+          <th >Valor venal</th>
+          <th >Em estoque</th>
+          <th >Promoção</th>
+          {% if perms.produto.change_produto %}
+            <th >Editar </th>
+          {% endif %}
+
+          {% if perms.produto.delete_produto %}
+            <th >Excluir </th>
+          {% endif %}
+        </tr>
+    </thead>
+        <tbody>
+            {% for produto in produto %}
+                <tr>
+                    <td>{{ produto.nome }}</td>
+                    <td>{{ produto.categoria.nome }}</td>
+                    <td>{{ produto.codigo }}</td>
+                     <td>${{ produto.valor_compra | floatformat:2 }}</td>
+                    <td>{{ produto.percentagem_de_lucro | floatformat:2 }}'% </td>
+                    <td>${{produto.valor_venal | floatformat:2 }}</td>
+                    <td>
+                        {% if  produto.estoque > 0 %}
+                        <lavel> {{ produto.estoque }}</lavel>
+                        {% else %}
+                        <lavel Style= 'color: red;'> {{ produto.estoque }}</lavel>
+                        {% endif %}
+                    </td>
+                    <td>{{ produto.promocao.descricao}}</td>
+
+                    {% if perms.produto.change_produto %}
+                        <td> <a href="{% url 'produto_update_cbv' produto.id %}">Editar</a>  </td>
+                    {% endif %}
+
+                    {% if perms.produto.delete_produto %}
+                        <td>  <a href="{% url 'produto_delete' produto.id %}">Excluir</a> </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+
+
+
+

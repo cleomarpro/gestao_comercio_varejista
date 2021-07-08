@@ -1,0 +1,66 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lobster|Philosopher:400i&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Inria+Serif&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Courier+Prime&display=swap');
+
+.divAlerta{
+    position:absolute;
+    width: 550px;
+    text-align: center;
+
+}
+
+.formAlerta{
+    background-color: #B5B5B5;
+    margin-left:250px;
+    margin-top: -200px;
+    width: 350px;
+    padding: 10px;
+    border: 1px solid #303131;
+    border-radius: 2px
+}
+#fechar{
+    display:none;
+}
+.butao_X{
+    background-color:  red;
+    border-radius: 2px;
+    color:white;
+    margin-left: 372px;
+    margin-top: -200px;
+    position:absolute;
+}
+.formAlerta label{
+    font-size: 18px;
+    padding: 0px;
+    margin-right: 10px;
+
+}
+
+
+@media (max-width: 450px) {
+.butao_X{
+    opacity:0;
+    margin-left: -190px;
+    margin-top: -300px;
+    position:absolute;
+    padding: 50%;
+}
+
+
+.formAlerta{
+    margin-left:0px;
+    margin-top: -200px;
+    width: 350px;
+    padding: 10px;
+    border: 1px solid #303131;
+    border-radius: 5px
+    position:absolute;
+
+}
+#atalho{
+    display:none;
+}
+}
+

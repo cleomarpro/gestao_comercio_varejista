@@ -1,0 +1,37 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lobster|Philosopher:400i&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Inria+Serif&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Courier+Prime&display=swap');
+
+.div_tabela{
+    position:absolute;
+    margin-left: 645px;
+    margin-top: -265px;
+    border: 1px solid #303131;
+    border-radius: 10px
+    overflow-y:auto;
+    overflow-x:auto;
+    height: 241px;
+}
+
+.tabela_caixa div{
+    font-size:12;
+
+}
+.tabela_caixa{
+    font-size:16px;
+    width:100%;
+    overflow-y:auto;
+    overflow-x:auto;
+
+}
+
+.tabela_caixa thead{
+    background-color: #DCDCDC;
+    border: 1px solid #303131;
+    border-radius: 10px
+}
+.tabela_caixa a{
+    text-decoration: none;
+}

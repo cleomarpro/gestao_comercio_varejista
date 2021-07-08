@@ -1,0 +1,106 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lobster|Philosopher:400i&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Inria+Serif&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Courier+Prime&display=swap');
+
+.cabesalho{
+    font-family: 'Philosopher', sans-serif;
+    background-color:#000000;
+    color:white;
+    text-align: center;
+    position: fixed;
+    width:100%;
+    margin-top: -77px;
+    margin-left: -8px;
+}
+
+.div_mae{
+    margin-top:80px;
+    color:white;
+}
+
+
+.div_cabesalho2{
+    background-color:#D3D3D3;
+    color:black;
+    position: fixed;
+    width:100%;
+    margin-top: -42px;
+    margin-left: -8px;
+    padding:5px;
+
+}
+
+.div_cabesalho2 a{
+    text-decoration: none;
+    color:blue;
+}
+.login{
+    position: absolute;
+    right: 15px;
+}
+
+.adm{
+    position: absolute;
+    right: 60px;
+}
+.usuario{
+    margin-left: 10px;
+}
+.form_logim{
+    width:400px;
+    background-color:#D3D3D3;
+    text-align: center;
+    margin:0% 25% 25% 25% ;
+}
+@media (max-width: 768px) {
+    .form_logim{
+    width:100%;
+    margin:0;
+
+}
+}
+#sub_titulo{
+    background-color:#000000;
+    width:96%;
+    text-align: center;
+    padding:3px;
+    margin:5px;
+
+    font-size: 18px;
+}
+.form_logim input{
+    text-align: center;
+    width:200px;
+    margin:5px;
+}
+
+#bt_login{
+    text-align: center;
+    width:96%;
+    background-color:#363636;
+    color:white;
+    margin:5px;
+    font-size: 16px;
+}
+
+.form_logim label{
+    text-align: center;
+    color:black;
+    font-size: 18px;
+}
+
+.form_logim a{
+    text-decoration: none;
+    color:blue;
+}
+
+
+
+
+
+
+
+
+

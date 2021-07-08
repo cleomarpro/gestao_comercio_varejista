@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<div class='div_Mae'>
+    <form class='formulario' action="{% url 'conta_areceber' %}" method="POST" >
+        {% csrf_token %}
+        <h1
+            <label style=" color:#EEE9E9;">Nova conta a receber</label>
+        </h1>
+             <br>
+            <label> Observação:</label>
+                <input style=" width:220px;"  placeholder=" Observação ou descrição..."
+                    type="text" id="observacao" name="observacao" />
+             <br>
+            <label> Cliente:</label>
+                <select style=" width:200px;" type="search" id="cliente_id" name="cliente_id" required/>
+
+                        <tr>
+                                <option value=''> __Selecionar__</option>
+                            {% for cliente in cliente %}
+                                <option value='{{cliente.id}}'> {{cliente.nome}}</option>
+                            {% endfor %}
+                        </tr>
+
+                </select>
+                <a style=" font-size: 30px;" href="{% url 'novo-cliente' %}">+</a>
+             <br>
+            <label> Venda:</label>
+                <select style=" width:220px;" type="search" id="venda_id" name="venda_id" required/>
+                        <tr>
+                                <option value=''> __Selecionar__</option>
+                            {% for vendas in venda %}
+                                <option value='{{vendas.id}}'> {{vendas}}</option>
+                            {% endfor %}
+                        </tr>
+                </select>
+             <br>
+            <label> Valor:</label>
+                <input style=" width:200px;"  placeholder="Valor..." type="text"
+                    id="valor" name="valor" required/>
+             <br>
+             <label> Parcelas:</label>
+                <input style=" width:200px;" value='1' placeholder=" parcelas..."
+                    type="text" id="parcelas" name="parcelas" required/>
+                    <br>
+                <input type="hidden" value='1' name="tipo_de_conta_id">
+
+            <label> Data de vencimento:</label>
+                <input style=" width:200px;"  placeholder=" Data de vencimento:"
+                    type="date" id="data_de_vencimento" name="data_de_vencimento" required/>
+                 <br>
+
+            <button type="submit"> salvar</button>
+    </form>
+        <br>
+
+<!-- Formulário de filtros -->
+    <form class='campo_de_busca1' method="GET" action="{% url 'conta_areceber' %}">
+              <input  type="search" id="client" name="client" placeholder="Cpf ou Cnpj...">
+
+        <select type="search" id="estado_da_conta" name="estado_da_conta" >
+           <tr >
+                <option value='1'> __Situação do débito__</option>
+                <option value=''> -Contas ativas </option>
+                <option value='0'> -Contas pagas </option>
+            </tr>
+        </select>
+        <button type="submit">Pesquisar</button>
+    </form>
+
+    <form  class='campo_de_busca2' method="GET" action="{% url 'conta_areceber' %}">
+        <laabel>Filtra por periodo: </laabel>
+        <input  type="date" id="dia" name="dia" > <laabel>Até</laabel>
+        <input  type="date" id="dia2" name="dia2" >
+                <button type="submit">Filtrar</button>
+    </form>
+
+    <table class="table">
+     <thead>
+        <tr>
+            <th >Cliente</th>
+            <th >Observação</th>
+            <th >Valor</th>
+            <th >ID da venda</th>
+            <th >Saldo devedor</th>
+            <th >Total de parcelas</th>
+            <th >Parcelas pagas</th>
+            <th >Parcelas restantes</th>
+            <th >Valor da parcela</th>
+            <th >Data de vencimento</th>
+
+            {% if perms.financeiro.change_contas %}
+            <th >Editar</th>
+            {%endif%}
+
+            {% if perms.financeiro.delete_contas %}
+            <th >Excluira</th>
+            {%endif%}
+
+            {% if perms.financeiro.add_pagamento %}
+            <th >Pagar</th>
+            {%endif%}
+        </tr>
+    </thead>
+        <tbody>
+            {%for conta in conta %}
+                <tr>
+                    <td>{{ conta.cliente.nome}}</td>
+                    <td>{{ conta.observacao}}</td>
+                    <td>${{ conta.valor }}</td>
+                    <td>{{ conta.venda.id}}</td>
+                    <td>${{ conta.saldo_devedor }}</td>
+                    <td>{{ conta.parcelas }}</td>
+                    <td>{{ conta.parcelas_pagas }}</td>
+                    <td>{{ conta.parcelas_restantes }}</td>
+                    <td>${{ conta.valor_parcela }}</td>
+                    <td>{{ conta.data_de_vencimento }}</td>
+
+                    {% if perms.financeiro.change_contas %}
+                    <td> <a href="{% url 'conta_areceber_update' conta.id %}">Editar</a> </td>
+                    {%endif%}
+
+                    {% if perms.financeiro.delete_contas %}
+                    <td> <a href="{% url 'conta_delete' conta.id %}">Excluir</a> </td>
+                    {%endif%}
+
+                    {% if perms.financeiro.add_pagamento %}
+                    <td>   <a href="{% url 'pagamento' conta.id %}">pagar</a> </td>
+                    {%endif%}
+                </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}
+<!-- <td> <a href="{% url 'GastosExtras_update_cbv' gastos_extras.id %}">Editar</a> </td>
+                    <td> <a href="{% url 'gastos_extras_delete' gastos_extras.id %}">Excluir</a> </td>  -->
+

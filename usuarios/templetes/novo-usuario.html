@@ -1,0 +1,57 @@
+
+{% load static%}
+<!DOCTYPE html>
+
+<html lang= "pt-br" >
+<head >
+    <meta charcet="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title> VieWorld  </title>
+
+    <link rel="stylesheet" href= "{% static 'Style/home.css'%}">
+
+    <meta charcet="UTF-8">
+    <meta name="cor" content="width=device-width,initial=scale=1">
+    <meta name="description" content="Rede SociL cor">
+   <!-- <meta name="keyWords" content="fluxo de caixa, gestão, controle de estoque"> -->
+    <meta name="author" content="cor">
+</head>
+<body>
+    <h1 class="cabesalho">Vieworld</h1>
+
+    <div class='div_mae'>
+        <h1 class="cabesalho">Vieworld</h1>
+        <form class='form_logim' method="post" action="{% url 'novo-usuario' %}">
+            <br>
+            {% csrf_token %}
+
+            <h4 id='sub_titulo'> Novo usuário</h4>
+
+            {% if mensagen_de_erro_usuario %}
+            <label style='color:red;'>{{mensagen_de_erro_usuario}}</label>
+            {% endif %} <br>
+            <label>Usuário*:</label>
+                <input style='width:200px;' Type='text' name= 'username' id= 'username' required/>
+
+            {% if mensagen_de_erro_email %}
+            <br>
+            <label style='color:red;'>{{mensagen_de_erro_email}}!</label>
+            {% endif %} <br>
+            <label>E-mail*:</label>
+                <input style='width:200px;' Type='email' name= 'email' id= 'email' required/>
+              <br>
+
+            <label>Senha*:</label>
+                <input style='width:200px;' Type='password' name= 'password'id= 'password' required/>
+
+              <br>
+              <br>
+            <input id='bt_login' type="submit" value="Criar">
+                <br>
+            <br>
+        </form>
+    </div>
+
+<body>
+</html>
+

@@ -1,0 +1,51 @@
+{% extends 'base.html'%}
+
+   {% block main%}
+
+
+
+<!-- CDASTRO  DE PRODUTOS -->
+<div class=divMae>
+
+
+    <div >
+
+        <form class='formulario' action="{% url 'cor_fornecedor_novo' %}" method="POST">
+            <ul>
+                <label class='cadastroTitulo'>Novo Fornecedor</label>
+
+                    {% csrf_token%}
+                    {{form.as_p}}
+
+                <button  type="submit">Cadastrar</button>
+            </ul>
+        </form>
+    </div>
+
+    <div >
+
+        <table class="table">
+            <thead>
+                <tr>
+            		<th> ID</th>
+            		<th> Nome </th>
+            		<th> CNPJ</th>
+                </tr>
+
+            </thead>
+
+                <tbody >
+                  {%for fornecedors in fornecedors %}
+                      <td> {{fornecedors.id}} </td>
+                      <td> <a href={% url 'cor_fornecedor_update' fornecedors.id %}>{{fornecedors.nome_completo}} </a> </td>
+                      <td> {{fornecedors.cnpj}} </td>
+
+                </tbody>
+                {% empty %}
+                        <li>Sem itens na lista.</li>
+                {%endfor%}
+        </table>
+    </div>
+</div>
+{% endblock %}
+

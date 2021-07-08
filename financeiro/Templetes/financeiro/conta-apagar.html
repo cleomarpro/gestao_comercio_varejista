@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<div class='div_Mae'>
+    <form class='formulario' action="{% url 'conta_apagar' %}" method="POST" >
+        {% csrf_token %}
+        <h1
+            <label style=" color:#EEE9E9;">Nova conta a pagar</label>
+        </h1>
+             <br>
+            <label> Observação:</label>
+                <input style=" width:220px;"  placeholder=" Observação ou descrição..."
+                    type="text" id="observacao" name="observacao" required/>
+             <br>
+            <label> Valor:</label>
+                <input style=" width:120px;"  placeholder="Valor..." type="text"
+                    id="valor" name="valor" required/>
+             <br>
+             <label> Parcelas:</label>
+                <input style=" width:120px;" value='1' placeholder=" parcelas:"
+                    type="text" id="parcelas" name="parcelas" required/>
+                    <br>
+                <input type="hidden" value='2' name="tipo_de_conta_id">
+
+            <label> Data de vencimento:</label>
+                <input style=" width:120px;"  placeholder=" Data de vencimento:"
+                    type="date" id="data_de_vencimento" name="data_de_vencimento" required/>
+                 <br>
+
+            <button type="submit"> salvar</button>
+    </form>
+        <br>
+
+<!-- Formulário de filtros -->
+
+    <form  class='campo_de_busca1' method="GET" action="{% url 'conta_apagar' %}">
+         <select  type="search" id="estado_da_conta" name="estado_da_conta" >
+           <tr >
+                <option value=''> __Situação do débito__</option>
+                <option value=''> -Contas ativas</option>
+                <option value='0'> -Contas pagas</option>
+            </tr>
+        </select>
+            <button type="submit">Filtrar</button>
+    </form>
+
+    <form  class='campo_de_busca2' method="GET" action="{% url 'conta_apagar' %}">
+        <select type="search" id="data_vencimento" name="data_vencimento" required/>
+            <tr >
+                <option value=''> __Escolhe um periodo__</option>
+                <option value='3'> -Hoje__</option>
+                <option value='2'> -Últimos 5 dias</option>
+                <option value='1'> -Esse mês</option>
+             </tr>
+        </select>
+            <button  type="submit">Filtrar</button>
+    </form>
+
+    <table class="table">
+     <thead>
+        <tr>
+            <th >Observação</th>
+            <th >Valor</th>
+            <th >Saldo devedor</th>
+            <th >Total de parcelas</th>
+            <th >Parcelas pagas</th>
+            <th >Parcelas restantes</th>
+            <th >Valor da parcela</th>
+            <th >Date de vencimento</th>
+
+            {% if perms.financeiro.change_contas %}
+            <th >Editar</th>
+            {%endif%}
+
+            {% if perms.financeiro.delete_contas %}
+            <th >Excluira</th>
+            {%endif%}
+
+            {% if perms.financeiro.add_pagamento %}
+            <th >Pagar</th>
+            {%endif%}
+        </tr>
+    </thead>
+        <tbody>
+            {%for conta in conta %}
+                <tr>
+                    <td>{{ conta.observacao}}</td>
+                    <td>${{ conta.valor }}</td>
+                    <td>${{ conta.saldo_devedor }}</td>
+                    <td>{{ conta.parcelas }}</td>
+                    <td>{{ conta.parcelas_pagas }}</td>
+                    <td>{{ conta.parcelas_restantes }}</td>
+                    <td>${{ conta.valor_parcela }}</td>
+                    <td>{{ conta.data_de_vencimento }}</td>
+
+                    {% if perms.financeiro.change_contas %}
+                    <td>  <a href="{% url 'conta_apagar_update' conta.id %}">Editar</a> </td>
+                    {%endif%}
+
+                    {% if perms.financeiro.delete_contas %}
+                    <td>  <a href="{% url 'conta_apagar_delete' conta.id %}">Excluir</a> </td>
+                    {%endif%}
+
+                    {% if perms.financeiro.add_pagamento %}
+                    <td>  <a href="{% url 'pagamento' conta.id %}">pagar</a> </td>
+                    {%endif%}
+
+                </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}
+<!-- <td> <a href="{% url 'GastosExtras_update_cbv' gastos_extras.id %}">Editar</a> </td>
+                    <td> <a href="{% url 'gastos_extras_delete' gastos_extras.id %}">Excluir</a> </td>  -->
+

@@ -1,0 +1,72 @@
+{% extends 'base.html'%}
+{% block main%}
+
+<div class='div_Mae'>
+
+
+    <form class='formulario' method="POST">
+        {% csrf_token %}
+              <h1 > Abrir ou feixar o caixa</h1>
+        <label > Caixa: </label>
+        <label> {{ estado_do_caixa.caixa.nome_do_caixa }} </label>
+        <br>
+        <label >  Estado do caixa:</label>
+        <label> {{ estado_do_caixa.estadoDoCaixa }} </label>
+         <br>
+        <label for="busca"> Obiservação:</label>
+            <input style=" width:150px;" type="text" id="descricao" name="descricao"
+                placeholder="Obiservação..." >
+        {% if estado_do_caixa.estadoDoCaixa != 'Aberto'%}
+            <br>
+            <button  type="submit">Abrir o caixa</button>
+            <input style=" width:200px; display: none;" type="text" id="estadoDoCaixa" name="estadoDoCaixa" value='Aberto'>
+        {% else %}
+            <br>
+            <button  type="submit">Feixar o caixa</button>
+            <input style=" width:200px; display: none;" type="text" id="estadoDoCaixa" name="estadoDoCaixa" value='Feixado'>
+        {% endif  %}
+
+    </form>
+    <br>
+    <form class='campo_de_busca1' method="GET"  >
+        <label> Consultar extrado de </label>
+        <input  type="date" id="dia" name="dia" > <laabel>Até</laabel>
+        <input  type="date" id="dia2" name="dia2" >
+
+        <button  type="submit">Filtrar</button>
+    </form>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th >Descrição</th>
+          <th >Saldo</th>
+          <th >Vendas em sedula</th>
+          <th >Valor depositado</th>
+          <th >Data</th>
+          <th >Usuário</th>
+
+
+        </tr>
+      </thead>
+      <tbody>
+        {% for caixa in historico_do_caixa %}
+            <tr>
+                <td>{{ caixa.descricao }}</td>
+                <td>${{ caixa.saldo_em_caixa }}</td>
+                <td>{{ caixa.venda_realizadas }}</td>
+                <td>{{ caixa.depositar }}</td>
+                <td>{{caixa.data_hora }}</td>
+                <td>{{caixa.user.username }}</td>
+
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+
+
+
+
+</div>
+{% endblock %}

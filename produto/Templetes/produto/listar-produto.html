@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<div class=div_Mae
+
+<div >
+    <form class='formulario' method="GET" action="{% url 'listar-produto' %}">
+          <h1> Tabela de produtos </h1><label>Buscar</label> </h1>
+          <input style=" width:200px;" type="search" id="produt" name="produt" placeholder="Buscar">
+          <button style=" width:40px; !important" type="submit">OK</button>
+    </form>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th >Nome</th>
+          <th >Categoria </th>
+          <th >Código</th>
+          <th >Valor venal</th>
+          <th >Estoque</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for produto in produto %}
+            <tr>
+                <td>{{ produto.nome }}</td>
+                <td>{{ produto.categoria.nome }}</td>
+                <td>{{ produto.codigo }}</td>
+                <td>{{ produto.valor_venal }}</td>
+                <td>
+
+                {% if  produto.estoque > 0 %}
+                    <lavel> {{ produto.estoque }}</lavel>
+                {% else %}
+                    <lavel Style= 'color: red;'> {{ produto.estoque }}</lavel>
+                {% endif %}
+
+                </td>
+                {% empty %}
+                        <li>Sem itens na lista.</li>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+</div>
+
+
+</div>
+
+{% endblock %}
