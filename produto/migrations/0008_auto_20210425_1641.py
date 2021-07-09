@@ -10,14 +10,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='produto',
-            name='data_inicio',
-            field=models.DateField(default=False, null=True),
-        ),
-        migrations.AlterField(
-            model_name='produto',
-            name='data_termino',
-            field=models.DateField(default=False, null=True),
-        ),
+     
     ]

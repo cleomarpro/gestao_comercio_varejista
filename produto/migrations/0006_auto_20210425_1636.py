@@ -8,24 +8,3 @@ class Migration(migrations.Migration):
     dependencies = [
         ('produto', '0005_auto_20210425_1626'),
     ]
-
-    operations = [
-        migrations.RemoveField(
-            model_name='produto',
-            name='inicio_da_promocao',
-        ),
-        migrations.RemoveField(
-            model_name='produto',
-            name='termino_da_promocao',
-        ),
-        migrations.AddField(
-            model_name='produto',
-            name='data_inicio_da_promocao',
-            field=models.DateField(blank=True, default=False, null=True),
-        ),
-        migrations.AddField(
-            model_name='produto',
-            name='data_termino_da_promocao',
-            field=models.DateField(blank=True, default=False, null=True),
-        ),
-    ]
