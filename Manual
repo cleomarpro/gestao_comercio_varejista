@@ -17,7 +17,11 @@
 
 1. Criar uma pasta para o projeto
 2. Linux:  python3 -m  venv  nome da venv.   Windous: python -m venv myvenv (criar virtula enve na mesma pasta do projeto)
+<<<<<<< HEAD
 3. Linux=  source nome da venv/bin/activate. Windows: nome da venv\Sicrpts\activate (ativar a venv)
+=======
+3. Linux=  source nome da venv/bin/activate. Windows: nome da venv\Scripts\activate (ativar a venv)
+>>>>>>> 37f28c4528a089131dd7f5c76c95342a4ae203de
 4. pip install django (instalação do django)
 5. pip Install python3.8    ( instalar a versão mais recente do python, Obs: isso se necessário mudar a versão)
 6. django-admin nome do projeto (Criar uma projeto)
@@ -37,5 +41,9 @@
 3. deactivate (desligar o servidor)
 4. python manage.py createsuperuser (criar super usuario)
 5. python manage.py startapp nome da app (criar uma app)
+<<<<<<< HEAD
 6. Linux=  source nome da venv/bin/activate. Windows: nome da venv\Sicrpts\activate (ativar a venv)
+=======
+
+>>>>>>> 37f28c4528a089131dd7f5c76c95342a4ae203de
 # CONSULTAS NA ORM DO DJANGO
