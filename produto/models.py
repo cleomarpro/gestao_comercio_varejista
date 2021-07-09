@@ -27,8 +27,8 @@ class Promocao(models.Model):
     descricao = models.CharField(max_length=50,  null = True, verbose_name="Descrição")
     quantidade_promocional = models.DecimalField(max_digits=9, decimal_places=2, default=0)
     desconto = models.DecimalField(max_digits=9, decimal_places=2, default=0)
-    data_inicio = models.DateField(max_length=30,  null= True, blank=True)
-    data_termino = models.DateField(max_length=30, null= True, blank=True)
+    data_inicio = models.DateField(blank=True, null=True)
+    data_termino = models.DateField(blank=True, null=True)
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
 
@@ -82,7 +82,7 @@ class EntradaMercadoria(models.Model):
     fornecedor = models.ForeignKey(Fornecedor, on_delete=models.CASCADE, blank=True)
     quantidade = models.DecimalField(max_digits=9, decimal_places=2, blank=False, default=1)
     data_hora = models.DateTimeField(default=timezone.now)
-    validade_produto = models.DateField(max_length=30, null= True, blank=True)
+    validade_produto = models.DateField(blank=True, null=True)
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
 
