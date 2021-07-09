@@ -25,8 +25,7 @@ SECRET_KEY = '+$-%88-g_4t&r5()0$pxvto=4u93wi999mk6@+j!$&s-x%&r^^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['gestao.vieworld.com.br']
-
+ALLOWED_HOSTS = ['gestao.vieworld.com.br', '127.0.0.1']
 
 # Application definition
 
