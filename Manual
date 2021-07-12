@@ -6,7 +6,9 @@
 4. git config --global user.email(visualizar email utilizado)
 5. git clone  https://github.com/cleomarpro/gestao_varejo.git (clonando o projeto na maquina local)
 6. Linux:  python3 -m  venv  nome da venv.   Windous: python -m venv myvenv (criar virtula enve na mesma pasta do projeto)
-7. Linux=  source nome da venv/bin/activate. Windows: nome da venv\Scripts\activate (ativar a venv)
+7. Linux: source NomeDaVenv/bin/activate.
+    bash no windows: source NomeDaVenv/Scripts/activate,
+    Windows: NomeDaVenv\Scripts\activate (ativar a venv)
 8. criar o arquivo .env e colocar essa chave SECRET_KEY= HgHjUyGbFbgHJmJjHmGf (arquivo para guardadr chaves)
 9. pip install -r requirements.txt (comando para instalar os  requirements.txt)
 10. python manage.py migrate (fazer as migrações)
@@ -16,12 +18,12 @@
 #INICIAR UM PROJETO DO ZERO
 
 1. Criar uma pasta para o projeto
-2. Linux:  python3 -m  venv  nome da venv.   Windous: python -m venv myvenv (criar virtula enve na mesma pasta do projeto)
-<<<<<<< HEAD
+#2. Linux:  python3 -m  venv  nome da venv.   Windous: python -m venv myvenv (criar virtula enve na mesma pasta do projeto)
 3. Linux=  source nome da venv/bin/activate. Windows: nome da venv\Sicrpts\activate (ativar a venv)
 =======
-3. Linux=  source nome da venv/bin/activate. Windows: nome da venv\Scripts\activate (ativar a venv)
->>>>>>> 37f28c4528a089131dd7f5c76c95342a4ae203de
+#3. Linux: source NomeDaVenv/bin/activate.
+    bash no windows: source NomeDaVenv/Scripts/activate,
+    Windows: NomeDaVenv\Scripts\activate (ativar a venv)
 4. pip install django (instalação do django)
 5. pip Install python3.8    ( instalar a versão mais recente do python, Obs: isso se necessário mudar a versão)
 6. django-admin nome do projeto (Criar uma projeto)
@@ -41,9 +43,12 @@
 3. deactivate (desligar o servidor)
 4. python manage.py createsuperuser (criar super usuario)
 5. python manage.py startapp nome da app (criar uma app)
-<<<<<<< HEAD
-6. Linux=  source nome da venv/bin/activate. Windows: nome da venv\Sicrpts\activate (ativar a venv)
-=======
-
->>>>>>> 37f28c4528a089131dd7f5c76c95342a4ae203de
+#6. Linux: source NomeDaVenv/bin/activate.
+    Bash no windows: source NomeDaVenv/Scripts/activate,
+    Windows: NomeDaVenv\Scripts\activate (ativar a venv)
 # CONSULTAS NA ORM DO DJANGO
+
+
+# Resovendo problemas comums
+
+1. mudando um arquivo ou pasta de propietário ( chown -Rv NomeDoPropietário venvGestao )

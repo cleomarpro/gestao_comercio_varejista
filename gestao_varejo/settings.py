@@ -62,16 +62,16 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            'gestao_varejo/static/Templetes',
-            'gestao_varejo/fluxo_de_caixa/Templetes',
-            'gestao_varejo/financeiro/Templetes',
-            'gestao_varejo/pessoa/Templetes',
-            'gestao_varejo/produto/Templetes',
-            'gestao_varejo/login/Templetes',
-            'gestao_varejo/home/Templetes',
-            'gestao_varejo/gestao/Templetes',
-            'gestao_varejo/cor/Templetes',
-            'gestao_varejo/usuarios/templetes',
+            'static/Templetes',
+            'fluxo_de_caixa/Templetes',
+            'financeiro/Templetes',
+            'pessoa/Templetes',
+            'produto/Templetes',
+            'login/Templetes',
+            'home/Templetes',
+            'gestao/Templetes',
+            'cor/Templetes',
+            'usuarios/templetes',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -144,19 +144,18 @@ LOGIN_REDIRECT_URL = 'usuario'
 LOGOUT_REDIRECT_URL = 'inicio'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    'static',
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/static/'
-
 # default static files settings for PythonAnywhere.
 # see https://help.pythonanywhere.com/pages/DjangoStaticFiles for more info
-MEDIA_ROOT = '/home/cleomarPro/gestao_varejo/media'
+MEDIA_ROOT = '/home/gestao_varejo/media'
 MEDIA_URL = '/media/'
-STATIC_ROOT = '/home/cleomarPro/gestao_varejo/static'
+STATIC_ROOT = '/home/gestao_varejo/static'
 STATIC_URL = '/static/'
 
 # Usuarios do model Model

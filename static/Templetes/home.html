@@ -20,10 +20,10 @@
 <div class="div_mae">
     <div class="div_cabesalho2">
        {%if user.is_authenticated%}
-                <label class='login'> <a href="http://gestao.vieworld.com.br/accounts/logout/"> Sair </a> </label>
+                <label class='login'> <a href="{% url 'logout' %}"> Sair </a> </label>
                 <label class='usuario'>Olá {{user}} </label>
             {%else%}
-                <label class='login'> <a href="http://gestao.vieworld.com.br/accounts/login/">Entra</a> </label>
+                <label class='login'> <a href="{% url 'login' %}">Entra</a> </label>
                 <label class='usuario'> Faça logim para inicia</label>
             {%endif%}
 

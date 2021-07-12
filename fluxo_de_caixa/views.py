@@ -63,7 +63,6 @@ class AtualizarPedido(LoginRequiredMixin, View):
             venda.valor_credito = data['valor_credito']
             venda.valor_debito = data['valor_debito'].replace(',', '.')
             venda.user_id = user_logado
-
             venda.venda_id = data['venda_id']
 
             venda.save()
