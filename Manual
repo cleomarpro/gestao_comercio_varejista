@@ -1,7 +1,7 @@
 # DA CONTINUIDADE A UM PROJETO QUE ESTAVA EM REPOSITÓRIO DO GIT
 
-1. git config --global user.name "cleomarpro" (criando usuário do git, utiliza o mesmo do github)
-2. git config --global user.email "cleomar-pro@outlook.com" (E-mail do github)
+1. git config --global user.name "usuário" (criando usuário do git, utiliza o mesmo do github)
+2. git config --global user.email "email" (E-mail do github)
 3. git config --global user.name (visualizar usuário utilizado)
 4. git config --global user.email(visualizar email utilizado)
 5. git clone  https://github.com/cleomarpro/gestao_varejo.git (clonando o projeto na maquina local)
@@ -52,3 +52,15 @@
 # Resovendo problemas comums
 
 1. mudando um arquivo ou pasta de propietário ( chown -Rv NomeDoPropietário venvGestao )
+
+#MANUAL GIT
+
+-criar repositório (git init)
+-Verivicar se tem algo para commitar(git status)
+-preparar todos os arquivo para o commit (git add .)
+-preparar um unico arquivo para o commit (git add nomeDoArquiv)
+-enviar o arquivo para o repositório(git commit -m "comentáro")
+-muda o repositório ou melhor "branch" (git branch -M "nome")
+-criando uma nova branch "ou melhor, repositório" (git checkout -b "nomeDaNovaBranch")
+-muda de branch ou repositório(git checkout 'nomeDaNovaBranch')
+- juntar as branch ((git merge "nomeDaNovaBranch") em seguida (git push origin "nomeDaNovaBranch"))
