@@ -7,4 +7,4 @@ venvgestao/
 .DS_Store
 media
 .env
-settings.py
+!settings.py
