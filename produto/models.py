@@ -79,7 +79,7 @@ class Produto (models.Model):
 
 class EntradaMercadoria(models.Model):
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
-    fornecedor = models.ForeignKey(Fornecedor, on_delete=models.CASCADE, blank=True)
+    fornecedor = models.ForeignKey(Fornecedor, null=True, on_delete=models.CASCADE)
     quantidade = models.DecimalField(max_digits=9, decimal_places=2, blank=False, default=1)
     data_hora = models.DateTimeField(default=timezone.now)
     validade_produto = models.DateField(blank=True, null=True)
