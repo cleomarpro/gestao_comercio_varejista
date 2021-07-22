@@ -18,7 +18,7 @@
 #INICIAR UM PROJETO DO ZERO
 
 1. Criar uma pasta para o projeto
-#2. Linux:  python3 -m  venv  nome da venv.   Windous: python -m venv myvenv (criar virtula enve na mesma pasta do projeto)
+#2. Linux:  python3 -m  venv  nome da venv ou virtualenv venvGestao,  Windous: python -m venv myvenv (criar virtula enve na mesma pasta do projeto)
 3. Linux=  source nome da venv/bin/activate. Windows: nome da venv\Sicrpts\activate (ativar a venv)
 =======
 #3. Linux: source NomeDaVenv/bin/activate.
@@ -43,9 +43,13 @@
 3. deactivate (desligar o servidor)
 4. python manage.py createsuperuser (criar super usuario)
 5. python manage.py startapp nome da app (criar uma app)
-#6. Linux: source NomeDaVenv/bin/activate.
+6. Linux: source NomeDaVenv/bin/activate
     Bash no windows: source NomeDaVenv/Scripts/activate,
     Windows: NomeDaVenv\Scripts\activate (ativar a venv)
+7. sudo chmod -R 777 nomeDaPasta (da permissão totar a determinada pasta)
+8. sudo vi diretórioDoArquivo (editar arquivo no ubunto CMD)
+9. sudo service apache2 restart (inicializar o servidor apache)
+
 # CONSULTAS NA ORM DO DJANGO
 
 
