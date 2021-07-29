@@ -46,9 +46,9 @@
 6. Linux: source NomeDaVenv/bin/activate
     Bash no windows: source NomeDaVenv/Scripts/activate,
     Windows: NomeDaVenv\Scripts\activate (ativar a venv)
-7. sudo chmod -R 777 nomeDaPasta (da permissão totar a determinada pasta)
-8. sudo vi diretórioDoArquivo (editar arquivo no ubunto CMD)
-9. sudo service apache2 restart (inicializar o servidor apache)
+7. sudo chmod -R 777 nomeDaPasta (da permissão total a determinada pasta)
+8. sudo vim diretórioDoArquivo (editar arquivo no ubunto CMD)
+9. 
 
 # CONSULTAS NA ORM DO DJANGO
 
@@ -76,3 +76,15 @@
 -excluir arquivo do repositório, é nessário commitar depos da remoção (git rm caminho/arquivo_a_ser_ignorado.txt)
 - incluir arquivo no gitignore apos ter comitado 
     (1: é necessário excluir o arquivo do repositório, 2:listar o arquivo no gitignore, 3:commitar novalmente)
+
+#COMANDOS DO apache2
+
+- /var/log/apache2$ (DIRETÓRIO DO APACHE2)
+
+- sudo service apache2 restart (inicializar o servidor apache)
+- sudo service apache2 start (parar o servidor)
+sudo service apache2 status (mostrar o estado do servidor)
+sudo service apache2 reload (reiniciar o servido aplicando mudanças de configuração)
+- cd /var/log/apache2$ nano access.log (virificar os loges do servidor)
+- cd /var/log/apache2$ less error.log (verificar os erros do servidor)
+- cd /var/log/apache2$ tall access.log (mostrar as ultimas linhas do arquivo de log)
