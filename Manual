@@ -85,6 +85,10 @@
 - sudo service apache2 start (parar o servidor)
 sudo service apache2 status (mostrar o estado do servidor)
 sudo service apache2 reload (reiniciar o servido aplicando mudanças de configuração)
-- cd /var/log/apache2$ nano access.log (virificar os loges do servidor)
-- cd /var/log/apache2$ less error.log (verificar os erros do servidor)
-- cd /var/log/apache2$ tall access.log (mostrar as ultimas linhas do arquivo de log)
+- cd /var/log/apache2 nano access.log (virificar os loges do servidor)
+- cd /var/log/apache2 less error.log (verificar os erros do servidor)
+2 tall access.log (mostrar as ultimas linhas do arquivo de log)- cd /var/log/apache
+
+# comandos ubunto(linux)
+
+- mkdir nomeDaPasta (criar pasta)
