@@ -19,7 +19,7 @@ class Usuarios(models.Model):
     usuario_cliente= models.CharField(max_length=100,blank=False)
     plano = models.ForeignKey(Plano, blank=True, on_delete=models.CASCADE)
     razao_social= models.CharField(max_length=30, blank=True, verbose_name='Razão Social')
-    inscricoo_istadual= models.CharField(max_length=30, blank=True, verbose_name='Inscrição estadual')
+    inscricao_istadual= models.CharField(max_length=30, blank=True, verbose_name='Inscrição estadual')
     inscricao_municipal= models.CharField(max_length=30, blank=True, verbose_name='Inscrição municipal')
     nascionalidade = models.CharField(max_length=50, blank=True)
     cep = models.CharField(max_length=12, blank=True)
