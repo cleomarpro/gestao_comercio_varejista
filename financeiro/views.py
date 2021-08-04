@@ -506,10 +506,10 @@ class Relatorio_mensal(LoginRequiredMixin, View):
         user_logado = user_logado.id # obitendo o ID do usuário logado
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID do usuário administrador com base no usuário logado
         else:
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
+            usuario = usuario.usuario_cliente # Obtendo o id  do usuário administrador
 
         today = date.today()
         ano_atual = today.year
@@ -535,7 +535,7 @@ class Relatorio_mensal(LoginRequiredMixin, View):
         lucro_mensal = valor_venda - valor_invertimento
 
         gastos_extras = Gastos_extras.objects.filter(
-            usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual ).aggregate(gastos = Sum('valor'))
+            usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual ).aggregate(gastos =Sum('valor'))
 
         desconto_po_mes = Venda.objects.filter(
             usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual ).aggregate(total_desconto=Sum('total_desconto'))
