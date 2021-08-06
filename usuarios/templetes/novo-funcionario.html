@@ -9,20 +9,17 @@
              style=" color:#EEE9E9;">Novo Funcionário</label>
         </h1>
             <label>Nome*:</label>
-                <input style='width:200px;' Type='text' name= 'nome'id= 'nome' required/>
+                <input style='width:200px;' Type='text' name= 'primeiro_nome'id= 'primeiro_nome' required/>
                 <br>
             <label>Segundo nome*:</label>
                 <input style='width:200px;' Type='text' name= 'segundo_nome'id= 'segundo_nome' required/>
                 <br>
-            <label>Data de nascimento:</label>
-                <input style='width:200px;' Type='date' name= 'data_de_nascimento'id= 'data_de_nascimento' required/>
-                <br>
              <label> Sexo*:</label>
-            <select style=" width:150px;" type="text" id="sexo" name="sexo" required/>
+            <select style=" width:150px;" type="text" id="ativo" name="ativo" required>
                 <tr>
-                    <option value=''> __Sexo__</option>
-                    <option value="2">Feminino </option>
-                    <option value="1">Masculino  </option>
+                    <option value=''> __estado do usuário__</option>
+                    <option value="True">Ativo </option>
+                    <option value="False">Inativo  </option>
                 </tr>
             </select>
             <br>
@@ -42,7 +39,16 @@
 
             <label>Senha*:</label>
                 <input style='width:200px;' Type='password' name= 'password'id= 'password' required/>
-
+             <br>
+            <label>Permissão*:</label>
+                <select style=" width:200px;" type="text" id="permissao" name="permissao" required>
+                    <tr>
+                        <option value=''> __Escolha a ermissão__</option>
+                        <option value="Administradores">Administradores </option>
+                        <option value="Caixa">Caixa  </option>
+                        <option value="Vendededor">Vendendedor  </option>
+                    </tr>
+                </select>
               <br>
               <br>
             <button type="submit" > Salvar </button>
@@ -59,6 +65,9 @@
         <tr>
            <th >Nome</th>
            <th >Usuário</th>
+           <th >Último acesso</th>
+           <th >Estado</th>
+           <th >Alterar</th>
 
         </tr>
     </thead>
@@ -67,6 +76,8 @@
                 <tr>
                     <td>{{ usuarios.nome }}{{usuarios.segundo_nome}}</td>
                     <td>{{ usuarios.user.username }}</td>
+                    <td>{{ usuarios.user.last_login }}</td>
+                    <td>{{ usuarios.user.is_active }}</td>
 
                 </tr>
             {%endfor%}
