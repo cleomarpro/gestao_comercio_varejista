@@ -39,7 +39,7 @@ class NovoUsuario(View):
                 email= request.POST['email']
                 )
             permissao= Group.objects.get(name='Administradores') # Buscando permissão
-            permissao= usuario.groups.add(permissao)# Inserindo permissão de administrador no novo usuário
+            permissao_add= usuario.groups.add(permissao)# Inserindo permissão de administrador no novo usuário
             cliente = usuario.id # Buscando o ID do usuário criado
             novo_usuario = Usuarios.objects.create(
                 usuario_cliente= cliente, user_id= cliente, plano_id= '1')# Criando novo usuário_cliente administrador
@@ -71,10 +71,10 @@ class NovoFuncionario(View):
         data['password'] = request.POST['password']
         data['username'] = request.POST['username']
         data['email'] = request.POST['email']
-        data['nome']= request.POST['nome'],
+        data['primeiro_nome']= request.POST['primeiro_nome'],
         data['segundo_nome']= request.POST['segundo_nome'],
-        data['data_de_nascimento']= request.POST['data_de_nascimento'],
-        data['sexo']= request.POST['sexo'],
+        data['ativo']= request.POST['ativo'],
+        data['permissao']= request.POST['permissao'],
 
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
@@ -103,20 +103,22 @@ class NovoFuncionario(View):
             usuario = User.objects.create_user(
                 password= request.POST['password'],
                 username= request.POST['username'],
-                email= request.POST['email']
+                email= request.POST['email'],
+                first_name= request.POST['primeiro_nome'],
+                last_name= request.POST['segundo_nome'],
+                is_active= request.POST['ativo']
                 )
 
+            permissaos= Group.objects.get(name= request.POST['permissao']) # Buscando permissão
+            permissao_add= usuario.groups.add(permissaos)# Inserindo permissão ao novo usuário
+            
             usuario= usuario.id # Id do novo usuario local criado
-
             funcionario = Funcionario.objects.create(
                 usuarios_id = usuarioId, user_id= usuario,
-                nome= request.POST['nome'],
+                nome= request.POST['primeiro_nome'],
                 segundo_nome= request.POST['segundo_nome'],
-                data_de_nascimento= request.POST['data_de_nascimento'],
-                sexo_id= request.POST['sexo'],
                 )
-            #permissao= Group.objects.get(name='Administradores')
-            #permissao= usuario.groups.add(permissao)
+            
             data['usuario'] = usuario
             data['funcionario'] = funcionario
             data['usuarios']= Funcionario.objects.filter(usuarios__usuario_cliente= usuarioCliente)
