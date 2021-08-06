@@ -38,7 +38,7 @@ class NovoUsuario(View):
                 username= request.POST['username'],
                 email= request.POST['email']
                 )
-            permissao= Group.objects.get(name='Administradores') # Buscando permissão
+            permissao= Group.objects.get(name='Administrador') # Buscando permissão
             permissao_add= usuario.groups.add(permissao)# Inserindo permissão de administrador no novo usuário
             cliente = usuario.id # Buscando o ID do usuário criado
             novo_usuario = Usuarios.objects.create(
