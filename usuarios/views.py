@@ -1,7 +1,7 @@
 
 from django.contrib.auth.models import User
 from pessoa.models import Funcionario
-from usuarios.models import Usuarios
+from usuarios.models import Usuarios, Plano
 from django.views import View
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
@@ -43,8 +43,11 @@ class NovoUsuario(View):
             permissao= Group.objects.get(name='Administrador') # Buscando permissão
             permissao_add= usuario.groups.add(permissao)# Inserindo permissão de administrador no novo usuário
             cliente = usuario.id # Buscando o ID do usuário criado
+            
+            plano= Plano.objects.first()
+            plano= plano.id
             novo_usuario = Usuarios.objects.create(
-                usuario_cliente= cliente, user_id= cliente, plano_id= '1')# Criando novo usuário_cliente administrador
+                usuario_cliente= cliente, user_id= cliente, plano_id= plano)# Criando novo usuário_cliente administrador
 
             data['usuario'] = usuario
             data['novo_usuario'] = novo_usuario
