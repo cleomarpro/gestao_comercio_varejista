@@ -10,7 +10,7 @@ class Plano(models.Model):
 
 
     def __str__(self):
-        return str(self.nome)
+        return str(self.nome)+'-'+str(self.id)
 
 
 class Usuarios(models.Model):
