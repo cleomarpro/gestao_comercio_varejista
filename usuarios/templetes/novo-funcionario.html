@@ -9,7 +9,8 @@
              style=" color:#EEE9E9;">Novo Funcionário</label>
         </h1>
             <label>Nome*:</label>
-                <input style='width:200px;' Type='text' name= 'primeiro_nome'id= 'primeiro_nome' required/>
+                <input style='width:200px;' Type='text' value= "{{usuario}}"
+                    name='primeiro_nome' id='primeiro_nome' required/>
                 <br>
             <label>Segundo nome*:</label>
                 <input style='width:200px;' Type='text' name= 'segundo_nome'id= 'segundo_nome' required/>
@@ -80,7 +81,10 @@
                     <td>{{ usuarios.user.username }}</td>
                     <td>{{ usuarios.user.last_login }}</td>
                     <td>{{ usuarios.user.is_active }}</td>
-
+                    <td>  
+                        <a href="{% url 'update-funcionario' usuarios.user.id %} ">Editar</a>
+                        <a href="{% url 'delete-funcionario' usuarios.user.id %}"> Excluir </a>
+                    </td>
                 </tr>
             {%endfor%}
         </tbody>
