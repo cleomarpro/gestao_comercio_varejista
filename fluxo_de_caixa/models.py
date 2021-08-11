@@ -54,8 +54,6 @@ class Depositar_sacar(models.Model):
 
 class Tipo_de_pagamento(models.Model):
     nome = models.CharField(max_length=30)
-    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
-    usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.nome)

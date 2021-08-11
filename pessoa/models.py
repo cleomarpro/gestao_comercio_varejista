@@ -6,8 +6,8 @@ from usuarios.models import Usuarios
 
 class Sexo (models.Model):
     nome = models.CharField(max_length=30,  blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
+    #user = models.ForeignKey(User, on_delete=models.CASCADE)
+    #usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
 
     def __str__(self): # METODO CONSTRUTOR
        return str(self.nome) + ' - ' + str(self.id)

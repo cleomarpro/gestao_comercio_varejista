@@ -1,5 +1,7 @@
 # DA CONTINUIDADE A UM PROJETO QUE ESTAVA EM REPOSITÓRIO DO GIT
 
+
+
 1. git config --global user.name "usuário" (criando usuário do git, utiliza o mesmo do github)
 2. git config --global user.email "email" (E-mail do github)
 3. git config --global user.name (visualizar usuário utilizado)
@@ -92,3 +94,31 @@ sudo service apache2 reload (reiniciar o servido aplicando mudanças de configur
 # comandos ubunto(linux)
 
 - mkdir nomeDaPasta (criar pasta)
+
+# DADOS NECESSÁRIO PARA INICIAR O SISTEMA
+
+from usuarios.models import*
+from pessoa.models import*
+from fluxo_de_caixa.models import*
+
+Tipo_de_pagamento.objects.create(nome='Cédula', id='1') 
+
+Tipo_de_pagamento.objects.create(nome='Crédito', id='2') 
+
+Tipo_de_pagamento.objects.create(nome='Débito', id='3')  
+
+Tipo_de_pagamento.objects.create(nome='Cédula e Débito', id='4')
+
+Tipo_de_pagamento.objects.create(nome='Cédula e Crédito', id='5')
+
+Tipo_de_pagamento.objects.create(nome='Crédito e Débito', id='6')
+
+Tipo_de_pagamento.objects.create(nome='')
+
+Plano.objects.create(nome='Sem plano', id='1') 
+
+Sexo.objects.create(id= '1', nome='Não espesificado') 
+
+Sexo.objects.create(id= '2', nome='Masculino')        
+
+Sexo.objects.create(id= '3', nome='Feminino')         

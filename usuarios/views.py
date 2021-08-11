@@ -117,11 +117,9 @@ class NovoFuncionario(View):
             permissaos= Group.objects.get(name= request.POST['permissao']) # Buscando permissão
             permissao_add= usuario.groups.add(permissaos)# Inserindo permissão ao novo usuário
             
-            sexo= Sexo.objects.first()
-            sexo= sexo.id
             usuario= usuario.id # Id do novo usuario local criado
             funcionario = Funcionario.objects.create(
-                usuarios_id = usuarioId, user_id= usuario, Sexo_id= sexo,
+                usuarios_id = usuarioId, user_id= usuario,
                 nome= request.POST['primeiro_nome'],
                 segundo_nome= request.POST['segundo_nome'],
                 )
