@@ -10,7 +10,7 @@ class Sexo (models.Model):
     usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
 
     def __str__(self): # METODO CONSTRUTOR
-       return self.nome
+       return str(self.nome) + ' - ' + str(self.id)
 
 
 class Pessoa (models.Model):

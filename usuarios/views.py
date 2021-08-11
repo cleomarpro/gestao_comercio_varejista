@@ -184,7 +184,6 @@ class UpdateFuncionario(View):
         
         data['usuario'] = usuario
         data['permissoes'] = usuario.groups.all()
-        usuario.save()
         return render(
                 request, 'update-funcionario.html', data)
 
