@@ -6,6 +6,7 @@ from django.views import View
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.conf import settings
 #from django.contrib.auth.models import Permission
 #from django.contrib.contenttypes.models import ContentType
 # Create your views here.
@@ -132,21 +133,23 @@ class NovoFuncionario(View):
 
 class UpdateFuncionario(View):
     def get(self, request, id):
+        user = request.user.has_perm('auth.delete_user')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            #usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            #usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-       
+        funcionario= Funcionario.objects.get(user__id = id) # buscado funcionário baseado no usuário logado
+        usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+    
+        if  user_logado == usuarioCliente:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
         data = {}
         usuario= User.objects.get(id= id)
         data['usuario'] = usuario
         data['permissoes'] = usuario.groups.all()
+        data['usuarioCliente'] = usuarioCliente
         return render(
                 request, 'update-funcionario.html', data)
 
@@ -189,9 +192,18 @@ class UpdateFuncionario(View):
 
 @login_required()
 def funcionarioDelete(request, id):
-    #user = request.user.has_perm('pessoa.delete_fornecedor')
-    #if user == False:
-       # return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+    user = request.user.has_perm('auth.delete_user')
+    if user == False:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+    user_logado = request.user # Obitendo o usuário logado
+    user_logado = user_logado.id # obitendo o ID do usuário logado
+    funcionario= Funcionario.objects.get(user__id = id) # buscado funcionário baseado no usuário logado
+    usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+
+    if  user_logado == usuarioCliente:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
     data  = {}
     usuario= User.objects.get(id= id)
     if request.method == 'POST':

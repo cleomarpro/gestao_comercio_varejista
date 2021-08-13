@@ -4,4 +4,44 @@
 <form class='formulario'>
     <label> Olá {{user}}, bem vinda a tela inicial do sistema! </a> </label>
 </form>
+
+
+</form >
+
+<h3 class='titulo_usuario'> Dados pessoais</h3>
+
+<form class='usuario'>
+
+    <label>Nome fantasia: ${{usuario.nome}}</label>
+     <br>
+    <label>
+    <label>id: ${{usuario.user.id}} </label>
+      <a style='text-align: center;'>Por tipo de pagamento</a>
+      <br>
+    <label style='border: 1px solid #303131; border-radius:
+        5px; font-size:15px; padding: 5px; width: 180px;'>
+        Cédula:${{ cedula.total_venda_cedula | floatformat:2}} </label>
+    <label style='border: 1px solid #303131; border-radius:
+        5px; font-size:15px; padding: 5px; width: 180px;'>
+        Crédito: ${{ credito.total_venda_credito | floatformat:2}}</label>
+    <label style='border: 1px solid #303131; border-radius:
+        5px; font-size:15px; padding: 5px; width: 180px;'>
+        Débito: ${{ debito.total_venda_debito | floatformat:2}}</label>
+</label>
+     <br>
+    <label>Total de descontos: ${{desconto_po_mes.total_desconto | floatformat:2}} </label>
+    <br>
+    <label>Lucro obtido: ${{lucro_mensal | floatformat:2}}</label>
+
+     <h4> Outras observações</h4>
+
+     <label >Gastos extras: ${{gastos_extras.gastos | floatformat:2}}</label>
+    <br>
+    <label>Contas a receber: ${{Contas_mensal_a_receber.total_conta | floatformat:2}} </label>
+    <br>
+    <label>Contas a pagar: ${{Contas_mensal_a_pagar.total_conta | floatformat:2}} </label>
+      <br>
+
+</form>
+</div>
 {% endblock %}
