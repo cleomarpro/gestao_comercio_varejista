@@ -16,6 +16,8 @@ class Usuario(View):
     def get(self, request):
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
-       
-        usuario = Usuarios.objects.get(user_id = user_logado)
-        return render(request,'usuario.html', {'usuario': usuario})
+        if Usuarios.objects.filter(user_id = user_logado):
+            usuario = Usuarios.objects.get(user_id = user_logado)
+            return render(request,'usuario.html', {'usuario': usuario})
+        else:
+            return render(request,'funcionario.html')

@@ -1,0 +1,57 @@
+{% extends 'base.html'%}
+{% block main%}
+<div class='div_Mae'>
+
+</form >
+
+<h3 class='titulo_usuario'> Meus dados</h3>
+
+<form class='usuario'>
+
+    <label>Nome fantasia:  {{usuario.nome_fantazia}}</label>
+     <br>
+    <label>Cnpj: {{usuario.cpf_cnpj}}</label>
+     <br>
+    <label>Data de criacão: {{usuario.data_de_criacao}}</label>
+     <br>
+    <label>Razão Social: {{usuario.razao_social}}</label>
+     <br>
+    <label>Inscricão Estadual: {{usuario.inscricao_estadual}}</label>
+     <br>
+    <label>Inscricão Municipal: {{usuario.inscricao_municipal}}</label>
+     <br>
+    <label>Nascionalidade: {{usuario.nascionalidade}}</label>
+     <br>
+    <label>CEP: {{usuario.cep}}</label>
+     <br>
+    <label>Rua: {{usuario.rua}}</label>
+     <br>
+    <label>Quadra: {{usuario.quadra}}</label>
+     <br>
+    <label>Número: {{usuario.numero}}</label>
+     <br>
+    <label>Setor: {{usuario.setor}}</label>
+     <br>
+    <label>Pais: {{usuario.pais}}</label>
+     <br>
+    <label>Estado: {{usuario.estado}}</label>
+     <br>
+    <label>Cidade: {{usuario.cidade}}</label>
+     <br>
+    <label>Complemento: {{usuario.complemento}}</label>
+     <br>
+    <label>DDD: {{usuario.DDD}}</label>
+     <br>
+    <label>Telefone: {{usuario.Telefone}}</label>
+     <br>
+    <label>E-mail: {{usuario.email}}</label>
+     <br>
+     <br>
+    <button style="width: 50%; border: 1px solid #303131; color:white; background-color: #4F4F4F; font-size:18px;">
+    <a style="color:white;" href="{% url 'update-usuario'%} ">Editar</a> </button>
+    <br>
+    <br>
+    <br>
+</form>
+</div>
+{% endblock %}

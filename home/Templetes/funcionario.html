@@ -1,0 +1,20 @@
+{% extends 'base.html'%}
+{% block main%}
+<div class='div_Mae'>
+
+</form >
+
+<h3 class='titulo_usuario'> Meus dados</h3>
+
+<form class='usuario'>
+
+    <label>Nome:  {{user.first_name}} {{user.last_name}}</label>
+     <br>
+    <label>Usuário: {{user.username}}</label>
+     <br>
+    <label>E-mail: {{user.email}}</label>
+    <br>
+    <br>
+</form>
+</div>
+{% endblock %}

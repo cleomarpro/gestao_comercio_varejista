@@ -52,20 +52,26 @@ class AtualizarPedido(LoginRequiredMixin, View):
         data['finalizada']= request.POST.get('finalizada', False)
         data['desconto'] = request.POST['desconto']
         data['venda_id'] = request.POST['venda_id']
+        vendas= Venda.objects.get(id= data['venda_id'])
+        usuario_adm = vendas.usuarios.id
 
         if data['venda_id']:
-            venda = Venda.objects.get(id=data['venda_id'])
-            venda.desconto = data['desconto'].replace(',', '.') or 0
-            venda.tipo_de_pagamento_id = data['pagamento'] or 1
-            venda.finalizada = data['finalizada']
-            venda.descricao = data['descricao']
-            venda.valor_recebido = data['valor_recebido'].replace(',', '.')
-            venda.valor_credito = data['valor_credito']
-            venda.valor_debito = data['valor_debito'].replace(',', '.')
-            venda.user_id = user_logado
-            venda.venda_id = data['venda_id']
+            if usuario_adm == usuario:
+                venda = Venda.objects.get(id=data['venda_id'])
+                venda.desconto = data['desconto'].replace(',', '.') or 0
+                venda.tipo_de_pagamento_id = data['pagamento'] or 1
+                venda.finalizada = data['finalizada']
+                venda.descricao = data['descricao']
+                venda.valor_recebido = data['valor_recebido'].replace(',', '.')
+                venda.valor_credito = data['valor_credito']
+                venda.valor_debito = data['valor_debito'].replace(',', '.')
+                venda.user_id = user_logado
+                venda.venda_id = data['venda_id']
 
-            venda.save()
+                venda.save()
+            
+            else:
+                return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
         else:
             venda = Venda.objects.create(user_id = user_logado, usuarios_id = usuario)
 
@@ -230,15 +236,27 @@ class EditPedido(LoginRequiredMixin, View):
         user = request.user.has_perm('fluxo_de_caixa.view_venda')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuario = usuario.id # Obitendo o id  do usuário administrador
 
         data = {}
         venda = Venda.objects.get(id=venda)
-        data['venda'] = venda
-        data['itens'] = venda.itemdopedido_set.all()
-        return render(
-            request, 'novo-pedido.html', data)
-
-
+        usuario_adm = venda.usuarios.id
+        if usuario_adm == usuario:
+            data['venda'] = venda
+            data['itens'] = venda.itemdopedido_set.all()
+            return render(
+                request, 'novo-pedido.html', data)
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        
 class DeletePedido(LoginRequiredMixin, View):
     def get(self, request, venda):
         user = request.user.has_perm('fluxo_de_caixa.delete_venda')

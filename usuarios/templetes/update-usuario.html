@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block main %}
+<div class='div_Mae'>
+    <form class='formulario' action="{% url 'update-usuario' %}" method="POST" >
+         {% csrf_token %}
+    <h1
+         style=" color:#EEE9E9;">Atualizar meus dados</label>
+    </h1>
+             <br>
+            <label>Cnpj:</label>
+                <input style=" width:250px;"  type="text" value= "{{usuario.cpf_cnpj}}"
+                    id="cpf_cnpj" name="cpf_cnpj" required/>
+             <br>
+             <!--
+            <label> Plano:</label>
+                <input style=" width:200px;"  type="text" id="plano" 
+                    name="plano" value= "{{usuario.plano.nome}}" >
+             <br>
+              -->
+            <label> Razão social:</label>
+                <input style=" width:200px;"  type="text" id="razao_social" 
+                    name="razao_social" value= "{{usuario.razao_social}}" >
+             <br>
+             
+            <label> inscricao_estadual:</label>
+                <input style=" width:180px;" type="text" id="inscricao_estadual" 
+                    name="inscricao_estadual" value= "{{usuario.inscricao_estadual}}" >
+             <br>
+    
+             <label> inscricao_municipal:</label>
+            <input style=" width:140px;" type="text" id="inscricao_municipal" 
+                name="inscricao_municipal" value= "{{usuario.inscricao_municipal}}" >
+                <br>
+             <label>Nascionalidade:</label>
+                <input style=" width:140px;"  type="text" id="nascionalidade"
+                    name="nascionalidade" value= "{{usuario.nascionalidade}}" >
+             <br>
+            <label> CEP:</label>
+            <input style=" width:200px;"  type="text" id="cep"
+                 name="cep" value= "{{usuario.cep}}" >
+            <BR>
+            <label> Rua:</label>
+                <input style=" width:200px;"  value= "{{usuario.rua}}" 
+                  type="text" id="rua" name="rua" />
+
+
+            <label> Quadra:</label>
+                <input style=" width:80px;"  placeholder=" Quadra..." 
+                type="text" id="quadra" name="quadra" value= "{{usuario.quadra}}" >
+                <br>
+            <label> Número:</label>
+                <input style=" width:80px;"  placeholder=" Número..." 
+                type="text" id="numero" name="numero" value= "{{usuario.numero}}" >
+            
+            <label> Setor:</label>
+                <input style=" width:150px;"  placeholder=" Setor..."
+                    type="text" id="setor" name="setor" value= "{{usuario.setor}}" >
+            <br>
+
+            <label> Estado:</label>
+                <input style=" width:200px;"  placeholder=" Estado..." 
+                type="text" id="estado" name="estado" value= "{{usuario.estado}}" >
+             <br>
+
+            <label> Cidade:</label>
+                <input style=" width:200px;"  placeholder=" Cidade..." 
+                type="text" id="cidade" name="cidade" value= "{{usuario.cidade}}" >
+             <br>
+
+            <label> Complemento:</label>
+                <input style=" width:180px;"  placeholder=" Complemento..." 
+                type="text" id="complemento" name="complemento" value= "{{usuario.complemento}}" >
+             <br>
+            <label> Pais:</label>
+                <input style=" width:100px;"  placeholder=" Pais..." type="text" 
+                    id="pais" name="pais" value= "{{usuario.pais}}" >
+            <br>
+            <label> DDD:</label>
+                <input style=" width:100px;"  placeholder=" Celular..."
+                     type="text" id="DDD" name="DDD" value= "{{usuario.DDD}}" >
+             <br>
+            <label> Celular:</label>
+                <input style=" width:100px;"  placeholder=" Celular..." 
+                type="text" id="Celular" name="Celular" value= "{{usuario.Celular}}" >
+             <br>
+
+            <label> Telefone:</label>
+                <input placeholder=" Telefone..." type="text" 
+                    id="Telefone" name="Telefone" value= "{{usuario.Telefone}}" >
+            <br>
+            <label> E-mail:</label>
+                <input   placeholder=" E-mail..." type="text" id="email" 
+                    name="email" value= "{{usuario.email}}" >
+            <br>
+            <label> Nome Fantazia:</label>
+                <input  type="text" id="nome_fantazia" 
+                    name="nome_fantazia" value= "{{usuario.nome_fantazia}}" >
+            <br>
+            <label> Data de criação:</label>
+                <input  type="date" id="data_de_criacao" value= "{{usuario.data_de_criacao}}" 
+                    name="data_de_criacao" required/>
+               <br>
+            <button  type="submit"> Atualizar</button>
+   
+</div>
+
+{% endblock %}

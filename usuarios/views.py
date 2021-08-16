@@ -55,6 +55,50 @@ class NovoUsuario(View):
             return render(
                 request, 'novo-usuario.html', data)
 
+class UpdateUsuario(View):
+    def get(self, request):
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        usuario = Usuarios.objects.get(user_id = user_logado)
+
+        return render(request,'update-usuario.html', {'usuario': usuario})
+    
+    def post(self, request):
+       
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        usuario = Usuarios.objects.get(user_id = user_logado)
+        
+        usuario.id= usuario.id
+        usuario.cpf_cnpj= request.POST['cpf_cnpj']
+        #user= request.POST['user']
+        #usuario_cliente= request.POST['usuario_cliente']
+        #usuario.plano= request.POST['plano']
+        usuario.razao_social= request.POST['razao_social']
+        usuario.inscricao_estadual= request.POST['inscricao_estadual']
+        usuario.inscricao_municipal= request.POST['inscricao_municipal']
+        usuario.nascionalidade= request.POST['nascionalidade']
+        usuario.cep= request.POST['cep']
+        usuario.rua= request.POST['rua']
+        usuario.quadra= request.POST['quadra']
+        usuario.numero= request.POST['numero']
+        usuario.setor= request.POST['setor']
+        usuario.estado= request.POST['estado']
+        usuario.cidade= request.POST['cidade']
+        usuario.pais= request.POST['pais']
+        usuario.complemento= request.POST['complemento']
+        usuario.DDD= request.POST['DDD']
+        usuario.Celular= request.POST['Celular']
+        #DDD= request.POST['DDD']
+        usuario.Telefone= request.POST['Telefone']
+        usuario.email= request.POST['email']
+        usuario.nome_fantazia= request.POST['nome_fantazia']
+        usuario.data_de_criacao= request.POST['data_de_criacao']
+        #data_hora= request.POST['data_hora']
+        usuario.save()
+        
+        return render(request,'update-usuario.html', {'usuario': usuario})
+
 class NovoFuncionario(View):
     def get(self, request):
         user_logado = request.user # Obitendo o usuário logado
@@ -168,9 +212,10 @@ class UpdateFuncionario(View):
 
         usuario= User.objects.get(id= id)
 
-        usuario.id = id
+        
         #usuario.password= request.POST['password']
         #usuario.username= request.POST['username']
+        usuario.id = id
         usuario.email= request.POST['email']
         usuario.first_name= request.POST['primeiro_nome']
         usuario.last_name= request.POST['segundo_nome']
