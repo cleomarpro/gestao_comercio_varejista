@@ -211,8 +211,6 @@ class UpdateFuncionario(View):
             usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
 
         usuario= User.objects.get(id= id)
-
-        
         #usuario.password= request.POST['password']
         #usuario.username= request.POST['username']
         usuario.id = id

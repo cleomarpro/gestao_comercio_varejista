@@ -52,10 +52,11 @@ class AtualizarPedido(LoginRequiredMixin, View):
         data['finalizada']= request.POST.get('finalizada', False)
         data['desconto'] = request.POST['desconto']
         data['venda_id'] = request.POST['venda_id']
-        vendas= Venda.objects.get(id= data['venda_id'])
-        usuario_adm = vendas.usuarios.id
-
+        
         if data['venda_id']:
+            vendas= Venda.objects.get(id= request.POST['venda_id'])
+            usuario_adm = vendas.usuarios.id
+
             if usuario_adm == usuario:
                 venda = Venda.objects.get(id=data['venda_id'])
                 venda.desconto = data['desconto'].replace(',', '.') or 0
@@ -262,16 +263,40 @@ class DeletePedido(LoginRequiredMixin, View):
         user = request.user.has_perm('fluxo_de_caixa.delete_venda')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuario = usuario.id # Obitendo o id  do usuário administrador
 
         venda = Venda.objects.get(id=venda)
-        return render(
-            request, 'delete-pedido-confirm.html', {'venda': venda})
+        usuario_adm = venda.usuarios.id
+        if usuario_adm == usuario: # Verificar autenticidade do usuário
+            return render(
+                request, 'delete-pedido-confirm.html', {'venda': venda})
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     def post(self, request, venda):
-        venda = Venda.objects.get(id=venda)
-        venda.delete()
-        return redirect('lista-vendas')
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuario = usuario.id # Obitendo o id  do usuário administrador
 
+        venda = Venda.objects.get(id=venda)
+        usuario_adm = venda.usuarios.id
+        if usuario_adm == usuario:
+            venda.delete()
+            return redirect('lista-vendas')
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
 class DeleteItemPedido(LoginRequiredMixin, View):
     def get(self, request, item):

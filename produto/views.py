@@ -48,12 +48,6 @@ class NovoProduto(LoginRequiredMixin, View):
     def post(self, request):
         data = {}
         today = date.today()
-        data['nome'] = request.POST['nome']
-        data['categoria_id'] = request.POST['categoria_id']
-        data['codigo'] = request.POST['codigo']
-        data['percentagem_de_lucro'] = request.POST['percentagem_de_lucro']
-        data['promocao'] = request.POST['promocao']
-        data['valor_compra'] = request.POST['valor_compra']
         #data['imagem'] = request.POST['imagem']
 
         user_logado = request.user # Obitendo o usuário logado
@@ -102,17 +96,95 @@ def produto_delete(request, id):
     if user == False:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     data  = {}
-    produto = Produto.objects.get(id=id)
-    if request.method == 'POST':
-        produto.delete()
-        return redirect('produto')
+    user_logado = request.user # Obitendo o usuário logado
+    user_logado = user_logado.id # obitendo o ID do usuário logado
+    if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+        funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+        usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
     else:
-        return render(request, 'produto/delete-produto-confirm.html',data)
+        usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+        usuario = usuario.id # Obitendo o id  do usuário administrador
+    
+    produto = Produto.objects.get(id=id)
+    usuario_adm= produto.usuarios.id
+    if usuario_adm == usuario: # Verificar autenticidade do usuário
+        if request.method == 'POST':
+            produto.delete()
+            return redirect('produto')
+        else:
+            return render(request, 'produto/delete-produto-confirm.html',data)
+    else:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+class ProdutoUpdate(LoginRequiredMixin, View):
+    def get(self, request, id):
+        data = {}
+        user = request.user.has_perm('produto.add_produto')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+            
+        else:
+            user_logado = request.user # Obitendo o usuário logado
+            user_logado = user_logado.id # obitendo o ID do usuário logado
+            if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+                funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+                usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+                usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+            else:
+                usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+                usuarioId = usuario.id # Obitendo o id  do usuário administrador
+                usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+           
+            produto = Produto.objects.get(id=id)
+            usuario_adm= produto.usuarios.id
+            if usuario_adm == usuarioId: # Verificar autenticidade do usuário
 
-class ProdutoUpdate(LoginRequiredMixin, UpdateView):
-    model = Produto
-    fields = ['nome', 'percentagem_de_lucro','valor_compra']
-    success_url = '/produto/produto/'
+                data['produto']  = Produto.objects.get(id= id)
+                data['categoria'] =Categoria.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
+                data['promocao'] = Promocao.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
+                return render(request, 'produto/produto_update.html',data)
+            else:
+                return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+    def post(self, request, id):
+        data = {}
+
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuarioId = usuario.id # Obitendo o id  do usuário administrador
+            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+        produto = Produto.objects.get(id=id)
+        usuario_adm= produto.usuarios.id
+        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+            produtos=Produto.objects.filter(id= id)
+            produto_id= Produto.objects.filter(usuarios__usuario_cliente= usuarioCliente, codigo= request.POST['codigo']) or 0
+            if produtos != 0 or produto_id != 0:
+
+                produto= Produto.objects.get(id= id)
+                
+                produto.id = id
+                produto.nome = request.POST['nome']
+                produto.categoria_id = request.POST['categoria_id']
+                produto.codigo = request.POST['codigo']
+                produto.percentagem_de_lucro = request.POST['percentagem_de_lucro'].replace(',', '.')
+                produto.promocao_id = request.POST['promocao' ]
+                produto.valor_compra = request.POST['valor_compra'].replace(',', '.')
+                produto.user_id = user_logado
+                produto.usuarios_id = usuarioId
+                #imagem = request.POST['imagem'],
+                produto.save()
+
+            data['produto']  = produto
+            data['categoria'] =Categoria.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
+            data['promocao'] = Promocao.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
+            return render(request, 'produto/produto_update.html',data)
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
 class ListaProdutos(LoginRequiredMixin, View):
     def get(self, request):

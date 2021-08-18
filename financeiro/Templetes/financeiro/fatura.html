@@ -1,0 +1,24 @@
+{% extends 'base.html'%}
+{% block main%}
+<div class='div_Mae'>
+
+</form >
+
+<h3 class='titulo_usuario'> Resumo da fatura</h3>
+
+<form class='usuario'>
+
+    <label>Nome fantasia:  {{usuario.nome_fantazia}}</label>
+     <br>
+    <label>Cnpj: {{usuario.cpf_cnpj}}</label>
+     
+     <br>
+     <br>
+    <button style="width: 50%; border: 1px solid #303131; color:white; background-color: #4F4F4F; font-size:18px;">
+    <a style="color:white;" href="{% url 'update-usuario'%} ">Editar</a> </button>
+    <br>
+    <br>
+    <br>
+</form>
+</div>
+{% endblock %}

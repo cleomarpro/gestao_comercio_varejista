@@ -26,7 +26,7 @@
             <br>
             <label> Categoria:</label>
                 <select style=" width:200px;" type="search" id="categoria_id"
-                    name="categoria_id" required/>
+                    name="categoria_id" required>
                     <tr>
                         <option value=''> __Selecionar__</option>
                     {% for categoria in categoria %}
@@ -37,9 +37,9 @@
                 <br>
             <label> Promoção:</label>
                 <select style=" width:200px;" type="search" id="promocao"
-                    name="promocao" >
+                    name="promocao" required>
                     <tr>
-                        <option value=''> __Selecionar__</option>
+                        <option value='1'> __Selecionar__</option>
                     {% for promocao in promocao %}
                             <option value='{{promocao.id}}'> {{promocao.descricao}}</option>
                     {% endfor %}
@@ -141,7 +141,7 @@
                     <td>{{ produto.promocao.descricao}}</td>
 
                     {% if perms.produto.change_produto %}
-                        <td> <a href="{% url 'produto_update_cbv' produto.id %}">Editar</a>  </td>
+                        <td> <a href="{% url 'produto_update' produto.id %}">Editar</a>  </td>
                     {% endif %}
 
                     {% if perms.produto.delete_produto %}
