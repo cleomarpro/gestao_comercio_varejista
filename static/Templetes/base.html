@@ -113,6 +113,7 @@
             {%endif%}
                 ---------------------------
             {% if perms.produto.add_produto %}
+                <li> <a href="{% url 'fatura' %}">-Resumo da fatura</a></li>
                 <li> <a href="{% url 'relatorio-produtos' %}">-Relatório por produto</a></li>
                 <li> <a href="{% url 'relatorio_mensal' %}">-Relatório mensal</a></li>
                 <li> <a href="{% url 'relatorio_anual' %}">-Relatório anual</a></li>

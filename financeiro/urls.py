@@ -2,7 +2,7 @@ from django.urls import path
 from financeiro import views
 from .views import ( GastosExtras, GastosExtrasUpdate, ContasApagar, ContaAreceberUpdate,
 Relarorio_produtos, Relatorio_diario, Relatorio_mensal, Relatorio_anual,
-FiltroGastosExtras, ContasAreceber, ContaApagarUpdate, Pagamentos
+FiltroGastosExtras, ContasAreceber, ContaApagarUpdate, Pagamentos, Fatura
 )
 
 
@@ -21,5 +21,6 @@ urlpatterns = [
     path('relatorio-diario/', Relatorio_diario.as_view(), name='relatorio_diario'),
     path('relatorio-mensal/', Relatorio_mensal.as_view(), name='relatorio_mensal'),
     path('relatorio-anual/', Relatorio_anual.as_view(), name='relatorio_anual'),
+    path('fatura/', Fatura.as_view(), name='fatura'),
     path('filtro-gastos-extras/', FiltroGastosExtras.as_view(), name='filtro_gastos_extras'),
 ]

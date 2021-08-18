@@ -9,6 +9,7 @@ from .models import Gastos_extras
 from .models import Tipo_de_conta
 from pessoa.models import Cliente
 from pessoa.models import Funcionario
+from produto.models import EntradaMercadoria
 from usuarios.models import Usuarios
 from django.db.models import Sum, Count, F #Avg ,DecimalField, F # Max ExpressionWrapper FloatField DecimalField Sum
 from datetime import date
@@ -250,7 +251,7 @@ class ContasApagar(LoginRequiredMixin, View):
         prox_5_dias = date(ano_atual, mes_atual, prox_5_dias)
 
         conta = Contas.objects.filter(usuarios__usuario_cliente= usuario, tipo_de_conta_id=2).order_by('-id')
-        tipo_de_conta = Tipo_de_conta.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
+        tipo_de_conta = Tipo_de_conta.objects.all()
 
         Data_vencimento = request.GET.get('data_vencimento',None)
         estado_da_conta = request.GET.get('estado_da_conta',None)
@@ -628,8 +629,61 @@ class Relatorio_anual(LoginRequiredMixin, View):
                     'ano_atual':ano_atual,
                     })
 
+class Fatura(LoginRequiredMixin, View):
+    def get(self, request):
+        user = request.user.has_perm('financeiro.delete_pagamento')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID do usuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuario = usuario.usuario_cliente # Obtendo o id  do usuário administrador
+        data = {}
+        today = date.today()
+        ano_atual = today.year
+        MES = today.month
+        Mes= request.GET.get('mes',None)
+        if Mes == None:
+            Mes= MES
 
+            vendas = Venda.objects.filter(
+                usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual ).aggregate(count= Count('id'))
+            vendas = vendas['count'] or 0
+
+            item_do_pedito = ItemDoPedido.objects.filter(
+                usuarios__usuario_cliente= usuario, venda__data_hora__month= Mes, venda__data_hora__year= ano_atual ).aggregate(count= Count('id'))
+            item_do_pedito = item_do_pedito['count'] or 0
+            
+            Contas_a_receber = Contas.objects.filter(
+                usuarios__usuario_cliente= usuario, data_hora__month= Mes, tipo_de_conta__id=1, data_hora__year= ano_atual).aggregate(count= Count('id'))
+            Contas_a_receber = Contas_a_receber['count'] or 0
+
+            Contas_a_pagar = Contas.objects.filter(
+                usuarios__usuario_cliente= usuario, data_hora__month= Mes, tipo_de_conta__id=2, data_hora__year= ano_atual).aggregate(count= Count('id'))
+            Contas_a_pagar = Contas_a_pagar['count'] or 0
+
+            entrada_ee_mercadoria = EntradaMercadoria.objects.filter(
+                usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual).aggregate(count= Count('id'))
+            entrada_ee_mercadoria = entrada_ee_mercadoria['count'] or 0
+
+            total_de_registros= vendas + item_do_pedito + Contas_a_receber + Contas_a_pagar + entrada_ee_mercadoria
+
+            total_a_pagar= total_de_registros * 4 / 100
+
+        data['vendas']= vendas
+        data['item_do_pedito']= item_do_pedito
+        data['Contas_a_receber']= Contas_a_receber
+        data['Contas_a_pagar']= Contas_a_pagar
+        data['entrada_ee_mercadoria']= entrada_ee_mercadoria
+        data['total_de_registros']= total_de_registros
+        data['total_a_pagar']= total_a_pagar
+
+        return render( request, 'financeiro/fatura.html', data)
 
 
 
