@@ -158,11 +158,13 @@ class ProdutoUpdate(LoginRequiredMixin, View):
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
             usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+        
         produto = Produto.objects.get(id=id)
         usuario_adm= produto.usuarios.id
         if usuario_adm == usuarioId: # Verificar autenticidade do usuário
             produtos=Produto.objects.filter(id= id)
             produto_id= Produto.objects.filter(usuarios__usuario_cliente= usuarioCliente, codigo= request.POST['codigo']) or 0
+           
             if produtos != 0 or produto_id != 0:
 
                 produto= Produto.objects.get(id= id)
@@ -175,9 +177,9 @@ class ProdutoUpdate(LoginRequiredMixin, View):
                 produto.promocao_id = request.POST['promocao' ]
                 produto.valor_compra = request.POST['valor_compra'].replace(',', '.')
                 produto.user_id = user_logado
-                produto.usuarios_id = usuarioId
                 #imagem = request.POST['imagem'],
                 produto.save()
+                return redirect('produto')
 
             data['produto']  = produto
             data['categoria'] =Categoria.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
@@ -265,12 +267,6 @@ class NovaPromocao (LoginRequiredMixin, View):
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
             usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
 
-        data['quantidade_promocional'] = request.POST['quantidade_promocional']
-        data['desconto'] = request.POST['desconto']
-        data['data_inicio'] = request.POST['data_inicio']
-        data['data_termino'] = request.POST['data_termino']
-        data['descricao'] = request.POST['descricao']
-
         promocao = Promocao.objects.create(
             quantidade_promocional = request.POST['quantidade_promocional'].replace(',', '.'),
             desconto = request.POST['desconto'].replace(',', '.'),
@@ -284,23 +280,96 @@ class NovaPromocao (LoginRequiredMixin, View):
         return render(
             request, 'produto/promocao.html', data)
 
-class PromocaoUpdate (LoginRequiredMixin, UpdateView):
-    model = Promocao
-    fields = ['descricao','quantidade_promocional','desconto','data_inicio','data_termino']
-    success_url = '/produto/promocao/'
+class PromocaoUpdate (LoginRequiredMixin, View):
+    def get(self, request, id):
+        user = request.user.has_perm('produto.add_promocao')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuarioId = usuario.id # Obitendo o id  do usuário administrador
+            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+       
+        promocao = Promocao.objects.get(id= id)
+        usuario_adm= promocao.usuarios.id
+        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+            return render(
+                request, 'produto/promocao-update.html',{'promocao': promocao})
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+
+    def post(self, request, id):
+        data = {}
+        user = request.user.has_perm('produto.add_promocao')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuarioId = usuario.id # Obitendo o id  do usuário administrador
+            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+
+            promocao = Promocao.objects.get(id= id)
+            promocao.id= id
+            promocao.quantidade_promocional = request.POST['quantidade_promocional'].replace(',', '.')
+            promocao.desconto = request.POST['desconto'].replace(',', '.')
+            promocao.data_inicio = request.POST['data_inicio'] 
+            promocao.data_termino = request.POST['data_termino' ]
+            promocao.descricao = request.POST['descricao' ]
+            promocao.user_id = user_logado
+            promocao.save()
+            return redirect('promocao')
+            
+        promocao = Promocao.objects.get(id= id)
+        usuario_adm= promocao.usuarios.id
+        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+            data['promocao'] = promocao
+            return render(
+                request, 'produto/promocao-update.html', data)
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
 def promocao_delete(request, id):
     user = request.user.has_perm('produto.delete_promocao')
     if user == False:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+    user_logado = request.user # Obitendo o usuário logado
+    user_logado = user_logado.id # obitendo o ID do usuário logado
+    if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+        funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+        usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+        usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+    else:
+        usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+        usuarioId = usuario.id # Obitendo o id  do usuário administrador
+        usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
 
     data  = {}
+
     promocao = Promocao.objects.get(id=id)
-    if request.method == 'POST':
-        promocao.delete()
-        return redirect('promocao')
+    usuario_adm= promocao.usuarios.id
+    if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+        if request.method == 'POST':
+            promocao.delete()
+            return redirect('promocao')
+        else:
+            return render(request, 'produto/delete-promocao-confirm.html',data)
     else:
-        return render(request, 'produto/delete-promocao-confirm.html',data)
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
 class Categoria_de_produto (LoginRequiredMixin, View):
     def get(self, request):
@@ -323,8 +392,6 @@ class Categoria_de_produto (LoginRequiredMixin, View):
         pass
     def post(self, request):
         data = {}
-        data['nome'] = request.POST['nome']
-
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
@@ -345,23 +412,90 @@ class Categoria_de_produto (LoginRequiredMixin, View):
         return render(
             request, 'produto/categoria.html', data)
 
-class CategoriaUpdate(LoginRequiredMixin, UpdateView):
-    #user = request.user.has_perm('produto.change_categoria')
-    model = Categoria
-    fields = ['nome']
-    success_url = '/produto/categoria/'
+class CategoriaUpdate(LoginRequiredMixin, View):
+    def get(self, request, id):
+        user = request.user.has_perm('produto.add_categoria')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuarioId = usuario.id # Obitendo o id  do usuário administrador
+            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+
+        categoria = Categoria.objects.get(id=id)
+        usuario_adm= categoria.usuarios.id
+        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+            return render(
+                request, 'produto/categoria_update.html', {'categoria': categoria})
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+      
+    def post(self, request, id):
+        user = request.user.has_perm('produto.change_categoria')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+        data = {}
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuarioId = usuario.id # Obitendo o id  do usuário administrador
+            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+
+        categoria = Categoria.objects.get(id=id)
+        usuario_adm= categoria.usuarios.id
+        if usuario_adm == usuarioId: # Verificar autenticidade do usuário 
+
+            categoria = Categoria.objects.get(id=id)
+            categoria.id= id
+            categoria.nome = request.POST['nome']
+            categoria.user_id = user_logado
+            categoria.save()
+            return redirect('categoria') 
+            data['categoria'] = categoria
+            return render(
+                request, 'produto/categoria_update.html', data)
+        else:
+             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
 def categoria_delete(request, id):
     user = request.user.has_perm('produto.delete_categoria')
     if user == False:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     data  = {}
-    categoria = Categoria.objects.get(id=id)
-    if request.method == 'POST':
-        categoria.delete()
-        return redirect('categoria')
+    user_logado = request.user # Obitendo o usuário logado
+    user_logado = user_logado.id # obitendo o ID do usuário logado
+    if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+        funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+        usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+        usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
     else:
-        return render(request, 'produto/delete-categoria-confirm.html',data)
+        usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+        usuarioId = usuario.id # Obitendo o id  do usuário administrador
+        usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+
+    categoria = Categoria.objects.get(id=id)
+    usuario_adm= categoria.usuarios.id
+    if usuario_adm == usuarioId: # Verificar autenticidade do usuário 
+        if request.method == 'POST':
+            categoria.delete()
+            return redirect('categoria')
+        else:
+            return render(request, 'produto/delete-categoria-confirm.html',data)
+    else:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
 class Entrada_Mercadoria (LoginRequiredMixin, View):
     def get(self, request):
@@ -429,22 +563,97 @@ class Entrada_Mercadoria (LoginRequiredMixin, View):
         return render(
             request, 'produto/entrada-mercadoria.html', data)
 
-class entradaMercadoria(LoginRequiredMixin, UpdateView):
-    model = EntradaMercadoria
-    fields = ['quantidade']
-    success_url = '/produto/entrada-mercadoria/'
+class EntradaMercadoriaUpdate(LoginRequiredMixin, View):
+    def get(self, request, id):
+        user = request.user.has_perm('produto.add_entradamercadoria')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuarioId = usuario.id # Obitendo o id  do usuário administrador
+            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+
+        entrada_Mercadoria= EntradaMercadoria.objects.get(id= id)
+        usuario_adm= entrada_Mercadoria.usuarios.id
+        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+
+            entrada_Mercadoria= EntradaMercadoria.objects.get(id= id)
+            return render(
+                request, 'produto/entrada_mercadoria_update.html',{'entrada_Mercadoria': entrada_Mercadoria})
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+    def post(self, request, id):
+        user = request.user.has_perm('produto.add_entradamercadoria')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+        data = {}
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuarioId = usuario.id # Obitendo o id  do usuário administrador
+            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+
+        entrada_Mercadoria= EntradaMercadoria.objects.get(id= id)
+        usuario_adm= entrada_Mercadoria.usuarios.id
+        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+
+            entrada_Mercadoria.id= id
+            entrada_Mercadoria.produto_id = request.POST['produto']
+            entrada_Mercadoria.fornecedor_id= request.POST['fornecedor']
+            entrada_Mercadoria.quantidade = request.POST['quantidade'].replace(',', '.')
+            entrada_Mercadoria.validade_produto= request.POST['validade_produto']
+            entrada_Mercadoria.user_id = user_logado 
+            entrada_Mercadoria.save()
+            return redirect('entrada-mercadoria')
+            
+            data['entrada_Mercadoria']= entrada_Mercadoria
+            return render(
+                request, 'produto/entrada_mercadoria_update.html', data)
+        else:
+             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
 def entradaMercadoria_delete(request, id):
     user = request.user.has_perm('produto.delete_entradamercadoria')
     if user == False:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-    data  = {}
-    entradaMercadoria = EntradaMercadoria.objects.get(id=id)
-    if request.method == 'POST':
-        entradaMercadoria.delete()
-        return redirect('entrada-mercadoria')
+    
+    user_logado = request.user # Obitendo o usuário logado
+    user_logado = user_logado.id # obitendo o ID do usuário logado
+    if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+        funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+        usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+        usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
     else:
-        return render(request, 'produto/entradaMercadoria-delete-confirme.html',data)
+        usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+        usuarioId = usuario.id # Obitendo o id  do usuário administrador
+        usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+
+    entrada_Mercadoria= EntradaMercadoria.objects.get(id= id)
+    usuario_adm= entrada_Mercadoria.usuarios.id
+    if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+        data  = {}
+        entrada_Mercadoria = EntradaMercadoria.objects.get(id=id)
+        if request.method == 'POST':
+            entrada_Mercadoria.delete()
+            return redirect('entrada-mercadoria')
+        else:
+            return render(request, 'produto/entradaMercadoria-delete-confirme.html',data)
+    else:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
 class FiltrarEntadaPorCategoria(LoginRequiredMixin, View):
     def get(self, request):

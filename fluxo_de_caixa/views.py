@@ -515,23 +515,36 @@ class AbrirFeixarCaixa(LoginRequiredMixin, View):
         today = date.today()
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuario = usuario.id # Obitendo o id  do usuário administrador
 
-        historico_do_caixa = Depositar_sacar.objects.filter(
-            Q(estadoDoCaixa='Feixado') | Q(estadoDoCaixa='Aberto'), caixa__id = id, user_id = user_logado,data_hora__contains= today).order_by('-id')
+        historico_do_caixa = Depositar_sacar.objects.get(id=id)
+        usuario_adm = historico_do_caixa.usuarios.id
+        if usuario_adm == usuario: # Verificar autenticidade do usuário
 
-        estado_do_caixa= Depositar_sacar.objects.filter(caixa__id = id).last()
-
-        DIA = request.GET.get('dia',None)
-        DIA2 = request.GET.get('dia2',None)
-
-        if DIA and DIA2 :
             historico_do_caixa = Depositar_sacar.objects.filter(
-            Q(estadoDoCaixa='Feixado') | Q(estadoDoCaixa='Aberto'), data_hora__range= (DIA, DIA2), caixa__id = id, user_id = user_logado, data_hora__contains= today).order_by('-id')
-        return render(
-            request, 'abrir-feixar-caixa.html',{
-                'historico_do_caixa':historico_do_caixa,
-                'estado_do_caixa': estado_do_caixa}
-            )
+                Q(estadoDoCaixa='Feixado') | Q(estadoDoCaixa='Aberto'), caixa__id = id, user_id = user_logado,data_hora__contains= today).order_by('-id')
+
+            estado_do_caixa= Depositar_sacar.objects.filter(caixa__id = id).last()
+
+            DIA = request.GET.get('dia',None)
+            DIA2 = request.GET.get('dia2',None)
+
+            if DIA and DIA2 :
+                historico_do_caixa = Depositar_sacar.objects.filter(
+                Q(estadoDoCaixa='Feixado') | Q(estadoDoCaixa='Aberto'), data_hora__range= (DIA, DIA2), caixa__id = id, user_id = user_logado, data_hora__contains= today).order_by('-id')
+            return render(
+                request, 'abrir-feixar-caixa.html',{
+                    'historico_do_caixa':historico_do_caixa,
+                    'estado_do_caixa': estado_do_caixa}
+                )
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
     def post(self, request, id):
         today = date.today()
 
@@ -549,37 +562,43 @@ class AbrirFeixarCaixa(LoginRequiredMixin, View):
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuario = usuario.id # Obitendo o id  do usuário administrador
 
-        venda_sedula= Venda.objects.filter(
-            data_hora__contains= today, user_id = user_logado, usuarios_id = usuario).aggregate(total_venda_cedula=Sum('valor_cedula'))
-        venda_sedula = venda_sedula['total_venda_cedula']or 0
+        historico_do_caixa = Depositar_sacar.objects.get(id=id)
+        usuario_adm = historico_do_caixa.usuarios.id
+        if usuario_adm == usuario: # Verificar autenticidade do usuário
 
-        estado_do_caixa= Depositar_sacar.objects.filter(caixa__id = id).aggregate(vendas=Sum('venda_realizadas'))
-        estado_do_caixa= estado_do_caixa['vendas'] or None
+            venda_sedula= Venda.objects.filter(
+                data_hora__contains= today, user_id = user_logado, usuarios_id = usuario).aggregate(total_venda_cedula=Sum('valor_cedula'))
+            venda_sedula = venda_sedula['total_venda_cedula']or 0
 
-        if estado_do_caixa != None:
-            ultimas_vendas= estado_do_caixa
+            estado_do_caixa= Depositar_sacar.objects.filter(caixa__id = id).aggregate(vendas=Sum('venda_realizadas'))
+            estado_do_caixa= estado_do_caixa['vendas'] or None
+
+            if estado_do_caixa != None:
+                ultimas_vendas= estado_do_caixa
+            else:
+                ultimas_vendas = 0
+            ultimas_vendas= float(venda_sedula) - float(ultimas_vendas)
+
+            saldoEmCaixa= Caixa.objects.get(id = id) # buscando o saldo atual do caiza
+            saldoEmCaixa= saldoEmCaixa.valor_atualizado
+            saldoEmCaixa= float(saldoEmCaixa) + float(ultimas_vendas)
+
+            deposito = Depositar_sacar.objects.create(
+                descricao= request.POST['descricao'],
+                estadoDoCaixa= request.POST['estadoDoCaixa'],
+                caixa_id= id, user_id = user_logado, usuarios_id = usuario,
+                venda_realizadas= ultimas_vendas, depositar= ultimas_vendas,
+                saldo_em_caixa= saldoEmCaixa
+                )
+            data['deposito'] = deposito
+            data['historico_do_caixa'] = Depositar_sacar.objects.filter(
+                Q(estadoDoCaixa='Feixado') | Q(estadoDoCaixa='Aberto'), caixa__id = id, user_id = user_logado,data_hora__contains= today).order_by('-id')
+            data['estado_do_caixa']= Depositar_sacar.objects.filter(caixa__id = id).last()
+
+            return render(
+                request, 'abrir-feixar-caixa.html', data)
         else:
-            ultimas_vendas = 0
-        ultimas_vendas= float(venda_sedula) - float(ultimas_vendas)
-
-        saldoEmCaixa= Caixa.objects.get(id = id) # buscando o saldo atual do caiza
-        saldoEmCaixa= saldoEmCaixa.valor_atualizado
-        saldoEmCaixa= float(saldoEmCaixa) + float(ultimas_vendas)
-
-        deposito = Depositar_sacar.objects.create(
-            descricao= request.POST['descricao'],
-            estadoDoCaixa= request.POST['estadoDoCaixa'],
-            caixa_id= id, user_id = user_logado, usuarios_id = usuario,
-            venda_realizadas= ultimas_vendas, depositar= ultimas_vendas,
-            saldo_em_caixa= saldoEmCaixa
-            )
-        data['deposito'] = deposito
-        data['historico_do_caixa'] = Depositar_sacar.objects.filter(
-            Q(estadoDoCaixa='Feixado') | Q(estadoDoCaixa='Aberto'), caixa__id = id, user_id = user_logado,data_hora__contains= today).order_by('-id')
-        data['estado_do_caixa']= Depositar_sacar.objects.filter(caixa__id = id).last()
-
-        return render(
-            request, 'abrir-feixar-caixa.html', data)
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
 '''
 python manage.py makemigrations (comando para migrar para o django)

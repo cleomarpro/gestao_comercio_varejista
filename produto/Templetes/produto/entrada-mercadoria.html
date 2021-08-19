@@ -6,7 +6,7 @@
 
 <!-- Formulário de entrada de mercadoria -->
     <form class='formulario' method="POST" action="{% url 'entrada-mercadoria' %}" >
-    <h1
+    <h1>
         <label style=" color:#EEE9E9;">Nova entrada de mercadoria</label>
     </h1>
                 {% csrf_token %}
@@ -125,7 +125,7 @@
             <td>{{ entrada.validade_produto}}</td>
 
             {% if perms.produto.change_entradamercadoria %}
-                <td> <a href="{% url 'entradaMercadoria_update_cbv' entrada.id %}">Editar</a> </td>
+                <td> <a href="{% url 'entrada_mercadoria_update' entrada.id %}">Editar</a> </td>
             {%endif%}
 
             {% if perms.produto.delete_entradamercadoria %}
