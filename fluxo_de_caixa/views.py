@@ -375,30 +375,42 @@ class CaixaDepositar(LoginRequiredMixin, View):
         user = request.user.has_perm('fluxo_de_caixa.add_depositar_sacar')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-        today = date.today()
-
-        depositos = Depositar_sacar.objects.filter(
-            caixa__id = id, data_hora__contains= today).order_by('-id').order_by('-data_hora')
-
+        
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuario = usuario.id # Obitendo o id  do usuário administrador
+        
         caixa = Caixa.objects.get(id=id)
+        usuario_adm = caixa.usuarios.id
+        if usuario_adm == usuario: # Verificar autenticidade do usuário
 
-        DIA = request.GET.get('dia',None)
-        DIA2 = request.GET.get('dia2',None)
+            today = date.today()
 
-        if DIA and DIA2 :
             depositos = Depositar_sacar.objects.filter(
-                data_hora__range= (DIA, DIA2), caixa__id = id).order_by('-data_hora')
-        return render(
-            request,'caixa-deposito.html',{'depositos':depositos,'caixa':caixa })
+                caixa__id = id, data_hora__contains= today).order_by('-id').order_by('-data_hora')
+
+            caixa = Caixa.objects.get(id=id)
+
+            DIA = request.GET.get('dia',None)
+            DIA2 = request.GET.get('dia2',None)
+
+            if DIA and DIA2 :
+                depositos = Depositar_sacar.objects.filter(
+                    data_hora__range= (DIA, DIA2), caixa__id = id).order_by('-data_hora')
+            return render(
+                request,'caixa-deposito.html',{'depositos':depositos,'caixa':caixa })
+        else:
+             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     def post(self, request, id):
         today = date.today()
         #today = date.today()
         data = {}
-
-        data['descricao'] = request.POST['descricao']
-        data['depositar'] = request.POST['depositar']
 
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
@@ -408,17 +420,24 @@ class CaixaDepositar(LoginRequiredMixin, View):
         else:
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuario = usuario.id # Obitendo o id  do usuário administrador
+        
+        caixa = Caixa.objects.get(id=id)
+        usuario_adm = caixa.usuarios.id
+        if usuario_adm == usuario: # Verificar autenticidade do usuário
 
-        deposito = Depositar_sacar.objects.create(
-            descricao=request.POST['descricao'],
-            depositar=request.POST['depositar'].replace(',', '.'),
-            caixa_id = id, user_id = user_logado, usuarios_id = usuario,
-            )
-        data['deposito'] = deposito
-        data['depositos'] = Depositar_sacar.objects.filter(caixa__id = id, data_hora__contains= today).order_by('-id')
-        data['caixa'] = Caixa.objects.get(id=id)
-        return render(
-            request, 'caixa-deposito.html', data)
+            deposito = Depositar_sacar.objects.create(
+                descricao=request.POST['descricao'],
+                depositar=request.POST['depositar'].replace(',', '.'),
+                caixa_id = id, user_id = user_logado, usuarios_id = usuario,
+                )
+            data['deposito'] = deposito
+            data['depositos'] = Depositar_sacar.objects.filter(caixa__id = id, data_hora__contains= today).order_by('-id')
+            data['caixa'] = Caixa.objects.get(id=id)
+            return render(
+                request, 'caixa-deposito.html', data)
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
 class CaixaSacar(LoginRequiredMixin, View):
 
     def get(self, request, id):
@@ -426,26 +445,38 @@ class CaixaSacar(LoginRequiredMixin, View):
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
-        today = date.today()
-        sacar = Depositar_sacar.objects.filter(
-            caixa__id = id, data_hora__contains= today).order_by('-id').order_by('-data_hora')
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuario = usuario.id # Obitendo o id  do usuário administrador
 
-        DIA = request.GET.get('dia',None)
-        DIA2 = request.GET.get('dia2',None)
+        caixa = Caixa.objects.get(id=id)
+        usuario_adm = caixa.usuarios.id
+        if usuario_adm == usuario: # Verificar autenticidade do usuário
 
-        if DIA and DIA2 :
+            today = date.today()
             sacar = Depositar_sacar.objects.filter(
-                data_hora__range= (DIA, DIA2), caixa__id = id).order_by('-data_hora')
-        return render(
-            request, 'caixa-sacar.html',{'sacar':sacar})
+                caixa__id = id, data_hora__contains= today).order_by('-id').order_by('-data_hora')
+
+            DIA = request.GET.get('dia',None)
+            DIA2 = request.GET.get('dia2',None)
+
+            if DIA and DIA2 :
+                sacar = Depositar_sacar.objects.filter(
+                    data_hora__range= (DIA, DIA2), caixa__id = id).order_by('-data_hora')
+            return render(
+                request, 'caixa-sacar.html',{'sacar':sacar})
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     def post(self, request, id):
         today = date.today()
 
         data = {}
-
-        data['descricao'] = request.POST['descricao']
-        data['sacar'] = request.POST['sacar']
 
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
@@ -456,17 +487,23 @@ class CaixaSacar(LoginRequiredMixin, View):
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuario = usuario.id # Obitendo o id  do usuário administrador
 
-        deposito = Depositar_sacar.objects.create(
-            descricao= request.POST['descricao'],
-            sacar= request.POST['sacar'].replace(',', '.'),
-            caixa_id= id, user_id = user_logado, usuarios_id = usuario,
-            )
-        data['deposito'] = deposito
-        data['sacar'] = Depositar_sacar.objects.filter(
-            caixa__id = id, data_hora__contains= today).order_by('-id')
-        data['caixa'] = Caixa.objects.all()
-        return render(
-            request, 'caixa-sacar.html', data)
+        caixa = Caixa.objects.get(id=id)
+        usuario_adm = caixa.usuarios.id
+        if usuario_adm == usuario: # Verificar autenticidade do usuário
+
+            deposito = Depositar_sacar.objects.create(
+                descricao= request.POST['descricao'],
+                sacar= request.POST['sacar'].replace(',', '.'),
+                caixa_id= id, user_id = user_logado, usuarios_id = usuario,
+                )
+            data['deposito'] = deposito
+            data['sacar'] = Depositar_sacar.objects.filter(
+                caixa__id = id, data_hora__contains= today).order_by('-id')
+            data['caixa'] = Caixa.objects.all()
+            return render(
+                request, 'caixa-sacar.html', data)
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
 class AbrirFeixarCaixa(LoginRequiredMixin, View):
 

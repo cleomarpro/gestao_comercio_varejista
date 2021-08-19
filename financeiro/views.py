@@ -141,7 +141,7 @@ class ContasAreceber(LoginRequiredMixin, View):
         DIA2 = request.GET.get('dia2',None)
 
         conta = Contas.objects.filter(usuarios__usuario_cliente= usuario, data_de_vencimento__month = mes_atual, tipo_de_conta_id=1).order_by('-id')
-        tipo_de_conta = Tipo_de_conta.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
+        #tipo_de_conta = Tipo_de_conta.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
         venda= Venda.objects.filter(usuarios__usuario_cliente= usuario, data_hora__gte = today).order_by('-id')
         cliente = Cliente.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
 
@@ -163,7 +163,7 @@ class ContasAreceber(LoginRequiredMixin, View):
 
         return render(
             request, 'financeiro/conta-areceber.html', {
-                'conta': conta, 'tipo_de_conta': tipo_de_conta,
+                'conta': conta, #'tipo_de_conta': tipo_de_conta,
                 'venda': venda, 'cliente':cliente, 'client': client,
                 })
         pass
