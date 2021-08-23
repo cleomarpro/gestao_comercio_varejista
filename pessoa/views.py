@@ -38,23 +38,6 @@ class NovoFornecedor(LoginRequiredMixin, View):
         pass
     def post(self, request):
         data = {}
-        data['nome_fantazia'] = request.POST['nome_fantazia']
-        data['cnpj'] = request.POST['cnpj']
-        data['data_de_criacao'] = request.POST['data_de_criacao']
-        data['nascionalidade'] = request.POST['nascionalidade']
-        data['cep'] = request.POST['cep']
-        data['rua'] = request.POST['rua']
-        data['quadra'] = request.POST['quadra']
-        data['numero'] = request.POST['numero']
-        data['setor'] = request.POST['setor']
-        data['estado'] = request.POST['estado']
-        data['cidade'] = request.POST['cidade']
-        data['complemento'] = request.POST['complemento']
-        data['pais']  = request.POST['pais']
-        data['Celular']  = request.POST['Celular']
-        data['Celular2']  = request.POST['Celular2']
-        data['Telefone']  = request.POST['Telefone']
-        data['email'] = request.POST['email']
 
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
@@ -151,26 +134,6 @@ class NovoCliente(LoginRequiredMixin, View):
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
             usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-
-        data['nome'] = request.POST['nome']
-        data['segundo_nome'] = request.POST['segundo_nome']
-        data['cpf_cnpj'] = request.POST['cpf_cnpj']
-        data['data_de_nascimento'] = request.POST['data_de_nascimento']
-        data['sexo_id'] = request.POST['sexo_id']
-        data['nascionalidade'] = request.POST['nascionalidade']
-        data['cep'] = request.POST['cep']
-        data['rua'] = request.POST['rua']
-        data['quadra'] = request.POST['quadra']
-        data['numero'] = request.POST['numero']
-        data['setor'] = request.POST['setor']
-        data['estado'] = request.POST['estado']
-        data['cidade'] = request.POST['cidade']
-        data['complemento'] = request.POST['complemento']
-        data['pais']  = request.POST['pais']
-        data['Celular']  = request.POST['Celular']
-        data['Celular2']  = request.POST['Celular2']
-        data['Telefone']  = request.POST['Telefone']
-        data['email'] = request.POST['email']
 
         cliente = Cliente.objects.create(
             nome = request.POST['nome'],

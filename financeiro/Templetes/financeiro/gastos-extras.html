@@ -5,7 +5,7 @@
 <div class='div_Mae'>
     <form class='formulario' action="{% url 'gastos-extras' %}" method="POST" >
          {% csrf_token %}
-    <h1
+    <h1>
         <label style=" color:#EEE9E9;">Anotar gastos</label>
     </h1>
             <label> Descrição:</label>
@@ -88,7 +88,7 @@
 
                     {% if perms.financeiro.change_gastos_extras %}
                     <td>
-                        <a href="{% url 'GastosExtras_update_cbv' gastos_extras.id %}">Editar</a>
+                        <a href="{% url 'gastos_extras_update' gastos_extras.id %}">Editar</a>
                     </td>
                     {% endif%}
 

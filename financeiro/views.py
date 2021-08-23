@@ -47,14 +47,14 @@ class GastosExtras(LoginRequiredMixin, View):
             request, 'financeiro/gastos-extras.html', {'gastos_extras': gastos_extras})
         pass
     def post(self, request ):
+        user = request.user.has_perm('financeiro.add_gastos_extras')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
         today = date.today()
         mes_atual = today.month
         ano = today.year
         data = {}
-        data['descricao'] = request.POST['descricao']
-        data['valor'] = request.POST['valor'].replace(',', '.')
-        #data['data_hora'] = request.POST['data_hora']
-        #data['arquivo'] = request.POST['arquivo']
 
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
@@ -80,22 +80,92 @@ class GastosExtras(LoginRequiredMixin, View):
 
 @login_required()
 def gastosExtras_delete(request, id):
-    user = request.user.has_perm('financeiro.delete_gastos_extras')
+    user = request.user.has_perm('financeiro.change_gastos_extras')
     if user == False:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
-    data  = {}
-    gastos_extras = Gastos_extras.objects.get(id=id)
-    if request.method == 'POST':
-        gastos_extras.delete()
-        return redirect('gastos-extras')
+    user_logado = request.user # Obitendo o usuário logado
+    user_logado = user_logado.id # obitendo o ID do usuário logado
+    if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+        funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+        usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+        usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
     else:
-        return render(request, 'financeiro/gastos-extras-delete-confirme.html',data)
+        usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+        usuarioId = usuario.id # Obitendo o id  do usuário administrador
+        usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+    
+    data  = {}
+    gastos_extras= Gastos_extras.objects.get(id= id)
+    usuario_adm = gastos_extras.usuarios.id
+    if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+       
+        if request.method == 'POST':
+            gastos_extras.delete()
+            return redirect('gastos-extras')
+        else:
+            return render(request, 'financeiro/gastos-extras-delete-confirme.html',data)
+    else:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
-class GastosExtrasUpdate(LoginRequiredMixin, UpdateView):
-    model = Gastos_extras
-    fields = ['descricao','valor']
-    success_url = '/financeiro/gastos-extras/'
+class GastosExtrasUpdate(LoginRequiredMixin, View):
+    def get(self, request, id):
+        user = request.user.has_perm('financeiro.change_gastos_extras')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuarioId = usuario.id # Obitendo o id  do usuário administrador
+            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+
+        gastos_extras= Gastos_extras.objects.get(id= id)
+        usuario_adm = gastos_extras.usuarios.id
+        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+            return render(
+                    request, 'financeiro/gastos_extras_update.html',{'gastos_extras': gastos_extras})
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+    def post(self, request, id):
+        data = {}
+        user = request.user.has_perm('financeiro.change_gastos_extras')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuarioId = usuario.id # Obitendo o id  do usuário administrador
+            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+
+        gastos_extras= Gastos_extras.objects.get(id= id)
+        usuario_adm = gastos_extras.usuarios.id
+        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+            gastos_extras.id= id
+            gastos_extras.descricao = request.POST['descricao']
+            gastos_extras.valor = request.POST['valor']
+            gastos_extras.user_id = user_logado
+            gastos_extras.save()
+            return redirect('gastos-extras')
+
+            data['gastos_extras'] = gastos_extras
+            return render(
+                request, 'financeiro/gastos_extras_update.html',data)
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
 
 class FiltroGastosExtras( LoginRequiredMixin, View):
     def get(self, request):
@@ -166,19 +236,14 @@ class ContasAreceber(LoginRequiredMixin, View):
                 'conta': conta, #'tipo_de_conta': tipo_de_conta,
                 'venda': venda, 'cliente':cliente, 'client': client,
                 })
-        pass
+
     def post(self, request):
+        user = request.user.has_perm('financeiro.add_contas')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
         data = {}
         today = date.today()
         mes_atual = today.month
-
-        data['observacao'] = request.POST['observacao']
-        data['valor'] = request.POST['valor']
-        data['parcelas'] = request.POST['parcelas']
-        data['cliente_id'] = request.POST['cliente_id']
-        data['venda_id'] = request.POST['venda_id']
-        data['tipo_de_conta_id'] = request.POST['tipo_de_conta_id']
-        data['data_de_vencimento'] = request.POST['data_de_vencimento']
 
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
@@ -216,17 +281,91 @@ def conta_delete(request, id):
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     data  = {}
-    conta = Contas.objects.get(id=id)
-    if request.method == 'POST':
-        conta.delete()
-        return redirect('conta_areceber')
+    user_logado = request.user # Obitendo o usuário logado
+    user_logado = user_logado.id # obitendo o ID do usuário logado
+    if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+        funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+        usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+        usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
     else:
-        return render(request, 'financeiro/conta-delete-confirme.html',data)
+        usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+        usuarioId = usuario.id # Obitendo o id  do usuário administrador
+        usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
 
-class ContaAreceberUpdate(UpdateView):
-    model = Contas
-    fields = ['observacao','valor','parcelas','data_de_vencimento']
-    success_url = '/financeiro/conta-areceber/'
+    conta = Contas.objects.get(id= id)
+    usuario_adm = conta.usuarios.id
+    if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+        if request.method == 'POST':
+            conta.delete()
+            return redirect('conta_areceber')
+        else:
+            return render(request, 'financeiro/conta-delete-confirme.html',data)
+    else:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+class ContaAreceberUpdate(LoginRequiredMixin, View):
+    def get(self, request, id):
+        user = request.user.has_perm('financeiro.change_contas')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuarioId = usuario.id # Obitendo o id  do usuário administrador
+            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+
+        conta = Contas.objects.get(id= id)
+        usuario_adm = conta.usuarios.id
+        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+
+            return render(
+                request, 'financeiro/conta_areceber_update.html',{'conta': conta})
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+   
+    def post(self, request, id):
+        data = {}
+        user = request.user.has_perm('financeiro.change_contas')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuarioId = usuario.id # Obitendo o id  do usuário administrador
+            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+       
+        conta = Contas.objects.get(id= id)
+        usuario_adm = conta.usuarios.id
+        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+            conta.id= id
+            conta.observacao = request.POST['observacao']
+            conta.valor = request.POST['valor'].replace(',', '.')
+            conta.parcelas = request.POST['parcelas']
+            conta.tipo_de_conta_id = request.POST['tipo_de_conta_id']
+            conta.data_de_vencimento = request.POST['data_de_vencimento']
+            conta.venda_id = request.POST['venda_id']
+            conta.cliente_id = request.POST['cliente_id']
+            conta.user_id = user_logado
+            conta.save()
+            return redirect('conta_areceber')
+            
+            data['conta'] = conta
+            return render(
+                request, 'financeiro/conta_areceber_update.html',data)
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
 class ContasApagar(LoginRequiredMixin, View):
     def get(self, request):
@@ -276,11 +415,9 @@ class ContasApagar(LoginRequiredMixin, View):
 
     def post(self, request):
         data = {}
-        data['observacao'] = request.POST['observacao']
-        data['valor'] = request.POST['valor']
-        data['parcelas'] = request.POST['parcelas']
-        data['tipo_de_conta_id'] = request.POST['tipo_de_conta_id']
-        data['data_de_vencimento'] = request.POST['data_de_vencimento']
+        user = request.user.has_perm('financeiro.add_contas')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
@@ -308,10 +445,64 @@ class ContasApagar(LoginRequiredMixin, View):
         return render(
              request, 'financeiro/conta-apagar.html',data)
 
-class ContaApagarUpdate(LoginRequiredMixin, UpdateView):
-    model = Contas
-    fields = ['observacao','valor','parcelas','data_de_vencimento']
-    success_url = '/financeiro/conta-apagar/'
+class ContaApagarUpdate(LoginRequiredMixin, View):
+    def get(self, request, id):
+        user = request.user.has_perm('financeiro.change_contas')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuarioId = usuario.id # Obitendo o id  do usuário administrador
+            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+        
+        conta = Contas.objects.get(id= id)
+        usuario_adm = conta.usuarios.id
+        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+            return render(request, 'financeiro/conta_apagar_update.html', {'conta': conta})
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+    def post(self, request, id):
+        data = {}
+        user = request.user.has_perm('financeiro.change_contas')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuarioId = usuario.id # Obitendo o id  do usuário administrador
+            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+        
+        conta = Contas.objects.get(id= id)
+        usuario_adm = conta.usuarios.id
+        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+            conta.id= id
+            conta.observacao = request.POST['observacao']
+            conta.valor = request.POST['valor'].replace(',', '.')
+            conta.parcelas = request.POST['parcelas']
+            conta.tipo_de_conta_id = request.POST['tipo_de_conta_id']
+            conta.data_de_vencimento = request.POST['data_de_vencimento']
+            conta.user_id = user_logado
+            conta.save()
+            return redirect('conta_apagar')
+        
+            data['conta'] = conta
+            return render(request, 'financeiro/conta_apagar_update.html',data)
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
 @login_required()
 def conta_apagar_delete(request, id):
@@ -320,12 +511,27 @@ def conta_apagar_delete(request, id):
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     data  = {}
-    conta = Contas.objects.get(id=id)
-    if request.method == 'POST':
-        conta.delete()
-        return redirect('conta_apagar')
+    user_logado = request.user # Obitendo o usuário logado
+    user_logado = user_logado.id # obitendo o ID do usuário logado
+    if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+        funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+        usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+        usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
     else:
-        return render(request, 'financeiro/conta-delete-confirme.html',data)
+        usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+        usuarioId = usuario.id # Obitendo o id  do usuário administrador
+        usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+    
+    conta = Contas.objects.get(id= id)
+    usuario_adm = conta.usuarios.id
+    if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+        if request.method == 'POST':
+            conta.delete()
+            return redirect('conta_apagar')
+        else:
+            return render(request, 'financeiro/conta-delete-confirme.html',data)
+    else:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
 class Pagamentos(LoginRequiredMixin, View):
     def get(self, request, id):
@@ -337,23 +543,34 @@ class Pagamentos(LoginRequiredMixin, View):
         user_logado = user_logado.id # obitendo o ID do usuário logado
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
             usuario= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
         else:
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuarioId = usuario.id # Obitendo o id  do usuário administrador
             usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
+            
 
-        data = {}
-        parcelas = Contas.objects.get(id=id)
-        pagamentos = Pagamento.objects.filter(usuarios__usuario_cliente= usuario, contas_id = id).order_by('-id')
-        parcela = int(parcelas.parcelas_restantes) + 1
-        parcela = list(range(parcela))
+        conta = Contas.objects.get(id= id)
+        usuario_adm = conta.usuarios.id
+        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+            data = {}
+            parcelas = Contas.objects.get(id=id)
+            pagamentos = Pagamento.objects.filter(usuarios__usuario_cliente= usuario, contas_id = id).order_by('-id')
+            parcela = int(parcelas.parcelas_restantes) + 1
+            parcela = list(range(parcela))
 
-        data['parcela'] = parcela
-        data['pagamentos'] = pagamentos
-        return render(
-            request, 'financeiro/pagamento.html',data)
+            data['parcela'] = parcela
+            data['pagamentos'] = pagamentos
+            return render(
+                request, 'financeiro/pagamento.html',data)
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     def post(self, request, id):
+        user = request.user.has_perm('financeiro.add_pagamento')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
         data = {}
 
         parcelas = Contas.objects.get(id=id)
@@ -374,19 +591,24 @@ class Pagamentos(LoginRequiredMixin, View):
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
             usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+        
+        conta = Contas.objects.get(id= id)
+        usuario_adm = conta.usuarios.id
+        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+            pagamento = Pagamento.objects.create(
+                observacao = request.POST['observacao'],
+                quantidade_de_parcelas = request.POST['quantidade_de_parcelas'],
+                contas_id = id, user_id = user_logado, usuarios_id = usuarioId
+                )
 
-        pagamento = Pagamento.objects.create(
-            observacao = request.POST['observacao'],
-            quantidade_de_parcelas = request.POST['quantidade_de_parcelas'],
-            contas_id = id, user_id = user_logado, usuarios_id = usuarioId
-            )
-
-        data['pagamento'] = pagamento
-        data['pagamentos'] = Pagamento.objects.filter(usuarios__usuario_cliente= usuarioCliente, contas_id = id).order_by('-id')
-        data['parcela'] = parcela
-        data['pagamentos'] = pagamentos
-        return render(
-            request, 'financeiro/pagamento.html',data)
+            data['pagamento'] = pagamento
+            data['pagamentos'] = Pagamento.objects.filter(usuarios__usuario_cliente= usuarioCliente, contas_id = id).order_by('-id')
+            data['parcela'] = parcela
+            data['pagamentos'] = pagamentos
+            return render(
+                request, 'financeiro/pagamento.html',data)
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
 # Relatoriop de produtos
 class Relarorio_produtos(LoginRequiredMixin, View):

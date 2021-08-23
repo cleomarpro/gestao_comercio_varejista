@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<div class='div_Mae'>
+    <form class='formulario' method="POST" >
+         {% csrf_token %}
+    <h1>
+        <label style=" color:#EEE9E9;">Anotar gastos</label>
+    </h1>
+            <label> Descrição:</label>
+            <input style=" width:150px;"  placeholder=" Descricão..." value="{{gastos_extras.descricao}}"
+                 type="text" id="descricao" name="descricao" required/>
+             <br>
+            <label> Valor:</label>
+            <input style=" width:150px;"  placeholder="Valor..." value="{{gastos_extras.valor}}"
+                type="text" id="valor" name="valor" required/>
+             <br>
+            <button type="submit"> salvar</button>
+    </form>
+    <br>
+</div>
+
+{% endblock %}

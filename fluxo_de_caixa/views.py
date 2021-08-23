@@ -34,6 +34,9 @@ class AtualizarPedido(LoginRequiredMixin, View):
         return render(
             request, 'novo-pedido.html')
     def post(self, request):
+        user = request.user.has_perm('fluxo_de_caixa.add_venda')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
         data = {}
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
@@ -119,6 +122,9 @@ class NovoItemPedido(LoginRequiredMixin, View):
         pass
 
     def post(self, request, venda):
+        user = request.user.has_perm('fluxo_de_caixa.add_venda')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
         data = {}
 
         data['desconto'] = request.POST['desconto'].replace(',', '.')
@@ -281,6 +287,10 @@ class DeletePedido(LoginRequiredMixin, View):
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     def post(self, request, venda):
+        user = request.user.has_perm('fluxo_de_caixa.delete_venda')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
@@ -309,6 +319,10 @@ class DeleteItemPedido(LoginRequiredMixin, View):
             request, 'delete-itempedido-confirm.html', {'item_pedido': item_pedido})
 
     def post(self, request, item):
+        user = request.user.has_perm('fluxo_de_caixa.delete_itemdopedido')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
         item_pedido = ItemDoPedido.objects.get(id=item)
         venda_id = item_pedido.venda.id
         item_pedido.delete()
@@ -341,6 +355,10 @@ class Caixas(LoginRequiredMixin, View):
                 })
 
     def post(self, request):
+        user = request.user.has_perm('fluxo_de_caixa.view_caixa')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
         data = {}
         data['nome_do_caixa'] = request.POST['nome_do_caixa']
         data['funcionario'] = request.POST['funcionario']
@@ -408,6 +426,10 @@ class CaixaDepositar(LoginRequiredMixin, View):
              return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     def post(self, request, id):
+        user = request.user.has_perm('fluxo_de_caixa.add_depositar_sacar')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
         today = date.today()
         #today = date.today()
         data = {}
@@ -474,6 +496,10 @@ class CaixaSacar(LoginRequiredMixin, View):
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     def post(self, request, id):
+        user = request.user.has_perm('fluxo_de_caixa.add_depositar_sacar')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
         today = date.today()
 
         data = {}
@@ -546,6 +572,10 @@ class AbrirFeixarCaixa(LoginRequiredMixin, View):
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     def post(self, request, id):
+        user = request.user.has_perm('fluxo_de_caixa.add_depositar_sacar')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
         today = date.today()
 
         data = {}

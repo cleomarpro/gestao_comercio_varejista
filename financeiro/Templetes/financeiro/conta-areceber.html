@@ -5,7 +5,7 @@
 <div class='div_Mae'>
     <form class='formulario' action="{% url 'conta_areceber' %}" method="POST" >
         {% csrf_token %}
-        <h1
+        <h1> 
             <label style=" color:#EEE9E9;">Nova conta a receber</label>
         </h1>
              <br>
@@ -37,7 +37,7 @@
                 </select>
              <br>
             <label> Valor:</label>
-                <input style=" width:200px;"  placeholder="Valor..." type="text"
+                <input style=" width:200px;"  placeholder="Valor..."  type="number" step=".01" lang="nb"
                     id="valor" name="valor" required/>
              <br>
              <label> Parcelas:</label>

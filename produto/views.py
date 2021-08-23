@@ -323,6 +323,10 @@ class PromocaoUpdate (LoginRequiredMixin, View):
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
             usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
 
+        promocao = Promocao.objects.get(id= id)
+        usuario_adm= promocao.usuarios.id
+        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+
             promocao = Promocao.objects.get(id= id)
             promocao.id= id
             promocao.quantidade_promocional = request.POST['quantidade_promocional'].replace(',', '.')
@@ -334,9 +338,6 @@ class PromocaoUpdate (LoginRequiredMixin, View):
             promocao.save()
             return redirect('promocao')
             
-        promocao = Promocao.objects.get(id= id)
-        usuario_adm= promocao.usuarios.id
-        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
             data['promocao'] = promocao
             return render(
                 request, 'produto/promocao-update.html', data)
