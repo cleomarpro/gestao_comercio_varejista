@@ -44,8 +44,8 @@ class AtualizarPedido(LoginRequiredMixin, View):
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
         else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.id # Obitendo o id  do usuário administrador
+            usuarios = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuario = usuarios.id # Obitendo o id  do usuário administrador
 
         data['pagamento']= request.POST['pagamento']  or 1
         data['descricao']= request.POST['descricao']
@@ -82,6 +82,7 @@ class AtualizarPedido(LoginRequiredMixin, View):
         itens = venda.itemdopedido_set.all().order_by('-id')
         data['venda'] = venda
         data['itens'] = itens
+        data['usuarios'] = usuarios
         return render(
             request, 'novo-pedido.html', data)
 
@@ -98,8 +99,8 @@ class NovoPedido(LoginRequiredMixin, View):
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
         else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.id # Obitendo o id  do usuário administrador
+            usuarios = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuario = usuarios.id # Obitendo o id  do usuário administrador
 
         data = {}
         data['venda_id'] = request.POST['venda_id']
@@ -109,6 +110,7 @@ class NovoPedido(LoginRequiredMixin, View):
         itens = venda.itemdopedido_set.all().order_by('-id')
         data['venda'] = venda
         data['itens'] = itens
+        data['usuarios'] = usuarios
         return render(
             request, 'novo-pedido.html', data)
 
@@ -162,7 +164,7 @@ class NovoItemPedido(LoginRequiredMixin, View):
 
             data['venda'] = item.venda
             data['itens'] = item.venda.itemdopedido_set.all().order_by('-id')
-
+            data['usuarios'] = usuario
             return render(
                 request, 'novo-pedido.html', data)
 
@@ -250,8 +252,8 @@ class EditPedido(LoginRequiredMixin, View):
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
         else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.id # Obitendo o id  do usuário administrador
+            usuarios = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuario = usuarios.id # Obitendo o id  do usuário administrador
 
         data = {}
         venda = Venda.objects.get(id=venda)
@@ -259,6 +261,7 @@ class EditPedido(LoginRequiredMixin, View):
         if usuario_adm == usuario:
             data['venda'] = venda
             data['itens'] = venda.itemdopedido_set.all()
+            data['usuarios'] = usuarios
             return render(
                 request, 'novo-pedido.html', data)
         else:

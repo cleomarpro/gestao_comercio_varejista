@@ -313,12 +313,13 @@
         <br>
 <!-- cupom fiscal-->
     <div id="div_cupomFiscal" class="cupom_fiscal">
-            <a href="#" onclick="document.getElementById('div_cupomFiscal').style.display='none';">
-            <button class="btX" accesskey="f" >X</button> </a>
-
-             <br />
        <form >
-            <label style=" margin-left:30%;" >CUPOM FISCAL</label>
+            <label style="text-align: center;" >NÃO É VALIDO COMO CUPOM FISCAL</label>
+                <br>
+                <br>
+            <label >- Empresa: {{usuarios.nome_fantazia}} </label>
+                <br>
+            <label >- Cnpj: {{usuarios.cpf_cnpj}} </label>
                 <br>
                 <br>
             <label >- Número do cupom: {{venda.id}} </label>
@@ -379,15 +380,26 @@
         </form>
     </div>
     <div>
-        <a  href="#" onclick="document.getElementById('div_cupomFiscal').style.display='block';">
-            <button  class='bt_visualizar_cupom' accesskey="v">
-                Visualizar cupom fiscal </button>
-        </a>
-
+        <input class='bt_visualizar_cupom' accesskey="v" type="button" value="Imprimir Cupom" onclick="imprimir_cupom_fiscal()">
+        
     </div>
     <br>
 </div>
 
+<script >
+    function imprimir_cupom_fiscal(){
+        var pegar_dados = document.getElementById('div_cupomFiscal').innerHTML;
+
+        var janela = window.open('','','width=800,heigth=600');
+        janela.document.write("<html><head>");
+        janela.document.write("<title>PDF</title></head>");
+        janela.document.write("<body>");
+        janela.document.write(pegar_dados);
+        janela.document.write("</body><html>");
+        janela.print();
+        janela.close();
+    }
+</script>
+
 {% endif %}
-</body>
 {% endblock %}
