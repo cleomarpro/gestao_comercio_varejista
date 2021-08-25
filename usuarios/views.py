@@ -118,14 +118,6 @@ class NovoFuncionario(View):
 
     def post(self, request):
         data = {}
-        data['password'] = request.POST['password']
-        data['username'] = request.POST['username']
-        data['email'] = request.POST['email']
-        data['primeiro_nome']= request.POST['primeiro_nome']
-        data['segundo_nome']= request.POST['segundo_nome']
-        data['ativo']= request.POST['ativo'],
-        data['permissao']= request.POST['permissao']
-
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
@@ -183,19 +175,27 @@ class UpdateFuncionario(View):
 
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
-        funcionario= Funcionario.objects.get(user__id = id) # buscado funcionário baseado no usuário logado
-        usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-    
-        if  user_logado == usuarioCliente:
-            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuarioId = usuario.id # Obitendo o id  do usuário administrador
+            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
 
-        data = {}
-        usuario= User.objects.get(id= id)
-        data['usuario'] = usuario
-        data['permissoes'] = usuario.groups.all()
-        data['usuarioCliente'] = usuarioCliente
-        return render(
-                request, 'update-funcionario.html', data)
+        funcionarios = Funcionario.objects.get(user__id = id)
+        usuario_adm = funcionarios.usuarios.usuario_cliente
+        if  usuario_adm == usuarioCliente:
+            data = {}
+            usuario= User.objects.get(id= id)
+            data['usuario'] = usuario
+            data['permissoes'] = usuario.groups.all()
+            data['usuarioCliente'] = usuarioCliente
+            return render(
+                    request, 'update-funcionario.html', data)
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     def post(self, request, id):
         data = {}
@@ -210,28 +210,33 @@ class UpdateFuncionario(View):
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
             usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
 
-        usuario= User.objects.get(id= id)
-        #usuario.password= request.POST['password']
-        #usuario.username= request.POST['username']
-        usuario.id = id
-        usuario.email= request.POST['email']
-        usuario.first_name= request.POST['primeiro_nome']
-        usuario.last_name= request.POST['segundo_nome']
-        usuario.is_active= request.POST['ativo']
-        usuario.save()
-        
-        if request.POST['permissao']:
-            permissao= Group.objects.get(name= request.POST['permissao']) # Buscando permissão
-            permissao_add= usuario.groups.add(permissao)# Inserindo permissão ao novo usuário
+        funcionarios = Funcionario.objects.get(user__id = id)
+        usuario_adm = funcionarios.usuarios.usuario_cliente
+        if  usuario_adm == usuarioCliente:
+            usuario= User.objects.get(id= id)
+            #usuario.password= request.POST['password']
+            #usuario.username= request.POST['username']
+            usuario.id = id
+            usuario.email= request.POST['email']
+            usuario.first_name= request.POST['primeiro_nome']
+            usuario.last_name= request.POST['segundo_nome']
+            usuario.is_active= request.POST['ativo']
+            usuario.save()
             
-        if request.POST['permissao_delete']:   
-            permissao= Group.objects.get(name= request.POST['permissao_delete']) # Buscando permissão
-            permissao_delete= usuario.groups.remove(permissao)# Excluindo permissão
-        
-        data['usuario'] = usuario
-        data['permissoes'] = usuario.groups.all()
-        return render(
-                request, 'update-funcionario.html', data)
+            if request.POST['permissao']:
+                permissao= Group.objects.get(name= request.POST['permissao']) # Buscando permissão
+                permissao_add= usuario.groups.add(permissao)# Inserindo permissão ao novo usuário
+                
+            if request.POST['permissao_delete']:   
+                permissao= Group.objects.get(name= request.POST['permissao_delete']) # Buscando permissão
+                permissao_delete= usuario.groups.remove(permissao)# Excluindo permissão
+            
+            data['usuario'] = usuario
+            data['permissoes'] = usuario.groups.all()
+            return render(
+                    request, 'update-funcionario.html', data)
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
 @login_required()
 def funcionarioDelete(request, id):
@@ -241,16 +246,25 @@ def funcionarioDelete(request, id):
 
     user_logado = request.user # Obitendo o usuário logado
     user_logado = user_logado.id # obitendo o ID do usuário logado
-    funcionario= Funcionario.objects.get(user__id = id) # buscado funcionário baseado no usuário logado
-    usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-
-    if  user_logado == usuarioCliente:
-        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-    data  = {}
-    usuario= User.objects.get(id= id)
-    if request.method == 'POST':
-        usuario.delete()
-        return redirect('novo-funcionario')
+    if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+        funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+        usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+        usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
     else:
-        return render(request, 'delete-funcionario.html',data)
+        usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+        usuarioId = usuario.id # Obitendo o id  do usuário administrador
+        usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+        
+    funcionarios = Funcionario.objects.get(user__id = id)
+    usuario_adm = funcionarios.usuarios.usuario_cliente
+    if  usuario_adm == usuarioCliente:
+        
+        data  = {}
+        usuario= User.objects.get(id= id)
+        if request.method == 'POST':
+            usuario.delete()
+            return redirect('novo-funcionario')
+        else:
+            return render(request, 'delete-funcionario.html',data)
+    else:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))

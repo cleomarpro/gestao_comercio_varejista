@@ -889,11 +889,15 @@ class Fatura(LoginRequiredMixin, View):
                 usuarios__usuario_cliente= usuario, data_hora__month= Mes, tipo_de_conta__id=2, data_hora__year= ano_atual).aggregate(count= Count('id'))
             Contas_a_pagar = Contas_a_pagar['count'] or 0
 
+            gastos_extras = Gastos_extras.objects.filter(
+                usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual).aggregate(count= Count('id'))
+            gastos_extras = gastos_extras['count'] or 0
+
             entrada_ee_mercadoria = EntradaMercadoria.objects.filter(
                 usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual).aggregate(count= Count('id'))
             entrada_ee_mercadoria = entrada_ee_mercadoria['count'] or 0
 
-            total_de_registros= vendas + item_do_pedito + Contas_a_receber + Contas_a_pagar + entrada_ee_mercadoria
+            total_de_registros= vendas + item_do_pedito + Contas_a_receber + Contas_a_pagar + entrada_ee_mercadoria + gastos_extras
 
             total_a_pagar= total_de_registros * 4 / 100
 
@@ -903,6 +907,7 @@ class Fatura(LoginRequiredMixin, View):
         data['Contas_a_pagar']= Contas_a_pagar
         data['entrada_ee_mercadoria']= entrada_ee_mercadoria
         data['total_de_registros']= total_de_registros
+        data['gastos_extras']= gastos_extras
         data['total_a_pagar']= total_a_pagar
 
         return render( request, 'financeiro/fatura.html', data)

@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<div class='div_Mae'>
+    <form class='formulario'  method="POST" >
+         {% csrf_token %}
+    <h1
+         style=" color:#EEE9E9;">Atualizar Fornecedor</label>
+    </h1>
+             <br>
+            <label> Nome fantazia*:</label>
+                <input style=" width:200px;"  placeholder=" Nome..." value="{{fornecedor.nome_fantazia}}"
+                type="text" id="nome_fantazia" name="nome_fantazia" required/>
+             <br>
+            <label> Cnpj*:</label>
+                <input style=" width:150;"  placeholder="Cnpj..." value="{{fornecedor.cnpj}}"
+                    type="text" id="cnpj" name="cnpj" required/>
+             <br>
+            <label> Data de criação:</label>
+                <input style=" width:140px;"  placeholder=" Data de criação:" value="{{fornecedor.data_de_criacao}}"
+                    type="date" id="data_de_criacao" name="data_de_criacao" required/>
+                <br>
+             <label> Nascionalidade:</label>
+            <select style=" width:140px;" type="text" id="nascionalidade" value="{{fornecedor.nascionalidade}}"
+                name="nascionalidade" >
+                <tr>
+                    <option value=''> __Selecionar__</option>
+                    <option >Nacional </option>
+                    <option >Multinacional  </option>
+                </tr>
+            </select>
+             <br>
+
+             <label>Cep:</label>
+                <input style=" width:140px;"  placeholder=" Cep..." value="{{fornecedor.cep}}"
+                    type="text" id="cep" name="cep" />
+             <br>
+
+            <label> Rua:</label>
+                <input style=" width:200px;"  placeholder=" Rua..." value="{{fornecedor.rua}}"
+                    type="text" id="rua" name="rua" />
+
+
+            <label> Quadra:</label>
+                <input style=" width:80px;"  placeholder=" Quadra..." value="{{fornecedor.quadra}}"
+                    type="text" id="quadra" name="quadra" />
+                <br>
+            <label> Número:</label>
+                <input style=" width:80px;"  placeholder=" Número..." value="{{fornecedor.numero}}"
+                    type="text" id="numero" name="numero" />
+
+            <label> Setor:</label>
+                <input style=" width:150px;"  placeholder=" Setor..." value="{{fornecedor.setor}}"
+                    type="text" id="setor" name="setor" />
+            <br>
+
+            <label> Estado:</label>
+                <input style=" width:200px;"  placeholder=" Estado..." value="{{fornecedor.estado}}"
+                    type="text" id="estado" name="estado" />
+             <br>
+
+            <label> Cidade:</label>
+                <input style=" width:200px;"  placeholder=" Cidade..." value="{{fornecedor.cidade}}"
+                    type="text" id="cidade" name="cidade" />
+             <br>
+
+            <label> Complemento:</label>
+                <input style=" width:180px;"  placeholder=" Complemento..." value="{{fornecedor.complemento}}"
+                    type="text" id="complemento" name="complemento" />
+             <br>
+            <label> Pais:</label>
+                <input style=" width:100px;"  placeholder=" Pais..." value="{{fornecedor.pais}}"
+                    type="text" id="pais" name="pais" />
+
+            <label> Celular:</label>
+                <input style=" width:100px;"  placeholder=" Celular..." value="{{fornecedor.Celular}}"
+                    type="text" id="Celular" name="Celular" />
+             <br>
+
+            <label> Celular 2:</label>
+                <input style=" width:120px;"  placeholder=" Celular 2..." value="{{fornecedor.Celular2}}"
+                    type="text" id="Celular2" name="Celular2" />
+
+            <label> Telefone:</label>
+                <input placeholder=" Telefone..." value="{{fornecedor.Telefone}}"
+                    type="text" id="Telefone" name="Telefone" />
+             <br>
+            <label> E-mail:</label>
+                <input   placeholder=" E-mail..." value="{{fornecedor.email}}"
+                    type="text" id="email" name="email" />
+             <br>
+            <button  type="submit"> Atualizar</button>
+  </form>
+</div>
+{% endblock %}
