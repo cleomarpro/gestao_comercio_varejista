@@ -100,6 +100,8 @@ sudo service apache2 reload (reiniciar o servido aplicando mudanças de configur
 from usuarios.models import*
 from pessoa.models import*
 from fluxo_de_caixa.models import*
+from financeiro.models import*
+from produto.models import*
 
 Tipo_de_pagamento.objects.create(nome='Cédula', id='1') 
 
@@ -119,4 +121,9 @@ Sexo.objects.create(id= '1', nome='Não espesificado')
 
 Sexo.objects.create(id= '2', nome='Masculino')        
 
-Sexo.objects.create(id= '3', nome='Feminino')         
+Sexo.objects.create(id= '3', nome='Feminino')
+
+Tipo_de_conta.objects.create(nome='conta a pagar', id= 2)   
+Tipo_de_conta.objects.create(nome='conta a receber', id= 1)   
+
+Promocao.objects.create(descricao='Sem promoção', id=1)

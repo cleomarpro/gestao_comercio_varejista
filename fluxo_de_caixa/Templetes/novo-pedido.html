@@ -156,7 +156,7 @@
                 type="number" step=".01" lang="nb" name="quantidade"
                     id="quantidade" value="1" required/>
                         <br>
-            <button accesskey="i">Incluir</button>
+            <button >Incluir</button>
         </form>
     {% else %}
         <form class='caixa' action="{% url 'novo-item-pedido' venda.id %}" method="POST">
@@ -380,7 +380,7 @@
         </form>
     </div>
     <div>
-        <input class='bt_visualizar_cupom' accesskey="v" type="button" value="Imprimir Cupom" onclick="imprimir_cupom_fiscal()">
+        <input class='bt_visualizar_cupom' accesskey="i" type="button" value="Imprimir Cupom" onclick="imprimir_cupom_fiscal()">
         
     </div>
     <br>
