@@ -81,7 +81,7 @@
             {%endif%}
                 --------------------------- <br>
             {% if perms.produto.add_produto %}
-                <li> <a href="{% url 'novo-funcionario' %}">-Novo funcionário</a></li>
+                <li> <a href="{% url 'novo-funcionario' %}">-Funcionário</a></li>
             {%endif%}
 
             {% if perms.pessoa.add_cliente %}
@@ -110,8 +110,8 @@
 
             {% if perms.produto.add_entradamercadoria %}
                 <li> <a href="{% url 'entrada-mercadoria' %}">-Entrada mercadoria</a></li>
-            {%endif%}
                 ---------------------------
+            {%endif%}
             {% if perms.produto.add_produto %}
                 <li> <a href="{% url 'fatura' %}">-Resumo da fatura</a></li>
                 <li> <a href="{% url 'relatorio-produtos' %}">-Relatório por produto</a></li>

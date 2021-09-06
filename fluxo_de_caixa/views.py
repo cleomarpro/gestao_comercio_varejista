@@ -144,8 +144,8 @@ class NovoItemPedido(LoginRequiredMixin, View):
             usuarios = Usuarios.objects.get(user_id = usuarioId) # Buscando usuário administrador com base no usuário logado
         else:
             usuarios = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+            usuarioId = usuarios.id # Obitendo o id  do usuário administrador
+            usuarioCliente= usuarios.usuario_cliente # Obitendo o id  do usuário_cliente administrador
 
         produto= Produto.objects.filter(usuarios__usuario_cliente= usuarioCliente, codigo= request.POST['produto_codigo'] ) or 0
         if produto != 0:
@@ -555,7 +555,7 @@ class AbrirFeixarCaixa(LoginRequiredMixin, View):
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuario = usuario.id # Obitendo o id  do usuário administrador
 
-        historico_do_caixa = Depositar_sacar.objects.get(id=id)
+        historico_do_caixa = Caixa.objects.get(id=id)
         usuario_adm = historico_do_caixa.usuarios.id
         if usuario_adm == usuario: # Verificar autenticidade do usuário
 
@@ -599,7 +599,7 @@ class AbrirFeixarCaixa(LoginRequiredMixin, View):
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuario = usuario.id # Obitendo o id  do usuário administrador
 
-        historico_do_caixa = Depositar_sacar.objects.get(id=id)
+        historico_do_caixa = Caixa.objects.get(id=id)
         usuario_adm = historico_do_caixa.usuarios.id
         if usuario_adm == usuario: # Verificar autenticidade do usuário
 

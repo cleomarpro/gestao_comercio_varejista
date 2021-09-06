@@ -257,7 +257,7 @@ def funcionarioDelete(request, id):
         
     funcionarios = Funcionario.objects.get(user__id = id)
     usuario_adm = funcionarios.usuarios.usuario_cliente
-    if  usuario_adm == usuarioCliente:
+    if  usuario_adm == usuarioId:
         
         data  = {}
         usuario= User.objects.get(id= id)
