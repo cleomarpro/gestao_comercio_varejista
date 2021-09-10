@@ -198,6 +198,10 @@ class UpdateFuncionario(View):
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     def post(self, request, id):
+        user = request.user.has_perm('auth.delete_user')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
         data = {}
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
@@ -222,6 +226,7 @@ class UpdateFuncionario(View):
             usuario.last_name= request.POST['segundo_nome']
             usuario.is_active= request.POST['ativo']
             usuario.save()
+            return redirect('novo-funcionario')
             
             if request.POST['permissao']:
                 permissao= Group.objects.get(name= request.POST['permissao']) # Buscando permissão
