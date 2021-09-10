@@ -27,16 +27,17 @@ from .models import ItemDoPedido
 
 class AtualizarPedido(LoginRequiredMixin, View):
     def get(self, request):
-        user = request.user.has_perm('fluxo_de_caixa.add_venda')
+        user = request.user.has_perm('fluxo_de_caixa.change_venda')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
         return render(
             request, 'novo-pedido.html')
     def post(self, request):
-        user = request.user.has_perm('fluxo_de_caixa.add_venda')
+        user = request.user.has_perm('fluxo_de_caixa.change_venda')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        
         data = {}
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
@@ -78,6 +79,10 @@ class AtualizarPedido(LoginRequiredMixin, View):
             else:
                 return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
         else:
+            user = request.user.has_perm('fluxo_de_caixa.add_venda')
+            if user == False:
+                return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
             venda = Venda.objects.create(user_id = user_logado, usuarios_id = usuario)
 
         itens = venda.itemdopedido_set.all().order_by('-id')
