@@ -80,7 +80,9 @@
                     <td>{{ usuarios.user.is_active }}</td>
                     <td>  
                         <a href="{% url 'update-funcionario' usuarios.user.id %} ">Editar</a>
+                    {% if perms.pessoa.delete_funcionario %}
                         <a href="{% url 'delete-funcionario' usuarios.user.id %}"> Excluir </a>
+                    {%endif%}
                     </td>
                 </tr>
             {%endfor%}
