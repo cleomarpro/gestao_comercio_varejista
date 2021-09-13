@@ -44,7 +44,7 @@ class AtualizarPedido(LoginRequiredMixin, View):
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarios = Usuarios.objects.get(user_id = usuario) # Buscando usuário administrador com base no usuário logado
+            usuarios = Usuarios.objects.get(id = usuario) # Buscando usuário administrador com base no usuário logado
         else:
             usuarios = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuario = usuarios.id # Obitendo o id  do usuário administrador
@@ -104,7 +104,7 @@ class NovoPedido(LoginRequiredMixin, View):
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarios = Usuarios.objects.get(user_id = usuario) # Buscando usuário administrador com base no usuário logado
+            usuarios = Usuarios.objects.get(id = usuario) # Buscando usuário administrador com base no usuário logado
         else:
             usuarios = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuario = usuarios.id # Obitendo o id  do usuário administrador
@@ -146,7 +146,7 @@ class NovoItemPedido(LoginRequiredMixin, View):
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
             usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-            usuarios = Usuarios.objects.get(user_id = usuarioId) # Buscando usuário administrador com base no usuário logado
+            usuarios = Usuarios.objects.get(id = usuarioId) # Buscando usuário administrador com base no usuário logado
         else:
             usuarios = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuarios.id # Obitendo o id  do usuário administrador
@@ -261,7 +261,7 @@ class EditPedido(LoginRequiredMixin, View):
             usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
             usuarios = Usuarios.objects.get(id = usuario)
         else:
-            usuarios = Usuarios.objects.get(id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuarios = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuario = usuarios.id # Obitendo o id  do usuário administrador
 
         data = {}
