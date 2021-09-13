@@ -259,9 +259,9 @@ class EditPedido(LoginRequiredMixin, View):
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarios = Usuarios.objects.get(user_id = usuario)
+            usuarios = Usuarios.objects.get(id = usuario)
         else:
-            usuarios = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuarios = Usuarios.objects.get(id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuario = usuarios.id # Obitendo o id  do usuário administrador
 
         data = {}
