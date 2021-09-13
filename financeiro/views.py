@@ -613,7 +613,7 @@ class Pagamentos(LoginRequiredMixin, View):
 # Relatoriop de produtos
 class Relarorio_produtos(LoginRequiredMixin, View):
     def get(self, request):
-        user = request.user.has_perm('financeiro.delete_pagamento')
+        user = request.user.has_perm('financeiro.view_relatorios')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
@@ -655,7 +655,7 @@ class Relarorio_produtos(LoginRequiredMixin, View):
 # relatório diário
 class Relatorio_diario(LoginRequiredMixin, View):
     def get(self, request):
-        user = request.user.has_perm('financeiro.delete_pagamento')
+        user = request.user.has_perm('financeiro.view_relatorios')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
@@ -721,7 +721,7 @@ class Relatorio_diario(LoginRequiredMixin, View):
 # relatório mensal
 class Relatorio_mensal(LoginRequiredMixin, View):
     def get(self, request):
-        user = request.user.has_perm('financeiro.delete_pagamento')
+        user = request.user.has_perm('financeiro.view_relatorios')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
@@ -786,7 +786,7 @@ class Relatorio_mensal(LoginRequiredMixin, View):
 # relatório anualanual
 class Relatorio_anual(LoginRequiredMixin, View):
     def get(self, request):
-        user = request.user.has_perm('financeiro.delete_pagamento')
+        user = request.user.has_perm('financeiro.view_relatorios')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
@@ -853,7 +853,7 @@ class Relatorio_anual(LoginRequiredMixin, View):
 
 class Fatura(LoginRequiredMixin, View):
     def get(self, request):
-        user = request.user.has_perm('financeiro.delete_pagamento')
+        user = request.user.has_perm('financeiro.view_relatorios')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 

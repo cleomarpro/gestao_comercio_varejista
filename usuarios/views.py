@@ -101,6 +101,10 @@ class UpdateUsuario(View):
 
 class NovoFuncionario(View):
     def get(self, request):
+        user = request.user.has_perm('pessoa.add_funcionario')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
@@ -117,6 +121,10 @@ class NovoFuncionario(View):
             request, 'novo-funcionario.html',{'usuarios': usuarios })
 
     def post(self, request):
+        user = request.user.has_perm('pessoa.add_funcionario')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
         data = {}
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
@@ -169,7 +177,7 @@ class NovoFuncionario(View):
 
 class UpdateFuncionario(View):
     def get(self, request, id):
-        user = request.user.has_perm('auth.delete_user')
+        user = request.user.has_perm('pessoa.change_funcionario')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
@@ -198,7 +206,7 @@ class UpdateFuncionario(View):
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     def post(self, request, id):
-        user = request.user.has_perm('auth.delete_user')
+        user = request.user.has_perm('pessoa.change_funcionario')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
@@ -245,7 +253,7 @@ class UpdateFuncionario(View):
 
 @login_required()
 def funcionarioDelete(request, id):
-    user = request.user.has_perm('auth.delete_user')
+    user = request.user.has_perm('pessoa.delete_funcionario')
     if user == False:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
@@ -262,7 +270,7 @@ def funcionarioDelete(request, id):
         
     funcionarios = Funcionario.objects.get(user__id = id)
     usuario_adm = funcionarios.usuarios.usuario_cliente
-    if  usuario_adm == usuarioId:
+    if  usuario_adm == usuarioCliente:
         
         data  = {}
         usuario= User.objects.get(id= id)

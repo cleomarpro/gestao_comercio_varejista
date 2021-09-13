@@ -11,6 +11,11 @@ from django.db.models import Sum
 #import datetime
 #from django.utils import timezone
 
+class Relatorios(models.Model):
+    descricao=models.CharField(max_length=100, blank=True, verbose_name="Descrição")
+    def __str__(self): # METODO CONSTRUTOR
+        return self.descricao
+
 class Gastos_extras(models.Model):
     descricao=models.CharField(max_length=100, blank=True, verbose_name="Descrição")
     valor = models.DecimalField(max_digits=9, decimal_places=2, blank=False, default=0)
