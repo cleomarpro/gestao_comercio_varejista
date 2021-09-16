@@ -16,13 +16,13 @@
     <meta name="author" content="cor">
 </head>
 <body>
-    <h1 class="cabesalho">Vieworld</h1>
+   
 
     <div class='div_mae'>
         
         
         <form class='form_logim' method="post" action="{% url 'login' %}">
-        
+            <P  style="color:black; font-size: 25px;">VieWorld</P>
             {% csrf_token %}
 
             {% if form.errors %}
@@ -39,7 +39,7 @@
                 <p style='color: red;'>É necessário fazer login para acessar essa página!</p>
             {% endif %}
             {% endif %}
-            <p style="color:black; font-size: 16px;">A melhor maneira de administrar o seu negocio e agilizar o atendimeto ao cliente! </p>
+            
                 <hr>
             <label id="username">Usuário:</label> <br>
                 <td>{{ form.username }}</td>

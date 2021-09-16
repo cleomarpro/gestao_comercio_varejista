@@ -17,15 +17,13 @@
     <meta name="author" content="cor">
 </head>
 <body>
-    <h1 class="cabesalho">Vieworld</h1>
+    
 
     <div class='div_mae'>
-        <h1 class="cabesalho">Vieworld</h1>
+      
         <form class='form_logim' method="post" action="{% url 'novo-usuario' %}">
-            
+            <P  style="color:black; font-size: 25px;">VieWorld</P>
             {% csrf_token %}
-            <p style="color:black; font-size: 16px;">A melhor maneira de administrar o seu negocio e agilizar o atendimeto ao cliente! </p>
-    
             <hr>
             {% if mensagen_de_erro_usuario %}
             <label style='color:red;'>{{mensagen_de_erro_usuario}}</label>
