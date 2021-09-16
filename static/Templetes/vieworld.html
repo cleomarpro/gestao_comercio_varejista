@@ -22,10 +22,10 @@
 <div class="div_principal">
     <div class="contatos">
        {%if user.is_authenticated%}
-                <label> <a href="http://gestao.vieworld.com.br/accounts/logout/">Sair</a> </label>
+                <label> <a href="{% url 'logout' %}">Sair</a> </label>
                 <label>Olá {{user}} </label>
             {%else%}
-                <label> <a href="http://gestao.vieworld.com.br/accounts/login/">Entra</a> </label>
+                <label> <a href="{% url 'login' %}">Entra</a>Entra</a> </label>
             {%endif%}
    </div>
    <p></p>

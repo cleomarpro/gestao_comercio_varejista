@@ -20,15 +20,67 @@
 <div class="div_mae">
     <div class="div_cabesalho2">
        {%if user.is_authenticated%}
-                <label class='login'> <a href="{% url 'logout' %}"> Sair </a> </label>
-                <label class='usuario'>Olá {{user}} </label>
+                <label id='login'> <a href="{% url 'logout' %}"> Sair </a> </label>
+                <label id="link_cadastrar"><a href="{% url 'usuario' %}">Área de trabalho</a></label>
+                <label id='usuario'>Olá <a href="{% url 'usuario' %}">{{user}}</a> </label>
+
             {%else%}
-                <label class='login'> <a href="{% url 'login' %}">Entra</a> </label>
-                <label class='usuario'> Faça logim para inicia</label>
+                <label id='login'> <a href="{% url 'login' %}">Entra</a> </label>
+                
+                <label id="link_cadastrar"><a href="{% url 'novo-usuario' %}">Cadastre-se</a></label>
+                
+                <label id='usuario'> Faça logim para inicia </label>
             {%endif%}
 
    </div>
-   <img src="{% static 'img/vieworld.png' %}" width="600" all="00">
+        <br>
+        <br>
+        <br>
+           
+        <div class="divFotos">
+
+            <ul>
+                <h2 class="titulo2"> Conheça nossos produtos</h2>
+                <img src="{% static 'img/rintVW.png' %}" width="900" all=" ">
+                <li> dffseefsafasdf</li>
+            </ul>
+
+    </div>
+
+    <footer id="roda_pe">
+        <form class="form_tela_inicial">
+            
+            <p>
+                A gestão empresarial traz benefícios para diferentes aspectos
+                do negócio: processos, equipe, resultados e 
+                até mesmo na percepção do cliente. Um dos principais ganhos
+                é que a gestão permite criar processos bem definidos na empresa a partir 
+                de uma rotina produtiva organizada e otimizada.
+            </p>
+            <p>
+                Nosso sistema atenderar as demandas da sua empresa, 
+                auxiliando nas rotinas do dia  a dia e na gestão.
+            </p>
+            <p>
+                <b> Funcionalidades do sitema:</b> Fluxo de caixa, caixa, contas
+                 a pagar, contas a receber, gastos extras,
+                relatórios diário, mensal, anual e controle de usuários.
+                Com isso, sua empresa terra um controle  melhor das rotinas 
+                diárias e conseguirá fazer planejamentos de pequenos e longo prazo com eficiencia.
+            </p>
+            <b> Preço:</b> O sistema só serar cobrado quando a fatura excede a 5,00 (Cinco reais ),
+                depois disso, serar cobrado 0,4(Quatro centavos por registro),
+                a fatura pode ser acompanhada em tempo real.
+            <p>
+
+            </p>
+            <hr>
+            <label style="font-size: 20px;">Contato:</label>
+            <label>Whatsapp: </label>  <label> (62)99841-8704 </label>
+            <br>
+        </form>
+    </footer>
+        
 </div>
 </body>
 </html>

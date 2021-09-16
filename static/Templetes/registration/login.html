@@ -19,12 +19,11 @@
     <h1 class="cabesalho">Vieworld</h1>
 
     <div class='div_mae'>
-        <h1 class="cabesalho">Vieworld</h1>
+        
+        
         <form class='form_logim' method="post" action="{% url 'login' %}">
-            <br>
+        
             {% csrf_token %}
-
-            <h4 id='sub_titulo'> LOGIN</h4>
 
             {% if form.errors %}
             <p style='color:red;'>Usuário ou senha inválido!</p>
@@ -40,11 +39,13 @@
                 <p style='color: red;'>É necessário fazer login para acessar essa página!</p>
             {% endif %}
             {% endif %}
-
-            <label>Usuário:</label>
+            <p style="color:black; font-size: 16px;">A melhor maneira de administrar o seu negocio e agilizar o atendimeto ao cliente! </p>
+                <hr>
+            <label id="username">Usuário:</label> <br>
                 <td>{{ form.username }}</td>
+                <br>
               <br>
-            <label>Senha:</label>
+            <label id="password">Senha:</label> <br>
                 <td>{{ form.password }}</td>
               <br>
               <br>
@@ -52,11 +53,16 @@
             <input type="hidden" name="next" value="{{ next }}">
 
              {# Assumes you setup the password_reset view in your URLconf #}
-                <br>
-            <!--<label><a href="{% url 'password_reset' %}">Esqueci minha senha!</a></label>
-            <br> -->
-            <label><a href="{% url 'novo-usuario' %}">Cadastre-se!</a></label>
+             <br>
+            
+            <label id="recuperar_senha"><a href="{% url 'password_reset' %}">Esqueceu a semha?</a></label>
+                
             <br>
+                    <hr>
+            <button id="bt_cadastrar"><a href="{% url 'novo-usuario' %}">Cadastre-se!</a></button>
+            <br>
+            <br>
+            
         </form>
     </div>
 

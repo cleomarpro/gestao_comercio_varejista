@@ -48,12 +48,14 @@ class NovoUsuario(View):
             plano= Plano.objects.first()
             plano= plano.id
             novo_usuario = Usuarios.objects.create(
-                usuario_cliente= cliente, user_id= cliente, plano_id= plano)# Criando novo usuário_cliente administrador
+                usuario_cliente= cliente, user_id= cliente, plano_id= plano,
+                cpf_cnpj= request.POST['cpf_cnpj'],
+                nome_fantazia= request.POST['nome_fantazia'])# Criando novo usuário_cliente administrador
 
             data['usuario'] = usuario
             data['novo_usuario'] = novo_usuario
-            return render(
-                request, 'novo-usuario.html', data)
+    
+            return redirect('login')
 
 class UpdateUsuario(View):
     def get(self, request):

@@ -36,28 +36,41 @@
     text-decoration: none;
     color:blue;
 }
-.login{
+#login{
     position: absolute;
     right: 15px;
 }
 
-.adm{
+#link_cadastrar{
     position: absolute;
     right: 60px;
 }
-.usuario{
+#usuario{
     margin-left: 10px;
 }
+.form_tela_inicial{
+    width:98%;
+    background-color:rgb(229, 236, 236);
+    color: rgb(6, 5, 5);
+    padding: 8px;
+    font-size: 18;
+}
+#roda_pe{
+    margin-top: 30px;
+}
 .form_logim{
-    width:400px;
-    background-color:#D3D3D3;
-    text-align: center;
+    width:350px;
+    background-color:#60778a;
+    color: white;
+    border: 1px solid #f5f5f0;
+    border-radius: 7px;
     margin:0% 25% 25% 25% ;
+    padding: 8px;
 }
 @media (max-width: 768px) {
     .form_logim{
     width:100%;
-    margin:0;
+    margin-left:-10px;
 
 }
 }
@@ -70,25 +83,47 @@
 
     font-size: 18px;
 }
-.form_logim input{
-    text-align: center;
-    width:200px;
-    margin:5px;
-}
 
 #bt_login{
     text-align: center;
     width:96%;
     background-color:#363636;
     color:white;
+    border: 1px solid #a9aeae;
+    border-radius: 5px;
     margin:5px;
     font-size: 16px;
 }
 
-.form_logim label{
-    text-align: center;
-    color:black;
+#username{
+    margin-left: 3px;
+    color:white;
     font-size: 18px;
+    
+}
+#id_password{
+    width: 91%;
+    font-size: 18px;
+    border: 1px solid #f5f5f0;
+    border-radius: 5px;
+    text-align: center;
+    padding: 5px;
+}
+#id_username{
+    width: 91%;
+    font-size: 18px;
+    border: 1px solid #f5f5f0;
+    border-radius: 5px;
+    text-align: center;
+    padding: 5px;
+}
+.form_novo_usuário{
+    width: 91%;
+    font-size: 16px;
+    border: 1px solid #f5f5f0;
+    border-radius: 5px;
+    padding: 5px;
+
 }
 
 .form_logim a{
@@ -96,9 +131,22 @@
     color:blue;
 }
 
+#bt_cadastrar{
+    text-align: center;
+    width:70%;
+    background-color:#ffffff;
+    color:white;
+    margin:5px;
+    font-size: 16px;
+    border: 1px solid #a9aeae;
+    border-radius: 5px;
+}
 
-
-
+#recuperar_senha a{
+    margin-left: 10px;
+    font-size: 16px;
+    color: rgba(240, 13, 81, 0.989);
+}
 
 
 

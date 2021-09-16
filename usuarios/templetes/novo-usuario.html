@@ -22,33 +22,42 @@
     <div class='div_mae'>
         <h1 class="cabesalho">Vieworld</h1>
         <form class='form_logim' method="post" action="{% url 'novo-usuario' %}">
-            <br>
+            
             {% csrf_token %}
-
-            <h4 id='sub_titulo'> Novo usuário</h4>
-
+            <p style="color:black; font-size: 16px;">A melhor maneira de administrar o seu negocio e agilizar o atendimeto ao cliente! </p>
+    
+            <hr>
             {% if mensagen_de_erro_usuario %}
             <label style='color:red;'>{{mensagen_de_erro_usuario}}</label>
             {% endif %} <br>
-            <label>Usuário*:</label>
-                <input style='width:200px;' Type='text' name= 'username' id= 'username' required/>
-
+                <input class="form_novo_usuário" Type='text' name= 'username' placeholder="Usuário*:" required/>
+                <br>
             {% if mensagen_de_erro_email %}
             <br>
             <label style='color:red;'>{{mensagen_de_erro_email}}!</label>
             {% endif %} <br>
-            <label>E-mail*:</label>
-                <input style='width:200px;' Type='email' name= 'email' id= 'email' required/>
-              <br>
-
-            <label>Senha*:</label>
-                <input style='width:200px;' Type='password' name= 'password'id= 'password' required/>
-
-              <br>
-              <br>
-            <input id='bt_login' type="submit" value="Criar">
-                <br>
+            
+            <input class="form_novo_usuário" Type='password' name= 'password'id= 'password' placeholder="Senha*:" required/>
             <br>
+            <br>
+            <input class="form_novo_usuário"   Type='email' name= 'email' id= 'email' placeholder="E-mail*:" required/>
+            <br>
+            <br>
+            <input class="form_novo_usuário" Type='text' name= 'cpf_cnpj' id= 'cpf_cnpj' placeholder="CNPJ ou CPF*:" required/>
+            <br>
+            <br>
+            <input class="form_novo_usuário" Type='text' name= 'nome_fantazia' id= 'nome_fantazia' placeholder="Nome fantasia*:" required/>
+            <br>
+            <br>
+                <hr>
+                    <p style="color:black; font-size: 16px;">
+                        Ao clicar em Cadastre-se, você concorda com nossos Termos, Política de Dados e Política de Cookies.
+                        Você poderá receber notificações por SMS e cancelar isso quando quiser.
+                    </p>
+            <input id='bt_login' type="submit" value="Cadastre-se">
+            <br>
+            <br>
+            
         </form>
     </div>
 
