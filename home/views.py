@@ -3,6 +3,7 @@ from django.shortcuts import render
 #from django.shortcuts import redirect #, render
 from django.contrib.auth.decorators import login_required
 from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from usuarios.models import Usuarios, Plano
 
@@ -12,7 +13,7 @@ def home(request):
 def TelaInicial(request):
     return render(request,'tela_inicial.html')
 
-class Usuario(View):
+class Usuario(LoginRequiredMixin, View):
     def get(self, request):
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado

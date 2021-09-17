@@ -16,9 +16,11 @@
     <meta name="author" content="cor">
 </head>
 <body>
-    <h1 class="cabesalho">Vieworld</h1>
+    
 <div class="div_mae">
     <div class="div_cabesalho2">
+        <h1 class="cabesalho" >Vieworld</h1>
+
        {%if user.is_authenticated%}
                 <label id='login'> <a href="{% url 'logout' %}"> Sair </a> </label>
                 <label id="link_cadastrar"><a href="{% url 'usuario' %}">Área de trabalho</a></label>
@@ -31,12 +33,9 @@
                 
                 <label id='usuario'> Faça logim para inicia </label>
             {%endif%}
-
+            
    </div>
-        <br>
-        <br>
-        <br>
-           
+        
         <div class="divFotos">
 
             <ul>
@@ -47,7 +46,7 @@
 
     </div>
 
-    <footer id="roda_pe">
+        
         <form class="form_tela_inicial">
             
             <p>
@@ -57,29 +56,48 @@
                 é que a gestão permite criar processos bem definidos na empresa a partir 
                 de uma rotina produtiva organizada e otimizada.
             </p>
+        </form>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <h3 style="color: black;font-size: 25px; text-align: center;">NOSSO OBJETIVO</h3>
+        <form class="form_tela_inicial">
+            
             <p>
-                Nosso sistema atenderar as demandas da sua empresa, 
-                auxiliando nas rotinas do dia  a dia e na gestão.
+                Auxiliar nas rotinas do dia  a dia da su empresa e na gestão.
             </p>
+        </form>
+        <br>
+        <h3 style="color: black;font-size: 25px; text-align: center;">FUNCIONALIDADE DO SISTEMA</h3>
+        <form class="form_tela_inicial">
             <p>
-                <b> Funcionalidades do sitema:</b> Fluxo de caixa, caixa, contas
+                 Fluxo de caixa, caixa, contas
                  a pagar, contas a receber, gastos extras,
                 relatórios diário, mensal, anual e controle de usuários.
                 Com isso, sua empresa terra um controle  melhor das rotinas 
                 diárias e conseguirá fazer planejamentos de pequenos e longo prazo com eficiencia.
             </p>
-            <b> Preço:</b> O sistema só serar cobrado quando a fatura excede a 5,00 (Cinco reais ),
-                depois disso, serar cobrado 0,4(Quatro centavos por registro),
-                a fatura pode ser acompanhada em tempo real.
+        </form>
+        <br>
+        <h3 style="color: black;font-size: 25px; text-align: center;">PREÇO</h3>
+        <form class="form_tela_inicial">
+             O sistema só serar cobrado quando a fatura excede a 5,00 (Cinco reais ),
+            depois disso, serar cobrado 0,4(Quatro centavos por registro),
+            a fatura pode ser acompanhada em tempo real.
             <p>
-
+        </form>
+        <br>
+        <h3 style="color: black;font-size: 25px; text-align: center;">CONTATOS</h3>
+        <form class="form_tela_inicial">
             </p>
-            <hr>
-            <label style="font-size: 20px;">Contato:</label>
-            <label>Whatsapp: </label>  <label> (62)99841-8704 </label>
+            <label style="font-size: 20px; text-align: center;">Contato:</label>
+            <label>Whatsapp: </label>  <label> (xx)xxxx-xxxx </label>
             <br>
         </form>
-    </footer>
+    <br>
+    <br>
         
 </div>
 </body>

@@ -22,14 +22,13 @@
 
 
 .div_cabesalho2{
-    background-color:#D3D3D3;
-    color:black;
+    color:white;
     position: fixed;
     width:100%;
-    margin-top: -42px;
+    margin-top: 0px;
     margin-left: -8px;
     padding:5px;
-
+    font-size: 20px;
 }
 
 .div_cabesalho2 a{
@@ -43,17 +42,23 @@
 
 #link_cadastrar{
     position: absolute;
-    right: 60px;
+    right: 70px;
 }
 #usuario{
     margin-left: 10px;
+    color: black;
+
 }
 .form_tela_inicial{
     width:98%;
-    background-color:rgb(229, 236, 236);
+    background-color:#60778a;
     color: rgb(6, 5, 5);
-    padding: 8px;
-    font-size: 18;
+    border: 1px solid #0e0e0d;
+    border-radius: 7px;
+    padding: 10px;
+    font-size: 20px;
+    text-align: center;
+    
 }
 #roda_pe{
     margin-top: 30px;

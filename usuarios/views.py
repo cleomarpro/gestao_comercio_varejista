@@ -7,6 +7,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 #from django.contrib.auth.models import Permission
 #from django.contrib.contenttypes.models import ContentType
 # Create your views here.
@@ -57,7 +58,7 @@ class NovoUsuario(View):
     
             return redirect('login')
 
-class UpdateUsuario(View):
+class UpdateUsuario(LoginRequiredMixin, View):
     def get(self, request):
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
@@ -101,7 +102,7 @@ class UpdateUsuario(View):
         
         return render(request,'update-usuario.html', {'usuario': usuario})
 
-class NovoFuncionario(View):
+class NovoFuncionario(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user.has_perm('pessoa.add_funcionario')
         if user == False:
@@ -177,7 +178,7 @@ class NovoFuncionario(View):
             return render(
                 request, 'novo-funcionario.html', data)
 
-class UpdateFuncionario(View):
+class UpdateFuncionario(LoginRequiredMixin, View):
     def get(self, request, id):
         user = request.user.has_perm('pessoa.change_funcionario')
         if user == False:
