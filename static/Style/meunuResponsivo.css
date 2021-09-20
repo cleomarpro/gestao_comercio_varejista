@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Lobster|Philosopher:400i&display=swap');
 
 .divCabesalho{
-    font-family: 'Philosopher', sans-serif;
+
     font-size: 40px;
     background-color:#000000;
     color:white;
     text-align: center;
     position: fixed;
     width:100%;
-    margin-top: -77px;
+    margin-top: -79px;
     margin-left: -8px;
 }
 

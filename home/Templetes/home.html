@@ -18,9 +18,9 @@
 <body>
     
 <div class="div_mae">
+    <h1 class="cabesalho" >VieWorld</h1>
     <div class="div_cabesalho2">
-        <h1 class="cabesalho" >Vieworld</h1>
-
+        
        {%if user.is_authenticated%}
                 <label id='login'> <a href="{% url 'logout' %}"> Sair </a> </label>
                 <label id="link_cadastrar"><a href="{% url 'usuario' %}">Área de trabalho</a></label>
@@ -29,7 +29,7 @@
             {%else%}
                 <label id='login'> <a href="{% url 'login' %}">Entra</a> </label>
                 
-                <label id="link_cadastrar"><a href="{% url 'novo-usuario' %}">Cadastre-se</a></label>
+                <label id="link_cadastrar"><a href="{% url 'novo-usuario' %}">Cadastrar-se</a></label>
                 <label id='usuario'> </label>
             {%endif%}
             
@@ -39,23 +39,12 @@
 
             <ul>
                 <h2 class="titulo2"> Conheça nossos produtos</h2>
-                <img src="{% static 'img/rintVW.png' %}" width="900" all=" ">
+                <img id="img" src="{% static 'img/VISAO-DO-MUNDO.png' %}" width="800" all=" ">
                 <li> dffseefsafasdf</li>
             </ul>
 
     </div>
 
-        
-        <form class="form_tela_inicial">
-            
-            <p>
-                A gestão empresarial traz benefícios para diferentes aspectos
-                do negócio: processos, equipe, resultados e 
-                até mesmo na percepção do cliente. Um dos principais ganhos
-                é que a gestão permite criar processos bem definidos na empresa a partir 
-                de uma rotina produtiva organizada e otimizada.
-            </p>
-        </form>
             <br>
             <br>
             <br>
@@ -65,7 +54,9 @@
         <form class="form_tela_inicial">
             
             <p>
-                Auxiliar nas rotinas do dia  a dia da su empresa e na gestão.
+                Auxiliar nas rotinas do dia  a dia da su empresa e na gestão, com isso, 
+                sua empresa terra um controle  melhor das rotinas 
+                diárias e conseguirá fazer planejamentos de pequenos e longo prazo com eficiencia.
             </p>
         </form>
         <br>
@@ -73,28 +64,21 @@
         <form class="form_tela_inicial">
             <p>
                  Fluxo de caixa, caixa, contas
-                 a pagar, contas a receber, gastos extras,
+                 a pagar, contas a receber, gastos extras, promoção de produtos,
                 relatórios diário, mensal, anual e controle de usuários.
-                Com isso, sua empresa terra um controle  melhor das rotinas 
-                diárias e conseguirá fazer planejamentos de pequenos e longo prazo com eficiencia.
+            
             </p>
         </form>
         <br>
         <h3 style="color: black;font-size: 25px; text-align: center;">PREÇO</h3>
         <form class="form_tela_inicial">
              O sistema só serar cobrado quando a fatura excede a 5,00 (Cinco reais ),
-            depois disso, serar cobrado 0,4(Quatro centavos por registro),
+            depois disso, será cobrado 0,4(Quatro centavos por registro),
             a fatura pode ser acompanhada em tempo real.
             <p>
         </form>
         <br>
-        <h3 style="color: black;font-size: 25px; text-align: center;">CONTATOS</h3>
-        <form class="form_tela_inicial">
-            </p>
-            <label style="font-size: 20px; text-align: center;">Contato:</label>
-            <label>Whatsapp: </label>  <label> (xx)xxxx-xxxx </label>
-            <br>
-        </form>
+    <br>
     <br>
     <br>
         

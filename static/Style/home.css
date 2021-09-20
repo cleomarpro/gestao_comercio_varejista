@@ -3,9 +3,12 @@
 @import url('https://fonts.googleapis.com/css?family=Lobster|Philosopher:400i&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Inria+Serif&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Courier+Prime&display=swap');
+@font-face {
+	font-family: elephant;
+	src: url(../Fonte/Elephant-PersonalUse.ttf)
+}
 
 .cabesalho{
-    font-family: 'Philosopher', sans-serif;
     background-color:#000000;
     color:white;
     text-align: center;
@@ -25,12 +28,12 @@
     color:white;
     position: fixed;
     width:100%;
-    margin-top: 0px;
+    margin-top: -42px;
     margin-left: -8px;
-    padding:5px;
+    background-color: rgb(146, 142, 142);
     font-size: 20px;
-    border: 1px solid #0e0e0d;
-    border-radius: 7px;
+    padding: 5px;
+    
 }
 
 .div_cabesalho2 a{
@@ -62,17 +65,28 @@
     text-align: center;
     
 }
+.errorlist{
+    color: red;
+}
 #roda_pe{
     margin-top: 30px;
 }
 .form_logim{
-    width:350px;
+    width:450px;
     background-color:#60778a;
     color: white;
     border: 1px solid #f5f5f0;
     border-radius: 7px;
     margin:0% 25% 25% 25% ;
     padding: 8px;
+    content: counter(mynum) ": ";
+    counter-increment: mynum;
+    font-weight: bold;
+}
+#img{
+    width:100%;
+    text-align: center;
+    margin-left: -30px;
 }
 @media (max-width: 768px) {
     .form_logim{
@@ -99,7 +113,8 @@
     border: 1px solid #a9aeae;
     border-radius: 5px;
     margin:5px;
-    font-size: 16px;
+    padding: 5px;
+    font-size: 18px;
 }
 
 #username{
