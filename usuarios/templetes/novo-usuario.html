@@ -44,18 +44,56 @@
             <input class="form_novo_usuário" Type='text' name= 'cpf_cnpj' id= 'cpf_cnpj' placeholder="Cnpj ou Cpf*..." required/>
             <br>
             <br>
-            <input class="form_novo_usuário" Type='text' name= 'nome_fantazia' id= 'nome_fantazia' placeholder="Nome fantasia*..." required/>
+            <input class="form_novo_usuário" Type='text' name= 'nome_fantazia' id= 'nome_fantazia' placeholder="Nome pessoal ou fantasia*..." required/>
             <br>
             <br>
                 <hr>
                     <p style="color:black; font-size: 16px;">
-                        Ao clicar em Cadastre-se, você concorda com nossos Termos e condição de uso
+                        Ao clicar em Cadastre-se, você concorda com nossos 
+                        <a style="color:rgb(226, 15, 15);" href="#" onclick="document.getElementById
+                            ('termo_e_condicao_de_uso').style.display='block';">
+                                Termos e condição de uso </a>
                     </p>
             <input id='bt_login' type="submit" value="Cadastre-se">
             <br>
             <br>
             
         </form>
+
+        
+            <form id='termo_e_condicao_de_uso'>
+                <a id="termo_buttao" href="#" onclick="document.getElementById
+                    ('termo_e_condicao_de_uso').style.display='none';"> X</a>
+                <P  style="color:black; font-size: 22px;">TEMOS E CONDIÇÕES DE USO</P>
+                <p>
+                   <p><b>INFORMACÕES PESSOAIS </b></p>
+                   A vieworld utilizara algumas informções pessoais para a indentificação dos usuários. <p></p>
+                   Não compartilhamos nenhuma informação com outros usuários ou empresas terceiras.<p></p>
+                   Não utilizamos informações com endereço IP e cookies.<p></p>
+                    
+                </p>
+                   <P><b>SEGURANÇA </b></P>
+                   O usuário é responsavel por guardadr a sua credenciais de logim como, e-mail, senha, usuário. <p></p> 
+                  O usuário fica ciente que, ao informar esses datos a terceiros, poderar expor  todos os seus dados e informações
+                
+                <p>
+                    <p><b>CANCELAENTO </b></p>
+                    Se caso o usuário não utilizar o sistemas no periodo de 90 dias, 
+                    sua conta poderar  ser desativada e seus dados e informações excluidos.
+                </p>
+                    <p><b> PAGAMENTO</b></p>
+                    Não terar cobrança dentro do plano gratuito. <p></p>
+                    O não pagamento da fatura, o usuário serar alertado pelo propio sistemas,
+                    e poderar ser incluso no cadastro de inadimplentes
+                <p>
+                   <p><b>PREÇO </b></p>
+                   O sistempa é gratuito até um certo poto, deposis disso poderar ser cobrado conforme a quantidade de registro no banco de dados.
+                </p>
+                <p><b>Verção: 1.0 </b></p>
+            <br>
+                    
+        </form>
+        
     </div>
 
 <body>
