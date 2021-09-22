@@ -71,9 +71,9 @@
 -muda de branch ou repositório(git checkout 'nomeDaNovaBranch')
 - juntar as branch ((git merge "nomeDaNovaBranch") em seguida (git push origin "nomeDaNovaBranch"))
 -voltar voltar au estado do commit anterior incluindo as alteraçoes (git reset --hard HEAD~1)
--voltar ao estado do mommite anterrior sel alterar os arquivos modificado(git reset HEAD~1)
+-voltar ao estado do mommite anterrior sem alterar os arquivos modificado(git reset HEAD~1)
 -tirar o arquivo adicionado a fila para o commite(git reset nomeDoArquiv)
--checar o ultimo commite, acada execução desse comado muda mara o commita mais antigo (git checkout HEAD~1)
+-checar o ultimo commite, acada execução desse comado muda para o commita mais antigo (git checkout HEAD~1)
 - voltar a veção anterior do arquivo (git checkout -- nomeDoArquiv)
 -excluir arquivo do repositório, é nessário commitar depos da remoção (git rm caminho/arquivo_a_ser_ignorado.txt)
 - incluir arquivo no gitignore apos ter comitado 
