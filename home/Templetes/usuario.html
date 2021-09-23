@@ -4,49 +4,68 @@
 
 </form >
 
-<h3 class='titulo_usuario'> Meus dados</h3>
-
 <form class='usuario'>
-
-    <label>Nome fantasia:  {{usuario.nome_fantazia}}</label>
+    <br>
+    <br>
+    <p style= "font-size: 20px;"><b>CONFIGURAÇOES DA CONTA </b></p>
+    <hr>
+    <label><b> Usuário:</b> {{user.username}}</label>
      <br>
-    <label>Cnpj: {{usuario.cpf_cnpj}}</label>
-     <br>
-    <label>Data de criacão: {{usuario.data_de_criacao}}</label>
-     <br>
-    <label>Razão Social: {{usuario.razao_social}}</label>
-     <br>
-    <label>Inscricão Estadual: {{usuario.inscricao_estadual}}</label>
-     <br>
-    <label>Inscricão Municipal: {{usuario.inscricao_municipal}}</label>
-     <br>
-    <label>Nascionalidade: {{usuario.nascionalidade}}</label>
-     <br>
-    <label>CEP: {{usuario.cep}}</label>
-     <br>
-    <label>Rua: {{usuario.rua}}</label>
-     <br>
-    <label>Quadra: {{usuario.quadra}}</label>
-     <br>
-    <label>Número: {{usuario.numero}}</label>
-     <br>
+    <label> <b> E-mail: </b> {{user.email}}</label>
+    <br>
+    <hr>
+    <br>
+    <button style="width: 50%; border: 1px solid #303131; color:white; background-color: #4F4F4F; font-size:18px;">
+        <a style="color:white;" href="{% url 'password_change'%} ">Alterar senha</a> </button>
+   
+    <br>
+    <br>
+    <hr>
+    <p style= "font-size: 20px;"><b>INFORMAÇÕES DA CONTA </b></p>
+    <hr>
+    <label><b>Nome fantazia: </b> {{usuario.nome_fantazia}}</label>
+     
+    <label><b>Cnpj:</b> {{usuario.cpf_cnpj}}</label>
+     
+    <label><b>Data de criacão:</b> {{usuario.data_de_criacao}}</label>
+     
+    <label><b> Razão Social:</b> {{usuario.razao_social}}</label>
+     
+    <label><b>Inscricão Estadual:</b> {{usuario.inscricao_estadual}}</label>
+     
+    <label> <b>Inscricão Municipal:</b> {{usuario.inscricao_municipal}}</label>
+   
+    <label><b>Nascionalidade:</b> {{usuario.nascionalidade}}</label>
+    <br>
+    <p style="font-size: 20px;"><b>ENDEREÇO</b></p>
+    <hr>
+    <label> <b>CEP:</b> {{usuario.cep}}</label>
+     
+    <label><b>Rua:</b> {{usuario.rua}}</label>
+     
+    <label><b>Quadra:</b> {{usuario.quadra}}</label>
+     
+    <label><b>Número:</b> {{usuario.numero}}</label>
+     
     <label>Setor: {{usuario.setor}}</label>
+     
+    <label><b>Pais:</b> {{usuario.pais}}</label>
+     
+    <label><b>Estado:</b> {{usuario.estado}}</label>
+     
+    <label><b>Cidade:</b> {{usuario.cidade}}</label>
+     
+    <label><b>Complemento:</b> {{usuario.complemento}}</label>
+
+    <br>
+    <p style=" font-size: 20px;"><b>CONTATO</b></p>
+    <hr>
+    <label><b>Telefone:</b> {{usuario.DDD}} {{usuario.Celular}}</label>
+    <label><b>Telefone:</b> {{usuario.DDD}} {{usuario.Telefone}}</label>
+    <label><b>E-mail:</b> {{usuario.email}}</label>
      <br>
-    <label>Pais: {{usuario.pais}}</label>
      <br>
-    <label>Estado: {{usuario.estado}}</label>
-     <br>
-    <label>Cidade: {{usuario.cidade}}</label>
-     <br>
-    <label>Complemento: {{usuario.complemento}}</label>
-     <br>
-    <label>DDD: {{usuario.DDD}}</label>
-     <br>
-    <label>Telefone: {{usuario.Telefone}}</label>
-     <br>
-    <label>E-mail: {{usuario.email}}</label>
-     <br>
-     <br>
+     <hr>
     <button style="width: 50%; border: 1px solid #303131; color:white; background-color: #4F4F4F; font-size:18px;">
     <a style="color:white;" href="{% url 'update-usuario'%} ">Editar</a> </button>
     <br>

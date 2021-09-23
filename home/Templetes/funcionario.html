@@ -4,15 +4,27 @@
 
 </form >
 
-<h3 class='titulo_usuario'> Meus dados</h3>
-
 <form class='usuario'>
-
-    <label>Nome:  {{user.first_name}} {{user.last_name}}</label>
+    <br>
+    <p style= "font-size: 20px;"><b>Configuracões de usuário </b></p>
+    <hr>
+    <label><b> Nome: </b> {{user.first_name}} {{user.last_name}}</label>
      <br>
-    <label>Usuário: {{user.username}}</label>
+    <label><b> Usuário:</b> {{user.username}}</label>
      <br>
-    <label>E-mail: {{user.email}}</label>
+    <label> <b> E-mail: </b> {{user.email}}</label>
+    <br>
+    <hr>
+    <br>
+    <a  style="
+        padding: 5px;
+        border: 1px solid #303131; 
+        color:white; 
+        background-color: #4F4F4F; 
+        font-size:18px;"
+        href="{% url 'password_change' %}">Alterar senha
+     </a> 
+    
     <br>
     <br>
 </form>

@@ -2,28 +2,56 @@
 {% block main%}
 <div class='div_Mae'>
 
-</form >
 
-<h3 class='titulo_usuario'> Resumo da fatura</h3>
+    <p style= "font-size: 20px;"><b>Resumo da fatura </b></p>
+ 
+     <table class="table" style="width: 350px; text-align: left; font-size: 18px; important">
+        <thead  >
+           <tr>
+               <th  style=" padding: 8px; important">Descricão</th>
+               <th style=" padding: 8px; important">Valores</th>
+           
+           </tr>
+       </thead>
+      
+           <tbody >
+                <td style="text-align: left;background-color: #C6E2FF; important" > Vendas </td>
+                <td style=" background-color: #C6E2FF; important">{{ vendas}}</td>
+           </tbody>
+            
+            <tbody>
+                <td style="text-align: left; important"> Item do pedito </td>
+                <td> {{item_do_pedito}} </td>
+            </tbody>
+            <tbody>
+                <td style="text-align: left;background-color: #C6E2FF; important"> Contas a receber </td>
+                <td style=" background-color: #C6E2FF; important"> {{Contas_a_receber}} </td>
 
-<form class='usuario'>
+            </tbody>
+            <tbody>
+                <td style="text-align: left; important"> Contas a pagar </td>
+                <td> {{Contas_a_pagar}} </td>
+            </tbody>
+            <tbody>
+                <td style="text-align: left; background-color: #C6E2FF; important"> Gastos extras </td>
+                <td style=" background-color: #C6E2FF; important" > {{gastos_extras}} </td>
+            </tbody>
+                <td style="text-align: left; important"> Entrada de mercadorias </td>
+                <td> {{entrada_ee_mercadoria}} </td>
 
-   
-    <label>Vendas: {{vendas}} </label>
-    <label>Itens de vendas: {{item_do_pedito}} </label>
-    <label>Contas a receber: {{Contas_a_receber}} </label>
-    <label>Contas a pagar: {{Contas_a_pagar}} </label>
-    <label>Gastos extras: {{gastos_extras}} </label>
-    <label>Entrada de mercadorias: {{entrada_ee_mercadoria}} </label>
-    <label>TOTAL DE REGISTRO: {{total_de_registros}} </label>
-    <label>TOTAL A PAGAR: R$ {{total_a_pagar}} </label>
-     <br>
-     <br>
-    <button style="width: 50%; border: 1px solid #303131; color:white; background-color: #4F4F4F; font-size:18px;">
-    <a style="color:white;" href="{% url 'update-usuario'%} ">Editar</a> </button>
+            <tbody>
+            </tbody>
+                <td style="text-align: left; background-color: #C6E2FF; important"> TOTAL DE REGISTRO </td>
+                <td style=" background-color: #C6E2FF; important"> {{total_de_registros}} </td>
+            <tbody>
+            </tbody>
+            <td style="text-align: left; background-color: #2b67c2; important"> TOTAL A PAGAR </td>
+            <td style=" background-color: #2b67c2; important"> R$ {{total_a_pagar}} </td>
+            <tbody>
+            
+
+       </table>
+    
     <br>
-    <br>
-    <br>
-</form>
 </div>
 {% endblock %}

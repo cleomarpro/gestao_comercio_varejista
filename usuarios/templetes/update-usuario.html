@@ -7,6 +7,9 @@
          style=" color:#EEE9E9;">Atualizar meus dados</label>
     </h1>
              <br>
+             
+        <p style= "font-size: 20px;"><b>INFORMACÕES DE CONTA </b></p>
+        <hr>
             <label>Cnpj:</label>
                 <input style=" width:250px;"  type="text" value= "{{usuario.cpf_cnpj}}"
                     id="cpf_cnpj" name="cpf_cnpj" required/>
@@ -21,13 +24,19 @@
                 <input style=" width:200px;"  type="text" id="razao_social" 
                     name="razao_social" value= "{{usuario.razao_social}}" >
              <br>
-             
-            <label> inscricao_estadual:</label>
+
+             <label> Data de criação:</label>
+             <input type="button" value= "{{usuario.data_de_criacao}}" > Alterar
+             <input  type="date" id="data_de_criacao" value= "{{usuario.data_de_criacao}}" 
+                 name="data_de_criacao" >
+            <br>
+
+            <label> Inscrição  estadual:</label>
                 <input style=" width:180px;" type="text" id="inscricao_estadual" 
                     name="inscricao_estadual" value= "{{usuario.inscricao_estadual}}" >
              <br>
     
-             <label> inscricao_municipal:</label>
+             <label> Inscrição  municipal:</label>
             <input style=" width:140px;" type="text" id="inscricao_municipal" 
                 name="inscricao_municipal" value= "{{usuario.inscricao_municipal}}" >
                 <br>
@@ -35,6 +44,8 @@
                 <input style=" width:140px;"  type="text" id="nascionalidade"
                     name="nascionalidade" value= "{{usuario.nascionalidade}}" >
              <br>
+        <p style="font-size: 20px;"><b>ENDEREÇO</b></p>
+            <hr>
             <label> CEP:</label>
             <input style=" width:200px;"  type="text" id="cep"
                  name="cep" value= "{{usuario.cep}}" >
@@ -75,10 +86,9 @@
                 <input style=" width:100px;"  placeholder=" Pais..." type="text" 
                     id="pais" name="pais" value= "{{usuario.pais}}" >
             <br>
-            <label> DDD:</label>
-                <input style=" width:100px;"  placeholder=" Celular..."
-                     type="text" id="DDD" name="DDD" value= "{{usuario.DDD}}" >
-             <br>
+        <p style=" font-size: 20px;"><b>CONTATO</b></p>
+            <hr>
+           
             <label> Celular:</label>
                 <input style=" width:100px;"  placeholder=" Celular..." 
                 type="text" id="Celular" name="Celular" value= "{{usuario.Celular}}" >
@@ -96,10 +106,8 @@
                 <input  type="text" id="nome_fantazia" 
                     name="nome_fantazia" value= "{{usuario.nome_fantazia}}" >
             <br>
-            <label> Data de criação:</label>
-                <input  type="date" id="data_de_criacao" value= "{{usuario.data_de_criacao}}" 
-                    name="data_de_criacao" required/>
-               <br>
+            
+               <hr>
             <button  type="submit"> Atualizar</button>
    
 </div>

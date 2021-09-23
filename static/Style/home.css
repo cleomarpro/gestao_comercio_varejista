@@ -72,6 +72,22 @@
     padding: 8px;
     
 }
+#id_new_password1{
+    margin-top: 5px;
+    font-size: 18px;
+    padding-right: 240px;
+    text-align: center;
+}
+#id_old_password{
+    font-size: 18px;
+    padding-right: 240px;
+    text-align: center;
+}
+#id_new_password2{
+    font-size: 18px;
+    padding-right: 240px;
+}
+
 #termo_e_condicao_de_uso{
     display: none;
     position:absolute;

@@ -90,17 +90,22 @@ class UpdateUsuario(LoginRequiredMixin, View):
         usuario.cidade= request.POST['cidade']
         usuario.pais= request.POST['pais']
         usuario.complemento= request.POST['complemento']
-        usuario.DDD= request.POST['DDD']
+        #usuario.DDD= request.POST['DDD']
         usuario.Celular= request.POST['Celular']
         #DDD= request.POST['DDD']
         usuario.Telefone= request.POST['Telefone']
         usuario.email= request.POST['email']
         usuario.nome_fantazia= request.POST['nome_fantazia']
-        usuario.data_de_criacao= request.POST['data_de_criacao']
+        if request.POST['data_de_criacao']:
+            usuario.data_de_criacao= request.POST['data_de_criacao']
         #data_hora= request.POST['data_hora']
         usuario.save()
-        
-        return render(request,'update-usuario.html', {'usuario': usuario})
+
+        userLogado = request.user
+        userLogado.email= request.POST['email'] # alterando o email do usuário logado
+        userLogado.save()
+
+        return redirect('usuario')
 
 class NovoFuncionario(LoginRequiredMixin, View):
     def get(self, request):

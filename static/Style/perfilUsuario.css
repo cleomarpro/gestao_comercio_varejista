@@ -22,32 +22,30 @@
 
 }
 .usuario label{
-    border: 1px solid #303131;
-    border-radius: 5px;
     font-size:18px;
-    padding: 5px;
+   margin-left: 15px;
     width: 94%;
-    margin:5px;
     display: inline-block;
 
 }
 
 .titulo_usuario{
-    background-color: #4F4F4F;
-    color:white;
+    
+    color:rgb(10, 9, 9);
     margin-left:185px;
-    border: 1px solid #303131;
+    
     border-radius: 5px;
-    font-size:30px;
+    font-size:25px;
     width: 600px;
-    text-align: center;
+
+    
 }
 .campo_de_filtro {
     background-color: #F0F8FF;
     margin-left:185px;
     font-size:18px;
     width: 580px;
-    padding:10px;
+    padding-left:10px;
 
 }
 
