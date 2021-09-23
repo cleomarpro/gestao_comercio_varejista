@@ -36,7 +36,20 @@
     margin-right: 10px;
 
 }
-
+.mensagem_de_erro{
+    width:450px;
+    background-color:#60778a;
+    color: white;
+    border: 1px solid #f5f5f0;
+    border-radius: 7px;
+    margin:0% 25% 25% 25% ;
+    padding: 8px;"
+}
+@media (max-width: 450px) {
+    .mensagem_de_erro{
+        width: 100%;
+        margin: 0px;
+    }
 
 @media (max-width: 450px) {
 .butao_X{
