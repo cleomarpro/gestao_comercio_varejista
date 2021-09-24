@@ -77,7 +77,10 @@
 
 
  .menu_label img{
-    border-radius: 5px;
+   
+   margin-left: -10px;
+   border: 4px solid #000000;
+   border-radius: 2px;
  }
 
 
