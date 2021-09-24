@@ -115,6 +115,15 @@
     margin-left:-10px;
 
 }
+#id_new_password1{
+    padding-right: 100px;
+}
+#id_old_password{
+    padding-right: 100px;
+}
+#id_new_password2{
+    padding-right: 100px;
+}
 }
 #sub_titulo{
     background-color:#000000;
@@ -128,7 +137,7 @@
 
 #bt_login{
     text-align: center;
-    width:96%;
+    width:92%;
     background-color:#363636;
     color:white;
     border: 1px solid #a9aeae;

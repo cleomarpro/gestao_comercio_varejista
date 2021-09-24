@@ -25,7 +25,7 @@
     <hr>
     <label><b>Nome fantazia: </b> {{usuario.nome_fantazia}}</label>
      
-    <label><b>Cnpj:</b> {{usuario.cpf_cnpj}}</label>
+    <label><b>Cnpj ou Cpf:</b> {{usuario.cpf_cnpj}}</label>
      
     <label><b>Data de criacão:</b> {{usuario.data_de_criacao}}</label>
      
@@ -47,7 +47,7 @@
      
     <label><b>Número:</b> {{usuario.numero}}</label>
      
-    <label>Setor: {{usuario.setor}}</label>
+    <label><b>Setor:</b> {{usuario.setor}}</label>
      
     <label><b>Pais:</b> {{usuario.pais}}</label>
      
@@ -60,14 +60,14 @@
     <br>
     <p style=" font-size: 20px;"><b>CONTATO</b></p>
     <hr>
-    <label><b>Telefone:</b> {{usuario.DDD}} {{usuario.Celular}}</label>
+    <label><b>Celular:</b> {{usuario.DDD}} {{usuario.Celular}}</label>
     <label><b>Telefone:</b> {{usuario.DDD}} {{usuario.Telefone}}</label>
     <label><b>E-mail:</b> {{usuario.email}}</label>
      <br>
      <br>
      <hr>
     <button style="width: 50%; border: 1px solid #303131; color:white; background-color: #4F4F4F; font-size:18px;">
-    <a style="color:white;" href="{% url 'update-usuario'%} ">Editar</a> </button>
+    <a style="color:white;" href="{% url 'update-usuario'%} ">Alterar</a> </button>
     <br>
     <br>
     <br>

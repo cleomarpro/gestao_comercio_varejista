@@ -8,9 +8,13 @@
     </h1>
              <br>
              
-        <p style= "font-size: 20px;"><b>INFORMACÕES DE CONTA </b></p>
+        <p style= "font-size: 20px;"><b>INFORMACÕES DA CONTA </b></p>
         <hr>
-            <label>Cnpj:</label>
+            <label> Nome Fantazia:</label>
+            <input  type="text" id="nome_fantazia" 
+                name="nome_fantazia" value= "{{usuario.nome_fantazia}}" >
+            <br>
+            <label>Cnpj ou Cpf:</label>
                 <input style=" width:250px;"  type="text" value= "{{usuario.cpf_cnpj}}"
                     id="cpf_cnpj" name="cpf_cnpj" required/>
              <br>
@@ -101,10 +105,6 @@
             <label> E-mail:</label>
                 <input   placeholder=" E-mail..." type="text" id="email" 
                     name="email" value= "{{usuario.email}}" >
-            <br>
-            <label> Nome Fantazia:</label>
-                <input  type="text" id="nome_fantazia" 
-                    name="nome_fantazia" value= "{{usuario.nome_fantazia}}" >
             <br>
             
                <hr>
