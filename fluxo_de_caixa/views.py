@@ -128,8 +128,6 @@ class NovoItemPedido(LoginRequiredMixin, View):
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
-        pass
-
     def post(self, request, venda):
         user = request.user.has_perm('fluxo_de_caixa.add_venda')
         if user == False:

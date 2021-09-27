@@ -60,6 +60,7 @@ class Tipo_de_pagamento(models.Model):
 
 class Venda(models.Model):
     valor = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, default=0)
+    valor_com_desconto = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, default=0)
     desconto = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, default=0)
     total_desconto = models.DecimalField(max_digits=9, null=True, blank=True, decimal_places=2, default=0)
     valor_recebido = models.DecimalField(max_digits=9,null=True, blank=True, decimal_places=2, default=0)
@@ -70,7 +71,7 @@ class Venda(models.Model):
     tipo_de_pagamento = models.ForeignKey(Tipo_de_pagamento, null=True, on_delete=models.CASCADE)
     descricao = models.CharField(max_length=100, blank=True)
     finalizada = models.CharField(max_length=20, blank=True)
-    nota_fiscal_impressa = models.CharField(max_length=20, blank=True)
+    nfe_emitida = models.BooleanField(default=False)
     data_hora = models.DateTimeField(default=timezone.now)
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
@@ -83,6 +84,8 @@ class Venda(models.Model):
         valor_da_venda = self.itemdopedido_set.all().aggregate(
         valor=Sum((F('quantidade_de_itens') * F('produto__valor_venal')), output_field=FloatField()))
         total_produto=valor_da_venda['valor'] or 0
+        self.valor = total_produto
+        Venda.objects.filter(id=self.id).update(valor = total_produto)
 
 # calculo de desconto por item
         desconto_item = self.itemdopedido_set.aggregate(
@@ -111,12 +114,12 @@ class Venda(models.Model):
 
                     total_promocao +=  calculo_promocao
 
-        total_da_venda = total_produto - desconto_por_item - total_da_venda
+        total_da_venda = total_produto - desconto_por_item - total_promocao
 # calculo do desconto da venda e do total da venda
         desconto_por_venda = total_da_venda * float(self.desconto)/ 100 #desconto por venda
         total_da_venda = total_da_venda - desconto_por_venda
-        self.valor = total_da_venda
-        Venda.objects.filter(id=self.id).update(valor=total_da_venda)
+        self.valor_com_desconto = total_da_venda
+        Venda.objects.filter(id=self.id).update(valor_com_desconto=total_da_venda)
 
 # Pagamento em crédito
         credito = self.itemdopedido_set.filter(venda__tipo_de_pagamento__id=2)

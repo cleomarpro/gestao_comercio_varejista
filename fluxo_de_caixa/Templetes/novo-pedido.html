@@ -133,9 +133,12 @@
     </div>
         <form class='caixa' method="POST" action="{% url 'novo-pedido' %}">
             {% csrf_token %}
+            
             <input type="hidden" value="{{venda.id}}" name="venda_id">
             <button id='bt_novo_pedido' style='width:111px;' accesskey="n"> Nova venda </button>
+            
         </form>
+
 {% if venda %}
     <div>
     {% if perms.fluxo_de_caixa.add_venda %}
@@ -176,21 +179,27 @@
                 type="number" step=".01" lang="nb" name="quantidade"
                     id="quantidade" value="1" required disabled=" true">
                         <br>
-                         <br>
+                        <br>
         </form>
     {% endif %}
 <!-- Painel de vendas-->
     <div class='divPainel'>
+        {%if venda.tipo_de_pagamento_id == None%}
         <label style=" background-color: #363636;">
-            TOTAL A PAGAR $: {{ venda.valor | floatformat:2}}</label>
+            TOTAL $: {{ venda.valor | floatformat:2}} </label>
+            <br>
+            {%endif%}
 
-
-             <br>
+        {%if venda.tipo_de_pagamento_id != None %}
+        <label style=" background-color: #363636;">
+            TOTAL A PAGAR $: {{ venda.valor_com_desconto | floatformat:2}}</label>
+                <br>
+                {%endif%}        
         <label style=" background-color: #2F4F4F;">
             Desconto $:{{venda.total_desconto | floatformat:2}}</label>
              <br>
 
-
+       
         {%if venda.tipo_de_pagamento_id == '1' %}
              {% if venda.troco > 0 %}
         <label style=" background-color: #0000CD;">
@@ -314,56 +323,73 @@
 <!-- cupom fiscal-->
     <div id="div_cupomFiscal" class="cupom_fiscal">
        <form >
-            <label style="text-align: center;" >NÃO É VALIDO COMO CUPOM FISCAL</label>
+        <label >- Número do cupom: {{venda.id}} </label>
+           <hr>
+            <label style="text-align: center;" >ESTE CUPOM NÃO POSSUI VALOR FISCAL</label>
+                <hr>
+            <label >-Empresa: {{usuarios.nome_fantazia}} </label>
                 <br>
+            <label >-Cnpj: {{usuarios.cpf_cnpj}} </label>
+            <hr>
+                
+            <label >-Total: {{venda.valor}} </label>
                 <br>
-            <label >- Empresa: {{usuarios.nome_fantazia}} </label>
+            <label >-Desconto: {{venda.total_desconto}} </label>
                 <br>
-            <label >- Cnpj: {{usuarios.cpf_cnpj}} </label>
+            <label>-Valor com desconto $: {{ venda.valor_com_desconto | floatformat:2}} </label>
                 <br>
-                <br>
-            <label >- Número do cupom: {{venda.id}} </label>
-                <br>
-            <label>- Valor com desconto $: {{ venda.valor | floatformat:2}} </label>
-                <br>
-            <label >- Tipo de pagamento:{{ venda.tipo_de_pagamento }}</label>
-                <br>
+            {%if venda.tipo_de_pagamento != None %}
+            <label >-Tipo de pagamento: {{ venda.tipo_de_pagamento }}</label>
+            {%else%}
+            <label >-Tipo de pagamento: Não definido</label>
+            {%endif%}
+            <br>
             {%if venda.valor_debito > '0' %}
-            <label>- Débito $:{{ venda.valor_debito }}</label>
+            <label>-Valor  recebido em débito $:{{ venda.valor_debito }}</label>
              <br>
             {%endif%}
             {%if venda.valor_credito > '0' %}
-            <label>- Crédito $:{{ venda.valor_credito}}</label>
+            <label>-Valor recebito em crédito $:{{ venda.valor_credito}}</label>
             <br>
-            {%endif%}
-            {%if venda.valor_recebido > '0' %}
-            <label>- Sedula $:{{ venda.valor_recebido | floatformat:2}}</label>
-            <br>
-            {%endif%}
-            {%if venda.troco > 0 %}
-                {%if venda.tipo_de_pagamento_id == '1' %}
-                    <label >- Troco:{{venda.troco | floatformat:2}}</lavel>
-                {%elif venda.tipo_de_pagamento_id == '4'%}
-                    <label>- Troco:{{venda.troco | floatformat:2}}</label>
-                {%elif venda.tipo_de_pagamento_id == '5'%}
-                <label>- Troco:{{venda.troco | floatformat:2}}</label>
-                {%endif%}
             {%endif%}
 
-            {%if venda.desconto > '0' %}
-            <label>- Total de desconto $: {{venda.total_desconto | floatformat:2}}</label>
+            {%if venda.tipo_de_pagamento_id == '1' %}
+                <label>-Valor recebito em cedula R$:{{ venda.valor_recebido | floatformat:2}}</label>
+                {%elif venda.tipo_de_pagamento_id == '4' %}
+                    <label>-Valor recebito em cedula R$:{{ venda.valor_recebido | floatformat:2}}</label>
+                {%elif venda.tipo_de_pagamento_id == '5' %}
+                    <label>-Valor recebito em cedula R$:{{ venda.valor_recebido | floatformat:2}}</label>
                 <br>
             {%endif%}
-            <label>- Data:{{ venda.data_hora}}</label>
             <br>
+            {%if venda.troco > 0 %}
+                {%if venda.tipo_de_pagamento_id == '1' %}
+                    <label >- Troco: {{venda.troco | floatformat:2}}</lavel>
+                {%elif venda.tipo_de_pagamento_id == '4'%}
+                    <label>- Troco: {{venda.troco | floatformat:2}}</label>
+                {%elif venda.tipo_de_pagamento_id == '5'%}
+                    <label>- Troco:{{venda.troco | floatformat:2}}</label>
+                {%else%}
+                    <label>-Falta  $:{{venda.troco | floatformat:2}}</label>
+                {%endif%}
+          
+            {%endif%}
+            
+            {%if venda.desconto > '0' %}
+            <label>-Total de desconto $: {{venda.total_desconto | floatformat:2}}</label>
+                <br>
+            {%endif%}
             <br>
+            <label>- Data da venda: {{ venda.data_hora}}</label>
+            <br>
+            <hr>
             <table>
                 <thead>
                     <tr>
                         <th >Valor</th>
                         <th >Produto</th>
-                        <th >Quantidade</th>
-                        <th >Desconto</th>
+                        <th >Quant</th>
+                        <th >Desc</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -390,7 +416,7 @@
     function imprimir_cupom_fiscal(){
         var pegar_dados = document.getElementById('div_cupomFiscal').innerHTML;
 
-        var janela = window.open('','','width=300,heigth=600');
+        var janela = window.open('','','width=400,heigth=600');
         janela.document.write("<html><head>");
         janela.document.write("<title>PDF</title></head>");
         janela.document.write("<body>");
