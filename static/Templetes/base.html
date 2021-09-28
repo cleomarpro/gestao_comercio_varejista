@@ -59,7 +59,9 @@
             {% if perms.fluxo_de_caixa.view_caixa %}
                 <li> <a href="{% url 'caixa' %}"> -Caixa</a> </li>
                 <li> <a href="{% url 'lista-vendas'%}"> -Vendas realizadas</a> </li>
-                <li> <a href="{% url 'lista-venda-usuario' %}"> -Vendas pagas</a> </li>
+                {% if perms.fluxo_de_caixa.change_caixa %}
+                    <li> <a href="{% url 'lista-venda-usuario' %}"> -Vendas pagas</a> </li>
+                {%endif%}
             {%endif%}
 
             {% if perms.fluxo_de_caixa.add_venda %}
