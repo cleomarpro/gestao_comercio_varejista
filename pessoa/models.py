@@ -45,7 +45,7 @@ class Departamento (models.Model):
 class Funcionario (Pessoa):
     nome = models.CharField(max_length=50,blank=True)
     segundo_nome = models.CharField(max_length=50,blank=True)
-    cpf = models.CharField(max_length=11,blank=True)
+    cpf = models.CharField(max_length=15,blank=True)
     data_de_nascimento = models.DateField(max_length=30, null= True, blank=True)
     sexo = models.ForeignKey(Sexo, on_delete=models.CASCADE, default=1)
     departamento = models.ForeignKey
@@ -56,7 +56,7 @@ class Funcionario (Pessoa):
 class Cliente (Pessoa):
     nome = models.CharField(max_length=50,blank=True)
     segundo_nome = models.CharField(max_length=50,blank=True)
-    cpf_cnpj = models.CharField(max_length=11,blank=True)
+    cpf_cnpj = models.CharField(max_length=30,blank=True)
     data_de_nascimento= models.DateField(max_length=30, null= True, blank=True)
     sexo = models.ForeignKey(Sexo, on_delete=models.CASCADE, default=1)
 
