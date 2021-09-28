@@ -128,6 +128,8 @@ class NovoItemPedido(LoginRequiredMixin, View):
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
+        pass
+
     def post(self, request, venda):
         user = request.user.has_perm('fluxo_de_caixa.add_venda')
         if user == False:
@@ -341,7 +343,7 @@ class DeleteItemPedido(LoginRequiredMixin, View):
 class Caixas(LoginRequiredMixin, View):
 
     def get(self, request):
-        user = request.user.has_perm('fluxo_de_caixa.add_caixa')
+        user = request.user.has_perm('fluxo_de_caixa.view_caixa')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
@@ -365,7 +367,7 @@ class Caixas(LoginRequiredMixin, View):
                 })
 
     def post(self, request):
-        user = request.user.has_perm('fluxo_de_caixa.add_caixa')
+        user = request.user.has_perm('fluxo_de_caixa.view_caixa')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
