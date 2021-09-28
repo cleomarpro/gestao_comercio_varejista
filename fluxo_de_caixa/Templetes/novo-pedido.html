@@ -131,13 +131,16 @@
         </form>
 
     </div>
+    {% if perms.fluxo_de_caixa.add_venda %}
         <form class='caixa' method="POST" action="{% url 'novo-pedido' %}">
             {% csrf_token %}
             
             <input type="hidden" value="{{venda.id}}" name="venda_id">
+            
             <button id='bt_novo_pedido' style='width:111px;' accesskey="n"> Nova venda </button>
             
         </form>
+        {% endif %}
 
 {% if venda %}
     <div>
