@@ -44,7 +44,7 @@
         <ul >
             {%if user.is_authenticated%}
                 <li > <a style=" color: #CD0000;" href="{% url 'logout'%}">Sair</a> </li>
-                <label> Olá <a style=" color: #1459ee; font-size: 20px;" href="{% url 'usuario'%}"> {{user}} </a> </label>
+                <label> Olá <a style=" color: #1459ee; font-size: 20px;" href="{% url 'usuario'%}"> {{user.first_name}} </a> </label>
             {%else%}
                 <li > <a style=" color: blue;" href="{% url 'login' %}">Entra</a> </li>
              {%endif%}
