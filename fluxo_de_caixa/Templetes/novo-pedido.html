@@ -326,15 +326,17 @@
 <!-- cupom fiscal-->
     <div id="div_cupomFiscal" class="cupom_fiscal">
        <form >
-        <label >- Número do cupom: {{venda.id}} </label>
-           <hr>
+            <hr>
             <label style="text-align: center;" >ESTE CUPOM NÃO POSSUI VALOR FISCAL</label>
-                <hr>
+            <hr>
+            <label >- Número do cliente: {{venda.id}} </label>
+                <br>
             <label >-Empresa: {{usuarios.nome_fantazia}} </label>
                 <br>
             <label >-Cnpj: {{usuarios.cpf_cnpj}} </label>
-            <hr>
-                
+                <br>
+            <label >-Atendente: {{user.first_name}} </label>
+            <hr>    
             <label >-Total: {{venda.valor}} </label>
                 <br>
             <label >-Desconto: {{venda.total_desconto}} </label>

@@ -204,12 +204,12 @@ class ListaProdutos(LoginRequiredMixin, View):
             usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
 
         produto=Produto.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
-        busca= request.GET.get('produt',None)
-        if busca:
-            produto=Produto.objects.filter(id__iexact=busca, usuarios__usuario_cliente= usuario) # trocar o 'iexact ' por 'icontains' para digitar do objeto completo
+        produt= request.GET.get('produt',None)
+        if produt:
+            produto=Produto.objects.filter(codigo__icontains=produt, usuarios__usuario_cliente= usuario) # trocar o 'iexact ' por 'icontains' para digitar do objeto completo
         return render(request, 'produto/listar-produto.html', {'produto': produto})
 
-class FiltroPorCategoria(LoginRequiredMixin, View):
+class FiltroPorCategoria(LoginRequiredMixin, View): 
     def get(self, request):
 
         user_logado = request.user # Obitendo o usuário logado

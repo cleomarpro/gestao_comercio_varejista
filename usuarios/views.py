@@ -237,12 +237,12 @@ class UpdateFuncionario(LoginRequiredMixin, View):
             #usuario.password= request.POST['password']
             #usuario.username= request.POST['username']
             usuario.id = id
-            usuario.email= request.POST['email']
+            #usuario.email= request.POST['email']
             usuario.first_name= request.POST['primeiro_nome']
             usuario.last_name= request.POST['segundo_nome']
             usuario.is_active= request.POST['ativo']
             usuario.save()
-            return redirect('novo-funcionario')
+            
             
             if request.POST['permissao']:
                 permissao= Group.objects.get(name= request.POST['permissao']) # Buscando permissão
@@ -254,6 +254,7 @@ class UpdateFuncionario(LoginRequiredMixin, View):
             
             data['usuario'] = usuario
             data['permissoes'] = usuario.groups.all()
+            return redirect('novo-funcionario')
             return render(
                     request, 'update-funcionario.html', data)
         else:

@@ -74,10 +74,14 @@
         <tbody>
             {%for usuarios in usuarios %}
                 <tr>
-                    <td>{{ usuarios.nome }} {{usuarios.segundo_nome}}</td>
+                    <td>{{ usuarios.user.first_name }} {{usuarios.user.last_name}}</td>
                     <td>{{ usuarios.user.username }}</td>
                     <td>{{ usuarios.user.last_login }}</td>
-                    <td>{{ usuarios.user.is_active }}</td>
+                    {% if usuarios.user.is_active %}
+                    <td>Ativo</td>
+                    {% else %}
+                    <td>Inativo</td>
+                    {% endif %}
                     <td>  
                         <a href="{% url 'update-funcionario' usuarios.user.id %} ">Editar</a>
                     {% if perms.pessoa.delete_funcionario %}

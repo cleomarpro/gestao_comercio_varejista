@@ -26,9 +26,9 @@
             <br>
             <label> Categoria:</label>
                 <select style=" width:200px;" type="search" id="categoria_id"
-                    name="categoria_id" required>
+                    name="categoria_id" >
                     <tr>
-                        <option value=''> __Selecionar__</option>
+                        <option value='1'> __Selecionar__</option>
                     {% for categoria in categoria %}
                             <option value='{{categoria.id}}'> {{categoria}}</option>
                     {% endfor %}
