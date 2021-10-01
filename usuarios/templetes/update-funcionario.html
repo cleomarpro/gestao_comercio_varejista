@@ -29,21 +29,17 @@
                     <option value="False">Inativo  </option>
                 </tr>
             </select>
-            {% if mensagen_de_erro_usuario %}
+            {% if mensagen_de_erro_usuario %} <br>
             <label style='color:red;'>{{mensagen_de_erro_usuario}}</label>
             {% endif %} <br>
             <label>Usuário*:</label>
-                <input style='width:200px; color: rgb(40, 39, 39);' Type='text' maxlength="20" minlength="5" disabled="true"
+                <input style='width:200px; color: rgb(40, 39, 39);' Type='text' maxlength="20" minlength="5" 
                     value="{{usuario.username}}" name='username' id= 'username' required/>
                     <br>
             <label>Senha:</label>
                 <input style='width:200px;' Type='password' 
                     name= 'password'id= 'password' />
-                
-            {% if mensagen_de_erro_email %}
             <br>
-            <label style='color:red;'>{{mensagen_de_erro_email}}</label>
-            {% endif %} <br>
             
             <label>Adiciona permissão:</label>
                 <select style=" width:200px;" type="text" value= "{{permissao}}"

@@ -224,16 +224,27 @@ class UpdateFuncionario(LoginRequiredMixin, View):
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
             usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
         
+        usuario= User.objects.get(id= id)
+        user_atualizado= request.POST['username']
+        user_antigo= usuario.username
         senha= request.POST['password']
+        usuario_exit = User.objects.filter(username= user_atualizado)or 0
         funcionarios = Funcionario.objects.get(user__id = id)
         usuario_adm = funcionarios.usuarios.usuario_cliente
         if  usuario_adm == usuarioCliente:
-            usuario= User.objects.get(id= id)
+            
             if  senha:
                 usuario.set_password(senha)
-            #usuario.username= request.POST['username']
+            if user_atualizado != user_antigo:
+                if usuario_exit != 0:
+                    data['usuario'] = usuario
+                    data['permissoes'] = usuario.groups.all()
+                    data['mensagen_de_erro_usuario'] = 'Usuário já existe!'
+                    return render(
+                        request, 'update-funcionario.html', data)
+
+                usuario.username= user_atualizado
             usuario.id = id
-            #usuario.email= request.POST['email']
             usuario.first_name= request.POST['primeiro_nome']
             usuario.last_name= request.POST['segundo_nome']
             usuario.is_active= request.POST['ativo']

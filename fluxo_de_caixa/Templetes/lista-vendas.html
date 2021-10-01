@@ -67,8 +67,8 @@
                 <td>{{ venda.id }}</td>
                 <td>{{ venda.data_hora.date}}</td>
                 <td >{{ venda.descricao}}</td>
-                <td>${{ venda.total_desconto }}</td>
-                <td>${{ venda.valor }}</td>
+                <td>R$ {{ venda.total_desconto }}</td>
+                <td>R$ {{ venda.valor }}</td>
 
                 {% if perms.fluxo_de_caixa.change_venda %}
                 <td> <a href="{% url 'edit-pedido' venda.id %} "> Pagar </a>  </td>
@@ -84,7 +84,7 @@
 
                 <td>
                     {% if venda.troco < 0  or venda.tipo_de_pagamento_id == None %}
-                        <label Style= 'color: red;'>Não pago </label %}
+                        <label Style= 'color: red;'>Não pago </label>
                     {% else %}
                         <label>Pago </label>
                     {% endif %}

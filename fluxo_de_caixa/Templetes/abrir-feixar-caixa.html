@@ -53,9 +53,9 @@
         {% for caixa in historico_do_caixa %}
             <tr>
                 <td>{{ caixa.descricao }}</td>
-                <td>${{ caixa.saldo_em_caixa }}</td>
-                <td>{{ caixa.venda_realizadas }}</td>
-                <td>{{ caixa.depositar }}</td>
+                <td>R$ {{ caixa.saldo_em_caixa }}</td>
+                <td>R$ {{ caixa.venda_realizadas }}</td>
+                <td>R$ {{ caixa.depositar }}</td>
                 <td>{{caixa.data_hora }}</td>
                 <td>{{caixa.user.username }}</td>
 

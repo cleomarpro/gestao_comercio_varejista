@@ -83,7 +83,7 @@
             {%for gastos_extras in gastos_extras %}
                 <tr>
                     <td>{{ gastos_extras.descricao }}</td>
-                    <td>{{ gastos_extras.valor }}</td>
+                    <td>R$ {{ gastos_extras.valor }}</td>
                     <td>{{ gastos_extras.data_hora.date }}</td>
 
                     {% if perms.financeiro.change_gastos_extras %}

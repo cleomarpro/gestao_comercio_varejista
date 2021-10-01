@@ -27,34 +27,34 @@
 
 <form class='relatorio'>
 
-    <label>Total invertimento: ${{invertimento_anual | floatformat:2}}</label>
+    <label>Total invertimento: R$ {{invertimento_anual | floatformat:2}}</label>
      <br>
 <label>
-    <label>Total da vendas: ${{venda_desse_ano| floatformat:2}}</label>
+    <label>Total da vendas: R$ {{venda_desse_ano| floatformat:2}}</label>
     <a style='text-align: center;'>Por tipo de pagamento</a>
     <br>
     <label style='border: 1px solid #303131; border-radius:
         5px; font-size:15px; padding: 5px; width: 180px;'>
-        Cédula:${{ cedula.total_venda_cedula | floatformat:2}} </label>
+        Cédula:R$ {{ cedula.total_venda_cedula | floatformat:2}} </label>
     <label style='border: 1px solid #303131; border-radius:
         5px; font-size:15px; padding: 5px; width: 180px;'>
-        Crédito: ${{ credito.total_venda_credito | floatformat:2}}</label>
+        Crédito: R$ {{ credito.total_venda_credito | floatformat:2}}</label>
     <label style='border: 1px solid #303131; border-radius:
         5px; font-size:15px; padding: 5px; width: 180px;'>
-        Débito: ${{ debito.total_venda_debito | floatformat:2}}</label>
+        Débito: R$ {{ debito.total_venda_debito | floatformat:2}}</label>
 </label>
      <br>
-    <label>Desconto: {{desconto_po_anual.total_desconto | floatformat:2}}</label>
+    <label>Desconto:R$ {{desconto_po_anual.total_desconto | floatformat:2}}</label>
       <br>
-    <label>Total de lucro: ${{lucro_anual | floatformat:2}}</label>
+    <label>Total de lucro: R$ {{lucro_anual | floatformat:2}}</label>
 
     <h4> Outras observações</h5>
 
-    <label>Gastos extras: ${{gastos_extras_anual.gastos | floatformat:2}}</label>
+    <label>Gastos extras: R$ {{gastos_extras_anual.gastos | floatformat:2}}</label>
     <br>
-     <label>Contas a receber: ${{Contas_anual_a_receber.total_conta | floatformat:2}} </label>
+     <label>Contas a receber: R$ {{Contas_anual_a_receber.total_conta | floatformat:2}} </label>
     <br>
-    <label>Contas a pagar: ${{Contas_anual_a_pagar.total_conta | floatformat:2}} </label>
+    <label>Contas a pagar: R$ {{Contas_anual_a_pagar.total_conta | floatformat:2}} </label>
     <br>
 
 </form>

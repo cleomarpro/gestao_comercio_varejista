@@ -27,7 +27,8 @@
        {%if user.is_authenticated%}
                 <label id='login'> <a href="{% url 'logout' %}"> Sair </a> </label>
                 <label id="link_cadastrar"><a href="{% url 'usuario' %}">Área de trabalho</a></label>
-                <label id='usuario'>Olá <a href="{% url 'usuario' %}">{{user.first_name }}</a> </label>
+                <label id='usuario'>Olá <a href="{% url 'usuario' %}">
+                    {%if user.first_name %} {{user.first_name}}  {%else %} {{user}} {%endif%}</a> </label>
 
             {%else%}
                 <label id='login'> <a href="{% url 'login' %}">Entra</a> </label>

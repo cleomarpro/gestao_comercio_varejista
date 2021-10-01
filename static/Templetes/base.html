@@ -7,7 +7,7 @@
 
     <meta charcet="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <link rel = "icon" type = "image/png" href = "{% static 'img/v.png' %}"/>
     <title>  VieWorld  </title>
 
     <link rel="stylesheet" href= "{% static 'Style/caixa.css'%}">
@@ -44,7 +44,8 @@
         <ul >
             {%if user.is_authenticated%}
                 <li > <a style=" color: #CD0000;" href="{% url 'logout'%}">Sair</a> </li>
-                <label> Olá <a style=" color: #1459ee; font-size: 20px;" href="{% url 'usuario'%}"> {{user.first_name}} </a> </label>
+                <label> Olá <a style=" color: #1459ee; font-size: 20px;" href="{% url 'usuario'%}"> 
+                      {%if user.first_name %} {{user.first_name}}  {%else %} {{user}} {%endif%}</a> </label>
             {%else%}
                 <li > <a style=" color: blue;" href="{% url 'login' %}">Entra</a> </li>
              {%endif%}

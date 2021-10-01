@@ -43,7 +43,7 @@
         {% for caixa in caixa %}
             <tr>
                 <td>{{ caixa.nome_do_caixa }}</td>
-                <td>${{ caixa.valor_atualizado }}</td>
+                <td>R$ {{ caixa.valor_atualizado }}</td>
 
                 <td>  <a href="{% url 'caixa-sacar' caixa.id %}">Sacar</a> </td>
                 <td>  <a href="{% url 'caixa-deposito' caixa.id %}">Depositar</a> </td>
@@ -71,7 +71,7 @@
         {% for caixa in caixa_user_logado %}
             <tr>
                 <td>{{ caixa.nome_do_caixa }}</td>
-                <td>${{ caixa.valor_atualizado }}</td>
+                <td>R$ {{ caixa.valor_atualizado }}</td>
 
                 <td>  <a href="{% url 'caixa-sacar' caixa.id %}">Sacar</a> </td>
                 <td>  <a href="{% url 'caixa-deposito' caixa.id %}">Depositar</a> </td>

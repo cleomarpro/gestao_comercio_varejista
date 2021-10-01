@@ -49,7 +49,7 @@
         {% for deposito in depositos %}
             <tr>
                 <td>{{ deposito.descricao }}</td>
-                <td>${{ deposito.depositar }}</td>
+                <td>R$ {{ deposito.depositar }}</td>
                 <td>{{ deposito.data_hora.date }}</td>
                 <td>{{ deposito.user.username}}</td>
 

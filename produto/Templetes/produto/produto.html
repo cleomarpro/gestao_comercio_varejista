@@ -128,9 +128,9 @@
                     <td>{{ produto.nome }}</td>
                     <td>{{ produto.categoria.nome }}</td>
                     <td>{{ produto.codigo }}</td>
-                     <td>${{ produto.valor_compra | floatformat:2 }}</td>
+                     <td>R$ {{ produto.valor_compra | floatformat:2 }}</td>
                     <td>{{ produto.percentagem_de_lucro | floatformat:2 }}'% </td>
-                    <td>${{produto.valor_venal | floatformat:2 }}</td>
+                    <td>R$ {{produto.valor_venal | floatformat:2 }}</td>
                     <td>
                         {% if  produto.estoque > 0 %}
                         <lavel> {{ produto.estoque }}</lavel>

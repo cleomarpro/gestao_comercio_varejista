@@ -86,12 +86,12 @@
             {%for conta in conta %}
                 <tr>
                     <td>{{ conta.observacao}}</td>
-                    <td>${{ conta.valor }}</td>
-                    <td>${{ conta.saldo_devedor }}</td>
+                    <td>R$ {{ conta.valor }}</td>
+                    <td>R$ {{ conta.saldo_devedor }}</td>
                     <td>{{ conta.parcelas }}</td>
                     <td>{{ conta.parcelas_pagas }}</td>
                     <td>{{ conta.parcelas_restantes }}</td>
-                    <td>${{ conta.valor_parcela }}</td>
+                    <td>R$ {{ conta.valor_parcela }}</td>
                     <td>{{ conta.data_de_vencimento }}</td>
 
                     {% if perms.financeiro.change_contas %}

@@ -67,9 +67,9 @@
                 <td>{{ item_de_pedido.produto__id }}</td>
                 <td>{{ item_de_pedido.produto__nome }}</td>
                 <td>{{ item_de_pedido.quantidade | floatformat:2}}-item</td>
-                <td>${{ item_de_pedido.total_investimento | floatformat:2 }}</td>
-                <td>${{ item_de_pedido.total_venda | floatformat:2 }}</td>
-                <td>${{ item_de_pedido.lucro_obtido | floatformat:2 }}</td>
+                <td>R$ {{ item_de_pedido.total_investimento | floatformat:2 }}</td>
+                <td>R$ {{ item_de_pedido.total_venda | floatformat:2 }}</td>
+                <td>R$ {{ item_de_pedido.lucro_obtido | floatformat:2 }}</td>
 
             </tr>
         {% endfor %}
