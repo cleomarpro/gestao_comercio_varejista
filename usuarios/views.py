@@ -151,17 +151,11 @@ class NovoFuncionario(LoginRequiredMixin, View):
             return render(
                 request, 'novo-funcionario.html', data)
 
-        email = User.objects.filter(email= request.POST['email'])or 0
-        if email !=  0:
-            data['mensagen_de_erro_email'] = 'E-mail já existe!'
-            return render(
-                request, 'novo-funcionario.html', data)
-
         else:
             usuario = User.objects.create_user(
                 password= request.POST['password'],
                 username= request.POST['username'],
-                email= request.POST['email'],
+                #email= request.POST['email'],
                 first_name= request.POST['primeiro_nome'],
                 last_name= request.POST['segundo_nome'],
                 is_active= request.POST['ativo']
@@ -229,12 +223,14 @@ class UpdateFuncionario(LoginRequiredMixin, View):
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
             usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-
+        
+        senha= request.POST['password']
         funcionarios = Funcionario.objects.get(user__id = id)
         usuario_adm = funcionarios.usuarios.usuario_cliente
         if  usuario_adm == usuarioCliente:
             usuario= User.objects.get(id= id)
-            #usuario.password= request.POST['password']
+            if  senha:
+                usuario.set_password(senha)
             #usuario.username= request.POST['username']
             usuario.id = id
             #usuario.email= request.POST['email']
