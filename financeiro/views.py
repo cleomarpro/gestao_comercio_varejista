@@ -898,8 +898,13 @@ class Fatura(LoginRequiredMixin, View):
             entrada_ee_mercadoria = entrada_ee_mercadoria['count'] or 0
 
             total_de_registros= vendas + item_do_pedito + Contas_a_receber + Contas_a_pagar + entrada_ee_mercadoria + gastos_extras
-
-            total_a_pagar= total_de_registros * 4 / 100
+            
+            if total_de_registros <= 750:
+                total_a_pagar = total_de_registros * 4 / 100
+            else:
+                total_a_pagar = total_de_registros * 2 / 100
+                total_a_pagar = total_a_pagar + 15
+                
 
         data['vendas']= vendas
         data['item_do_pedito']= item_do_pedito
