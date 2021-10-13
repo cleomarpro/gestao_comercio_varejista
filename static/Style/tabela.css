@@ -3,6 +3,7 @@
 @import url('https://fonts.googleapis.com/css?family=Lobster|Philosopher:400i&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Inria+Serif&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Courier+Prime&display=swap');
+@import url('https://fonts.googleapis.com/css2? família=David+Libre&família=Montaga&família=Poppins:wght@300&família=Fonte+Sans+Pro&display=swap');
 
 .cabesalho_tabela{
     background-color: #DCDCDC;
@@ -47,6 +48,7 @@
     font-size:15px;
     margin-left:185px;
     width:100%;
+    font-family: 'Source Sans Pro', sans-serif;
 }
 
 .table thead{

@@ -3,21 +3,22 @@
 @import url('https://fonts.googleapis.com/css?family=Lobster|Philosopher:400i&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Inria+Serif&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Courier+Prime&display=swap');
+@import url('https://fonts.googleapis.com/css2? família=David+Libre&família=Montaga&família=Poppins:wght@300&família=Fonte+Sans+Pro&display=swap');
 
-
-.divMae{
-    margin-top:80px;
+.div_Mae{
+  margin-top:80px;
+  font-family: 'Source Sans Pro', sans-serif;
 }
 .formulario{
-    background-color: #F0F8FF;
-    margin-left:185px;
-    width: 100%;
-    font-size:18px;
+  background-color: #F0F8FF;
+  margin-left:185px;
+  width: 100%;
+  font-size:18px;
 
 }
 .formulario a{
-    position:absolute;
-    right:40px;
+  position:absolute;
+  right:40px;
 }
 
 .bt_xx{
