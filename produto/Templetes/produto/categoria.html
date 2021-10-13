@@ -3,16 +3,27 @@
 {% block main %}
 
 <div class='div_Mae'>
-    <form class='formulario' action="{% url 'categoria' %}" method="POST" >
+
+    
+    <h2 class="sub_menu" >&nbsp; CATEGORIA
+        <a 
+            href="#" onclick="document.getElementById('form_up').style.display='block';">
+                Adicionar 
+        </a>
+    </h2>
+
+    <form id="form_up" class='formulario' style="display: none;" action="{% url 'categoria' %}" method="POST" >
          {% csrf_token %}
-    <h1>
-        <label style=" color:#EEE9E9;">Nova categoria</label>
-    </h1>
-            <a href="{% url 'produto' %}">
-            <label style= " background-color: #6495ED; padding:3px; color:white; font-size:20px; border-radius: 5px;">Novo produto</label> </a>
+         <a id="termo_buttao" href="#" onclick="document.getElementById
+         ('form_up').style.display='none';"> X</a>
+         <label  style="color:black; font-size: 18px;"> NOVA CATEGORIA</label>
+
+        <hr>
+           
             <label> Nome:</label>
-            <input style=" width:310px;"  placeholder=" nome..." type="text" id="nome" name="nome" required/>
+            <input placeholder=" nome..." type="text" id="nome" name="nome" required/>
              <br>
+             <hr>
             <button type="submit"> salvar</button>
     </form>
      <br>

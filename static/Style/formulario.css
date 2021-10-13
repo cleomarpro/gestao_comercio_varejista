@@ -9,6 +9,28 @@
   margin-top:80px;
   font-family: 'Source Sans Pro', sans-serif;
 }
+.sub_menu{
+  background-color: #454549;
+  margin-left:185px;
+  width: 100%;
+  font-size:18px;
+  color: rgb(245, 241, 241);
+  padding-block: 7px;
+
+}
+.sub_menu a{
+  position:absolute;
+  right:40px;
+  text-decoration: none;
+  color:rgb(14, 13, 13); 
+  border: 1px solid #e5e7ed;
+  background-color: rgb(195, 195, 207);
+  border-radius: 1px;
+  padding: 3px;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
 .formulario{
   background-color: #F0F8FF;
   margin-left:185px;
@@ -18,7 +40,13 @@
 }
 .formulario a{
   position:absolute;
-  right:40px;
+  right:44px;
+  border: 1px solid #e5e7ed;
+  background-color: rgb(195, 195, 207);
+  border-radius: 3px;
+  font-size:14px;
+
+  padding: 2px;
 }
 
 .bt_xx{
@@ -87,10 +115,18 @@
     padding:35px
 }
 @media (max-width: 768px) {
+  .sub_menu{
+   margin-left: 0px;
+  
+  }
+  .sub_menu a{
+    margin-right: -29px;
+  }
+
 .formulario{
     width: 100%;
     margin-left:0px;
-    font-size:10px;
+    font-size:14px;
 }
 .formulario input{
     width: 60%;
@@ -110,7 +146,7 @@
     width: 100%;
 }
 .formulario a{
-    right: 0px;
+    right: 8px;
 }
 .bt_Novo{
    margin-left:10px;
