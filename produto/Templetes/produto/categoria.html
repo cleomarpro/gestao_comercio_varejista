@@ -16,12 +16,12 @@
          {% csrf_token %}
          <a id="termo_buttao" href="#" onclick="document.getElementById
          ('form_up').style.display='none';"> X</a>
-         <label> NOVA CATEGORIA</label>
+         <p> NOVA CATEGORIA</p>
 
         <hr>
            
-            <label> Nome:</label>
-            <input placeholder=" nome..." type="text" id="nome" name="nome" required/>
+            
+            <input placeholder=" Nome..." type="text" id="nome" name="nome" required/>
              <br>
              <hr>
             <button type="submit"> salvar</button>
@@ -32,11 +32,7 @@
         <tr>
           <th >Categoria</th>
           {% if perms.produto.change_categoria %}
-            <th >Editar</th>
-          {% endif %}
-
-          {% if perms.produto.delete_categoria %}
-            <th >Excluir</th>
+            <th >Alterar</th>
           {% endif %}
 
         </tr>
@@ -44,14 +40,14 @@
         <tbody>
             {%for categoria in categoria %}
                 <tr>
-                    <td>{{ categoria.nome }}</td>
+                    <td style="text-align: left;"> {{ categoria.nome }}</td>
 
                 {% if perms.produto.change_categoria %}
-                    <td> <a href="{% url 'categoria_update' categoria.id %}">Editar</a> </td>
+                    <td> <a href="{% url 'categoria_update' categoria.id %}">Editar</a> 
                 {% endif %}
 
                 {% if perms.produto.delete_categoria %}
-                    <td> <a href="{% url 'categoria_delete' categoria.id %}">Excluir</a> </td>
+                    <a href="{% url 'categoria_delete' categoria.id %}">Excluir</a> </td>
                 {% endif %}
                 </tr>
             {%endfor%}

@@ -66,7 +66,8 @@
   .formulario input{
     border: 1px solid #303131;
     border-radius: 2px;
-    margin:2px;
+    margin:10px;
+    padding: 3px;
     font-size: 15px;
   }
 .formulario a{
@@ -83,7 +84,17 @@
     padding: 0px;
     margin:10px;
     font-size: 20px;
+    
   }
+
+  .formulario p{
+    font-size: 18px;
+    padding: 0px;
+    margin:10px;
+    font-size: 20px;
+    font-weight:bold;
+  }
+
   .formulario h1{
     background-color: #4F4F4F;
     color:white;
@@ -117,11 +128,13 @@
 @media (max-width: 768px) {
   .sub_menu{
    margin-left: 0px;
-   
+   font-size: 14px;
   
   }
   .sub_menu a{
     margin-right: -29px;
+    font: 14px;
+    padding:1px;
   }
 
 .formulario{
@@ -140,7 +153,10 @@
 }
 
 .formulario label{
-    font-size:14px;
+  font-size:14px;
+}
+.formulario p{
+  font-size:14px;
 }
 .formulario button{
     font-size:14px;

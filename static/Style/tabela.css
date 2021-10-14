@@ -51,10 +51,10 @@
     font-family: 'Source Sans Pro', sans-serif;
 }
 
-.table thead{
-   background-color: #B0C4DE;
-
-    padding:-0px;
+.table th{
+    background-color: #B0C4DE;
+    font-size: 16px;
+    padding:10px;
 
 }
 .table a{
@@ -62,11 +62,10 @@
 }
 .table td{
     text-align: center;
+    font-size: 16px;
 
 }
-.table th{
 
-}
 @media (max-width: 768px) {
  .table{
     margin-left:0px;
@@ -84,6 +83,15 @@
     background-color: #DCDCDC;
     margin-left:0px;
     width: 100%;
+}
+.table th{
+    font-size: 14px;
+   
+}
+
+.table td{
+    font-size: 14px;
+
 }
 }
 
