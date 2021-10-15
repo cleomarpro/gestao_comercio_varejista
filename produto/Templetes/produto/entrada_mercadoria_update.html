@@ -3,16 +3,14 @@
 {% block main %}
 
 <div class= 'div_Mae'>
-
-<!-- Formulário de entrada de mercadoria -->
+    <h2 class="sub_menu" >&nbsp; ENTRADA DE MERCADORIA </h2>
     <form class='formulario' method="POST" >
-    <h1>
-        <label style=" color:#EEE9E9;">Nova entrada de mercadoria</label>
-    </h1>
-                {% csrf_token %}
-
-            <label> Produto:</label>
-            <select style=" width:200px;" type="search" id="produto" name="produto" required/>
+        {% csrf_token %}
+        <p> ATUALIZAR ENTRADA DE MERCADORIA</p>
+        <hr>
+        <div>
+            <label> Produto</label> <br>
+            <select style=" width:150px;" type="search" id="produto" name="produto" required/>
                 <tr>
                     <option value='{{entrada_Mercadoria.produto.id}}'> {{entrada_Mercadoria.produto}}</option>
                     {% for produto in produto %}
@@ -20,11 +18,11 @@
                     {% endfor %}
                 </tr>
             </select>
-                <a style=" font-size: 30px;" href="{% url 'produto' %}">+</a>
-             <br>
-
-            <label> Fornecedor:</label>
-            <select style=" width:200px;" type="search" id="fornecedor" name="fornecedor" required/>
+                <a  href="{% url 'produto' %}">+</a>
+        </div>
+        <div>
+            <label> Fornecedor</label> <br>
+            <select style=" width:150px;" type="search" id="fornecedor" name="fornecedor" required/>
                 <tr>
                     <option value='{{entrada_Mercadoria.fornecedor.id}}'> {{entrada_Mercadoria.fornecedor}}</option>
                     {% for fornecedor in fornecedor %}
@@ -32,17 +30,19 @@
                     {% endfor %}
                 </tr>
             </select>
-                <a style=" font-size: 30px;" href="{% url 'novo-fornecedor' %}">+</a>
-             <br>
-            <label> Quantidade:</label>
-            <input style=" width:200px;"  placeholder=" Quantidade..." value="{{entrada_Mercadoria.quantidade}}"
+                <a  href="{% url 'novo-fornecedor' %}">+</a>
+        </div>
+        <div>
+            <label> Quantidade</label> <br>
+            <input style=" width:150px;"  placeholder=" Quantidade..." value="{{entrada_Mercadoria.quantidade}}"
                 type="text" id="quantidade" name="quantidade"  required/>
-             <br>
-            <label> Validade do produto:</label>
-            <input style=" width:200px;" value="{{entrada_Mercadoria.validade_produto}}"
+        </div>
+        <div>
+            <label> Validade do produto</label> <br>
+            <input style=" width:150px;" value="{{entrada_Mercadoria.validade_produto}}"
                 type="date" id="validade_produto" name="validade_produto"  required/>
-             <br>
-
+        </div>
+            <hr>
             <button type="submit"> salvar</button>
     </form>
     <br>

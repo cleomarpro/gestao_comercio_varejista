@@ -161,14 +161,21 @@ class ProdutoUpdate(LoginRequiredMixin, View):
         
         produto = Produto.objects.get(id=id)
         usuario_adm= produto.usuarios.id
+       
+        codigo_produto_autal= produto.codigo
+        novo_codigo_produto= request.POST['codigo']
+        produto_id= Produto.objects.filter(usuarios__usuario_cliente= usuarioCliente, codigo= request.POST['codigo']) or 0
+        if codigo_produto_autal == novo_codigo_produto or produto_id != 0:
+            data['mensagen_de_erro'] = 'Esse produto já existe!'
+            data['produto']  = Produto.objects.filter(usuarios__usuario_cliente= usuarioCliente) # listar produtos recem cadastrados
+            data['categoria'] =Categoria.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
+            data['promocao'] = Promocao.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
+            return render(
+                request, 'produto/produto_update.html', data)
         if usuario_adm == usuarioId: # Verificar autenticidade do usuário
             produtos=Produto.objects.filter(id= id)
-            produto_id= Produto.objects.filter(usuarios__usuario_cliente= usuarioCliente, codigo= request.POST['codigo']) or 0
-           
+            
             if produtos != 0 or produto_id != 0:
-
-                produto= Produto.objects.get(id= id)
-                
                 produto.id = id
                 produto.nome = request.POST['nome']
                 produto.categoria_id = request.POST['categoria_id']

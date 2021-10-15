@@ -3,28 +3,18 @@
 {% block main %}
 
 <div class='div_Mae'>
-
-<!-- Formulário de cadastro de produtos -->
-      <!--  <a class="bt_Novo" href="#" onclick="document.getElementById('formulario').style.display='block';">
-            <label style= " background-color: #6495ED; padding:3px; color:white;
-                font-size:15px; border-radius: 5px;">Novo produto</label> </a> -->
-
-
+    <h2 class="sub_menu" >&nbsp; FORNECEDOR </h2>
     <form  style="display:block;" id='formulario' class='formulario'  method="POST" >
         {% csrf_token %}
-
-       <!--  <a class="bt_xx" class="" href="#" onclick="document.getElementById('formulario').style.display='none';">
-            <label style= " background-color: #6495ED; padding:3px; color:white;
-                font-size:15px; border-radius: 5px;">Esconder Formulário</label> </a> -->
-
-    <h1>
-        <label style=" color:#EEE9E9;"> Nova produtos</label>
-    </h1>
-            <label> Nome:</label>
-                <input style=" width:250px;"  placeholder=" Nome..." type="text"
+        <p> ATUALIZAR FORNECEDOR</p>
+        <hr>
+    <div>
+            <label> Nome</label> <br>
+                <input style=" width:200px;"  placeholder=" Nome..." type="text"
                     id="nome" name="nome" value="{{produto.nome}}" required/>
-            <br>
-            <label> Categoria:</label>
+    </div>
+    <div>
+            <label> Categoria</label> <br>
                 <select style=" width:200px;" type="search" id="categoria_id"
                     name="categoria_id" required>
                     <tr>
@@ -34,8 +24,9 @@
                     {% endfor %}
                     </tr>
                 </select>
-                <br>
-            <label> Promoção:</label>
+        </div>
+        <div>
+            <label> Promoção</label> <br>
                 <select style=" width:200px;" type="search" id="promocao"
                     name="promocao" value="{{produto.promocao}}" >
                     <tr>
@@ -45,20 +36,23 @@
                     {% endfor %}
                      </tr>
                 </select>
-
-                <br>
-            <label> Código do produto:</label>
+        </div>
+        <div>
+            <label> Código do produto</label> <br>
                 <input style=" width:170px;"  placeholder=" Código do produto..." type="text"
-                    id="codigo" name="codigo" value="{{produto.codigo}}" required/>
-                 <br>
-            <label> Porcentagem de lucro:</label>
+                    id="codigo" name="codigo" value="{{produto.codigo}}"  required/>
+        </div>
+        <div>
+            <label> Porcentagem de lucro</label> <br>
                 <input style=" width:127px;"  placeholder=" 00,00%" type="text" value="{{produto.percentagem_de_lucro}}"
                     id="percentagem_de_lucro" name="percentagem_de_lucro" required/>
-                <br>
-            <label> Valor da compra:</label>
+        </div>
+        <div>
+            <label> Valor da compra</label> <br>
                 <input style=" width:150px;"  placeholder=" Valor da compra..." value="{{produto.valor_compra}}"
                     type="text" id="valor_compra" name="valor_compra" required/>
-                <br>
+        </div>
+                <hr>
                 <button type="submit"> salvar</button>
     </form>
 

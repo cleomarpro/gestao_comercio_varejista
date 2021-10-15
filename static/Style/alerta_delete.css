@@ -1,5 +1,5 @@
 .div_alerta_delete{
-    width: 550px;
+    width: 350px;
     text-align: center;
     margin-left: 35%;
     margin-top: 100px;
@@ -15,6 +15,7 @@
 
 .label_mensagem{
     color:#EE6363;
+    font-size: 18px;
 }
 .div_alerta_delete button{
     background-color: #696969;
@@ -32,10 +33,12 @@
     border-radius: 5px;
     color:white;
 }
-
 @media (max-width: 768px) {
+    
     .div_alerta_delete{
-        margin-left: 0%;
-        width: 100%;
+        width: 90%;
+        margin-left: 0px;
+        margin-top: 100px;
+        
     }
 }

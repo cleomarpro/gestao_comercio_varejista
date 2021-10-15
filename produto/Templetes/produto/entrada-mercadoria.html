@@ -3,15 +3,22 @@
 {% block main %}
 
 <div class= 'div_Mae'>
+    <h2 class="sub_menu" >&nbsp; ENTRADA DE MERCADORIA
+        <a 
+            href="#" onclick="document.getElementById('form_up').style.display='block';">
+                Adicionar 
+        </a>
+    </h2>
+    <form id="form_up" class='formulario' style="display: none;" method="POST" action="{% url 'entrada-mercadoria' %}" >
+        {% csrf_token %}
 
-<!-- Formulário de entrada de mercadoria -->
-    <form class='formulario' method="POST" action="{% url 'entrada-mercadoria' %}" >
-    <h1>
-        <label style=" color:#EEE9E9;">Nova entrada de mercadoria</label>
-    </h1>
-                {% csrf_token %}
+        <a id="termo_buttao" href="#" onclick="document.getElementById
+        ('form_up').style.display='none';"> X</a>
+        <p> NOVA ENTRADA</p>
 
-            <label> Produto:</label>
+        <hr> 
+        <div> 
+            <label> Produto</label>
             <select style=" width:200px;" type="search" id="produto" name="produto" required/>
                 <tr>
                     <option value=''> __Selecionar__</option>
@@ -20,10 +27,10 @@
                     {% endfor %}
                 </tr>
             </select>
-                <a style=" font-size: 30px;" href="{% url 'produto' %}">+</a>
-             <br>
-
-            <label> Fornecedor:</label>
+                <a  href="{% url 'produto' %}">+</a>
+        </div>
+        <div>
+            <label> Fornecedor</label>
             <select style=" width:200px;" type="search" id="fornecedor" name="fornecedor" required/>
                 <tr>
                     <option value=''> __Selecionar__</option>
@@ -32,17 +39,19 @@
                     {% endfor %}
                 </tr>
             </select>
-                <a style=" font-size: 30px;" href="{% url 'novo-fornecedor' %}">+</a>
-             <br>
-            <label> Quantidade:</label>
+                <a href="{% url 'novo-fornecedor' %}">+</a>
+        </div>
+        <div>
+            <label> Quantidade</label>
             <input style=" width:200px;"  placeholder=" Quantidade..."
                 type="text" id="quantidade" name="quantidade"  required/>
-             <br>
-            <label> Validade do produto:</label>
-            <input style=" width:200px;"
+        </div>
+        <div>
+            <label> Validade do produto</label>
+            <input style=" width:150px;"
                 type="date" id="validade_produto" name="validade_produto"  required/>
-             <br>
-
+        </div>
+            <hr>
             <button type="submit"> salvar</button>
     </form>
     <br>

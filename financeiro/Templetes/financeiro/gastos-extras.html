@@ -3,17 +3,23 @@
 {% block main %}
 
 <div class='div_Mae'>
-    <form class='formulario' action="{% url 'gastos-extras' %}" method="POST" >
+    <h2 class="sub_menu" >&nbsp; Gastos Extras
+        <a 
+            href="#" onclick="document.getElementById('form_up').style.display='block';">
+                Adicionar 
+        </a>
+    </h2>
+    <form id="form_up" class='formulario' style="display: none;" action="{% url 'gastos-extras' %}" method="POST" >
          {% csrf_token %}
-    <h1>
-        <label style=" color:#EEE9E9;">Anotar gastos</label>
-    </h1>
-            <label> Descrição:</label>
-            <input style=" width:150px;"  placeholder=" Descricão..." type="text" id="descricao" name="descricao" required/>
+         <a id="termo_buttao" href="#" onclick="document.getElementById
+         ('form_up').style.display='none';"> X</a>
+         <p> Anotar gastos</p>
+        <hr> 
+            <input placeholder=" Descricão..." type="text" id="descricao" name="descricao" required/>
+             
+            <input placeholder="Valor..." type="text" id="valor" name="valor" required/>
              <br>
-            <label> Valor:</label>
-            <input style=" width:150px;"  placeholder="Valor..." type="text" id="valor" name="valor" required/>
-             <br>
+             <hr>
             <button type="submit"> salvar</button>
     </form>
         <br>

@@ -4,27 +4,32 @@
 
 <div class='div_Mae'>
 
-<!-- Formulário de cadastro de produtos -->
-      <!--  <a class="bt_Novo" href="#" onclick="document.getElementById('formulario').style.display='block';">
-            <label style= " background-color: #6495ED; padding:3px; color:white;
-                font-size:15px; border-radius: 5px;">Novo produto</label> </a> -->
-
-
-    <form  style="display:block;" id='formulario' class='formulario' action="{% url 'produto' %}" method="POST" >
+    <h2 class="sub_menu" >&nbsp; PRODUTO
+        <a 
+            href="#" onclick="document.getElementById('form_up').style.display='block';">
+                Adicionar 
+        </a>
+    </h2>
+    {% if mensagen_de_erro %}
+        <form  id="form_up" class='formulario' style="display: block;" action="{% url 'produto' %}" method="POST" >
+    {% else %}
+        <form  id="form_up" class='formulario' style="display: none;" action="{% url 'produto' %}" method="POST" >
+    {% endif %}
+       
         {% csrf_token %}
 
-       <!--  <a class="bt_xx" class="" href="#" onclick="document.getElementById('formulario').style.display='none';">
-            <label style= " background-color: #6495ED; padding:3px; color:white;
-                font-size:15px; border-radius: 5px;">Esconder Formulário</label> </a> -->
+        <a id="termo_buttao" href="#" onclick="document.getElementById
+        ('form_up').style.display='none';"> X</a>
+        <p> NOVO PRODUTO</p>
 
-    <h1>
-        <label style=" color:#EEE9E9;">Nova produtos</label>
-    </h1>
-            <label> Nome:</label>
-                <input style=" width:250px;"  placeholder=" Nome..." type="text"
+        <hr> 
+        <div>       
+            <label> Nome</label> <br>
+                <input style=" width:200px;"  placeholder=" Nome..." type="text"
                     id="nome" name="nome" required/>
-            <br>
-            <label> Categoria:</label>
+        </div>
+        <div>
+            <label> Categoria</label> <br>
                 <select style=" width:200px;" type="search" id="categoria_id"
                     name="categoria_id" >
                     <tr>
@@ -34,32 +39,37 @@
                     {% endfor %}
                     </tr>
                 </select>
-                <br>
-            <label> Promoção:</label>
+        </div>
+        <div>
+            <label> Promoção</label> <br>
                 <select style=" width:200px;" type="search" id="promocao"
                     name="promocao" required>
-                    <tr>
+        </div>
+        <div>
                         <option value='1'> __Selecionar__</option>
                     {% for promocao in promocao %}
                             <option value='{{promocao.id}}'> {{promocao.descricao}}</option>
                     {% endfor %}
                      </tr>
                 </select>
-
-                <br>
-            <label> Código do produto:</label>
+        </div>
+        <div>
+            <label> Código do produto</label> <br>
                 <input style=" width:170px;"  placeholder=" Código do produto..." type="text"
                     id="codigo" name="codigo"  required/>
-                 <br>
-            <label> Porcentagem de lucro:</label>
+        </div>
+        <div>
+            <label> Porcentagem de lucro</label> <br>
                 <input style=" width:127px;"  placeholder=" 00,00%" type="text"
                     id="percentagem_de_lucro" name="percentagem_de_lucro" required/>
-                <br>
-            <label> Valor da compra:</label>
+        </div>
+        <div>
+            <label> Valor da compra</label> <br>
                 <input style=" width:150px;"  placeholder=" Valor da compra..."
                     type="text" id="valor_compra" name="valor_compra" required/>
-                <br>
-                <button type="submit"> salvar</button>
+        </div>
+        <hr>
+                <button id="refresh" type="submit"> salvar</button>
     </form>
 
 
@@ -79,8 +89,24 @@
                     <br>
             </form>
          </div>
+         {%endif%}
+         {% if mensagen_de_erro == false and produto.codigo != None%}
+         <div id="div_alerta" class="divAlerta" style="margin-top: 200px;">
+            <a href="#" onclick="document.getElementById('div_alerta').style.display='none';">
+            <input class="butao_X" type="button" value="X" autofocus="autofocus", accesskey="x"> </a>
+            <form class='formAlerta' style="background-color: chartreuse;">
+                    <br>
+                    <label style="color: black; font-size: 20px;"> 
+                        Cadastrado com sucesso!</label>
+                    <br>
+                   
+            </form>
+         </div>
         {%endif%}
 <br>
+
+
+
 
 <!-- Formulário de busca de produtos -->
     <form class='campo_de_busca1' method="GET" action="{% url 'produto' %}">

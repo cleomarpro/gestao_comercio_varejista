@@ -3,35 +3,47 @@
 
 {% block main %}
 <div class='div_Mae'>
+    <h2 class="sub_menu" >&nbsp; PROMOÇÃO
+        <a 
+            href="#" onclick="document.getElementById('form_up').style.display='block';">
+                Adicionar 
+        </a>
+    </h2>
 
-    <form class='formulario' action="{% url 'promocao' %}" method="POST" >
+    <form id="form_up" class='formulario' style="display: none;" action="{% url 'promocao' %}" method="POST" >
         {% csrf_token %}
+        <a id="termo_buttao" href="#" onclick="document.getElementById
+        ('form_up').style.display='none';"> X</a>
+        <p> NOVA PROMOÇÃO</p>
 
-         <h1>
-        <label style=" color:#EEE9E9;">Nova promoção</label>
-    </h1>
-
-        <label> Descrição:</label>
+        <hr> 
+    <div> 
+        <label> Descrição</label> <br>
             <input style=" width:200px;"  placeholder=" Descrição..." type="text"
                 id="descricao" name="descricao" value='{{ promUpdate.descricao}}' required/>
-                <br>
-        <label> Desconto a partir:</label>
+    </div>
+    <div>
+        <label> Desconto a partir</label>  <br>
             <input style=" width:120px;" autofocus="autofocus" placeholder=" Digite a quantidade..."
                 type="text" id="quantidade_promocional" name="quantidade_promocional"
                 value='{{ promUpdate.quantidade_promocional}}' required/>
-            <br>
-        <label> Desconto promocional (%):</label>
-            <input style=" width:110px;"  placeholder=" 0,00%:" type="text"
+    </div>
+    <div>
+        <label> Desconto promocional (%)</label> <br>
+            <input style=" width:110px;"  placeholder=" 0,00%" type="text"
                 id="desconto" name="desconto" value='{{ promUpdate.desconto}}' required/>
-                <br>
-        <label> Data de iníco:</label>
+    </div>
+    <div>
+        <label> Data de iníco</label> <br>
             <input style=" width:150px;"type="date" id="myDate" name="data_inicio"
                 value='{{ promUpdate.data_inicio}}' required/>
-            <br>
-        <label> Data de termino:</label>
+    </div>
+    <div>
+        <label> Data de termino</label> <br>
             <input style=" width:150px;" type="date" id="data_termino"
                 name="data_termino"  value='{{ promUpdate.data_termino}}' required/>
-            <br>
+    </div>
+            <hr>
         <button type="submit"> salvar</button>
     </form>
 

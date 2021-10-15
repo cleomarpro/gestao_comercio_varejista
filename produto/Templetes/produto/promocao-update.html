@@ -2,35 +2,39 @@
 
 {% block main %}
 <div class='div_Mae'>
-
+    <h2 class="sub_menu" >&nbsp; PROMOÇÃO </h2>
     <form class='formulario' method="POST" >
         {% csrf_token %}
-
-         <h1>
-        <label style=" color:#EEE9E9;">Nova promoção</label>
-    </h1>
-
-        <label> Descrição:</label>
+        {% csrf_token %}
+        <p> ATUALIZAR PROMOÇÃO</p>
+        <hr>
+    <div>
+        <label> Descrição</label>
             <input style=" width:200px;"  placeholder=" Descrição..." type="text"
                 id="descricao" name="descricao" value='{{ promocao.descricao}}' required/>
-                <br>
-        <label> Desconto a partir:</label>
-            <input style=" width:120px;" autofocus="autofocus" placeholder=" Digite a quantidade..."
+    </div>
+    <div>
+        <label> Desconto a partir</label>
+            <input style=" width:150px;" autofocus="autofocus" placeholder=" Digite a quantidade..."
                 type="text" id="quantidade_promocional" name="quantidade_promocional"
                 value='{{ promocao.quantidade_promocional}}' required/>
-            <br>
-        <label> Desconto promocional (%):</label>
+    </div>
+    <div>
+        <label> Desconto promocional (%)</label>
             <input style=" width:110px;"  placeholder=" 0,00%:" type="text"
                 id="desconto" name="desconto" value='{{ promocao.desconto}}' required/>
-                <br>
-        <label> Data de iníco:</label>
+    </div>
+    <div>
+        <label> Data de iníco</label>
             <input style=" width:150px;"type="date" id="myDate" name="data_inicio"
                 value='{{ promocao.data_inicio}}' required/>
-            <br>
-        <label> Data de termino:</label>
+    </div>
+    <div>
+        <label> Data de termino</label>
             <input style=" width:150px;" type="date" id="data_termino"
                 name="data_termino"  value='{{ promocao.data_termino}}' required/>
-            <br>
+    </div>
+        <hr>
         <button type="submit"> salvar</button>
     </form>
     <br>

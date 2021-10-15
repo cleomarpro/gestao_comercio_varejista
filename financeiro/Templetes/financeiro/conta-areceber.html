@@ -3,53 +3,71 @@
 {% block main %}
 
 <div class='div_Mae'>
-    <form class='formulario' action="{% url 'conta_areceber' %}" method="POST" >
+    <h2 class="sub_menu" >&nbsp; CONTA A RECEBER
+        <a 
+            href="#" onclick="document.getElementById('form_up').style.display='block';">
+                Adicionar 
+        </a>
+    </h2>
+    <form id="form_up" class='formulario' style="display: none;" action="{% url 'conta_areceber' %}" method="POST" >
         {% csrf_token %}
-        <h1> 
-            <label style=" color:#EEE9E9;">Nova conta a receber</label>
-        </h1>
-             <br>
-            <label> Observação:</label>
-                <input style=" width:220px;"  placeholder=" Observação ou descrição..."
+        
+        <a id="termo_buttao" href="#" onclick="document.getElementById
+        ('form_up').style.display='none';"> X</a>
+        <p> NOVA CONTA</p>
+
+       <hr> 
+        <div>
+            <label> Observação</label><br>
+                <input  placeholder=" Observação ou descrição..."
                     type="text" id="observacao" name="observacao" />
-             <br>
-            <label> Cliente:</label>
-                <select style=" width:200px;" type="search" id="cliente_id" name="cliente_id" required/>
+        </div>
+        <div>  
+            <label> Cliente</label><br>
+                <select  type="search" id="cliente_id" name="cliente_id" required/>
 
                         <tr>
-                                <option value=''> __Selecionar__</option>
+                                <option value=''> __Selecionar __</option>
                             {% for cliente in cliente %}
                                 <option value='{{cliente.id}}'> {{cliente.nome}}</option>
                             {% endfor %}
                         </tr>
-
                 </select>
-                <a style=" font-size: 30px;" href="{% url 'novo-cliente' %}">+</a>
-             <br>
-            <label> Venda:</label>
-                <select style=" width:220px;" type="search" id="venda_id" name="venda_id" required/>
-                        <tr>
-                                <option value=''> __Selecionar__</option>
-                            {% for vendas in venda %}
-                                <option value='{{vendas.id}}'> {{vendas}}</option>
-                            {% endfor %}
-                        </tr>
+                <a class="link_add" href="{% url 'novo-cliente' %}">+</a>
+        </div>   
+        <div>
+            <label> Venda</label><br>
+                <select  type="search" id="venda_id" name="venda_id" required/>
+                    <tr>
+                            <option value=''> __Selecionar__</option>
+                        {% for vendas in venda %}
+                            <option value='{{vendas.id}}'> {{vendas}}</option>
+                        {% endfor %}
+                    </tr>
                 </select>
-             <br>
-            <label> Valor:</label>
-                <input style=" width:200px;"  placeholder="Valor..."  type="number" step=".01" lang="nb"
+                
+        </div>
+        <div>
+            <label> Valor</label><br>
+                <input  placeholder="Valor..."  type="number" step=".01" lang="nb"
                     id="valor" name="valor" required/>
-             <br>
-             <label> Parcelas:</label>
-                <input style=" width:200px;" value='1' placeholder=" parcelas..."
+        </div>
+    
+        <div>
+             <label> Parcelas</label><br>
+                <input value='1' placeholder=" parcelas..."
                     type="text" id="parcelas" name="parcelas" required/>
-                    <br>
+        </div>
+       
                 <input type="hidden" value='1' name="tipo_de_conta_id">
-
-            <label> Data de vencimento:</label>
-                <input style=" width:200px;"  placeholder=" Data de vencimento:"
+       
+        <div> 
+            <label> Data de vencimento</label> <br>
+                <input style=" width:150px; padding: 3px;"  placeholder=" Data de vencimento:"
                     type="date" id="data_de_vencimento" name="data_de_vencimento" required/>
-                 <br>
+        
+        </div>
+        <hr>
 
             <button type="submit"> salvar</button>
     </form>

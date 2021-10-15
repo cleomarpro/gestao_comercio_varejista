@@ -1,22 +1,24 @@
 {% extends 'base.html'%}
 {% block main%}
 
-    <div class='div_Mae'>
+    <div class='div_Mae'> 
+        <h2 class="sub_menu" >&nbsp; FUNCIONÁRIO </h2>
         <form class='formulario' method="post" >
-            <br>
             {% csrf_token %}
-        <h1
-             style=" color:#EEE9E9;"> Funcionário</label>
-        </h1>
-            <label>Nome*:</label>
+        <p> ALTERAR CONTA</p>
+        <hr>
+        <div>
+            <label>Nome*</label>
                 <input style='width:200px;' Type='text' value= "{{usuario.first_name}}"
                     name='primeiro_nome' id='primeiro_nome' required/>
-                <br>
-            <label>Segundo nome*:</label>
+        </div>
+        <div>
+            <label>Segundo nome*</label>
                 <input style='width:200px;' Type='text' value= "{{usuario.last_name}}"
                     name= 'segundo_nome'id= 'segundo_nome' required/>
-                <br>
-             <label> Estado*:</label>
+        </div>
+        <div>
+            <label> Estado*</label>
             <select style=" width:150px;" type="text" value= "{{usuario.is_active}}"
                 id="ativo" name="ativo" required>
                 <tr>
@@ -24,24 +26,28 @@
                     <option value='True'> Ativo</option>
                     {% else %}
                     <option value="">Inativo  </option>
-                    {% endif %} <br>
+                    {% endif %} 
                     <option value="True">Ativo </option>
                     <option value="False">Inativo  </option>
                 </tr>
             </select>
-            {% if mensagen_de_erro_usuario %} <br>
+        </div>
+        <div>
+            {% if mensagen_de_erro_usuario %} 
             <label style='color:red;'>{{mensagen_de_erro_usuario}}</label>
             {% endif %} <br>
-            <label>Usuário*:</label>
+            <label>Usuário*</label>
                 <input style='width:200px; color: rgb(40, 39, 39);' Type='text' maxlength="20" minlength="5" 
                     value="{{usuario.username}}" name='username' id= 'username' required/>
-                    <br>
-            <label>Senha:</label>
+        </div>
+        <div>
+            <label>Senha</label>
                 <input style='width:200px;' Type='password' 
                     name= 'password'id= 'password' />
-            <br>
+        </div>
+        <div>
             
-            <label>Adiciona permissão:</label>
+            <label>Adiciona permissão</label>
                 <select style=" width:200px;" type="text" value= "{{permissao}}"
                 id="permissao" name="permissao" >
                     <tr>
@@ -53,14 +59,15 @@
                         <option value="Vendedor_Caixa">Vendedor_Caixa </option>
                     </tr>
                 </select>
-                <br>
+        </div>
+        <div>
             <label>Permissões atribuidas: </label>
                 {% for permissao in permissoes %}
             <label style="color:blue">{{permissao}}, </label>
                 {%endfor%}
-             <br>
-
-            <label>Excluir permissão:</label>
+        </div>
+        <div>
+            <label>Excluir permissão</label>
                 <select style=" width:200px;" type="text" id="permissao_delete" name="permissao_delete" >
                     <tr>
                         <option value=''> __Selecionar__</option>
@@ -69,8 +76,8 @@
                         {%endfor%}
                     </tr>
                 </select>
-              <br>
-              <br>
+        </div>
+            <hr>
             <button type="submit" > Editar </button>
             <br>
         </div>

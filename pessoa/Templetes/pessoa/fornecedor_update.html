@@ -3,25 +3,28 @@
 {% block main %}
 
 <div class='div_Mae'>
+    <h2 class="sub_menu" >&nbsp; FORNECEDOR </h2>
     <form class='formulario'  method="POST" >
          {% csrf_token %}
-    <h1
-         style=" color:#EEE9E9;">Atualizar Fornecedor</label>
-    </h1>
-             <br>
-            <label> Nome fantazia*:</label>
+        <p> ATUALIZAR FORNECEDOR</p>
+        <hr>
+        <div>
+            <label> Nome fantazia*</label> <br>
                 <input style=" width:200px;"  placeholder=" Nome..." value="{{fornecedor.nome_fantazia}}"
                 type="text" id="nome_fantazia" name="nome_fantazia" required/>
-             <br>
-            <label> Cnpj*:</label>
+        </div>
+        <div>
+            <label> Cnpj*</label> <br>
                 <input style=" width:150;"  placeholder="Cnpj..." value="{{fornecedor.cnpj}}"
                     type="text" id="cnpj" name="cnpj" required/>
-             <br>
-            <label> Data de criação:</label>
+        </div>
+        <div>
+            <label> Data de criação</label> <br>
                 <input style=" width:140px;"  placeholder=" Data de criação:" value="{{fornecedor.data_de_criacao}}"
                     type="date" id="data_de_criacao" name="data_de_criacao" required/>
-                <br>
-             <label> Nascionalidade:</label>
+        </div>
+        <div>
+             <label> Nascionalidade</label> <br>
             <select style=" width:140px;" type="text" id="nascionalidade" value="{{fornecedor.nascionalidade}}"
                 name="nascionalidade" >
                 <tr>
@@ -30,66 +33,74 @@
                     <option >Multinacional  </option>
                 </tr>
             </select>
-             <br>
-
-             <label>Cep:</label>
+        </div>
+        <div>
+             <label>Cep</label> <br>
                 <input style=" width:140px;"  placeholder=" Cep..." value="{{fornecedor.cep}}"
                     type="text" id="cep" name="cep" />
-             <br>
-
-            <label> Rua:</label>
+        </div>
+        <div>
+            <label> Rua</label> <br>
                 <input style=" width:200px;"  placeholder=" Rua..." value="{{fornecedor.rua}}"
                     type="text" id="rua" name="rua" />
-
-
-            <label> Quadra:</label>
+        </div>
+        <div>
+            <label> Quadra</label> <br>
                 <input style=" width:80px;"  placeholder=" Quadra..." value="{{fornecedor.quadra}}"
                     type="text" id="quadra" name="quadra" />
-                <br>
-            <label> Número:</label>
+        </div>
+        <div>
+            <label> Número</label> <br>
                 <input style=" width:80px;"  placeholder=" Número..." value="{{fornecedor.numero}}"
                     type="text" id="numero" name="numero" />
-
-            <label> Setor:</label>
+        </div>
+        <div>
+            <label> Setor</label> <br>
                 <input style=" width:150px;"  placeholder=" Setor..." value="{{fornecedor.setor}}"
                     type="text" id="setor" name="setor" />
-            <br>
-
-            <label> Estado:</label>
+        </div>
+        <div>
+            <label> Estado</label> <br>
                 <input style=" width:200px;"  placeholder=" Estado..." value="{{fornecedor.estado}}"
                     type="text" id="estado" name="estado" />
-             <br>
-
-            <label> Cidade:</label>
+        </div>
+        <div>
+            <label> Cidade</label> <br>
                 <input style=" width:200px;"  placeholder=" Cidade..." value="{{fornecedor.cidade}}"
                     type="text" id="cidade" name="cidade" />
-             <br>
-
-            <label> Complemento:</label>
+        </div>
+        <div>
+            <label> Complemento</label> <br>
                 <input style=" width:180px;"  placeholder=" Complemento..." value="{{fornecedor.complemento}}"
                     type="text" id="complemento" name="complemento" />
-             <br>
-            <label> Pais:</label>
+        </div>
+        <div>
+            <label> Pais</label> <br>
                 <input style=" width:100px;"  placeholder=" Pais..." value="{{fornecedor.pais}}"
                     type="text" id="pais" name="pais" />
-
-            <label> Celular:</label>
+        </div>
+        <div>
+            <label> Celular</label> <br>
                 <input style=" width:100px;"  placeholder=" Celular..." value="{{fornecedor.Celular}}"
                     type="text" id="Celular" name="Celular" />
-             <br>
-
-            <label> Celular 2:</label>
+        </div>
+        <div>
+            <label> Celular 2</label> <br>
                 <input style=" width:120px;"  placeholder=" Celular 2..." value="{{fornecedor.Celular2}}"
                     type="text" id="Celular2" name="Celular2" />
-
-            <label> Telefone:</label>
+        </div>
+        <div>
+            <label> Telefone</label> <br>
                 <input placeholder=" Telefone..." value="{{fornecedor.Telefone}}"
                     type="text" id="Telefone" name="Telefone" />
-             <br>
-            <label> E-mail:</label>
+        </div>
+        <div>
+            <label> E-mail</label> <br>
                 <input   placeholder=" E-mail..." value="{{fornecedor.email}}"
                     type="text" id="email" name="email" />
-             <br>
+        </div>
+            
+            <hr>
             <button  type="submit"> Atualizar</button>
   </form>
 </div>

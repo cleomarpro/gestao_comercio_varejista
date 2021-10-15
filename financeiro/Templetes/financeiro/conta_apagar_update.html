@@ -3,31 +3,36 @@
 {% block main %}
 
 <div class='div_Mae'>
+    <h2 class="sub_menu" >&nbsp; CONTA A RECEBER </h2>
     <form class='formulario' method="POST" >
         {% csrf_token %}
-        <h1> 
-            <label style=" color:#EEE9E9;">Nova conta a pagar</label>
-        </h1>
-             <br>
+        <p> ALTERAR CONTA</p>
+        <hr>
+
+        <div>
             <label> Observação:</label>
                 <input style=" width:220px;"  placeholder=" Observação ou descrição..."
                     type="text" id="observacao" name="observacao" value="{{conta.observacao}}" required/>
-             <br>
+        </div>
+        <div>
             <label> Valor:</label>
                 <input style=" width:120px;"  placeholder="Valor..." type="number" step=".01" lang="nb"
                     id="valor" name="valor" value="{{conta.valor}}" required/>
-             <br>
+        </div>
+        <div>
              <label> Parcelas:</label>
                 <input style=" width:120px;" value='1' placeholder=" parcelas:" value="{{conta.parcelas}}"
                     type="text" id="parcelas" name="parcelas" required/>
-                    <br>
+        </div>
+        <div>
                 <input type="hidden" value='2' name="tipo_de_conta_id">
 
             <label> Data de vencimento:</label>
-                <input style=" width:120px;"  placeholder=" Data de vencimento:" value="{{conta.data_de_vencimento}}"
+                <input style=" width:150px;"  placeholder=" Data de vencimento:" value="{{conta.data_de_vencimento}}"
                     type="date" id="data_de_vencimento" name="data_de_vencimento" required/>
-                 <br>
-
+        </div>
+               
+            <hr>
             <button type="submit"> salvar</button>
         </form>
     <br>

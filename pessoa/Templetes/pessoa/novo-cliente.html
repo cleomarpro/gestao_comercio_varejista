@@ -1,27 +1,39 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} 
 
 {% block main %}
 
 <div class='div_Mae'>
-    <form class='formulario' action="{% url 'novo-cliente' %}" method="POST" >
+    <h2 class="sub_menu" >&nbsp; CLIENTE
+        <a 
+            href="#" onclick="document.getElementById('form_up').style.display='block';">
+                Adicionar 
+        </a>
+    </h2>
+    <form id="form_up" class='formulario' style="display: none;" action="{% url 'novo-cliente' %}" method="POST" >
          {% csrf_token %}
-    <h1
-         style=" color:#EEE9E9;">Novo cliente</label>
-    </h1>
-             <br>
-            <label> Nome*:</label>
-                <input style=" width:250px;"  placeholder=" Nome..." type="text" id="nome" name="nome" required/>
-             <br>
-            <label> Segundo nome*:</label>
+                <a id="termo_buttao" href="#" onclick="document.getElementById
+                ('form_up').style.display='none';"> X</a>
+                <p> NOVO FUNCIONÁRIO</p>
+
+            <hr> 
+        <div>
+            <label> Nome*</label><br>
+                <input style=" width:200px;"  placeholder=" Nome..." type="text" id="nome" name="nome" required/>
+        </div>
+        <div> 
+            <label> Segundo nome*</label><br>
                 <input style=" width:200px;"  placeholder="Segundo nome..." type="text" id="segundo_nome" name="segundo_nome" required/>
-             <br>
-            <label> Cpf ou cnpj*:</label>
+        </div>
+        <div> 
+            <label> Cpf ou cnpj*</label><br>
                 <input style=" width:200px;"  placeholder=" Cpf ou cnpj..." type="text" id="cpf_cnpj" name="cpf_cnpj" required/>
-             <br>
-            <label> Data de nascimento*:</label>
+        </div>
+        <div> 
+            <label> Data de nascimento*</label><br>
                 <input style=" width:180px;"  placeholder=" Data de nascimento.." type="date" id="data_de_nascimento" name="data_de_nascimento" required/>
-             <br>
-            <label> Sexo*:</label>
+        </div>
+        <div> 
+            <label> Sexo*</label><br>
             <select style=" width:150px;" type="text" id="sexo_id" name="sexo_id" required/>
                 <tr>
                     <option value=''> __Sexo__</option>
@@ -29,8 +41,9 @@
                     <option value="2">Masculino  </option>
                 </tr>
             </select>
-             <br>
-             <label> Nascionalidade*:</label>
+        </div>
+        <div> 
+             <label> Nascionalidade*</label><br>
             <select style=" width:140px;" type="text" id="nascionalidade" name="nascionalidade" required/>
                 <tr>
                     <option value=''> __Selecionar__</option>
@@ -38,55 +51,68 @@
                     <option >Estrangeiro  </option>
                 </tr>
             </select>
-             <br>
+        </div>
+        <div> 
 
-             <label>Cep:</label>
+             <label>Cep</label><br>
                 <input style=" width:140px;"  placeholder=" Cep..." type="text" id="cep" name="cep" />
-             <br>
+        </div>
+        <div> 
 
-            <label> Rua:</label>
+            <label> Rua</label><br>
                 <input style=" width:200px;"  placeholder=" Rua..." type="text" id="rua" name="rua" />
-
-
-            <label> Quadra:</label>
+        </div>
+        <div> 
+            <label> Quadra</label><br>
                 <input style=" width:80px;"  placeholder=" Quadra..." type="text" id="quadra" name="quadra" />
-                <br>
-            <label> Número:</label>
+        </div>
+        <div> 
+            <label> Número</label><br>
                 <input style=" width:80px;"  placeholder=" Número..." type="text" id="numero" name="numero" />
-
-            <label> Setor:</label>
+        </div>
+        <div> 
+            <label> Setor</label><br>
                 <input style=" width:150px;"  placeholder=" Setor..." type="text" id="setor" name="setor" />
-            <br>
+        </div>
+        <div> 
 
-            <label> Estado:</label>
+            <label> Estado</label><br>
                 <input style=" width:200px;"  placeholder=" Estado..." type="text" id="estado" name="estado" />
-             <br>
+        </div>
+        <div> 
 
-            <label> Cidade:</label>
+            <label> Cidade</label><br>
                 <input style=" width:200px;"  placeholder=" Cidade..." type="text" id="cidade" name="cidade" />
-             <br>
+        </div>
+        <div> 
 
-            <label> Complemento:</label>
+            <label> Complemento</label><br>
                 <input style=" width:180px;"  placeholder=" Complemento..." type="text" id="complemento" name="complemento" />
-             <br>
-            <label> Pais:</label>
+        </div>
+        <div> 
+            <label> Pais</label><br>
                 <input style=" width:100px;"  placeholder=" Pais..." type="text" id="pais" name="pais" />
+        </div>
+        <div> 
+            <label> Celular:</label><br>
+                <input style=" width:150px;"  placeholder=" Celular..." type="text" id="Celular" name="Celular" />
+        </div>
+        <div> 
 
-            <label> Celular:</label>
-                <input style=" width:100px;"  placeholder=" Celular..." type="text" id="Celular" name="Celular" />
-             <br>
+            <label> Celular 2</label><br>
+                <input style=" width:150px;"  placeholder=" Celular 2..." type="text" id="Celular2" name="Celular2" />
+        </div>
+        <div> 
 
-            <label> Celular 2:</label>
-                <input style=" width:120px;"  placeholder=" Celular 2..." type="text" id="Celular2" name="Celular2" />
-
-
-            <label> Telefone:</label>
-                <input placeholder=" Telefone..." type="text" id="Telefone" name="Telefone" />
-             <br>
-            <label> E-mail:</label>
-                <input   placeholder=" E-mail..." type="text" id="email" name="email" />
-             <br>
-
+            <label> Telefone</label><br>
+                <input style=" width:150px;" placeholder=" Telefone..." type="text" id="Telefone" name="Telefone" />
+        </div>
+        <div> 
+            <label> E-mail</label><br>
+                <input style=" width:150px;"  placeholder=" E-mail..." type="text" id="email" name="email" />
+        </div>
+            
+            <hr>
             <button  type="submit"> salvar</button>
     </form>
        <br>
