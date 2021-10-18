@@ -2,12 +2,15 @@
    {% block main%}
 
 <div class='div_Mae'>
-    <form class='campo_de_busca1' method="GET" action="{% url 'lista-vendas' %}">
-        <h1> Vendas realizadas</h1>
+    <h2 class="sub_menu" >&nbsp; VENDAS REALIZADAS 
         {% if perms.fluxo_de_caixa.add_venda %}
-            <a href="{% url 'atualizar-pedido' %}">
-            <label style= " background-color: #6495ED; padding:3px; color:white; font-size:15px; border-radius: 5px;">Nova venda</label> </a>
+            <a href="{% url 'atualizar-pedido' %}"> 
+            Adicionar 
         {% endif %}
+    </a>
+    </h2>
+    <form class='campo_de_busca1' method="GET" action="{% url 'lista-vendas' %}">
+        
         <input  type="search" id="venda" name="venda" placeholder="Número do cliente...">
             <button  type="submit">Buscar</button>
     </form>
@@ -41,9 +44,9 @@
       <thead>
         <tr>
             <th>Cliente</th>
-            <th>Data</th>
+            <th class="col_table"> Data</th>
             <th>Descrição</th>
-            <th>Desconto</th>
+            <th class="col_table">Desconto</th>
             <th>Valor</th>
 
             {% if perms.fluxo_de_caixa.change_venda %}
@@ -65,9 +68,9 @@
         {% for venda in vendas %}
             <tr>
                 <td>{{ venda.id }}</td>
-                <td>{{ venda.data_hora.date}}</td>
+                <td class="col_table">{{ venda.data_hora.date}}</td>
                 <td >{{ venda.descricao}}</td>
-                <td>R$ {{ venda.total_desconto }}</td>
+                <td class="col_table">R$ {{ venda.total_desconto }}</td>
                 <td>R$ {{ venda.valor }}</td>
 
                 {% if perms.fluxo_de_caixa.change_venda %}

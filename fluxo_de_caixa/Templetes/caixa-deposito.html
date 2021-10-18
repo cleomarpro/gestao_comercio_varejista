@@ -2,27 +2,34 @@
 {% block main%}
 
 <div class='div_Mae'>
-
-
+    <h2 class="sub_menu" >&nbsp; SACAR
+      <a href="{% url 'caixa' %}">Voltar</a>
+      </a>
+  </h2>
     <form class='formulario' method="POST">
         {% csrf_token %}
-              <h1 > Novo Depósito</h1>
-         <label>Caixa:</label>
+        <p> NOVA DEPÓSITO</p>
+
+       <hr> 
+    <div>
+         <label> <b> Caixa: </b></label>
          <label>{{ caixa.nome_do_caixa }}</label>
-         <br>
-         <label>Saldo em caixa:</label>
+        <br>
+         <label > <b> Saldo em caixa </b></label>
          <label>${{ caixa.valor_atualizado }} </label>
-         <br>
-        <label for="busca"> Descriçcão:</label>
+    </div>
+    <div>
+        <label for="busca"> Descriçcão</label> <br>
             <input style=" width:200px;" type="text" id="descricao" name="descricao"
                 placeholder="Descriçcão" >
-            <br>
-
-        <label for="busca"> Valor:</label>
+    </div> 
+    <div> 
+        
+        <label for="busca"> Valor</label> <br>
             <input style=" width:200px;" type="text" id="depositar" name="depositar"
                 placeholder="0,00" required/>
-
-            <br>
+    </div> 
+                <hr>
             <button  type="submit">Depositar</button>
 
     </form>
@@ -48,11 +55,12 @@
       <tbody>
         {% for deposito in depositos %}
             <tr>
+              {% if deposito.depositar > 0%}
                 <td>{{ deposito.descricao }}</td>
                 <td>R$ {{ deposito.depositar }}</td>
                 <td>{{ deposito.data_hora.date }}</td>
                 <td>{{ deposito.user.username}}</td>
-
+              {%endif%}
             </tr>
         {% endfor %}
       </tbody>

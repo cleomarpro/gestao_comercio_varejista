@@ -3,7 +3,7 @@
 {% block main %}
 
 <div class='div_Mae'>
-    <h2 class="sub_menu" >&nbsp; Gastos Extras
+    <h2 class="sub_menu" >&nbsp;GASTOS EXTRAS 
         <a 
             href="#" onclick="document.getElementById('form_up').style.display='block';">
                 Adicionar 
@@ -15,10 +15,14 @@
          ('form_up').style.display='none';"> X</a>
          <p> Anotar gastos</p>
         <hr> 
-            <input placeholder=" Descricão..." type="text" id="descricao" name="descricao" required/>
-             
+    <div> 
+        <label>Descrição</label><br>
+            <input placeholder=" Descrição..." type="text" id="descricao" name="descricao" required/>
+    </div>
+    <div>
+        <label>Valor</label><br>
             <input placeholder="Valor..." type="text" id="valor" name="valor" required/>
-             <br>
+    </div>
              <hr>
             <button type="submit"> salvar</button>
     </form>

@@ -106,20 +106,14 @@
     <table class="table">
      <thead>
         <tr>
-            <th >Produto</th>
+            <th >Nome</th>
             <th >Código</th>
-            <th > Fornecedor </th>
-            <th >CNPJ do fornecedor</th>
+            <th class="col_table"> Fornecedor </th>
+            <th class="col_table">CNPJ do fornecedor</th>
             <th >Quantidade</th>
-            <th>Data</th>
-            <th> Validade</th>
-            {% if perms.produto.change_entradamercadoria %}
-                <th >Editar</th>
-            {%endif%}
-
-            {% if perms.produto.delete_entradamercadoria %}
-                <th >Excluir</th>
-            {%endif%}
+            <th class="col_table">Data</th>
+            <th class="col_table"> Validade</th>
+            <th>Ação</th>
         </tr>
     </thead>
     <tbody>
@@ -127,18 +121,18 @@
         <tr>
             <td>{{ entrada.produto.nome}}</td>
             <td>{{ entrada.produto.id}}</td>
-            <td>{{ entrada.fornecedor.nome_fantazia}}</td>
-            <td>{{ entrada.fornecedor.cnpj}}</td>
+            <td class="col_table">{{ entrada.fornecedor.nome_fantazia}}</td>
+            <td class="col_table">{{ entrada.fornecedor.cnpj}}</td>
             <td>{{ entrada.quantidade}}</td>
-            <td>{{ entrada.data_hora.date}}</td>
-            <td>{{ entrada.validade_produto}}</td>
+            <td class="col_table">{{ entrada.data_hora.date}}</td>
+            <td class="col_table">{{ entrada.validade_produto}}</td>
 
             {% if perms.produto.change_entradamercadoria %}
-                <td> <a href="{% url 'entrada_mercadoria_update' entrada.id %}">Editar</a> </td>
+                <td> <a href="{% url 'entrada_mercadoria_update' entrada.id %}">Editar</a> 
             {%endif%}
 
             {% if perms.produto.delete_entradamercadoria %}
-                <td> <a href="{% url 'entradaMercadoria_delete' entrada.id %}">Excluir</a> </td>
+                 <a href="{% url 'entradaMercadoria_delete' entrada.id %}">Excluir</a> </td>
             {%endif%}
 
         </tr>

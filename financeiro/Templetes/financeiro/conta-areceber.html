@@ -98,53 +98,42 @@
      <thead>
         <tr>
             <th >Cliente</th>
-            <th >Observação</th>
+            <th class="col_table">Observação</th>
             <th >Valor</th>
             <th >ID da venda</th>
             <th >Saldo devedor</th>
-            <th >Total de parcelas</th>
-            <th >Parcelas pagas</th>
-            <th >Parcelas restantes</th>
-            <th >Valor da parcela</th>
+            <th class="col_table">Total de parcelas</th>
+            <th class="col_table" >Parcelas pagas</th>
+            <th class="col_table" >Parcelas restantes</th>
+            <th class="col_table" >Valor da parcela</th>
             <th >Data de vencimento</th>
-
-            {% if perms.financeiro.change_contas %}
-            <th >Editar</th>
-            {%endif%}
-
-            {% if perms.financeiro.delete_contas %}
-            <th >Excluira</th>
-            {%endif%}
-
-            {% if perms.financeiro.add_pagamento %}
-            <th >Pagar</th>
-            {%endif%}
+            <th>Ação</th>
         </tr>
     </thead>
         <tbody>
             {%for conta in conta %}
                 <tr>
                     <td>{{ conta.cliente.nome}}</td>
-                    <td>{{ conta.observacao}}</td>
+                    <td class="col_table">{{ conta.observacao}}</td>
                     <td>R$ {{ conta.valor }}</td>
                     <td>{{ conta.venda.id}}</td>
                     <td>R$ {{ conta.saldo_devedor }}</td>
-                    <td>{{ conta.parcelas }}</td>
-                    <td>{{ conta.parcelas_pagas }}</td>
-                    <td>{{ conta.parcelas_restantes }}</td>
-                    <td>R$ {{ conta.valor_parcela }}</td>
+                    <td class="col_table">{{ conta.parcelas }}</td>
+                    <td class="col_table">{{ conta.parcelas_pagas }}</td>
+                    <td class="col_table">{{ conta.parcelas_restantes }}</td>
+                    <td class="col_table">R$ {{ conta.valor_parcela }}</td>
                     <td>{{ conta.data_de_vencimento }}</td>
 
                     {% if perms.financeiro.change_contas %}
-                    <td> <a href="{% url 'conta_areceber_update' conta.id %}">Editar</a> </td>
+                    <td> <a href="{% url 'conta_areceber_update' conta.id %}">Editar</a> 
                     {%endif%}
 
                     {% if perms.financeiro.delete_contas %}
-                    <td> <a href="{% url 'conta_delete' conta.id %}">Excluir</a> </td>
+                    <a href="{% url 'conta_delete' conta.id %}">Excluir</a> 
                     {%endif%}
 
                     {% if perms.financeiro.add_pagamento %}
-                    <td>   <a href="{% url 'pagamento' conta.id %}">pagar</a> </td>
+                    <a href="{% url 'pagamento' conta.id %}">pagar</a> </td>
                     {%endif%}
                 </tr>
             {%endfor%}

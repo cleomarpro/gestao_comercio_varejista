@@ -2,20 +2,33 @@
 {% block main%}
 <!-- CDASTRO  DE PRODUTOS -->
 <div class='div_Mae'>
-    <form class='formulario' method="POST" >
+  <h2 class="sub_menu" >&nbsp; SACAR
+    <a href="{% url 'caixa' %}">Voltar</a>
+</h2>
+    <form class='formulario'  method="POST" >
         {% csrf_token %}
-              <h1 > Novo saque</h1>
+        <p> NOVA SAQUE</p>
 
-        <label for="busca"> Descriçcão:</label>
+        <hr> 
+    <div>
+        <label> <b> Caixa: </b></label>
+        <label>{{ caixa.nome_do_caixa }}</label>
+        <br>
+        <label > <b> Saldo em caixa </b></label>
+        <label>${{ caixa.valor_atualizado }} </label>
+    </div>
+     
+    <div>
+        <label for="busca"> Descriçcão</label> <br>
             <input style=" width:200px;" type="text" id="descricao" name="descricao"
                 placeholder="Descriçcão" >
-            <br>
-
-        <label for="busca"> Valor:</label>
+    </div>
+    <div>
+        <label for="busca"> Valor</label> <br>
             <input style=" width:200px;" type="text" id="sacar" name="sacar"
                 placeholder="0,00" required/>
-            <br>
-
+    </div>
+            <hr>
             <button  type="submit">Sacar</button>
 
     </form>
@@ -40,10 +53,13 @@
       <tbody>
         {% for sacar in sacar %}
             <tr>
+              {%if sacar.sacar > 0 %}
                 <td>{{ sacar.descricao }}</td>
                 <td>R$ {{ sacar.sacar }}</td>
                 <td>{{ sacar.caixa.nome_do_caixa }}</td>
                 <td>{{ sacar.data_hora.date }}</td>
+           
+              {%endif%}
             </tr>
         {% endfor %}
       </tbody>

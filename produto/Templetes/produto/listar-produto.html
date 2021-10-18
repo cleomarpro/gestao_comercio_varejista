@@ -3,10 +3,8 @@
 {% block main %}
 
 <div class=div_Mae>
-
-<div >
+  <h2 class="sub_menu" >&nbsp; PRODUTOS</h2>
     <form class='formulario' method="GET" action="{% url 'listar-produto' %}">
-          <h1> Tabela de produtos </h1><label>Buscar</label> </h1>
           <input style=" width:200px;" type="search" id="produt" name="produt" placeholder="Código do produto...">
           <button style=" width:40px; !important" type="submit">OK</button>
     </form>
@@ -44,9 +42,6 @@
         {% endfor %}
       </tbody>
     </table>
-
-</div>
-
 
 </div>
 

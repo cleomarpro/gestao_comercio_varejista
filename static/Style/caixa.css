@@ -107,13 +107,15 @@
    background-color: #4F4F4F;
   }
 #bt_novo_pedido{
-   margin-top:-272px;
-   margin-left:330px;
+   margin-top:-277px;
+   margin-left:360px;
    border: 1px solid #303131;
    border-radius: 5px;
    color:black;
-   background-color: #00BFFF;
+   background-color: #c7cdd8;
    position:absolute;
+   padding-block: 5px;
+   width: 90px;
 
  }
 

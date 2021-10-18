@@ -491,7 +491,7 @@ class CaixaSacar(LoginRequiredMixin, View):
         caixa = Caixa.objects.get(id=id)
         usuario_adm = caixa.usuarios.id
         if usuario_adm == usuario: # Verificar autenticidade do usuário
-
+            
             today = date.today()
             sacar = Depositar_sacar.objects.filter(
                 caixa__id = id, data_hora__contains= today).order_by('-id').order_by('-data_hora')
@@ -503,7 +503,7 @@ class CaixaSacar(LoginRequiredMixin, View):
                 sacar = Depositar_sacar.objects.filter(
                     data_hora__range= (DIA, DIA2), caixa__id = id).order_by('-data_hora')
             return render(
-                request, 'caixa-sacar.html',{'sacar':sacar})
+                request, 'caixa-sacar.html',{'sacar':sacar, 'caixa':caixa})
         else:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
@@ -537,7 +537,7 @@ class CaixaSacar(LoginRequiredMixin, View):
             data['deposito'] = deposito
             data['sacar'] = Depositar_sacar.objects.filter(
                 caixa__id = id, data_hora__contains= today).order_by('-id')
-            data['caixa'] = Caixa.objects.all()
+            data['caixa'] = Caixa.objects.get(id=id)
             return render(
                 request, 'caixa-sacar.html', data)
         else:

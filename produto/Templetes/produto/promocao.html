@@ -53,35 +53,30 @@
     <table class="table">
      <thead>
         <tr>
-          <th >Descrição </th>
+          <th class="col_table" >Descrição </th>
           <th >Desconto a partir</th>
           <th >Desconto promocional</th>
-          <th >Data de iníco</th>
+          <th  >Data de iníco</th>
           <th >Data de termino</th>
-          {% if perms.produto.change_promocao %}
-           <th > Editar</th>
-          {%endif%}
-
-          {% if perms.produto.delete_promocao %}
-           <th > Excluir</th>
-          {% endif %}
+           <th > Ação</th>
+          
         </tr>
     </thead>
         <tbody>
             {% for promocao in promocao %}
                 <tr>
-                    <td>{{ promocao.descricao}}</td>
+                    <td class="col_table">{{ promocao.descricao}}</td>
                     <td>{{ promocao.quantidade_promocional | floatformat:2}}</td>
                     <td>{{ promocao.desconto | floatformat:2}}%</td>
                     <td>{{ promocao.data_inicio}}</td>
                     <td>{{ promocao.data_termino}}</td>
 
                     {% if perms.produto.change_promocao %}
-                        <td> <a href="{% url 'promocao-update' promocao.id %} ">Editar</a> </td>
+                        <td> <a href="{% url 'promocao-update' promocao.id %} ">Editar</a> 
                     {% endif %}
 
                     {% if perms.produto.delete_promocao %}
-                        <td> <a href="{% url 'promocao_delete' promocao.id %} ">Excluir</a> </td>
+                        <a href="{% url 'promocao_delete' promocao.id %} ">Excluir</a> </td>
                     {% endif %}
                 </tr>
             {% endfor %}

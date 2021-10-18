@@ -3,18 +3,23 @@
 {% block main %}
 
 <div class='div_Mae'>
-    <h2 class="sub_menu" >&nbsp; Gastos Extras  </h2>
+    <h2 class="sub_menu" >&nbsp; GASTOS EXTRAS  </h2>
     <form class='formulario' method="POST" >
          {% csrf_token %}
     
          <p> Anotar gastos</p>
          <hr> 
+        <div> 
+            <label>Descrição</label><br>
             <input style=" width:150px;"  placeholder=" Descricão..." value="{{gastos_extras.descricao}}"
                  type="text" id="descricao" name="descricao" required/>
-            
+                </div>
+        <div>
+            <label>Valor</label><br>
             <input style=" width:150px;"  placeholder="Valor..." value="{{gastos_extras.valor}}"
                 type="text" id="valor" name="valor" required/>
-             <br>
+        </div>
+            <hr>
             <button type="submit"> salvar</button>
     </form>
     <br>

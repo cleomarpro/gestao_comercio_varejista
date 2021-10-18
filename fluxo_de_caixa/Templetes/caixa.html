@@ -2,31 +2,43 @@
 {% block main%}
 <!-- CDASTRO  DE PRODUTOS -->
 <div class='div_Mae'>
+  <h2 class="sub_menu" >&nbsp; CAIXA
+    <a 
+        href="#" onclick="document.getElementById('form_up').style.display='block';">
+            Adicionar 
+    </a>
+  </h2>
 
     {% if perms.fluxo_de_caixa.add_caixa %}
-    <form class='formulario' method="POST" action="{% url 'caixa' %}">
-    {% csrf_token %}
-          <h1 > Novo caixa</h1>
+    <form id="form_up" class='formulario' style="display: none;" method="POST" action="{% url 'caixa' %}">
+    
+    <a id="termo_buttao" href="#" onclick="document.getElementById
+    ('form_up').style.display='none';"> X</a>
+    <p> NOVA CAIXA</p>
 
-    <label for="busca"> Nome:</label>
+   <hr> 
+   {% csrf_token %}
+   <div> 
+      <label for="busca"> Nome</label> <br>
         <input style=" width:200px;" type="text" id="nome_do_caixa" name="nome_do_caixa"
             placeholder="Nome do novo caixa..." required/>
-        <br>
-    <label> Funcioário responsável:</label>
-        <select style=" width:200px;" type="select"  name="funcionario" id="funcionario" required/>
-            <option value=''> __Selecionar__ </option>
-        {% for funcionarios in funcionarios %}
-            <option value='{{funcionarios.id}}'> Nome:{{funcionarios}} </option>
-        {% endfor %}
-        </select >
-         <br>
-        <button  type="submit">Criar</button>
+    </div>
+    <div>
+      <label> Funcioário responsável</label> <br>
+          <select style=" width:230px;" type="select"  name="funcionario" id="funcionario" required/>
+              <option value=''> __Selecionar__ </option>
+          {% for funcionarios in funcionarios %}
+              <option value='{{funcionarios.id}}'> Nome:{{funcionarios}} </option>
+          {% endfor %}
+          </select >
+     </div>
+          <hr>
+          <button  type="submit">Criar</button>
 
     </form>
 
 
 <form class='campo_de_busca1'>
-<h1> Caixa </h1>
 </form>
     <table class="table">
       <thead>
