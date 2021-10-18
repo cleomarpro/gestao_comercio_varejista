@@ -132,46 +132,43 @@
      <thead>
         <tr>
           <th >Nome</th>
-          <th >Categoria </th>
+          <th class="col_table">Categoria </th>
           <th >Código</th>
-          <th >Valor da compra</th>
-          <th >Lucro estimado(%)</th>
+          <th class="col_table">Valor da compra</th>
+          <th class="col_table">Lucro estimado(%)</th>
           <th >Valor venal</th>
           <th >Em estoque</th>
-          <th >Promoção</th>
-          {% if perms.produto.change_produto %}
-            <th >Editar </th>
-          {% endif %}
+          <th class="col_table">Promoção</th>
+            <th >Alterar </th>
+          }
 
-          {% if perms.produto.delete_produto %}
-            <th >Excluir </th>
-          {% endif %}
         </tr>
     </thead>
         <tbody>
             {% for produto in produto %}
                 <tr>
                     <td>{{ produto.nome }}</td>
-                    <td>{{ produto.categoria.nome }}</td>
+                    <td class="col_table">{{ produto.categoria.nome }}</td>
                     <td>{{ produto.codigo }}</td>
-                     <td>R$ {{ produto.valor_compra | floatformat:2 }}</td>
-                    <td>{{ produto.percentagem_de_lucro | floatformat:2 }}'% </td>
+                    <td class="col_table">R$ {{ produto.valor_compra | floatformat:2 }}</td>
+                    <td class="col_table">{{ produto.percentagem_de_lucro | floatformat:2 }}'% </td>
                     <td>R$ {{produto.valor_venal | floatformat:2 }}</td>
                     <td>
                         {% if  produto.estoque > 0 %}
-                        <lavel> {{ produto.estoque }}</lavel>
+                        <label> {{ produto.estoque }}</label>
                         {% else %}
-                        <lavel Style= 'color: red;'> {{ produto.estoque }}</lavel>
+                        <label Style= 'color: red;'> {{ produto.estoque }} 
+                        </label>
                         {% endif %}
                     </td>
-                    <td>{{ produto.promocao.descricao}}</td>
+                    <td class="col_table">{{ produto.promocao.descricao}}</td>
 
                     {% if perms.produto.change_produto %}
-                        <td> <a href="{% url 'produto_update' produto.id %}">Editar</a>  </td>
+                        <td> <a href="{% url 'produto_update' produto.id %}">Editar</a> 
                     {% endif %}
 
                     {% if perms.produto.delete_produto %}
-                        <td>  <a href="{% url 'produto_delete' produto.id %}">Excluir</a> </td>
+                         <a href="{% url 'produto_delete' produto.id %}">Excluir</a> </td>
                     {% endif %}
                 </tr>
             {% endfor %}

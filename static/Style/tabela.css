@@ -93,6 +93,9 @@
     font-size: 14px;
 
 }
+.col_table{
+    display: none;
+}
 }
 
 
