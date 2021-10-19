@@ -6,12 +6,13 @@
     </h2>
 <!-- formulário de filtro -->
     <form class='campo_de_busca' method="GET" action="{% url 'validade-produtos' %}">
-        <label>Consultar por periodo</label><br>
-        <input  type="date" id="dia" name="dia" >
-         até
-        <input  type="date" id="dia2" name="dia2" >
-
-        <button  type="submit">Filtrar</button>
+        <div> 
+            <label>Consultar por periodo</label><br>
+            <input style="width:90px" type="date" id="dia" name="dia" >
+            até
+            <input style="width:90px" type="date" id="dia2" name="dia2" >
+            <button style="width:50px" type="submit">Filtrar</button>
+        </div>
     </form>
 
 <!--tabela de entrada de mercadoria  -->
