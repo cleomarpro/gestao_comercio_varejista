@@ -69,7 +69,7 @@
                     type="text" id="valor_compra" name="valor_compra" required/>
         </div>
         <hr>
-                <button id="refresh" type="submit"> salvar</button>
+                <button id="refresh" type="submit"> Salvar</button>
     </form>
 
 
@@ -109,23 +109,26 @@
 
 
 <!-- Formulário de busca de produtos -->
-    <form class='campo_de_busca1' method="GET" action="{% url 'produto' %}">
-
-              <input type="search" id="produt" name="produt" placeholder="Código do produto">
-              <button  type="submit">Pesquisar</button>
-    </form>
-
-    <form class='campo_de_busca2' method="GET" action="{% url 'filtro-categoria' %}">
-        <select  type="search" id="produt" name="produt" >
-            <tr >
-                <option value=''> __Filtrar por categoria__</option>
-            {% for categoria in categoria %}
-                    <option  value='{{categoria.id}}'> -{{categoria}}</option>
-            {% endfor %}
-             </tr>
-        </select>
+    <form class='campo_de_busca' method="GET" action="{% url 'filtro-categoria' %}">
+        <div> 
+            <label>Buscar produto</label> <br>
+            <input type="search" id="produt" name="produt" placeholder="Código do produto">
+            <button  type="submit">Buscar</button>
+        </div>
+    
+        <div>
+            <label>Filtrar por categoria </label> <br>
+            <select  type="search" id="busca_categoria" name="busca_categoria" >
+                <tr >
+                    <option value=''> __Selecionar__</option>
+                {% for categoria in categoria %}
+                        <option  value='{{categoria.id}}'> -{{categoria}}</option>
+                {% endfor %}
+                </tr>
+            </select>
             <button  type="submit">Filtrar</button>
-    </form>
+        </div>
+    </form> 
 
 <!-- Tabela de produtos -->
     <table class="table">

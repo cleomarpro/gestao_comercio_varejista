@@ -74,26 +74,27 @@
         <br>
 
 <!-- Formulário de filtros -->
-    <form class='campo_de_busca1' method="GET" action="{% url 'conta_areceber' %}">
-              <input  type="search" id="client" name="client" placeholder="Cpf ou Cnpj...">
-
-        <select type="search" id="estado_da_conta" name="estado_da_conta" >
+    <form class='campo_de_busca' method="GET" action="{% url 'conta_areceber' %}">
+    <div>
+        <label> Cpf ou Cnpj / Situação do débito</label><br>
+        <input style="width:125px"; type="search" id="client" name="client" placeholder="Cpf ou Cnpj...">
+        
+        <select style="width:100px"; type="search" id="estado_da_conta" name="estado_da_conta" >
            <tr >
-                <option value='1'> __Situação do débito__</option>
+                <option value='1'> Selecionar</option>
                 <option value=''> -Contas ativas </option>
                 <option value='0'> -Contas pagas </option>
             </tr>
         </select>
-        <button type="submit">Pesquisar</button>
+        <button style="width:50px"; type="submit">Filtrar</button>
+    </div> 
+    <div> 
+        <label>Filtra por periodo  </label> <br>
+        <input style="width:90px"; type="date" id="dia" name="dia" > até
+        <input style="width:90px"; type="date" id="dia2" name="dia2" >
+            <button style="width:50px"; type="submit">Filtrar</button>
+    </div> 
     </form>
-
-    <form  class='campo_de_busca2' method="GET" action="{% url 'conta_areceber' %}">
-        <laabel>Filtra por periodo: </laabel>
-        <input  type="date" id="dia" name="dia" > <laabel>Até</laabel>
-        <input  type="date" id="dia2" name="dia2" >
-                <button type="submit">Filtrar</button>
-    </form>
-
     <table class="table">
      <thead>
         <tr>

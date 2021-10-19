@@ -13,7 +13,7 @@
          {% csrf_token %}
          <a id="termo_buttao" href="#" onclick="document.getElementById
          ('form_up').style.display='none';"> X</a>
-         <p> Anotar gastos</p>
+         <p> ANOTAR GASTOS</p>
         <hr> 
     <div> 
         <label>Descrição</label><br>
@@ -24,19 +24,17 @@
             <input placeholder="Valor..." type="text" id="valor" name="valor" required/>
     </div>
              <hr>
-            <button type="submit"> salvar</button>
+            <button type="submit"> Salvar</button>
     </form>
         <br>
 <!-- formulário de filtro -->
-    <form class='campo_de_busca1' method="GET" action="{% url 'gastos-extras' %}">
-            <input type="date" id="dia" name="dia" >
-            <button type="submit">Pesquisar</button>
-    </form>
-
-    <form  class='campo_de_busca1' method="GET" action="{% url 'filtro_gastos_extras' %}">
+    <form class='campo_de_busca' method="GET" action="{% url 'filtro_gastos_extras' %}">
+   
+    <div>
+        <label> Filtrar por periodo </label> <br>
         <select  type="search" id="mes" name="mes"/>
                 <tr>
-                    <option value='{{today.month}}'> __Selecionar o mês__</option>
+                    <option value='{{today.month}}'>Mês</option>
                     <option value='1'> -Janeiro</option>
                     <option value='2'> -Fevereiro</option>
                     <option value='3'> -Março</option>
@@ -52,10 +50,10 @@
                 </tr>
                  <br>
         </select>
-
-        <select  type="search" id="ano" name="ano" />
+        
+        <select  type="search" id="ano" name="ano" >
                 <tr>
-                    <option value='{{today.month}}'> __Selecionar o ano__</option>
+                    <option value='{{today.year}}'> Ano</option>
                     <option value='2021'> -2021</option>
                     <option value='2022'> -2022</option>
                     <option value='2023'> -2023</option>
@@ -71,8 +69,13 @@
                 </tr>
                  <br>
         </select>
-
             <button type="submit">Filtrar</button>
+    </div>
+    <div>
+        <label>Por data específica </label> <br>
+        <input type="date" id="dia" name="dia" >
+        <button type="submit">Filtrar</button>
+    </div>  
     </form>
 
     <table class="table">

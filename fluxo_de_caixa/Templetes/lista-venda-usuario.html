@@ -2,26 +2,30 @@
    {% block main%}
 
 <div class='div_Mae'>
-    <h2 class="sub_menu" >&nbsp; VENDAS REALIZADAS 
+    <h2 class="sub_menu" >&nbsp; MINHAS VENDAS
         {% if perms.fluxo_de_caixa.add_venda %}
             <a href="{% url 'atualizar-pedido' %}"> 
             Adicionar 
         {% endif %}
     </a>
     </h2>
-    <form class='campo_de_busca1' method="GET" action="{% url 'lista-venda-usuario' %}">
-       
+    
+    <form class='campo_de_busca' method="GET" action="{% url 'lista-venda-usuario' %}">
+    <div>
+        <label>Número do cliente</label> <br>
         <input  type="search" id="venda" name="venda" placeholder="Número do cliente...">
             <button  type="submit">Buscar</button>
-    </form>
-    <form class='campo_de_busca2' method="GET" action="{% url 'lista-venda-usuario' %}">
+    </div>
+    <div>
+        <label>Selecionar o dia</label> <br>
         <input  type="date" id="dia" name="dia">
             <button  type="submit">Filtrar</button>
-    </form>
-    <form class='campo_de_busca3' method="GET" action="{% url 'lista-venda-usuario' %}">
-        <select  type="search" id="mes" name="mes" required/>
+    </div>
+    <div>
+        <label>Selecionar o mês</label> <br>
+        <select  type="search" id="mes" name="mes" >
                 <tr>
-                        <option value='{{today.month}}'> __Selecionar o mês__</option>
+                        <option value='{{today.month}}'> __Selecionar__</option>
                         <option value='1'> -Janeiro</option>
                         <option value='2'> -Fevereiro</option>
                         <option value='3'> -Março</option>
@@ -38,6 +42,7 @@
                  <br>
         </select>
         <button  type="submit">Filtrar</button>
+    </div>
     </form>
 
     <table class='table'>

@@ -13,7 +13,7 @@
          {% csrf_token %}
                 <a id="termo_buttao" href="#" onclick="document.getElementById
                 ('form_up').style.display='none';"> X</a>
-                <p> NOVO FUNCIONÁRIO</p>
+                <p> NOVO CLIENTE</p>
 
             <hr> 
         <div>
@@ -113,12 +113,13 @@
         </div>
             
             <hr>
-            <button  type="submit"> salvar</button>
+            <button  type="submit"> Salvar</button>
     </form>
        <br>
-    <form class='campo_de_busca1' method="GET" action="{% url 'novo-cliente' %}">
-              <input  type="search" id="client" name="client" placeholder="Cpf ou cnpj...">
-              <button  type="submit">Pesquisar</button>
+    <form class='campo_de_busca' method="GET" action="{% url 'novo-cliente' %}">
+        <label>Buscar clientes</label><br>
+        <input  type="search" id="client" name="client" placeholder="Cpf ou cnpj...">
+        <button  type="submit">Buscar</button>
     </form>
     <table class="table">
      <thead>
@@ -131,7 +132,7 @@
             {%endif%}
 
             {% if perms.pessoa.delete_cliente %}
-                <th >Excluira</th>
+                <th >Excluir</th>
             {%endif%}
         </tr>
     </thead>

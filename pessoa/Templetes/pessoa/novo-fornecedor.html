@@ -91,13 +91,14 @@
                 <input style=" width:200px;"  placeholder=" E-mail..." type="text" id="email" name="email" />
             </div>
             <hr>
-            <button  type="submit"> salvar</button>
+            <button  type="submit"> Salvar</button>
             <br>
     </form>
         <br>
-     <form class='campo_de_busca1' method="GET" action="{% url 'novo-fornecedor' %}">
-              <input  type="search" id="fornecedor" name="fornecedor" placeholder="Código do produto">
-              <button type="submit">Pesquisar</button>
+     <form class='campo_de_busca' method="GET" action="{% url 'novo-fornecedor' %}">
+        <label>Buscar fornecedor</label><br>
+        <input  type="search" id="fornecedor" name="fornecedor" placeholder="Cnpj ou Cpf">
+        <button type="submit">Pesquisar</button>
     </form>
     <table class="table">
      <thead>

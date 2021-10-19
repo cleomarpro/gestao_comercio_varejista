@@ -2,7 +2,7 @@
 {% block main%}
 <!-- CDASTRO  DE PRODUTOS -->
 <div class='div_Mae'>
-  <h2 class="sub_menu" >&nbsp; SACAR
+  <h2 class="sub_menu" >&nbsp; CAIXA
     <a href="{% url 'caixa' %}">Voltar</a>
 </h2>
     <form class='formulario'  method="POST" >
@@ -15,11 +15,11 @@
         <label>{{ caixa.nome_do_caixa }}</label>
         <br>
         <label > <b> Saldo em caixa </b></label>
-        <label>${{ caixa.valor_atualizado }} </label>
+        <label>R${{ caixa.valor_atualizado }} </label>
     </div>
      
     <div>
-        <label for="busca"> Descriçcão</label> <br>
+        <label for="busca"> Descrição</label> <br>
             <input style=" width:200px;" type="text" id="descricao" name="descricao"
                 placeholder="Descriçcão" >
     </div>
@@ -33,12 +33,13 @@
 
     </form>
     <br>
-    <form class='campo_de_busca1' method="GET" >
-        <label> Consultar extrado de </label>
-        <input  type="date" id="dia" name="dia" > <laabel>Até</laabel>
-        <input  type="date" id="dia2" name="dia2" >
-
-        <button  type="submit">Filtrar</button>
+    <form class='campo_de_busca' method="GET" >
+      <div>
+        <label> Consultar histórico de saque</label> <br>
+        <input class="input_data" style="width:90px" type="date" id="dia" name="dia" > <laabel>Até</laabel>
+        <input class="input_data" style="width:90px" type="date" id="dia2" name="dia2" >
+        <button  style="width:50px" type="submit">Filtrar</button>
+      </div>
     </form>
     <table class="table">
       <thead>
@@ -47,6 +48,7 @@
           <th >Valor do saque</th>
           <th >Caixa</th>
           <th >Data do deposito</th>
+          <th >Responsável</th>
 
         </tr>
       </thead>
@@ -58,6 +60,7 @@
                 <td>R$ {{ sacar.sacar }}</td>
                 <td>{{ sacar.caixa.nome_do_caixa }}</td>
                 <td>{{ sacar.data_hora.date }}</td>
+                <td>{{ sacar.user.username}}</td>
            
               {%endif%}
             </tr>

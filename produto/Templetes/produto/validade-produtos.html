@@ -5,9 +5,10 @@
     <h2 class="sub_menu" >&nbsp; VALIDADE DOS PRODUTOS
     </h2>
 <!-- formulário de filtro -->
-    <form class='campo_de_busca1' method="GET" action="{% url 'validade-produtos' %}">
-    
-        <input  type="date" id="dia" name="dia" > <laabel>Até</laabel>
+    <form class='campo_de_busca' method="GET" action="{% url 'validade-produtos' %}">
+        <label>Consultar por periodo</label><br>
+        <input  type="date" id="dia" name="dia" >
+         até
         <input  type="date" id="dia2" name="dia2" >
 
         <button  type="submit">Filtrar</button>
@@ -19,7 +20,7 @@
         <tr>
           <th >Produto</th>
           <th >Código</th>
-          <th  class="col_table"> Fornecedor </th>
+          <th class="col_table"> Fornecedor </th>
           <th class="col_table">CNPJ do fornecedor</th>
           <th >Quantidade</th>
           <th>Validade</th>
@@ -37,9 +38,9 @@
             <td>{{ produto_a_vencer.quantidade}}</td>
             <td>
             {% if produto_a_vencer.validade_produto < today %}
-                 <div <div div style= 'color: red'> {{ produto_a_vencer.validade_produto}}</div>
+                 <label style= 'color: red'> {{ produto_a_vencer.validade_produto}}</label>
             {% else %}
-                 <div>{{ produto_a_vencer.validade_produto}}</div>
+                 <label>{{ produto_a_vencer.validade_produto}}</label>
              {% endif %}
             </td>
 

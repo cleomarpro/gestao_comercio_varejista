@@ -3,10 +3,11 @@
 {% block main %}
 
 <div class=div_Mae>
-  <h2 class="sub_menu" >&nbsp; PRODUTOS</h2>
-    <form class='formulario' method="GET" action="{% url 'listar-produto' %}">
-          <input style=" width:200px;" type="search" id="produt" name="produt" placeholder="Código do produto...">
-          <button style=" width:40px; !important" type="submit">OK</button>
+  <h2 class="sub_menu" >&nbsp; PRODUTOS</h2> 
+    <form class='campo_de_busca' method="GET" action="{% url 'listar-produto' %}">
+      <label>Código do produto</label><br>
+      <input type="search" id="produt" name="produt" placeholder="Código do produto...">
+      <button >Buscar</button>
     </form>
 
     <table class="table">

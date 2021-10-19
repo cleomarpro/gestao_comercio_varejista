@@ -48,27 +48,31 @@
 
 <!-- Formulário de filtros -->
 
-    <form  class='campo_de_busca1' method="GET" action="{% url 'conta_apagar' %}">
+    <form  class='campo_de_busca' method="GET" action="{% url 'conta_apagar' %}">
+    <div>
+        <label>Situação do débito</label><br>
          <select  type="search" id="estado_da_conta" name="estado_da_conta" >
            <tr >
-                <option value=''> __Situação do débito__</option>
+                <option value=''> __Selecionar__</option>
                 <option value=''> -Contas ativas</option>
                 <option value='0'> -Contas pagas</option>
             </tr>
         </select>
             <button type="submit">Filtrar</button>
-    </form>
-
-    <form  class='campo_de_busca2' method="GET" action="{% url 'conta_apagar' %}">
-        <select type="search" id="data_vencimento" name="data_vencimento" required/>
+    </div>
+    
+    <div>
+        <label>Filtrar por periodo</label> <br>
+        <select type="search" id="data_vencimento" name="data_vencimento" >
             <tr >
-                <option value=''> __Escolhe um periodo__</option>
+                <option value=''> __Selecionar__</option>
                 <option value='3'> -Hoje__</option>
                 <option value='2'> -Últimos 5 dias</option>
                 <option value='1'> -Esse mês</option>
              </tr>
         </select>
             <button  type="submit">Filtrar</button>
+    </div>
     </form>
 
     <table class="table">

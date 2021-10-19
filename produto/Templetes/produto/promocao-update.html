@@ -6,7 +6,7 @@
     <form class='formulario' method="POST" >
         {% csrf_token %}
         {% csrf_token %}
-        <p> ATUALIZAR PROMOÇÃO</p>
+        <p> EDITAR PROMOÇÃO</p>
         <hr>
     <div>
         <label> Descrição</label>
@@ -35,7 +35,7 @@
                 name="data_termino"  value='{{ promocao.data_termino}}' required/>
     </div>
         <hr>
-        <button type="submit"> salvar</button>
+        <button type="submit"> Salvar</button>
     </form>
     <br>
 </div>

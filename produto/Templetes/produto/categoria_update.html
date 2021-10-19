@@ -3,18 +3,18 @@
 {% block main %}
 
 <div class='div_Mae'>
+    <h2 class="sub_menu" >&nbsp; CATEGORIA </h2>
     <form class='formulario' method="POST" >
          {% csrf_token %}
-    <h1>
-        <label style=" color:#EEE9E9;">Nova categoria</label>
-    </h1>
-            <a href="{% url 'produto' %}">
-            <label style= " background-color: #6495ED; padding:3px; color:white; font-size:20px; border-radius: 5px;">Novo produto</label> </a>
-            <label> Nome:</label>
+         <p> EDITAR CATEGORIA</p>
+         <hr>
+    <div>
+            <label> Nome</label><br>
             <input style=" width:310px;"  placeholder=" nome..." value="{{categoria.nome}}"
                  type="text" id="nome" name="nome" required/>
-             <br>
-            <button type="submit"> salvar</button>
+    </div>
+            <hr>
+            <button type="submit"> Editar</button>
     </form>
      <br>
 </div>

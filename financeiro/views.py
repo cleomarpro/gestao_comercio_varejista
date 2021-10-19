@@ -39,10 +39,7 @@ class GastosExtras(LoginRequiredMixin, View):
         ano = today.year
         gastos_extras = Gastos_extras.objects.filter(
             usuarios__usuario_cliente= usuario, data_hora__month = mes_atual, data_hora__year= ano ).order_by('-id')
-        Dia= request.GET.get('dia',None)
-        if Dia:
-            gastos_extras = Gastos_extras.objects.filter(
-                usuarios__usuario_cliente= usuario, data_hora__contains = Dia ).order_by('-id')
+       
         return render(
             request, 'financeiro/gastos-extras.html', {'gastos_extras': gastos_extras})
         pass
@@ -159,10 +156,6 @@ class GastosExtrasUpdate(LoginRequiredMixin, View):
             gastos_extras.user_id = user_logado
             gastos_extras.save()
             return redirect('gastos-extras')
-
-            data['gastos_extras'] = gastos_extras
-            return render(
-                request, 'financeiro/gastos_extras_update.html',data)
         else:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
@@ -184,6 +177,10 @@ class FiltroGastosExtras( LoginRequiredMixin, View):
         gastos_extras = Gastos_extras.objects.filter(usuarios__usuario_cliente= usuario, data_hora__month = mes_atual ).order_by('-id')
         Mes= request.GET.get('mes',None)
         Ano= request.GET.get('ano',None)
+        Dia= request.GET.get('dia',None)
+        if Dia:
+            gastos_extras = Gastos_extras.objects.filter(
+                usuarios__usuario_cliente= usuario, data_hora__contains = Dia ).order_by('-id')
         if Mes and Ano:
             gastos_extras = Gastos_extras.objects.filter(
                 usuarios__usuario_cliente= usuario, data_hora__year= Ano, data_hora__month= Mes).order_by('-id')

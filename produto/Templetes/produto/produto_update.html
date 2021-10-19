@@ -3,10 +3,10 @@
 {% block main %}
 
 <div class='div_Mae'>
-    <h2 class="sub_menu" >&nbsp; FORNECEDOR </h2>
+    <h2 class="sub_menu" >&nbsp; PRODUTO </h2>
     <form  style="display:block;" id='formulario' class='formulario'  method="POST" >
         {% csrf_token %}
-        <p> ATUALIZAR FORNECEDOR</p>
+        <p> EDITAR PRODUTO</p>
         <hr>
     <div>
             <label> Nome</label> <br>
@@ -53,7 +53,7 @@
                     type="text" id="valor_compra" name="valor_compra" required/>
         </div>
                 <hr>
-                <button type="submit"> salvar</button>
+                <button type="submit"> Editar</button>
     </form>
 
 

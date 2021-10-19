@@ -35,9 +35,6 @@ class NovoProduto(LoginRequiredMixin, View):
 
         today = date.today()
         produto=Produto.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
-        busca= request.GET.get('produt',None)
-        if busca:
-            produto=Produto.objects.filter(id__iexact=busca, usuarios__usuario_cliente= usuario) # trocar o 'iexact ' por 'icontains' para digitar do objeto completo
         categoria = Categoria.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
         promocao = Promocao.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
         return render(request, 'produto/produto.html', {
@@ -165,33 +162,28 @@ class ProdutoUpdate(LoginRequiredMixin, View):
         codigo_produto_autal= produto.codigo
         novo_codigo_produto= request.POST['codigo']
         produto_id= Produto.objects.filter(usuarios__usuario_cliente= usuarioCliente, codigo= request.POST['codigo']) or 0
-        if codigo_produto_autal == novo_codigo_produto or produto_id != 0:
-            data['mensagen_de_erro'] = 'Esse produto já existe!'
-            data['produto']  = Produto.objects.filter(usuarios__usuario_cliente= usuarioCliente) # listar produtos recem cadastrados
-            data['categoria'] =Categoria.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
-            data['promocao'] = Promocao.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
-            return render(
-                request, 'produto/produto_update.html', data)
+        if codigo_produto_autal != novo_codigo_produto: # verifica se o código do produto foi alterado ous se já existe
+         
+            if produto_id != 0:
+                data['mensagen_de_erro'] = 'Esse produto já existe!'
+                data['produto']  = Produto.objects.filter(usuarios__usuario_cliente= usuarioCliente) # listar produtos recem cadastrados
+                data['categoria'] =Categoria.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
+                data['promocao'] = Promocao.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
+                return render(
+                    request, 'produto/produto_update.html', data)
         if usuario_adm == usuarioId: # Verificar autenticidade do usuário
-            produtos=Produto.objects.filter(id= id)
-            
-            if produtos != 0 or produto_id != 0:
-                produto.id = id
-                produto.nome = request.POST['nome']
-                produto.categoria_id = request.POST['categoria_id']
-                produto.codigo = request.POST['codigo']
-                produto.percentagem_de_lucro = request.POST['percentagem_de_lucro'].replace(',', '.')
-                produto.promocao_id = request.POST['promocao' ]
-                produto.valor_compra = request.POST['valor_compra'].replace(',', '.')
-                produto.user_id = user_logado
-                #imagem = request.POST['imagem'],
-                produto.save()
-                return redirect('produto')
+            produto.id = id
+            produto.nome = request.POST['nome']
+            produto.categoria_id = request.POST['categoria_id']
+            produto.codigo = request.POST['codigo']
+            produto.percentagem_de_lucro = request.POST['percentagem_de_lucro'].replace(',', '.')
+            produto.promocao_id = request.POST['promocao' ]
+            produto.valor_compra = request.POST['valor_compra'].replace(',', '.')
+            produto.user_id = user_logado
+            #imagem = request.POST['imagem'],
+            produto.save()
+            return redirect('produto')
 
-            data['produto']  = produto
-            data['categoria'] =Categoria.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
-            data['promocao'] = Promocao.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
-            return render(request, 'produto/produto_update.html',data)
         else:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
@@ -231,8 +223,11 @@ class FiltroPorCategoria(LoginRequiredMixin, View):
         categoria = Categoria.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
         produto = Produto.objects.filter(usuarios__usuario_cliente= usuario).order_by
         busca= request.GET.get('produt',None)
+        busca_categoria= request.GET.get('busca_categoria',None)
         if busca:
-            produto = Produto.objects.filter(categoria__id= busca, usuarios__usuario_cliente= usuario).order_by('-id') # listar produtos recem cadastrados
+            produto=Produto.objects.filter(codigo__iexact=busca, usuarios__usuario_cliente= usuario) # trocar o 'iexact ' por 'icontains' para digitar do objeto completo
+        if busca_categoria:
+            produto = Produto.objects.filter(categoria__id= busca_categoria, usuarios__usuario_cliente= usuario).order_by('-id') # listar produtos recem cadastrados
         return render(
             request, 'produto/produto.html', {
                 'produto': produto, 'categoria': categoria
@@ -526,10 +521,7 @@ class Entrada_Mercadoria (LoginRequiredMixin, View):
         entrada_Mercadoria = EntradaMercadoria.objects.filter(
             usuarios__usuario_cliente= usuario, data_hora__month = mes_atual).order_by('-id')
         produto = Produto.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
-        busca= request.GET.get('produt',None)
-        if busca:
-            entrada_Mercadoria = EntradaMercadoria.objects.filter(
-                usuarios__usuario_cliente= usuario, produto__id= busca).order_by('-id')
+        
         return render(
             request, 'produto/entrada-mercadoria.html', {
                 'produto': produto, 'fornecedor': fornecedor,
@@ -683,6 +675,10 @@ class FiltrarEntadaPorCategoria(LoginRequiredMixin, View):
             usuarios__usuario_cliente= usuario, data_hora__month = mes_atual ).order_by('-id')
         Mes= request.GET.get('mes',None)
         Ano= request.GET.get('ano',None)
+        busca= request.GET.get('produt',None)
+        if busca:
+            entrada_Mercadoria = EntradaMercadoria.objects.filter(
+                usuarios__usuario_cliente= usuario, produto__id= busca).order_by('-id')
         if Mes and Ano:
             entrada_Mercadoria = EntradaMercadoria.objects.filter(
                 usuarios__usuario_cliente= usuario, data_hora__year= Ano, data_hora__month= Mes).order_by('-id')

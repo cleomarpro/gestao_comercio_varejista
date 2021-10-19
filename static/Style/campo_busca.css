@@ -3,190 +3,85 @@
 @import url('https://fonts.googleapis.com/css?family=Lobster|Philosopher:400i&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Inria+Serif&display=swap');
 
-.campo_de_busca1{
+.campo_de_busca{
     background-color: #F0F8FF;
     margin-left:185px;
     width: 100%;
     font-size:15px;
+    
 }
-.campo_de_busca1 a{
-    position:absolute;
-    right:40px;
+
+.campo_de_busca form div{
+  background-color:blue;
+  width: 25%;
+  padding: 0px;
+  display: inline-block;
 }
 
 @media (max-width: 768px) {
-.campo_de_busca1{
+.campo_de_busca{
     margin-left: 0px;
 
 }
 
-.campo_de_busca1 a{
+.campo_de_busca a{
     right:5px;
 
 }
 }
-.campo_de_busca1 button{
+.campo_de_busca button{
     border: 1px solid #303131;
     border-radius: 2px;
     color:white;
-    width: 100px;
+    width: 70px;
     background-color: #4F4F4F;
     margin-left: -7px;
     margin:3px;
+    padding: 5px
  }
 
-.campo_de_busca1 input{
-    border: 1px solid #303131;
-    border-radius: 2px;
-    margin:3px;
-  }
+.campo_de_busca input{
+  border: 1px solid #303131;
+  border-radius: 5px;
+  margin-left:0px;
+  padding: 5px;
+  margin-left: 5px;
+  font-size: 15px;
+  margin:3px;
+}
 
-.campo_de_busca1 a{
+.campo_de_busca a{
     text-decoration: none;
   }
-.campo_de_busca1 label{
+.campo_de_busca label{
     font-size: 18px;
     padding: 0px;
     margin-right: 2px;
     margin:3px;
+    margin-left:5px;
  }
- .campo_de_busca1 select{
-    border: 1px solid #303131;
-    border-radius: 2px;
-    width: 150px;
-    margin:3px;
-  }
- .campo_de_busca1 h1{
-    background-color: #4F4F4F;
-    color:white;
-    font-size: 30px;
-    width: 100%;
-    border: 1px solid #303131;
-    border-radius: 5px;
-  }
-
-  .campo_de_busca2{
-    background-color: #F0F8FF;
-    font-size:15px;
-    margin-left: 185px;
-    width: 100%;
-
+ .campo_de_busca select{
+  border: 1px solid #303131;
+  border-radius: 5px;
+  margin-left:5px;
+  font-size: 15px;
+  padding: 5px;
+  
 }
-.campo_de_busca2 a{
-    position:absolute;
-    right:40px;
+#dia{
+  padding: 4px;
+}
+#dia2{
+  padding: 4px;
+}
+.input_data{
+  padding: 4px;
 }
 
-@media (max-width: 768px) {
-.campo_de_busca2{
-    margin-left: 0px;
-    margin-top: 0px;;
-    width: 100%;
+.campo_de_busca div{
+  width: 300px;
+  padding: 0px;
+  display: inline-block;
+ 
 }
-.campo_de_busca2 a{
-    right: 0px;
-}
-}
-.campo_de_busca2 button{
-    border: 1px solid #303131;
-    border-radius: 2px;
-    color:white;
-    width: 80px;
-    background-color: #4F4F4F;
-    margin-left: -7px;
-    margin:3px;
- }
 
-.campo_de_busca2 input{
-    border: 1px solid #303131;
-    border-radius: 2px;
-    margin:3px;
-
-  }
-
-.campo_de_busca2 label{
-    font-size: 18px;
-    padding: 0px;
-    margin-right: 2px;
-    margin:3px;
-
- }
-
- .campo_de_busca2 select{
-    border: 1px solid #303131;
-    border-radius: 2px;
-    width: 200px;
-    margin:3px;
-
-  }
- .campo_de_busca2 h1{
-    background-color: #4F4F4F;
-    color:white;
-    font-size: 30px;
-    width: 100%;
-    border: 1px solid #303131;
-    border-radius: 5px;
-
-  }
-
-  .campo_de_busca3{
-    background-color: #F0F8FF;
-    margin-left:185px;
-    width: 100%;
-    font-size:15px;
-}
-.campo_de_busca3 a{
-    position:absolute;
-    right:40px;
-}
-@media (max-width: 768px) {
-.campo_de_busca3{
-    margin-left: 0px;
-    margin-top: 0px;
-    width: 100%;
-}
-.campo_de_busca3 a{
-    right: 0px;
-}
-}
-.campo_de_busca3 button{
-    border: 1px solid #303131;
-    border-radius: 2px;
-    color:white;
-    width: 80px;
-    background-color: #4F4F4F;
-    margin-left: -7px;
-    margin-top: -62px;
-    margin:3px;
- }
-
-.campo_de_busca3 input{
-    border: 1px solid #303131;
-    border-radius: 2px;
-    margin:3px;
-
-  }
-
-.campo_de_busca3 select{
-    border: 1px solid #303131;
-    border-radius: 2px;
-    width: 150px;
-    margin:3px;
-
-  }
-
-.campo_de_busca3 label{
-    font-size: 18px;
-    padding: 0px;
-    margin-right: 2px;
-    margin:3px;
-
- }
- .campo_de_busca3 h1{
-    background-color: #4F4F4F;
-    color:white;
-    font-size: 30px;
-    width: 100%;
-    border: 1px solid #303131;
-    border-radius: 5px;
-  }
