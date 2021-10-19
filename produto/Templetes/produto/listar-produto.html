@@ -13,7 +13,7 @@
       <thead>
         <tr>
           <th >Nome</th>
-          <th >Categoria </th>
+          <th class="col_table">Categoria </th>
           <th >Código</th>
           <th >Valor venal</th>
           <th >Estoque</th>
@@ -24,7 +24,7 @@
         {% for produto in produto %}
             <tr>
                 <td>{{ produto.nome }}</td>
-                <td>{{ produto.categoria.nome }}</td>
+                <td class="col_table">{{ produto.categoria.nome }}</td>
                 <td>{{ produto.codigo }}</td>
                 <td>R$ {{ produto.valor_venal }}</td>
                 <td>
