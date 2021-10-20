@@ -75,11 +75,11 @@
 
 <!-- Formulário de filtros -->
     <form class='campo_de_busca' method="GET" action="{% url 'conta_areceber' %}">
-    <div>
+    <div style="width:50%";>
         <label> Cpf ou Cnpj / Situação do débito</label><br>
-        <input style="width:125px"; type="search" id="client" name="client" placeholder="Cpf ou Cnpj...">
+        <input style="width:125px"; type="search" id="client" name="client" placeholder="Cpf ou Cnpj..." >
         
-        <select style="width:100px"; type="search" id="estado_da_conta" name="estado_da_conta" >
+        <select style="width:90px"; type="search" id="estado_da_conta" name="estado_da_conta" >
            <tr >
                 <option value='1'> Selecionar</option>
                 <option value=''> -Contas ativas </option>
@@ -90,9 +90,9 @@
     </div> 
     <div> 
         <label>Filtra por periodo  </label> <br>
-        <input style="width:90px"; type="date" id="dia" name="dia" > até
-        <input style="width:90px"; type="date" id="dia2" name="dia2" >
-            <button style="width:50px"; type="submit">Filtrar</button>
+        <input style="width:87px"; type="date" id="dia" name="dia" > até
+        <input style="width:87px"; type="date" id="dia2" name="dia2" >
+        <button style="width:47px"; type="submit">Filtrar</button>
     </div> 
     </form>
     <table class="table">
