@@ -3,7 +3,7 @@
 {% block main %}
 
 <div class= 'div_Mae'>
-    <h2 class="sub_menu" >&nbsp; ENTRADA DE MERCADORIA </h2>
+    <h2 class="sub_menu" >&nbsp; ENTRADA DE MERCADORIA <a href="{% url 'entrada-mercadoria' %}">Cancelar</a></h2>
     <form class='formulario' method="POST" >
         {% csrf_token %}
         <p> EDITAR MERCADORIA</p>
@@ -39,7 +39,7 @@
         </div>
         <div>
             <label> Validade do produto</label> <br>
-            <input style=" width:150px;" value="{{entrada_Mercadoria.validade_produto}}"
+            <input style=" width:150px; padding: 3px;" value="{{entrada_Mercadoria.validade_produto}}"
                 type="date" id="validade_produto" name="validade_produto"  required/>
         </div>
             <hr>

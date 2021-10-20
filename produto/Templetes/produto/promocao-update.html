@@ -2,36 +2,36 @@
 
 {% block main %}
 <div class='div_Mae'>
-    <h2 class="sub_menu" >&nbsp; PROMOÇÃO </h2>
+    <h2 class="sub_menu" >&nbsp; PROMOÇÃO <a href="{% url 'promocao' %}"> Cancelar</a></h2>
     <form class='formulario' method="POST" >
         {% csrf_token %}
         {% csrf_token %}
         <p> EDITAR PROMOÇÃO</p>
         <hr>
     <div>
-        <label> Descrição</label>
+        <label> Descrição</label> <br>
             <input style=" width:200px;"  placeholder=" Descrição..." type="text"
                 id="descricao" name="descricao" value='{{ promocao.descricao}}' required/>
     </div>
     <div>
-        <label> Desconto a partir</label>
+        <label> Desconto a partir</label> <br>
             <input style=" width:150px;" autofocus="autofocus" placeholder=" Digite a quantidade..."
                 type="text" id="quantidade_promocional" name="quantidade_promocional"
                 value='{{ promocao.quantidade_promocional}}' required/>
     </div>
     <div>
-        <label> Desconto promocional (%)</label>
+        <label> Desconto promocional (%)</label> <br>
             <input style=" width:110px;"  placeholder=" 0,00%:" type="text"
                 id="desconto" name="desconto" value='{{ promocao.desconto}}' required/>
     </div>
     <div>
-        <label> Data de iníco</label>
-            <input style=" width:150px;"type="date" id="myDate" name="data_inicio"
+        <label> Data de iníco</label> <br>
+            <input style=" width:150px; padding:3px;"type="date" id="myDate" name="data_inicio"
                 value='{{ promocao.data_inicio}}' required/>
     </div>
     <div>
-        <label> Data de termino</label>
-            <input style=" width:150px;" type="date" id="data_termino"
+        <label> Data de termino</label> <br>
+            <input style=" width:150px; padding:3px;" type="date" id="data_termino"
                 name="data_termino"  value='{{ promocao.data_termino}}' required/>
     </div>
         <hr>

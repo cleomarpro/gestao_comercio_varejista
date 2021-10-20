@@ -18,7 +18,7 @@
 
         <hr> 
         <div> 
-            <label> Produto</label>
+            <label> Produto</label> <br>
             <select style=" width:200px;" type="search" id="produto" name="produto" required/>
                 <tr>
                     <option value=''> __Selecionar__</option>
@@ -30,7 +30,7 @@
                 <a  href="{% url 'produto' %}">+</a>
         </div>
         <div>
-            <label> Fornecedor</label>
+            <label> Fornecedor</label> <br>
             <select style=" width:200px;" type="search" id="fornecedor" name="fornecedor" required/>
                 <tr>
                     <option value=''> __Selecionar__</option>
@@ -42,13 +42,13 @@
                 <a href="{% url 'novo-fornecedor' %}">+</a>
         </div>
         <div>
-            <label> Quantidade</label>
+            <label> Quantidade</label> <br>
             <input style=" width:200px;"  placeholder=" Quantidade..."
                 type="text" id="quantidade" name="quantidade"  required/>
         </div>
         <div>
-            <label> Validade do produto</label>
-            <input style=" width:150px;"
+            <label> Validade do produto</label> <br>
+            <input style=" width:150px; padding:3px;"
                 type="date" id="validade_produto" name="validade_produto"  required/>
         </div>
             <hr>

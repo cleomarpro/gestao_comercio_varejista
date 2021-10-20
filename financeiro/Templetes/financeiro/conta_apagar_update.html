@@ -3,31 +3,31 @@
 {% block main %}
 
 <div class='div_Mae'>
-    <h2 class="sub_menu" >&nbsp; CONTA A PAGAR </h2>
+    <h2 class="sub_menu" >&nbsp; CONTA A PAGAR <a href="{% url 'conta_apagar' %}">Cancelar</a></h2>
     <form class='formulario' method="POST" >
         {% csrf_token %}
         <p> EDITAR CONTA</p>
         <hr>
 
         <div>
-            <label> Observação:</label>
+            <label> Observação:</label> <br>
                 <input style=" width:220px;"  placeholder=" Observação ou descrição..."
                     type="text" id="observacao" name="observacao" value="{{conta.observacao}}" required/>
         </div>
         <div>
-            <label> Valor:</label>
+            <label> Valor:</label> <br>
                 <input style=" width:120px;"  placeholder="Valor..." type="number" step=".01" lang="nb"
                     id="valor" name="valor" value="{{conta.valor}}" required/>
         </div>
         <div>
-             <label> Parcelas:</label>
+             <label> Parcelas:</label> <br>
                 <input style=" width:120px;" value='1' placeholder=" parcelas:" value="{{conta.parcelas}}"
                     type="text" id="parcelas" name="parcelas" required/>
         </div>
         <div>
                 <input type="hidden" value='2' name="tipo_de_conta_id">
 
-            <label> Data de vencimento:</label>
+            <label> Data de vencimento:</label> <br>
                 <input style=" width:150px;"  placeholder=" Data de vencimento:" value="{{conta.data_de_vencimento}}"
                     type="date" id="data_de_vencimento" name="data_de_vencimento" required/>
         </div>

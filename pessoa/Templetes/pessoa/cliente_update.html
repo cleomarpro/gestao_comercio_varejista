@@ -3,7 +3,7 @@
 {% block main %}
 
 <div class='div_Mae'>
-    <h2 class="sub_menu" >&nbsp; CLIENTE </h2>
+    <h2 class="sub_menu" >&nbsp; CLIENTE <a href="{% url 'novo-cliente' %}">Cancelar</a></h2>
     <form class='formulario' method="POST" >
          {% csrf_token %}
          <p> EDITAR CLIENTE</p>

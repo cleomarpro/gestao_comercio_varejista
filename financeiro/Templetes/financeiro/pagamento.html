@@ -2,14 +2,18 @@
 {% block main%}
 <!-- CDASTRO  DE PRODUTOS -->
 <div class='div_Mae'>
+  <h2 class="sub_menu" >&nbsp; PAGAMENTO  <a href="{% url 'conta_apagar' %}">Cancelar</a></h2>
 <form class='formulario' method="POST">
     {% csrf_token %}
-          <h1 > Novo pagamento</h1>
-    <label>Observacão:</label>
-      <input style=" width:150px;" type='text' id='observacao' name='observacao'>
-        <br>
-    <label > Quantidade de parcelas:</label>
-        <select style=" width:150px;" type="select"  name="quantidade_de_parcelas"
+          <P> Novo pagamento</P>
+      <hr>
+      <div>
+          <label>Observacão</label><br>
+        <input style=" width:200px;" type='text' id='observacao' name='observacao'>
+      </div>
+      <div>
+        <label > Quantidade de parcelas</label><br>
+        <select style=" width:200px;" type="select"  name="quantidade_de_parcelas"
             id="quantidade_de_parcelas" required/>
             <tr>
                 <option value=''> __Selecionar__</option>
@@ -18,11 +22,12 @@
             {% endfor %}
             </tr>
         </select>
-         <br>
+      </div>
+         <hr>
         <button  type="submit">Pagar</button>
 
 </form>
-
+<br>
     <table class="table">
       <thead>
         <tr>

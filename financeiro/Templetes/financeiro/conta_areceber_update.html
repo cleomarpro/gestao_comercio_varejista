@@ -3,7 +3,7 @@
 {% block main %}
 
 <div class='div_Mae'>
-    <h2 class="sub_menu" >&nbsp; CONTA A RECEBER </h2>
+    <h2 class="sub_menu" >&nbsp; CONTA A RECEBER <a href="{% url 'conta_areceber' %}">Cancelar</a> </h2>
     <form class='formulario' method="POST" >
         {% csrf_token %}
     
@@ -11,12 +11,12 @@
        <hr>
       
         <div>
-            <label> Observação</label>
+            <label> Observação</label> <br>
                 <input style=" width:220px;"  placeholder=" Observação ou descrição..."
                     type="text" id="observacao" name="observacao" value="{{conta.observacao}}"/>
         </div>
         <div>
-            <label> Cliente</label>
+            <label> Cliente</label> <br>
                 <select style=" width:200px;" type="search" id="cliente_id" name="cliente_id" required/>
 
                         <tr>
@@ -31,7 +31,7 @@
         </div>   
         <div>
                 
-            <label> Venda</label>
+            <label> Venda</label> <br>
                 <select style=" width:220px;" type="search" id="venda_id" name="venda_id" required/>
                         <tr>
                                 <option value='{{conta.venda.id}}'> {{conta.venda}}</option>
@@ -42,20 +42,20 @@
                 </select>
         </div>
         <div>
-            <label> Valor</label>
+            <label> Valor</label> <br>
                 <input style=" width:200px;"  placeholder="Valor..." type="number" step=".01" lang="nb"
                    id="valor" name="valor" required value="{{conta.valor}}" />
         </div>   
         <div>
-             <label> Parcelas</label>
+             <label> Parcelas</label> <br>
                 <input style=" width:200px;" value='1' placeholder=" parcelas..."
                     type="text" id="parcelas" name="parcelas" required value="{{conta.parcelas}}" />
         </div>   
        
                 <input type="hidden" value='1' name="tipo_de_conta_id">
         <div>
-            <label> Data de vencimento</label>
-                <input style="width:150px;"  placeholder=" Data de vencimento:" value="{{conta.data_de_vencimento}}"
+            <label> Data de vencimento</label> <br>
+                <input style="width:150px; padding:3px"  placeholder=" Data de vencimento:" value="{{conta.data_de_vencimento}}"
                     type="date" id="data_de_vencimento" name="data_de_vencimento" required/>
         </div>   
              <hr> 

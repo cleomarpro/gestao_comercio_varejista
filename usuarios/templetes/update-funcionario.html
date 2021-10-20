@@ -2,7 +2,7 @@
 {% block main%}
 
     <div class='div_Mae'> 
-        <h2 class="sub_menu" >&nbsp; FUNCIONÁRIO </h2>
+        <h2 class="sub_menu" >&nbsp; FUNCIONÁRIO <a href="{% url 'novo-funcionario' %}">Cancelar</a></h2>
         <form class='formulario' method="post" >
             {% csrf_token %}
         <p> EDITAR FUNCIONÁRIO</p>

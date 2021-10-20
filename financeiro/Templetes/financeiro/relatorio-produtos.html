@@ -3,17 +3,24 @@
    {% block main%}
 
 <div class=div_Mae>
-
-<form class='formulario'>
-          <h1> Relatório por produto </h1>
+  <h2 class="sub_menu" >&nbsp; RELATÓRIO POR PRODUTO 
+  <a style="color:brown;"
+  href="#" onclick="document.getElementById('form_up').style.display='block';"> Importante saber 
+</a>
+</h2>
+<form id="form_up" class='formulario' style="display: none;"> 
+  <a id="termo_buttao" href="#" onclick="document.getElementById
+        ('form_up').style.display='none';"> X</a>
+  <p> AVISO IMPORTANTE!</p>
+  <hr>
+  <p style='font-size: 14px; color: red;'> A coluna (lucro obitido) desta tabela, não inclui os descontos inserido no fluxo de caixa, ou melhor,
+    o cálculo é baseado no valor venal, sem descontos!</p>
 </form>
-
-<br>
-<form class='campo_de_busca1' method="GET" action="{% url 'relatorio-produtos' %}">
-    <li style='font-size: 12px; color: red;'> A coluna (lucro obitido) desta tabela, não inclui os descontos inserido no fluxo de caixa, ou melhor,
-            o cálculo é baseado no valor venal, sem descontos!</li>
-            <select type="select"  name="ano" id="ano" >
-                <option value=" {{ano_atual}}" >__Escolha um Ano__ </option>
+<hr>
+<form class='campo_de_busca' method="GET" action="{% url 'relatorio-produtos' %}">
+    
+            <select style="width:70px" type="select"  name="ano" id="ano" >
+                <option value=" {{ano_atual}}" >Ano </option>
                 <option value="2021" >-2021 </option>
                 <option value="2022" >-2022</option>
                 <option value="2023" >-2023</option>
@@ -22,8 +29,8 @@
                 <option value="2026" >-2026</option>
             </select >
 
-                <select type="select"  name="mes" id="mes"  >
-                <option value="{{MES}}" >__Escolha um mês__ </option>
+                <select style="width:70px" type="select"  name="mes" id="mes"  >
+                <option value="{{MES}}" >Mês</option>
                 <option value="1" >-Janeiro </option>
                 <option value="2" >-Fevereiro</option>
                 <option value="3" >-Março</option>
@@ -38,25 +45,25 @@
                 <option value="12" >-Dezembro</option>
             </select >
 
-            <select type="select"  name="filtrar_produto" id="filtrar_produto" >
-                <option value="-lucro_obtido" >__Escolha um filtro__</option>
+            <select style="width:70px" type="select"  name="filtrar_produto" id="filtrar_produto" >
+                <option value="-lucro_obtido" >Filtro</option>
                 <option value="-quantidade" >-Mais vendido </option>
                 <option value="quantidade" >-Menus vendido </option>
                 <option value="-lucro_obtido" >-Maior lucrou</option>
                 <option value="lucro_obtido" >-Menor lucrou</option>
            </select >
-           <button style='margin:10px;' type="submit">Filtrar</button>
+           <button style="width:50px" style='margin:10px;' type="submit">Filtrar</button>
 </form>
 
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">ID do produto</th>
-          <th scope="col">Nome do produto</th>
-          <th scope="col">Qtd vendido</th>
-          <th scope="col">Valor investido</th>
-          <th scope="col">Valor da venda</th>
-          <th scope="col">Lucro Obitido</th>
+          <th class="col_table">ID do produto</th>
+          <th >Nome do produto</th>
+          <th >Qtd vendido</th>
+          <th >Valor investido</th>
+          <th >Valor da venda</th>
+          <th >Lucro Obitido</th>
 
         </tr>
       </thead>
@@ -64,7 +71,7 @@
 
         {% for item_de_pedido in item_de_pedido %}
             <tr>
-                <td>{{ item_de_pedido.produto__id }}</td>
+                <td class="col_table">{{ item_de_pedido.produto__id }}</td>
                 <td>{{ item_de_pedido.produto__nome }}</td>
                 <td>{{ item_de_pedido.quantidade | floatformat:2}}-item</td>
                 <td>R$ {{ item_de_pedido.total_investimento | floatformat:2 }}</td>
