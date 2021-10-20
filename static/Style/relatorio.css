@@ -11,15 +11,21 @@
     width: 600px;
     font-size:15px;
 }
-.relatorio h4{
-    background-color: #4F4F4F;
-    color:white;
-    text-align: center;
-    padding:5px;
-    margin-left: 10px;
-    width: 94%;
-    font-size: 25px;
-
+.sub_menu_relat{
+  background-color: #454549;
+  margin-left:185px;
+  width: 600px;
+  font-size:18px;
+  color: rgb(245, 241, 241);
+  padding-block: 7px;
+}
+.relatorio h2{
+    background-color: #454549;
+    margin-left:5px;
+    width: 96%;
+    font-size:18px;
+    color: rgb(245, 241, 241);
+    padding-block: 7px;
 }
 .relatorio label{
     border: 1px solid #303131;
@@ -32,72 +38,84 @@
 
 }
 
-.titulo_relatorio{
-    background-color: #4F4F4F;
-    color:white;
-    margin-left:185px;
-    border: 1px solid #303131;
-    border-radius: 5px;
-    font-size:30px;
-    width: 600px;
-    text-align: center;
-}
-.campo_de_filtro {
+.campo_de_busca_relat {
     background-color: #F0F8FF;
     margin-left:185px;
     font-size:18px;
     width: 580px;
     padding:10px;
-
+}
+.campo_de_busca_relat form div{
+  background-color:blue;
+  width: 25%;
+  padding: 0px;
+  display: inline-block;
 }
 
-.campo_de_filtro select{
-    font-size:15px;
+.campo_de_busca_relat select{
+    border: 1px solid #303131;
+    border-radius: 5px;
+    margin-left:5px;
+    font-size: 15px;
+    padding: 5px;
+}
+
+.campo_de_busca_relat input{
+    border: 1px solid #303131;
+    border-radius: 5px;
+    margin-left:0px;
+    padding: 5px;
+    margin-left: 5px;
+    font-size: 15px;
+    margin:3px;
+}
+
+.campo_de_busca_relat label{
+    font-size: 18px;
+    padding: 0px;
+    margin-right: 2px;
+    margin:3px;
+    margin-left:5px;
+ }
+
+.campo_de_busca_relat button{
     border: 1px solid #303131;
     border-radius: 2px;
-    padding:3px;
-
-}
-
-.campo_de_filtro input{
-    font-size:16px;
-    border: 1px solid #303131;
-    border-radius: 2px;
-    padding:1px;
-
-
-}
-
-.campo_de_filtro button{
+    color:white;
+    width: 70px;
     background-color: #4F4F4F;
-    border: 1px solid #303131;
-    color: white;
-    border-radius: 2px;
-    font-size:16px;
-    width: 80px;
     margin-left: -7px;
-    padding:3px;
+    margin:3px;
+    padding: 6px
 }
 
 @media (max-width: 768px) {
 .relatorio{
     margin-left:0px;
-    width: 100%;
-    padding:10px;
+    width: 98%;
+    padding:5px;
 }
 
 .relatorio label{
     font-size:18px;
 }
-.titulo_relatorio{
+
+.campo_de_busca_relat {
     margin-left:0px;
-    padding: 10px;
-    width: 100%;
-}
-.campo_de_filtro {
-    margin-left:0px;
-    padding: 10px;
-    width: 100%;
+    padding: 5px;
+    width: 98%;
 
 }
+.sub_menu_relat{
+    margin-left:0px;
+    width:100%;
 }
+
+}
+
+
+
+
+
+
+

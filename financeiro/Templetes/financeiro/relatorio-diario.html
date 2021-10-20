@@ -2,18 +2,19 @@
 
    {% block main%}
 
-<div class=div_Mae>
-
-<form class='campo_de_filtro' method="GET" action="{% url 'relatorio_diario' %}">
-    <input style=" width:150px;" type="date"  name="dia" id="dia"  required/>
-
-    <button  type="submit">Filtrar</button>
+<div class='div_Mae'>
+<h2 class='sub_menu_relat'>&nbsp; RELATÓRIO DIÁRIO</h2>
+<form class='campo_de_busca_relat' method="GET" action="{% url 'relatorio_diario' %}">
+    <div>
+        <label>Escolhe uma data</label><br>
+        <input style=" width:150px;" type="date"  name="dia" id="dia"  required/>
+        <button  type="submit">Filtrar</button>
+    </div>
 </form>
 
-<h3 class='titulo_relatorio'> Relarório diário</h3>
+<br>
 
 <form class='relatorio'>
-
     <label>Total invertido: R$ {{invertimento_do_dia | floatformat:2}}</label>
      <br>
 <label>
@@ -34,7 +35,7 @@
       <br>
     <label>Lucro: R$ {{lucro_diario | floatformat:2}}</label>
 
-    <h4> Outras observações</h5>
+    <h2>&nbsp; Outras observações</h2>
 
     <label>Gastos extras: R$ {{gastos_extras_diario.gastos | floatformat:2}}</label>
     <br>

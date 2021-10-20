@@ -3,30 +3,31 @@
    {% block main%}
 
 <div class='div_Mae'>
+<h2 class="sub_menu_relat" >&nbsp; RELATÓRIO MENSAL </h2>
+<form class='campo_de_busca_relat' method="GET" action="{% url 'relatorio_mensal' %}">
+    <div>
 
-<form class='campo_de_filtro' method="GET" action="{% url 'relatorio_mensal' %}">
+        <select style=" width:180px;" type="select"  name="mes" id="mes"  >
+        <option value="{{MES}}" >Escolha um mês </option>
+        <option value="01" >Janeiro </option>
+        <option value="02" >Fevereiro</option>
+        <option value="03" >Março</option>
+        <option value="04" >Abril </option>
+        <option value="05" >Maio</option>
+        <option value="06" >Junio</option>
+        <option value="07" >Julho </option>
+        <option value="08" >Agosto</option>
+        <option value="09" >Setembro</option>
+        <option value="10" >Outubro </option>
+        <option value="11" >Novembroo</option>
+        <option value="12" >Dezembro</option>
+    </select >
 
-                <select style=" width:150px;" type="select"  name="mes" id="mes"  >
-                <option value="{{MES}}" >Escolha um mês </option>
-                <option value="01" >Janeiro </option>
-                <option value="02" >Fevereiro</option>
-                <option value="03" >Março</option>
-                <option value="04" >Abril </option>
-                <option value="05" >Maio</option>
-                <option value="06" >Junio</option>
-                <option value="07" >Julho </option>
-                <option value="08" >Agosto</option>
-                <option value="09" >Setembro</option>
-                <option value="10" >Outubro </option>
-                <option value="11" >Novembroo</option>
-                <option value="12" >Dezembro</option>
-            </select >
-
-           <button  type="submit">Filtrar</button>
-
+   <button  type="submit">Filtrar</button>
+ </div>
 </form >
 
-<h3 class='titulo_relatorio'> Relarório mensal</h3>
+<br>
 
 <form class='relatorio'>
 
@@ -51,7 +52,7 @@
     <br>
     <label>Lucro obtido: R$ {{lucro_mensal | floatformat:2}}</label>
 
-     <h4> Outras observações</h4>
+     <h2 >&nbsp; Outras observações</h2>
 
      <label >Gastos extras: R$ {{gastos_extras.gastos | floatformat:2}}</label>
     <br>
