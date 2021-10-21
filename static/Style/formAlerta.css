@@ -6,7 +6,7 @@
 
 .divAlerta{
     position:absolute;
-    width: 550px;
+    width: 350px;
     text-align: center;
 
 }
@@ -14,7 +14,7 @@
     background-color: #B5B5B5;
     margin-left:250px;
     margin-top: -200px;
-    width: 350px;
+    width: 300px;
     padding: 10px;
     border: 1px solid #303131;
     border-radius: 2px
@@ -23,9 +23,9 @@
     display:none;
 }
 .butao_X{
-    background-color:  red;
-    border-radius: 2px;
-    color:white;
+    background-color:  rgb(236, 236, 242);
+    border-radius: 1px;
+    color:rgb(240, 10, 10);
     margin-left: 372px;
     margin-top: -200px;
     position:absolute;
@@ -45,30 +45,35 @@
     margin:0% 25% 25% 25% ;
     padding: 8px;"
 }
-@media (max-width: 450px) {
+@media (max-width: 768px) {
     .mensagem_de_erro{
+        margin-left: 0px;
         width: 100%;
         margin: 0px;
     }
 
-@media (max-width: 450px) {
-.butao_X{
-    opacity:0;
-    margin-left: -190px;
-    margin-top: -300px;
-    position:absolute;
-    padding: 50%;
-}
+@media (max-width:768px) {
+    .butao_X{
+        background-color:rgb(245, 245, 249);
+        color:rgb(216, 6, 6);
+        margin-left: 50%;
+        margin-top: -400px;
+        padding-: 5%;
+        
+    }
+    }
 
+.divAlerta{
+    margin-left: 0px;
+    width: 90%;
+    text-align: center;
+}
 
 .formAlerta{
     margin-left:0px;
-    margin-top: -200px;
-    width: 350px;
-    padding: 10px;
-    border: 1px solid #303131;
-    border-radius: 5px
-    position:absolute;
+    margin-top: -400px;
+    width: 100%;
+   
 
 }
 #atalho{
