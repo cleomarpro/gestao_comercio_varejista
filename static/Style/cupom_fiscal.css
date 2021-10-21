@@ -12,7 +12,9 @@
     display:none;
 
 }
-
+#div_cupomFiscal{
+    display:none;
+}
 .cupom_fiscal form{
     background-color: #FFF8DC;
     margin-left:212px;
@@ -20,6 +22,7 @@
     padding: 10px;
     border: 1px solid #303131;
     border-radius: 2px
+    display:none;
 
 }
 .cupom_fiscal labem{
@@ -36,15 +39,15 @@
     margin-left:560px;
     margin-top:00px;
 }
-.bt_visualizar_cupom{
-    margin-top:-30px;
+#bt_visualizar_cupom{
+    margin-top:-19px;
     border: 1px solid #303131;
     border-radius: 2px;
     color:white;
     background-color: #4F4F4F;
-    margin-left:195px;
+    margin-left:610px;
     position:absolute;
-    width: 317px;
+    width: 180px;
 }
 
 
@@ -76,14 +79,8 @@
 
 }
 @media (max-width: 768px) {
-.bt_visualizar_cupom{
-    margin-top:-130px;
-    background-color: #4F4F4F;
-    border-radius: 10px;
-    color:white;
-    width: 70%;
-    margin-left:10px;
-    position:static;
+#bt_visualizar_cupom{
+   margin-left: 0px;
 }
 .cupom_fiscal{
     position:absolute;

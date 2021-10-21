@@ -4,27 +4,22 @@
 @import url('https://fonts.googleapis.com/css?family=Inria+Serif&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Courier+Prime&display=swap');
 
-.div_caixa_cabecalho{
-    height:280px;
+
+
+#div_caixa div{
+    margin-left:185px;
+    width:950px;
 }
-.div_Mae{
-    margin-top:80px;
-    margin-right:220px;
+#div_caixa div div{
+    display:inline-block;
     margin-left:10px;
+    width:400px;
 }
-
-.divPainel{
-    background-color: #F0F8FF;
-    color:white;
-    position:fixed;
-    margin-left: 645px;
-    margin-top: -373px;
-    width: 450px;
-
-
-
+#divPainel {
+    height: 130px;
+    width: 100%;
 }
-.divPainel label{
+#divPainel label{
     font-size: 25px;
     color:white;
     margin: 2px;
@@ -32,30 +27,18 @@
     border: 1px solid #303131;
     border-radius: 2px;
     display: inline-block;
+    
 }
-
-.div_Mae div{
-   width: 450px;
-
+#div_painel_tabela{
+    width: 400px;
 }
-
-.caixaTitulo{
-    width: 100%;
-    background-color: #4F4F4F;
-    color:white;
-    font-family: 'Philosopher',  sans-serif;
-    font-size: 22px;
-    text-align: center;
-}
-
 .caixa{
     background-color: #F0F8FF;
-    margin-left:185px;
     width: 100%;
-    font-size: 18;
+    font-size: 16;
+    height: 86px;
+
 }
-
-
 
 .caixa ul{
     padding: 10px;
@@ -99,16 +82,18 @@
   }
 
  .caixa button{
-   margin-top:0px;
-   border: 1px solid #303131;
-   border-radius: 2px;
-   color:white;
-   width: 70%;
-   background-color: #4F4F4F;
+    position:absolute;
+    margin-right: -30px;
+    margin-top:0px;
+    border: 1px solid #303131;
+    border-radius: 2px;
+    color:white;
+    width: 180px;
+    background-color: #4F4F4F;
   }
 #bt_novo_pedido{
-   margin-top:-277px;
-   margin-left:360px;
+   margin-top:-134px;
+   margin-left:308px;
    border: 1px solid #303131;
    border-radius: 5px;
    color:black;

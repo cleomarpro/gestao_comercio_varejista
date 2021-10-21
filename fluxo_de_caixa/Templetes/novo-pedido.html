@@ -1,12 +1,22 @@
 {% extends 'base.html'%}
 {% block main%}
 
-<div class=div_Mae>
+<div class='div_Mae'>
+    
 <!-- Caixa-->
-    <div class='div_caixa_cabecalho'>
-        <form class='caixa' method="POST" action="{% url 'atualizar-pedido' %}">
+<div id="div_caixa">
+   
+<div>
+<div>
+    <h2 class="sub_menu" style="width:100%; margin-left: 0px;">&nbsp; Cliente: {{venda.id}} </h2>
+    <form id="caixa_id" class='caixa' method="POST" action="{% url 'atualizar-pedido' %}">
         {% csrf_token %}
-        <h2  style=" color:#EEE9E9;"> Cliente: {{venda.id}}</h2>
+        {% if venda %}
+        <button  style="width:70px;" accesskey="a" click='2' > Atualizar  </button>
+    {% else %}
+        <button accesskey="i" > Iniciar </button>
+    {% endif %} 
+    <br>
                 <input type="hidden" value="{{venda.id}}" name="venda_id">
             <label> Descrição:</label>
                 <input style=" width:63%;"  placeholder=" Descrição da venda..."
@@ -27,7 +37,7 @@
            </select >
 
             {% if perms.fluxo_de_caixa.add_venda %}
-            <label id='label_input_desconto'> Desconto (%):</label>
+            <label id='label_input_desconto'> Desconto:</label>
                 <input id='label_input_desconto' style=" width:120px"; type="number" step=".01" lang="nb"
                     placeholder="0,0%"  name="desconto" id="desconto"value="{{ venda.desconto}}">
             {% endif%}
@@ -51,7 +61,7 @@
                  <br>
 
              {% else %}
-            <label id='label_input_desconto'> Desconto(%):</label>
+            <label id='label_input_desconto'> Desconto:</label>
                 <input id='label_input_desconto' style=" width:120px"; type="number" step=".01" lang="nb"
                     placeholder="0,0%"  name="desconto" id="desconto"value="{{ venda.desconto}}" disabled=" true">
                 <br>
@@ -83,37 +93,34 @@
                     name="valor_debito"value="0" required/>
 
             {%if venda.tipo_de_pagamento_id == '1'%}
-                <label> Valor recebido $:</label>
+                <label> Valor recebido:</label>
                     <input style=" width:20%;" type="number" step=".01" lang="nb"
                         id="valor_recebido"name="valor_recebido" value="{{ venda.valor_recebido}}"  accesskey="c" required/>
 
-
             {%elif venda.tipo_de_pagamento_id == '4'%}
-            <label> Cédula $:</label>
-                <input style=" width:20%;" type="number" step=".01" lang="nb" id="valor_recebido"
-                 name="valor_recebido" value="{{ venda.valor_recebido}}" accesskey="c" required/>
-
-            <label for="busca">Débito $:</label>
+            <label> Cédula</label>
+                <input style=" width:20%;" type="number" step=".01" lang="nb" id="valor_recebido">
+            <label for="busca">Débito:</label>
                 <input  style=" width:20%;" type="number" step=".01" lang="nb" id="valor_debito" name="valor_debito"
                 value="{{ venda.valor_debito}}" accesskey="d" required/>
-
+        
             {%elif venda.tipo_de_pagamento_id == '5'%}
-            <label> Cédula $:</label>
+            <label> Cédula:</label>
                 <input style=" width:20%;" type="number" step=".01" lang="nb" id="valor_recebido"
                  name="valor_recebido" value="{{ venda.valor_recebido}}" accesskey="c" required/>
 
-            <label >Crédito $:</label>
+            <label >Crédito:</label>
                 <input  style=" width:20%;"
                 type="number" step=".01" lang="nb" id="valor_credito" accesskey="ç"
                 name="valor_credito"  value="{{ venda.valor_credito}}" required/>
 
             {%elif venda.tipo_de_pagamento_id == '6'%}
-            <label for="busca">Crédito $:</label>
+            <label for="busca">Crédito:</label>
                 <input style=" width:20%;"
                  type="number" step=".01" lang="nb" id="valor_credito" accesskey="ç"
                 name="valor_credito"  value="{{ venda.valor_credito}}" required/>
 
-            <label for="busca">Débito $:</label>
+            <label for="busca">Débito:</label>
                 <input   style=" width:20%; " type="number" step=".01" lang="nb" accesskey="d"
                 id="valor_debito" name="valor_debito" value="{{ venda.valor_debito}}" required/>
             {% endif%}
@@ -122,17 +129,9 @@
                 <label style=" display: none;"; class='bt_finalizar' for="finalizada"> Finalizar</label>
             </a>
                 <input style=" display: none;"; class='bt_checkbo' type="checkbox" id="finalizada" name="finalizada" value="True" >
-            <br>
-            <br>
-            {% if venda %}
-                <button   accesskey="a" click='2' > Atualizar  </button>
-            {% else %}
-                <button accesskey="i" > Iniciar </button>
-            {% endif %}
-
+           
         </form>
-
-    </div>
+    
     {% if perms.fluxo_de_caixa.add_venda %}
         <form class='caixa' method="POST" action="{% url 'novo-pedido' %}">
             {% csrf_token %}
@@ -144,8 +143,9 @@
         </form>
         {% endif %}
 
+<br>
 {% if venda %}
-    <div>
+    
     {% if perms.fluxo_de_caixa.add_venda %}
         <form class='caixa' action="{% url 'novo-item-pedido' venda.id %}" method="POST">
              {% csrf_token %}
@@ -155,7 +155,7 @@
                 id="produto_codigo" autofocus="autofocus" accesskey="z"
                 placeholder="Pressione ( Alt + Z )" required/>
             <br>
-            <label> Desconto (%):</label>
+            <label> Desconto: </label>
                 <input style=" width:17%;" accesskey="d"
                 type="number" step=".01" lang="nb" name="desconto"
                     id="desconto" placeholder="0,0%" value="0" required/>
@@ -163,6 +163,7 @@
                 <input style=" width:17%;" accesskey="q"
                 type="number" step=".01" lang="nb" name="quantidade"
                     id="quantidade" value="1" required/>
+                        <br>
                         <br>
             <button >Incluir</button>
         </form>
@@ -175,7 +176,7 @@
                 id="produto_codigo" autofocus="autofocus" accesskey="z"
                 placeholder="Pressione ( Alt + Z )" required disabled=" true">
             <br>
-            <label> Desconto (%):</label>
+            <label> Desconto:</label>
                 <input style=" width:17%;" accesskey="d"
                 type="number" step=".01" lang="nb" name="desconto"
                     id="desconto" placeholder="0,0%" value="0" required disabled=" true">
@@ -185,10 +186,13 @@
                     id="quantidade" value="1" required disabled=" true">
                         <br>
                         <br>
+        
         </form>
     {% endif %}
+</div>
 <!-- Painel de vendas-->
-    <div class='divPainel'>
+<div id= "div_painel_tabela">
+    <div id="divPainel" > 
         {%if venda.tipo_de_pagamento_id == None%}
         <label style=" background-color: #363636;">
             TOTAL R$ : {{ venda.valor | floatformat:2}} </label>
@@ -275,8 +279,37 @@
             {%endif%}
         {%endif%}
     </div>
-
+    <br>
+    <div id="div_tabela" > 
+        <table >
+            <thead>
+                <tr>
+                    <th >Valor</th>
+                    <th >Nome </th>
+                    <th >Quantid</th>
+                    <th >Desconto</th>
+                    <th >Excluir</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in itens %}
+                <tr>
+                    <td>R$ {{ item.produto.valor_venal }}</td>
+                    <td>{{ item.produto.nome }}</td>
+                    <td>{{ item.quantidade_de_itens }}</td>
+                    <td>{{ item.desconto }}'%</td>
+                    <td scope="col">
+                    <a href="{% url 'delete-item-pedido' item.id%}">Excluir</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
+</div>
+</div>
+</div>
+
     {% if mensagen_de_erro %}
     <div id="div_alerta" class="divAlerta">
         <a href="#" onclick="document.getElementById('div_alerta').style.display='none';">
@@ -295,38 +328,13 @@
     </div>
 
     {% endif %}
-    <br>
-    <div class='div_tabela'>
 
-        <table class="tabela_caixa">
-            <thead>
-                <tr>
-                    <th >Valor</th>
-                    <th >Nome </th>
-                    <th >Quantidade</th>
-                    <th >Desconto</th>
-                    <th >Excluir</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for item in itens %}
-                <tr>
-                    <td>R$ {{ item.produto.valor_venal }}</td>
-                    <td>{{ item.produto.nome }}</td>
-                    <td>{{ item.quantidade_de_itens }}</td>
-                    <td>{{ item.desconto }}'%</td>
-                    <th scope="col">
-                    <a href="{% url 'delete-item-pedido' item.id%}">Excluir</a>
-                    </th>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    </div>
+
+
+
         <br>
 <!-- cupom fiscal-->
-    <div id="div_cupomFiscal" class="cupom_fiscal">
+    <div id="div_cupomFiscal" class="cupom_fiscal" style="display:none;" >
        <form >
             <hr>
             <label style="text-align: center;" >ESTE CUPOM NÃO POSSUI VALOR FISCAL</label>
@@ -417,12 +425,12 @@
         </form>
     </div>
     <div>
-        <input class='bt_visualizar_cupom' accesskey="i" type="button" value="Imprimir Cupom" onclick="imprimir_cupom_fiscal()">
-        
+        <input id='bt_visualizar_cupom' accesskey="i" 
+            type="button" value="Imprimir Cupom" onclick="imprimir_cupom_fiscal()">
     </div>
     <br>
 </div>
-
+</div>
 <script >
     function imprimir_cupom_fiscal(){
         var pegar_dados = document.getElementById('div_cupomFiscal').innerHTML;

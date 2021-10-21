@@ -4,34 +4,51 @@
 @import url('https://fonts.googleapis.com/css?family=Inria+Serif&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Courier+Prime&display=swap');
 
-.div_tabela{
-    position:absolute;
-    margin-left: 645px;
-    margin-top: -265px;
+#div_tabela{
     border: 1px solid #303131;
     border-radius: 10px
     overflow-y:auto;
     overflow-x:auto;
-    height: 241px;
-}
-
-.tabela_caixa div{
-    font-size:12;
-
-}
-.tabela_caixa{
+    height: 199px;
     font-size:16px;
-    width:100%;
-    overflow-y:auto;
-    overflow-x:auto;
-
 }
 
-.tabela_caixa thead{
-    background-color: #DCDCDC;
-    border: 1px solid #303131;
-    border-radius: 10px
+#div_tabela table{
+    font-size:16px;
+    text-align: center;
+    
 }
-.tabela_caixa a{
+
+#div_tabela  th{
+    width: 100%;
+    background-color: #464040;
+    border: 1px solid #2c2828;
+    color: #ffffff;
+    border-radius: 0px;
+    padding: 5px;
+    
+}
+
+#div_tabela  td{
+    background-color: #ebe4e9;
+    border: 1px solid #8b8f91;
+    border-radius: 2px
+}
+#div_tabela  a{
     text-decoration: none;
+}
+@media (max-width: 768px) {
+    #div_tabela{
+       margin-top: -30px;
+        height: 150px;
+        
+    }
+
+    #div_tabela  th{
+        font-size:14px;
+    }
+    #div_tabela  td{
+        font-size:14px;
+    }
+
 }

@@ -5,35 +5,28 @@
 @import url('https://fonts.googleapis.com/css?family=Courier+Prime&display=swap');
 
 @media (max-width: 768px) {
-
-.div_caixa_cabecalho{
-    height:280px;
-}
-.div_Mae{
-    margin-right:0px;
+   
+#div_caixa div{
     margin-left:0px;
+    width:100%;
 }
-.div_Mae div{
-   width: 100%;
-
-}
-
-.divPainel{
-    position:static;
-    margin-top: 10px;
-    margin-left: 0px;
-    width: 100%;
-    padding: 10px;
-}
-.divPainel label{
-    margin-left: -10px;
-
+#div_caixa div div{
+    margin-left:0px;
+    width:100%;
 }
 .caixa{
-    margin-left:0px;
-    height: -100px;
+    height: 65px;
 
-
+}
+#divPainel{
+    margin-top: 30px;
+    margin-left: 0px;
+    width: 95%;
+    padding:0px;
+}
+#divPainel label{
+    font-size:18px;
+    
 }
 
 .caixa input{
@@ -49,36 +42,12 @@
 
 .caixa label{
     margin:2px;
-    font-size:15px;
+    font-size:18px;
 }
 
 #bt_novo_pedido{
-   right:10px;
-   position:absolute;
-}
-.caixa button{
-
-}
-.caixa button{
-
-}
+   right:39px;
+   margin-top: -106px;
 }
 
-@media (max-width: 768px) {
-
-.div_tabela{
-    position:static;
-    margin-left: 0px;
-    margin-top: 0px;
-    border: 1px solid #303131;
-    border-radius: 5px
-
-
-
-}
-
-.tabela_caixa td{
-    text-align: center;
-
-}
 }
