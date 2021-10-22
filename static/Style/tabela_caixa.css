@@ -9,7 +9,7 @@
     border-radius: 10px
     overflow-y:auto;
     overflow-x:auto;
-    height: 199px;
+    height: 208px;
     font-size:16px;
 }
 
@@ -39,7 +39,7 @@
 }
 @media (max-width: 768px) {
     #div_tabela{
-       margin-top: -30px;
+       margin-top: -40px;
         height: 150px;
         
     }

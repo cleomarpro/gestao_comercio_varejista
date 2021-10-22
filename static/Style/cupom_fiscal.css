@@ -45,9 +45,9 @@
     border-radius: 2px;
     color:white;
     background-color: #4F4F4F;
-    margin-left:610px;
+    margin-left:622px;
     position:absolute;
-    width: 180px;
+    width: 150px;
 }
 
 
@@ -81,6 +81,7 @@
 @media (max-width: 768px) {
 #bt_visualizar_cupom{
    margin-left: 0px;
+   display:none;
 }
 .cupom_fiscal{
     position:absolute;

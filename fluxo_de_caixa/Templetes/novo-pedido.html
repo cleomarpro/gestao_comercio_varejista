@@ -1,22 +1,25 @@
 {% extends 'base.html'%}
 {% block main%}
 
-<div class='div_Mae'>
+<div class='div_Mae' style="margin-left:0px;">
     
 <!-- Caixa-->
 <div id="div_caixa">
    
 <div>
 <div>
-    <h2 class="sub_menu" style="width:100%; margin-left: 0px;">&nbsp; Cliente: {{venda.id}} </h2>
+    <h2 class="sub_menu" style="width:100%; margin-left: 0px;">&nbsp; CLIENTE: {{venda.id}} </h2>
     <form id="caixa_id" class='caixa' method="POST" action="{% url 'atualizar-pedido' %}">
         {% csrf_token %}
         {% if venda %}
-        <button  style="width:70px;" accesskey="a" click='2' > Atualizar  </button>
+        <button id="bt_vendas1" accesskey="a" click='2' > Atualizar  </button>
     {% else %}
-        <button accesskey="i" > Iniciar </button>
+        <button id="bt_vendas1" > Iniciar </button>
     {% endif %} 
-    <br>
+    <button id="bt_vendas2" >
+        <a accesskey="v" click='1' href="{% url 'lista-vendas'%}">Visualizar vendas</a>
+    </button>
+    <hr>
                 <input type="hidden" value="{{venda.id}}" name="venda_id">
             <label> Descrição:</label>
                 <input style=" width:63%;"  placeholder=" Descrição da venda..."
@@ -163,9 +166,8 @@
                 <input style=" width:17%;" accesskey="q"
                 type="number" step=".01" lang="nb" name="quantidade"
                     id="quantidade" value="1" required/>
-                        <br>
-                        <br>
-            <button >Incluir</button>
+                <br>
+            <button id="bt_vendas1">Incluir</button>
         </form>
     {% else %}
         <form class='caixa' action="{% url 'novo-item-pedido' venda.id %}" method="POST">
@@ -184,9 +186,7 @@
                 <input style=" width:17%;" accesskey="q"
                 type="number" step=".01" lang="nb" name="quantidade"
                     id="quantidade" value="1" required disabled=" true">
-                        <br>
-                        <br>
-        
+                <br>
         </form>
     {% endif %}
 </div>

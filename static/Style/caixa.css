@@ -7,9 +7,10 @@
 
 
 #div_caixa div{
-    margin-left:185px;
-    width:950px;
+    margin-left:190px;
+    width:900px;
 }
+
 #div_caixa div div{
     display:inline-block;
     margin-left:10px;
@@ -36,7 +37,7 @@
     background-color: #F0F8FF;
     width: 100%;
     font-size: 16;
-    height: 86px;
+    height: 90px;
 
 }
 
@@ -81,26 +82,39 @@
 
   }
 
- .caixa button{
-    position:absolute;
-    margin-right: -30px;
+ #bt_vendas1{
+    font-size: 16px;
     margin-top:0px;
     border: 1px solid #303131;
     border-radius: 2px;
     color:white;
-    width: 180px;
+    width: 150px;
     background-color: #4F4F4F;
   }
+#bt_vendas2{
+    margin-left: 100px;
+    margin-top:0px;
+    border: 1px solid #303131;
+    border-radius: 2px;
+    background-color: #4F4F4F;
+    padding-top: 0px;
+    font-size: 16px;
+  }
+#bt_vendas2 a{
+    text-decoration: none;
+    color:white;
+}
+
 #bt_novo_pedido{
-   margin-top:-134px;
-   margin-left:308px;
+   margin-top:-138px;
+   margin-left:289px;
    border: 1px solid #303131;
    border-radius: 5px;
    color:black;
    background-color: #c7cdd8;
    position:absolute;
    padding-block: 5px;
-   width: 90px;
+   width: 110px;
 
  }
 

@@ -15,11 +15,11 @@
     width:100%;
 }
 .caixa{
-    height: 65px;
+    height: 72px;
 
 }
 #divPainel{
-    margin-top: 30px;
+    margin-top: 10px;
     margin-left: 0px;
     width: 95%;
     padding:0px;
@@ -46,8 +46,14 @@
 }
 
 #bt_novo_pedido{
-   right:39px;
-   margin-top: -106px;
+   right:8px;
+   margin-top: -113px;
 }
-
+#bt_vendas1{
+    width:90px;
+}
+#bt_vendas2{
+    position:absolute;
+    right:10px;
+}
 }
