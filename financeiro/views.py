@@ -348,13 +348,15 @@ class ContaAreceberUpdate(LoginRequiredMixin, View):
         if usuario_adm == usuarioId: # Verificar autenticidade do usuário
             conta.id= id
             conta.observacao = request.POST['observacao']
-            conta.valor = request.POST['valor'].replace(',', '.')
+            if request.POST['valor']:
+                conta.valor = request.POST['valor'].replace(',', '.')
             conta.parcelas = request.POST['parcelas']
             conta.tipo_de_conta_id = request.POST['tipo_de_conta_id']
-            conta.data_de_vencimento = request.POST['data_de_vencimento']
+            if request.POST['data_de_vencimento']:
+                conta.data_de_vencimento = request.POST['data_de_vencimento']
             conta.venda_id = request.POST['venda_id']
             conta.cliente_id = request.POST['cliente_id']
-            conta.user_id = user_logado
+            conta.user_id = user_logado 
             conta.save()
             return redirect('conta_areceber')
             
@@ -426,16 +428,18 @@ class ContasApagar(LoginRequiredMixin, View):
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
             usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-
-
-        conta = Contas.objects.create(
-            observacao = request.POST['observacao'],
-            valor = request.POST['valor'].replace(',', '.'),
-            parcelas = request.POST['parcelas'],
-            tipo_de_conta_id = request.POST['tipo_de_conta_id'],
-            data_de_vencimento = request.POST['data_de_vencimento'],
-            user_id = user_logado, usuarios_id = usuarioId
-            )
+            #parcelas = request.POST['parcelas']
+            #parcelas = int(parcelas)
+            #for conta in range( parcelas):
+            conta = Contas.objects.create(
+                observacao = request.POST['observacao'],
+                valor = request.POST['valor'].replace(',', '.'),
+                parcelas = request.POST['parcelas'],
+                tipo_de_conta_id = request.POST['tipo_de_conta_id'],
+                data_de_vencimento = request.POST['data_de_vencimento'],
+                user_id = user_logado, usuarios_id = usuarioId
+                )
+                
         data['conta'] = conta
         data['conta']  = Contas.objects.filter(
             usuarios__usuario_cliente= usuarioCliente, tipo_de_conta_id=2).order_by('-id') # listar produtos
@@ -488,10 +492,12 @@ class ContaApagarUpdate(LoginRequiredMixin, View):
         if usuario_adm == usuarioId: # Verificar autenticidade do usuário
             conta.id= id
             conta.observacao = request.POST['observacao']
-            conta.valor = request.POST['valor'].replace(',', '.')
+            if request.POST['valor']:
+                conta.valor = request.POST['valor'].replace(',', '.')
             conta.parcelas = request.POST['parcelas']
             conta.tipo_de_conta_id = request.POST['tipo_de_conta_id']
-            conta.data_de_vencimento = request.POST['data_de_vencimento']
+            if request.POST['data_de_vencimento']:
+                conta.data_de_vencimento = request.POST['data_de_vencimento']
             conta.user_id = user_logado
             conta.save()
             return redirect('conta_apagar')
@@ -558,6 +564,7 @@ class Pagamentos(LoginRequiredMixin, View):
             parcela = list(range(parcela))
 
             data['parcela'] = parcela
+            data['conta'] = Contas.objects.get(id=id)
             data['pagamentos'] = pagamentos
             return render(
                 request, 'financeiro/pagamento.html',data)
@@ -574,6 +581,7 @@ class Pagamentos(LoginRequiredMixin, View):
         pagamentos = Pagamento.objects.filter(contas_id = id).order_by('-id')
         parcela = int(parcelas.parcelas_restantes) + 1
         parcela = list(range(parcela))
+        
 
         data['observacao'] = request.POST['observacao']
         data['quantidade_de_parcelas'] = request.POST['quantidade_de_parcelas']
@@ -590,17 +598,27 @@ class Pagamentos(LoginRequiredMixin, View):
             usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
         
         conta = Contas.objects.get(id= id)
+        perc_restantes = int(conta.parcelas_restantes)
+        parc_enviadas= int(request.POST['quantidade_de_parcelas'])
         usuario_adm = conta.usuarios.id
         if usuario_adm == usuarioId: # Verificar autenticidade do usuário
-            pagamento = Pagamento.objects.create(
-                observacao = request.POST['observacao'],
-                quantidade_de_parcelas = request.POST['quantidade_de_parcelas'],
-                contas_id = id, user_id = user_logado, usuarios_id = usuarioId
-                )
+            if perc_restantes > 0 and perc_restantes >= parc_enviadas and parc_enviadas > 0:
+                pagamento = Pagamento.objects.create(
+                    observacao = request.POST['observacao'],
+                    quantidade_de_parcelas = request.POST['quantidade_de_parcelas'],
+                    contas_id = id, user_id = user_logado, usuarios_id = usuarioId
+                    )
+            else:
+                data['mensagem_de_erro'] = 'Você pode ter enviado o número  ( 0 ) ou um valor superior a quantidade de parcelas existente'
+                data['conta'] = Contas.objects.get(id=id)
+                data['pagamentos'] = Pagamento.objects.filter(usuarios__usuario_cliente= usuarioCliente, contas_id = id).order_by('-id')
+                data['parcela'] = parcela
+                return render(
+                    request, 'financeiro/pagamento.html',data)
 
-            data['pagamento'] = pagamento
             data['pagamentos'] = Pagamento.objects.filter(usuarios__usuario_cliente= usuarioCliente, contas_id = id).order_by('-id')
             data['parcela'] = parcela
+            data['conta'] = Contas.objects.get(id=id)
             data['pagamentos'] = pagamentos
             return render(
                 request, 'financeiro/pagamento.html',data)

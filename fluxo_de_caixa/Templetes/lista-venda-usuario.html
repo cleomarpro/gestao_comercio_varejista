@@ -10,7 +10,10 @@
     </a>
     </h2>
     
-    <form class='campo_de_busca' method="GET" action="{% url 'lista-venda-usuario' %}">
+    <form id="form_mobil" class='campo_de_busca' method="GET" action="{% url 'lista-venda-usuario' %}">
+    <a id="br_X_mobil" href="#" onclick="document.getElementById
+    ('form_mobil').style.display='none';"> X</a>
+
     <div>
         <label>Número do cliente</label> <br>
         <input style="width:160px" type="search" id="venda" name="venda" placeholder="Número do cliente...">
@@ -43,8 +46,17 @@
         </select>
         <button  type="submit">Filtrar</button>
     </div>
+    <div>
+        <label>Total das vendas: R$ {{total_vendas.total}}</label><br>
+        <label>Total de desconto: R$ {{total_desconto.total}}</label>
+    </div>
     </form>
-
+    
+        <a id="mostrar_filtros"
+            href="#" onclick="document.getElementById('form_mobil').style.display='block';">
+            Mostrar filtros 
+        </a>
+   
     <table class='table'>
       <thead>
         <tr>
@@ -65,11 +77,7 @@
                 <td >{{ venda.descricao}}</td>
                 <td class="col_table">R$ {{ venda.total_desconto }}</td>
                 <td>R$ {{ venda.valor }}</td>
-
-                {% if perms.fluxo_de_caixa.change_venda %}
-                <td> <a href="{% url 'edit-pedido' venda.id %} "> Pagar </a>  
-                {%endif%}
-
+                <td> 
                 {% if perms.fluxo_de_caixa.add_venda %}
                  <a href="{% url 'edit-pedido' venda.id %} "> Editar </a> 
                 {%endif%}
@@ -80,7 +88,11 @@
 
                 <td>
                     {% if venda.troco < 0  or venda.tipo_de_pagamento_id == None %}
-                        <label Style= 'color: red;'>Não pago </label> 
+                        {% if perms.fluxo_de_caixa.change_venda %}
+                         <label> <a Style= 'color: red;' href="{% url 'edit-pedido' venda.id %} "> Pagar </a>  </label>
+                        {% else %}
+                        <label Style= 'color: red;'> Não Pago </label>
+                        {% endif %}
                     {% else %}
                         <label>Pago </label>
                     {% endif %}

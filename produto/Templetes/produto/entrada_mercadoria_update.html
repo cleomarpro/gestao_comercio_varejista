@@ -22,7 +22,7 @@
         </div>
         <div>
             <label> Fornecedor</label> <br>
-            <select style=" width:150px;" type="search" id="fornecedor" name="fornecedor" required/>
+            <select style=" width:150px;" type="search" id="fornecedor" name="fornecedor" >
                 <tr>
                     <option value='{{entrada_Mercadoria.fornecedor.id}}'> {{entrada_Mercadoria.fornecedor}}</option>
                     {% for fornecedor in fornecedor %}
@@ -40,7 +40,7 @@
         <div>
             <label> Validade do produto</label> <br>
             <input style=" width:150px; padding: 3px;" value="{{entrada_Mercadoria.validade_produto}}"
-                type="date" id="validade_produto" name="validade_produto"  required/>
+                type="date" id="validade_produto" name="validade_produto" >
         </div>
             <hr>
             <button type="submit"> Editar</button>

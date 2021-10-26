@@ -37,7 +37,7 @@
         </div>   
         <div>
             <label> Venda</label><br>
-                <select  type="search" id="venda_id" name="venda_id" required/>
+                <select  type="search" id="venda_id" name="venda_id" >
                     <tr>
                             <option value=''> __Selecionar__</option>
                         {% for vendas in venda %}
@@ -45,7 +45,7 @@
                         {% endfor %}
                     </tr>
                 </select>
-                
+
         </div>
         <div>
             <label> Valor</label><br>
@@ -74,7 +74,10 @@
         <br>
 
 <!-- Formulário de filtros -->
-    <form class='campo_de_busca' method="GET" action="{% url 'conta_areceber' %}">
+    <form id="form_mobil" class='campo_de_busca' method="GET" action="{% url 'conta_areceber' %}">
+        <a id="br_X_mobil" href="#" onclick="document.getElementById
+        ('form_mobil').style.display='none';"> X</a>
+        
     <div id="div_busca_filtro";>
         <label> Cpf ou Cnpj / Situação do débito</label><br>
         <input style="width:40%"; type="search" id="client" name="client" placeholder="Cpf ou Cnpj..." >
@@ -95,20 +98,25 @@
         <button style="width:50px;" type="submit">Filtrar</button>
     </div> 
     </form>
+        <a id="mostrar_filtros"
+            href="#" onclick="document.getElementById('form_mobil').style.display='block';">
+            Mostrar filtros 
+        </a>
     <table class="table">
      <thead>
         <tr>
             <th >Cliente</th>
             <th class="col_table">Observação</th>
             <th >Valor</th>
-            <th >ID da venda</th>
-            <th >Saldo devedor</th>
+            <th class="col_table">ID da venda</th>
+            <th class="col_table">Saldo devedor</th>
             <th class="col_table">Total de parcelas</th>
             <th class="col_table" >Parcelas pagas</th>
             <th class="col_table" >Parcelas restantes</th>
             <th class="col_table" >Valor da parcela</th>
             <th >Data de vencimento</th>
             <th>Ação</th>
+            <th>Pagar</th>
         </tr>
     </thead>
         <tbody>
@@ -116,27 +124,28 @@
                 <tr>
                     <td>{{ conta.cliente.nome}}</td>
                     <td class="col_table">{{ conta.observacao}}</td>
-                    <td>R$ {{ conta.valor }}</td>
-                    <td>{{ conta.venda.id}}</td>
+                    <td class="col_table">R$ {{ conta.valor }}</td>
+                    <td class="col_table">{{ conta.venda.id}}</td>
                     <td>R$ {{ conta.saldo_devedor }}</td>
                     <td class="col_table">{{ conta.parcelas }}</td>
                     <td class="col_table">{{ conta.parcelas_pagas }}</td>
                     <td class="col_table">{{ conta.parcelas_restantes }}</td>
                     <td class="col_table">R$ {{ conta.valor_parcela }}</td>
                     <td>{{ conta.data_de_vencimento }}</td>
+                    <td>
+                        {% if perms.financeiro.change_contas %}
+                            <a href="{% url 'conta_areceber_update' conta.id %}">Editar</a> 
+                        {%endif%}
 
-                    {% if perms.financeiro.change_contas %}
-                    <td> <a href="{% url 'conta_areceber_update' conta.id %}">Editar</a> 
-                    {%endif%}
-
-                    {% if perms.financeiro.delete_contas %}
-                    <a href="{% url 'conta_delete' conta.id %}">Excluir</a> 
-                    {%endif%}
-
-                    {% if perms.financeiro.add_pagamento %}
-                    <a href="{% url 'pagamento' conta.id %}">pagar</a> </td>
-                    {%endif%}
-                </tr>
+                        {% if perms.financeiro.delete_contas %}
+                            <a href="{% url 'conta_delete' conta.id %}">Excluir</a> 
+                        {%endif%}
+                    </td>
+                    <td>
+                        {% if perms.financeiro.add_pagamento %}
+                            <a href="{% url 'pagamento' conta.id %}">pagar</a> 
+                        {%endif%}
+                    </td>
             {%endfor%}
         </tbody>
     </table>

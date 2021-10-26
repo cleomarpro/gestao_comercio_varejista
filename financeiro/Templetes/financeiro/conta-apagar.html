@@ -48,7 +48,10 @@
 
 <!-- Formulário de filtros -->
 
-    <form  class='campo_de_busca' method="GET" action="{% url 'conta_apagar' %}">
+    <form id="form_mobil" class='campo_de_busca' method="GET" action="{% url 'conta_apagar' %}">
+        <a id="br_X_mobil" href="#" onclick="document.getElementById
+        ('form_mobil').style.display='none';"> X</a>
+    
     <div>
         <label>Situação do débito</label><br>
          <select  type="search" id="estado_da_conta" name="estado_da_conta" >
@@ -74,19 +77,23 @@
             <button  type="submit">Filtrar</button>
     </div>
     </form>
-
+        <a id="mostrar_filtros"
+            href="#" onclick="document.getElementById('form_mobil').style.display='block';">
+            Mostrar filtros 
+        </a>    
     <table class="table">
      <thead>
         <tr>
             <th >Observação</th>
             <th >Valor</th>
-            <th  >Saldo devedor</th>
+            <th  class="col_table">Saldo devedor</th>
             <th class="col_table">Total de parcelas</th>
             <th class="col_table" >Parcelas pagas</th>
             <th class="col_table" >Parcelas restantes</th>
             <th class="col_table">Valor da parcela</th>
             <th >Date de vencimento</th>
             <th >Açao</th>
+            <th >Pagar</th>
             
 
         </tr>
@@ -94,26 +101,29 @@
         <tbody>
             {%for conta in conta %}
                 <tr>
-                    <td>{{ conta.observacao}}</td>
+                    <td >{{ conta.observacao}}</td>
                     <td>R$ {{ conta.valor }}</td>
-                    <td>R$ {{ conta.saldo_devedor }}</td>
+                    <td class="col_table">R$ {{ conta.saldo_devedor }}</td>
                     <td class="col_table"> {{ conta.parcelas }}</td>
                     <td class="col_table">{{ conta.parcelas_pagas }}</td>
                     <td class="col_table">{{ conta.parcelas_restantes }}</td>
                     <td class="col_table">R$ {{ conta.valor_parcela }}</td>
-                    <td>{{ conta.data_de_vencimento }}</td>
+                    <td >{{ conta.data_de_vencimento }}</td>
+                    <td> 
+                        {% if perms.financeiro.change_contas %}
+                                <a href="{% url 'conta_apagar_update' conta.id %}">Editar</a> 
+                            {%endif%}
 
-                    {% if perms.financeiro.change_contas %}
-                    <td>  <a href="{% url 'conta_apagar_update' conta.id %}">Editar</a> 
-                    {%endif%}
-
-                    {% if perms.financeiro.delete_contas %}
-                     <a href="{% url 'conta_apagar_delete' conta.id %}">Excluir</a> 
-                    {%endif%}
-
-                    {% if perms.financeiro.add_pagamento %}
-                     <a href="{% url 'pagamento' conta.id %}">pagar</a> </td>
-                    {%endif%}
+                            {% if perms.financeiro.delete_contas %}
+                                <a href="{% url 'conta_apagar_delete' conta.id %}">Excluir</a> 
+                        {%endif%}
+                    </td>
+                    <td>
+                        {% if perms.financeiro.add_pagamento %}
+                        <a href="{% url 'pagamento' conta.id %}">pagar</a> 
+                        {%endif%}
+                    </td>
+                    
 
                 </tr>
             {%endfor%}

@@ -32,7 +32,7 @@
         <div>
                 
             <label> Venda</label> <br>
-                <select style=" width:220px;" type="search" id="venda_id" name="venda_id" required/>
+                <select style=" width:220px;" type="search" id="venda_id" name="venda_id" >
                         <tr>
                                 <option value='{{conta.venda.id}}'> {{conta.venda}}</option>
                             {% for vendas in venda %}
@@ -44,7 +44,7 @@
         <div>
             <label> Valor</label> <br>
                 <input style=" width:200px;"  placeholder="Valor..." type="number" step=".01" lang="nb"
-                   id="valor" name="valor" required value="{{conta.valor}}" />
+                   id="valor" name="valor"  value="{{conta.valor}}" />
         </div>   
         <div>
              <label> Parcelas</label> <br>
@@ -56,7 +56,7 @@
         <div>
             <label> Data de vencimento</label> <br>
                 <input style="width:150px; padding:3px"  placeholder=" Data de vencimento:" value="{{conta.data_de_vencimento}}"
-                    type="date" id="data_de_vencimento" name="data_de_vencimento" required/>
+                    type="date" id="data_de_vencimento" name="data_de_vencimento" >
         </div>   
              <hr> 
             <button type="submit"> Editar</button>

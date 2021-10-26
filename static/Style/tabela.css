@@ -26,6 +26,7 @@
 .table td{
     text-align: center;
     font-size: 16px;
+    background-color: #c5d1df;c
 }
 
 @media (max-width: 768px) {

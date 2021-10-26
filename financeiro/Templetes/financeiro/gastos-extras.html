@@ -28,8 +28,10 @@
     </form>
         <br>
 <!-- formulário de filtro -->
-    <form class='campo_de_busca' method="GET" action="{% url 'filtro_gastos_extras' %}">
-   
+    <form id="form_mobil" class='campo_de_busca' method="GET" action="{% url 'filtro_gastos_extras' %}">
+        <a id="br_X_mobil" href="#" onclick="document.getElementById
+        ('form_mobil').style.display='none';"> X</a>
+
     <div>
         <label> Filtrar por periodo </label> <br>
         <select  type="search" id="mes" name="mes"/>
@@ -77,6 +79,10 @@
         <button type="submit">Filtrar</button>
     </div>  
     </form>
+        <a id="mostrar_filtros"
+            href="#" onclick="document.getElementById('form_mobil').style.display='block';">
+            Mostrar filtros 
+        </a>
 
     <table class="table">
      <thead>

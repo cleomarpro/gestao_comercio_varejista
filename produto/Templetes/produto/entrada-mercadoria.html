@@ -31,7 +31,7 @@
         </div>
         <div>
             <label> Fornecedor</label> <br>
-            <select style=" width:200px;" type="search" id="fornecedor" name="fornecedor" required/>
+            <select style=" width:200px;" type="search" id="fornecedor" name="fornecedor">
                 <tr>
                     <option value=''> __Selecionar__</option>
                     {% for fornecedor in fornecedor %}
@@ -49,14 +49,17 @@
         <div>
             <label> Validade do produto</label> <br>
             <input style=" width:150px; padding:3px;"
-                type="date" id="validade_produto" name="validade_produto"  required/>
+                type="date" id="validade_produto" name="validade_produto" >
         </div>
             <hr>
             <button type="submit"> Salvar</button>
     </form>
     <br>
 <!-- formulário de filtro -->
-    <form class='campo_de_busca' method="GET" action="{% url 'filtro-categoria-entrada-mercadoria' %}">
+    <form id="form_mobil" class='campo_de_busca' method="GET" action="{% url 'filtro-categoria-entrada-mercadoria' %}">
+        <a id="br_X_mobil" href="#" onclick="document.getElementById
+    ('form_mobil').style.display='none';"> X</a>
+        
         <div>
             <label>Buscar produto</label> <br>
             <input  type="search" id="produt" name="produt" placeholder="Digite o código do produto...">
@@ -104,7 +107,10 @@
         </div>
     </form>
     
-
+    <a id="mostrar_filtros"
+    href="#" onclick="document.getElementById('form_mobil').style.display='block';">
+    Mostrar filtros 
+    </a>
 
 <!--tabela de entrada de mercadoria  -->
     <table class="table">

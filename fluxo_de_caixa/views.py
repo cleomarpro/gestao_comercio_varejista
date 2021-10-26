@@ -235,16 +235,27 @@ class ListaVendaPorUsuario(LoginRequiredMixin, View):
 
         vendas = Venda.objects.filter(
             data_hora__gte=today, user = user_logado, usuarios__usuario_cliente= usuario).order_by('-id') #__startswith, __contains
+        total_vendas= vendas.aggregate(total=Sum("valor_com_desconto"))
+        total_desconto= vendas.aggregate(total=Sum("total_desconto"))
         if Dia:
             vendas = Venda.objects.filter(
                 data_hora__contains=Dia, user = user_logado, usuarios__usuario_cliente= usuario).order_by('-id')#data_hora__day= Dia
+            total_vendas= vendas.aggregate(total=Sum("valor_com_desconto"))
+            total_desconto= vendas.aggregate(total=Sum("total_desconto"))
         if Mes:
             vendas = Venda.objects.filter(
                 data_hora__year__contains=today.year, data_hora__month__contains=Mes, user = user_logado, usuarios__usuario_cliente= usuario ).order_by('-id')
+            total_vendas= vendas.aggregate(total=Sum("valor_com_desconto"))
+            total_desconto= vendas.aggregate(total=Sum("total_desconto"))
+
         if busca:
             vendas = Venda.objects.filter(
                 user = user_logado, usuarios__usuario_cliente= usuario, id__icontains=busca)
+            total_vendas= vendas.aggregate(total=Sum("valor_com_desconto"))
+            total_desconto= vendas.aggregate(total=Sum("total_desconto"))
         data['vendas'] = vendas
+        data['total_vendas']= total_vendas
+        data['total_desconto']= total_desconto
         return render(request, 'lista-venda-usuario.html', data)
 
 

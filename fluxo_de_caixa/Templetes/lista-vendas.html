@@ -9,18 +9,20 @@
         {% endif %}
     </a>
     </h2>
-    <form class='campo_de_busca' method="GET" action="{% url 'lista-vendas' %}">
+    <form id="form_mobil" class='campo_de_busca' method="GET" action="{% url 'lista-vendas' %}">
+        <a id="br_X_mobil" href="#" onclick="document.getElementById
+        ('form_mobil').style.display='none';"> X</a>
     <div>    
-        <label>Número do cliente</label> <br>
+        <label>Buscar vendas</label> <br>
         <input style="width:160px" type="search" id="venda" name="venda" placeholder="Número do cliente...">
             <button  type="submit">Buscar</button>
     </div> 
-    <div> 
+    <div > 
         <label>Selecione o dia</label> <br>
         <input style="padding: 3px;" type="date" id="dia" name="dia">
             <button  type="submit">Filtrar</button>
         </div> 
-        <div> 
+        <div > 
             <label>Selecione o mês</label> <br>
         <select  type="search" id="mes" name="mes" >
                 <tr>
@@ -43,6 +45,10 @@
         <button  type="submit">Filtrar</button>
     </div> 
     </form>
+        <a id= "mostrar_filtros"
+        href="#" onclick="document.getElementById('form_mobil').style.display='block';">
+            Mostrar filtros 
+        </a>
 
     <table class='table'>
       <thead>
@@ -53,10 +59,7 @@
             <th class="col_table">Desconto</th>
             <th>Valor</th>
             <th >Ação</th>
-            
-         
-
-            <th>Estado</th>
+            <th >Estado</th>
         </tr>
       </thead>
       <tbody>
@@ -67,22 +70,23 @@
                 <td >{{ venda.descricao}}</td>
                 <td class="col_table">R$ {{ venda.total_desconto }}</td>
                 <td>R$ {{ venda.valor }}</td>
+                <td>
+                    {% if perms.fluxo_de_caixa.add_venda %}
+                    <a href="{% url 'edit-pedido' venda.id %} "> Editar </a>  
+                    {%endif%}
 
-                {% if perms.fluxo_de_caixa.change_venda %}
-                <td> <a href="{% url 'edit-pedido' venda.id %} "> Pagar </a> 
-                {%endif%}
-
-                {% if perms.fluxo_de_caixa.add_venda %}
-                 <a href="{% url 'edit-pedido' venda.id %} "> Editar </a>  
-                {%endif%}
-
-                {% if perms.fluxo_de_caixa.delete_venda %}
-                 <a href="{% url 'delete-pedido' venda.id %} ">Excluir</a> </td>
-                {%endif%}
-
+                    {% if perms.fluxo_de_caixa.delete_venda %}
+                    <a href="{% url 'delete-pedido' venda.id %} ">Excluir</a> 
+                    
+                    {%endif%}
+                </td>
                 <td>
                     {% if venda.troco < 0  or venda.tipo_de_pagamento_id == None %}
-                        <label Style= 'color: red;'>Não pago </label>
+                        {% if perms.fluxo_de_caixa.change_venda %}
+                         <label> <a Style= 'color: red;' href="{% url 'edit-pedido' venda.id %} "> Pagar </a>  </label>
+                        {% else %}
+                        <label Style= 'color: red;'> Não Pago </label>
+                        {% endif %}
                     {% else %}
                         <label>Pago </label>
                     {% endif %}

@@ -547,12 +547,12 @@ class Entrada_Mercadoria (LoginRequiredMixin, View):
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
             usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-
+    
         entrada_Mercadoria = EntradaMercadoria.objects.create(
             produto_id = request.POST['produto'],
             fornecedor_id= request.POST['fornecedor'],
             quantidade = request.POST['quantidade'].replace(',', '.'),
-            validade_produto= request.POST['validade_produto'],
+            validade_produto= request.POST['validade_produto'] or '2000-02-03',
             user_id = user_logado, usuarios_id = usuarioId
             )
         data['entrada_Mercadoria']=entrada_Mercadoria
@@ -613,9 +613,11 @@ class EntradaMercadoriaUpdate(LoginRequiredMixin, View):
 
             entrada_Mercadoria.id= id
             entrada_Mercadoria.produto_id = request.POST['produto']
-            entrada_Mercadoria.fornecedor_id= request.POST['fornecedor']
+            if request.POST['fornecedor']:
+                entrada_Mercadoria.fornecedor_id= request.POST['fornecedor']
             entrada_Mercadoria.quantidade = request.POST['quantidade'].replace(',', '.')
-            entrada_Mercadoria.validade_produto= request.POST['validade_produto']
+            if request.POST['validade_produto']:
+                entrada_Mercadoria.validade_produto= request.POST['validade_produto']
             entrada_Mercadoria.user_id = user_logado 
             entrada_Mercadoria.save()
             return redirect('entrada-mercadoria')

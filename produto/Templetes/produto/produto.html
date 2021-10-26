@@ -109,7 +109,9 @@
 
 
 <!-- Formulário de busca de produtos -->
-    <form class='campo_de_busca' method="GET" action="{% url 'filtro-categoria' %}">
+    <form id="form_mobil" class='campo_de_busca' method="GET" action="{% url 'filtro-categoria' %}">
+        <a id="br_X_mobil" href="#" onclick="document.getElementById
+        ('form_mobil').style.display='none';"> X</a>
         <div> 
             <label>Buscar produto</label> <br>
             <input type="search" id="produt" name="produt" placeholder="Código do produto">
@@ -129,6 +131,11 @@
             <button  type="submit">Filtrar</button>
         </div>
     </form> 
+
+    <a id="mostrar_filtros"
+            href="#" onclick="document.getElementById('form_mobil').style.display='block';">
+            Mostrar filtros 
+    </a>
 
 <!-- Tabela de produtos -->
     <table class="table">
