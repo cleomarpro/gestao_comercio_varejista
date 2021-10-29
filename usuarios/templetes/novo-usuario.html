@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title> VieWorld  </title>
 
+    <script type="module" src="{% static 'js/mascaras.js' %}"></script>
     <link rel="stylesheet" href= "{% static 'Style/home.css'%}">
 
     <meta charcet="UTF-8">
@@ -28,23 +29,28 @@
             {% if mensagen_de_erro_usuario %}
             <label style='color:red;'>{{mensagen_de_erro_usuario}}</label>
             {% endif %} <br>
-                <input class="form_novo_usuário" Type='text' name= 'username' placeholder="Usuário*..." required/>
+                <input class="form_novo_usuário" Type='text' name= 'username' 
+                minlength="6" maxlength="20" placeholder="Usuário*..." data-js="usuario_e_senha" required/>
                 <br>
             {% if mensagen_de_erro_email %}
             <br>
             <label style='color:red;'>{{mensagen_de_erro_email}}!</label>
             {% endif %} <br>
             
-            <input class="form_novo_usuário" Type='password' name= 'password'id= 'password' placeholder="Senha*..." required/>
+            <input class="form_novo_usuário" Type='password' name='password' id='password' 
+                minlength="6" maxlength="20" placeholder="Senha*..." data-js="usuario_e_senha" required/>
             <br>
             <br>
-            <input class="form_novo_usuário"   Type='email' name= 'email' id= 'email' placeholder="E-mail*..." required/>
+            <input class="form_novo_usuário"   Type='email' name='email' 
+                id='email' maxlength="50" placeholder="E-mail*..." required/>
             <br>
             <br>
-            <input class="form_novo_usuário" Type='text' name= 'cpf_cnpj' id= 'cpf_cnpj' placeholder="Cnpj ou Cpf*..." required/>
+            <input class="form_novo_usuário" Type='text' name= 'cpf_cnpj' 
+                id='cpf_cnpj' placeholder="Cnpj..." data-js="cnpj" >
             <br>
             <br>
-            <input class="form_novo_usuário" Type='text' name= 'nome_fantazia' id= 'nome_fantazia' placeholder="Nome fantasia*..." required/>
+            <input class="form_novo_usuário" Type='text' name='nome_fantazia' 
+            id='nome_fantazia'maxlength="30" placeholder="Nome fantasia..." >
             <br>
             <br>
                 <hr>

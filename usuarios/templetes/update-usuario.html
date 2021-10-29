@@ -3,110 +3,122 @@
 <div class='div_Mae'>
     <form class='formulario' action="{% url 'update-usuario' %}" method="POST" >
          {% csrf_token %}
-    <h1
-         style=" color:#EEE9E9;">Atualizar meus dados</label>
-    </h1>
+    <h2 class="sub_menu" style="margin-left: 0px;">
+        &nbsp;Atualizar meus dados
+    </h2>
              <br>
              
         <p style= "font-size: 20px;"><b>INFORMACÕES DA CONTA </b></p>
         <hr>
-            <label> Nome Fantazia:</label>
-            <input  type="text" id="nome_fantazia" 
+        <div>
+            <label> Nome Fantazia</label> <br>
+            <input  type="text" id="nome_fantazia" placeholder="Nome da empresa"
                 name="nome_fantazia" value= "{{usuario.nome_fantazia}}" >
-            <br>
-            <label>Cnpj ou Cpf:</label>
-                <input style=" width:250px;"  type="text" value= "{{usuario.cpf_cnpj}}"
-                    id="cpf_cnpj" name="cpf_cnpj" required/>
-             <br>
+        </div>
+        <div>
+            <label>Cnpj</label><br>
+                <input style=" width:200px;"  type="text" value= "{{usuario.cpf_cnpj}}"
+                   data-js="cnpj" placeholder="000.000.000-00" id="cpf_cnpj" name="cpf_cnpj" required/>
+        </div>
+        <div>
+        
              <!--
             <label> Plano:</label>
                 <input style=" width:200px;"  type="text" id="plano" 
                     name="plano" value= "{{usuario.plano.nome}}" >
              <br>
               -->
-            <label> Razão social:</label>
+            <label> Razão social</label> <br>
                 <input style=" width:200px;"  type="text" id="razao_social" 
-                    name="razao_social" value= "{{usuario.razao_social}}" >
-             <br>
-
-             <label> Data de criação:</label>
-             <input type="button" value= "{{usuario.data_de_criacao}}" > Alterar
-             <input  type="date" id="data_de_criacao" value= "{{usuario.data_de_criacao}}" 
-                 name="data_de_criacao" >
-            <br>
-
-            <label> Inscrição  estadual:</label>
+                  maxlength="30"  name="razao_social" value= "{{usuario.razao_social}}" >
+        </div>
+        <div>
+             <label> Data de criação </label> <br>
+             <input style=" width:150px;" type="date" id="data_de_criacao" 
+             value= "{{usuario.data_de_criacao | date:'Y-m-d'}}"  name="data_de_criacao" >
+        </div>
+        <div>
+            <label> Inscrição  estadual</label> <br>
                 <input style=" width:180px;" type="text" id="inscricao_estadual" 
-                    name="inscricao_estadual" value= "{{usuario.inscricao_estadual}}" >
-             <br>
-    
-             <label> Inscrição  municipal:</label>
+                  name="inscricao_estadual" value= "{{usuario.inscricao_estadual}}" >
+        </div>
+        <div>
+             <label> Inscrição  municipal</label> <br>
             <input style=" width:140px;" type="text" id="inscricao_municipal" 
-                name="inscricao_municipal" value= "{{usuario.inscricao_municipal}}" >
-                <br>
-             <label>Nascionalidade:</label>
+            maxlength="30" name="inscricao_municipal" value= "{{usuario.inscricao_municipal}}" >
+        </div>
+        <div>
+             <label>Nascionalidade</label> <br>
                 <input style=" width:140px;"  type="text" id="nascionalidade"
-                    name="nascionalidade" value= "{{usuario.nascionalidade}}" >
-             <br>
+                maxlength="30" placeholder="Nascionalidade..." name="nascionalidade" value= "{{usuario.nascionalidade}}" >
+        </div>
+        
         <p style="font-size: 20px;"><b>ENDEREÇO</b></p>
             <hr>
-            <label> CEP:</label>
-            <input style=" width:200px;"  type="text" id="cep"
-                 name="cep" value= "{{usuario.cep}}" >
-            <BR>
-            <label> Rua:</label>
+        <div>
+            <label> CEP</label> <br>
+            <input style=" width:200px;"  type="text" data-js="cep" id="cep"
+                 name="cep" value= "{{usuario.cep}}"  placeholder="00000-000">
+        </div>
+        <div>
+            <label> Rua</label> <br>
                 <input style=" width:200px;"  value= "{{usuario.rua}}" 
-                  type="text" id="rua" name="rua" />
-
-
-            <label> Quadra:</label>
+                maxlength="30" type="text" id="rua" name="rua" placeholder="Rua..." />
+        </div>
+        <div>
+            <label> Quadra</label> <br>
                 <input style=" width:80px;"  placeholder=" Quadra..." 
-                type="text" id="quadra" name="quadra" value= "{{usuario.quadra}}" >
-                <br>
-            <label> Número:</label>
+                type="number" max="999999999" id="quadra" name="quadra" value= "{{usuario.quadra}}" >
+        </div>
+        <div>
+            <label> Número</label> <br>
                 <input style=" width:80px;"  placeholder=" Número..." 
-                type="text" id="numero" name="numero" value= "{{usuario.numero}}" >
-            
-            <label> Setor:</label>
+                type="number" max="999999999" id="numero" name="numero" value= "{{usuario.numero}}" >
+        </div>
+        <div>
+            <label> Setor:</label> <br>
                 <input style=" width:150px;"  placeholder=" Setor..."
-                    type="text" id="setor" name="setor" value= "{{usuario.setor}}" >
-            <br>
-
-            <label> Estado:</label>
+                maxlength="30" type="text" id="setor" name="setor" value= "{{usuario.setor}}" >
+        </div>
+        <div>
+            <label> Estado</label> <br>
                 <input style=" width:200px;"  placeholder=" Estado..." 
-                type="text" id="estado" name="estado" value= "{{usuario.estado}}" >
-             <br>
-
-            <label> Cidade:</label>
+                maxlength="30" type="text" id="estado" name="estado" value= "{{usuario.estado}}" >
+        </div>
+        <div>
+            <label> Cidade</label> <br>
                 <input style=" width:200px;"  placeholder=" Cidade..." 
-                type="text" id="cidade" name="cidade" value= "{{usuario.cidade}}" >
-             <br>
-
-            <label> Complemento:</label>
-                <input style=" width:180px;"  placeholder=" Complemento..." 
-                type="text" id="complemento" name="complemento" value= "{{usuario.complemento}}" >
-             <br>
-            <label> Pais:</label>
+                maxlength="30" type="text" id="cidade" name="cidade" value= "{{usuario.cidade}}" >
+        </div>
+        <div>
+            <label> Complemento</label> <br>
+                <input style=" width:180px;"  placeholder="Ex: casa, ap, bloco" 
+                maxlength="30" type="text" id="complemento" name="complemento" value= "{{usuario.complemento}}" >
+        </div>
+        <div>
+            <label> Pais</label> <br>
                 <input style=" width:100px;"  placeholder=" Pais..." type="text" 
-                    id="pais" name="pais" value= "{{usuario.pais}}" >
-            <br>
+                maxlength="30"  id="pais" name="pais" value= "{{usuario.pais}}" >
+        </div>
+        
         <p style=" font-size: 20px;"><b>CONTATO</b></p>
             <hr>
-           
-            <label> Celular:</label>
-                <input style=" width:100px;"  placeholder=" Celular..." 
-                type="text" id="Celular" name="Celular" value= "{{usuario.Celular}}" >
-             <br>
-
-            <label> Telefone:</label>
-                <input placeholder=" Telefone..." type="text" 
+        <div>
+            <label> Celular</label> <br>
+                <input style=" width:150px;"  placeholder=" (00) 00000-0000" 
+                type="text" data-js="phone"  id="Celular" name="Celular" value= "{{usuario.Celular}}" >
+        </div>
+        <div>
+            <label> Telefone</label> <br>
+                <input placeholder="(00) 0000-0000" type="text" data-js="phone" 
                     id="Telefone" name="Telefone" value= "{{usuario.Telefone}}" >
-            <br>
-            <label> E-mail:</label>
-                <input   placeholder=" E-mail..." type="text" id="email" 
+        </div>
+        <div>
+            <label> E-mail</label> <br>
+                <input   placeholder="exemplo@dominio.com" type="email" id="email" 
                     name="email" value= "{{usuario.email}}" >
-            <br>
-            
+        </div>
+        
                <hr>
             <button  type="submit"> Atualizar</button>
    

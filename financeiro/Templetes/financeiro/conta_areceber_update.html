@@ -43,12 +43,13 @@
         </div>
         <div>
             <label> Valor</label> <br>
-                <input style=" width:200px;"  placeholder="Valor..." type="number" step=".01" lang="nb"
-                   id="valor" name="valor"  value="{{conta.valor}}" />
-        </div>   
+                <input style=" width:200px;"  placeholder="R$ 0,00" type="text" data-js="money" 
+                   id="valor" name="valor"  value="R$ {{conta.valor | floatformat:2}}" />
+        </div> 
+         <!-- step=".01" lang="nb" -->   
         <div>
              <label> Parcelas</label> <br>
-                <input style=" width:200px;" value='1' placeholder=" parcelas..."
+                <input style=" width:200px;"  placeholder=" parcelas..."
                     type="text" id="parcelas" name="parcelas" required value="{{conta.parcelas}}" />
         </div>   
        

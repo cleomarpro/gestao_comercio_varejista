@@ -16,12 +16,12 @@
         </div>
         <div>
             <label> Valor:</label> <br>
-                <input style=" width:120px;"  placeholder="Valor..." type="number" step=".01" lang="nb"
-                    id="valor" name="valor" value="{{conta.valor}}" >
+                <input style=" width:120px;"  placeholder="R$ 0,00" type="text" data-js="money"
+                    id="valor" name="valor" value="R$ {{conta.valor}}" >
         </div>
         <div>
              <label> Parcelas:</label> <br>
-                <input style=" width:120px;" value='1' placeholder=" parcelas:" value="{{conta.parcelas}}"
+                <input style=" width:120px;"  placeholder=" parcelas:" value="{{conta.parcelas}}"
                     type="text" id="parcelas" name="parcelas" required/>
         </div>
         <div>

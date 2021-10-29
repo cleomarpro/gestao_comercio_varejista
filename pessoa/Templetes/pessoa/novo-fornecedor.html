@@ -18,15 +18,18 @@
             <hr> 
         <div>
             <label> Nome fantazia*</label> <br>
-                <input style=" width:200px;"  placeholder=" Nome..." type="text" id="nome_fantazia" name="nome_fantazia" required/>
+                <input style=" width:200px;"  placeholder="Nome da empresa..."
+                 type="text" maxlength="30" id="nome_fantazia" name="nome_fantazia" required/>
         </div>
         <div>
             <label> Cnpj*</label> <br>
-                <input style=" width:150;"  placeholder="Cnpj..." type="text" id="cnpj" name="cnpj" required/>
+                <input style=" width:150;"  id="cnpj" name="cnpj" placeholder="00.000.000/0000-00" 
+                type="text data-js="cnpj"  maxlength="18" minlength="17" required/>
             </div>
             <div>
             <label> Data de criação</label> <br>
-                <input style=" width:140px;"  placeholder=" Data de criação:" type="date" id="data_de_criacao" name="data_de_criacao" required/>
+                <input style=" width:140px;"  placeholder=" Data de criação:" value="25-05-1996"
+                 type="date" id="data_de_criacao" name="data_de_criacao">
             </div>
             <div>
              <label> Nascionalidade</label> <br>
@@ -40,55 +43,96 @@
         </div>
         <div>
              <label>Cep</label> <br>
-                <input style=" width:140px;"  placeholder=" Cep..." type="text" id="cep" name="cep" />
+                <input style=" width:140px;" placeholder="00000-000" type="text" 
+                data-js="cep" id="cep" name="cep" />
         </div>
         <div>
             <label> Rua</label> <br>
-                <input style=" width:200px;"  placeholder=" Rua..." type="text" id="rua" name="rua" />
+                <input style=" width:200px;"  placeholder=" Rua..." type="text" maxlength="30"
+                id="rua" name="rua" />
         </div>
         <div>
             <label> Quadra</label> <br>
-                <input style=" width:80px;"  placeholder=" Quadra..." type="text" id="quadra" name="quadra" />
+                <input style=" width:80px;"  placeholder=" Quadra..." 
+                type="number" max="999999" id="quadra" name="quadra" />
         </div>
         <div>
             <label> Número</label> <br>
-                <input style=" width:80px;"  placeholder=" Número..." type="text" id="numero" name="numero" />
+                <input style=" width:80px;"  placeholder=" Número..." 
+                type="number" max="999999" id="numero" name="numero" />
         </div>
         <div>
             <label> Setor</label> <br>
-                <input style=" width:150px;"  placeholder=" Setor..." type="text" id="setor" name="setor" />
+                <input style=" width:150px;"  placeholder=" Setor..." type="text" maxlength="30"
+                id="setor" name="setor" />
         </div>
         <div>
             <label> Estado</label> <br>
-                <input style=" width:200px;"  placeholder=" Estado..." type="text" id="estado" name="estado" />
+                <select style=" width:200px;"  placeholder=" Estado..." type="text" maxlength="30" 
+                id="estado" name="estado" />
+                    <option value="">Selecionar</option>
+                    <option value="AC">Acre</option>
+                    <option value="AL">Alagoas</option>
+                    <option value="AP">Amapá</option>
+                    <option value="AM">Amazonas</option>
+                    <option value="BA">Bahia</option>
+                    <option value="CE">Ceará</option>
+                    <option value="DF">Distrito Federal</option>
+                    <option value="ES">Espírito Santo</option>
+                    <option value="GO">Goiás</option>
+                    <option value="MA">Maranhão</option>
+                    <option value="MT">Mato Grosso</option>
+                    <option value="MS">Mato Grosso do Sul</option>
+                    <option value="MG">Minas Gerais</option>
+                    <option value="PA">Pará</option>
+                    <option value="PB">Paraíba</option>
+                    <option value="PR">Paraná</option>
+                    <option value="PE">Pernambuco</option>
+                    <option value="PI">Piauí</option>
+                    <option value="RJ">Rio de Janeiro</option>
+                    <option value="RN">Rio Grande do Norte</option>
+                    <option value="RS">Rio Grande do Sul</option>
+                    <option value="RO">Rondônia</option>
+                    <option value="RR">Roraima</option>
+                    <option value="SC">Santa Catarina</option>
+                    <option value="SP">São Paulo</option>
+                    <option value="SE">Sergipe</option>
+                    <option value="TO">Tocantins</option>
+                </select>
         </div>
         <div>
             <label> Cidade</label> <br>
-                <input style=" width:200px;"  placeholder=" Cidade..." type="text" id="cidade" name="cidade" />
+                <input style=" width:200px;"  placeholder=" Cidade..." type="text" maxlength="30"
+                id="cidade" name="cidade" />
         </div>
         <div>
             <label> Complemento</label> <br>
-                <input style=" width:180px;"  placeholder=" Complemento..." type="text" id="complemento" name="complemento" />
+                <input style=" width:180px;"  placeholder="Ex: casa, ap, bolco" maxlength="30"
+                type="text" id="complemento" name="complemento" />
         </div>
         <div>
             <label> Pais</label> <br>
-                <input style=" width:100px;"  placeholder=" Pais..." type="text" id="pais" name="pais" />
+                <input style=" width:100px;"  placeholder=" Pais..." type="text" maxlength="30"
+                id="pais" name="pais" />
         </div>
         <div>
             <label> Celular</label> <br>
-                <input style=" width:150px;"  placeholder=" Celular..." type="text" id="Celular" name="Celular" />
+                <input style=" width:150px;"  placeholder="(00) 00000-0000" type="text" 
+                id="Celular" data-js="phone" name="Celular" min="9999999999999"/>
         </div>
         <div>
             <label> Celular 2</label> <br>
-                <input style=" width:150px;"  placeholder=" Celular 2..." type="text" id="Celular2" name="Celular2" />
+                <input style=" width:150px;"  placeholder="(00) 00000-0000"
+                  data-js="phone" type="text" id="Celular2" name="Celular2" />
         </div>
         <div>
             <label> Telefone</label> <br>
-                <input style=" width:150px;" placeholder=" Telefone..." type="text" id="Telefone" name="Telefone" />
+                <input style=" width:150px;" placeholder="(00) 00000-0000" 
+                type="text" id="Telefone" name="Telefone" data-js="phone"/>
         </div>
         <div>
             <label> E-mail</label> <br>
-                <input style=" width:200px;"  placeholder=" E-mail..." type="text" id="email" name="email" />
+                <input style=" width:200px;"  placeholder=" exemplo@dominio.com" type="text" id="email" name="email" />
             </div>
             <hr>
             <button  type="submit"> Salvar</button>
@@ -97,7 +141,7 @@
         <br>
      <form class='campo_de_busca' method="GET" action="{% url 'novo-fornecedor' %}">
         <label>Buscar fornecedor</label><br>
-        <input  type="search" id="fornecedor" name="fornecedor" placeholder="Cnpj ou Cpf">
+        <input  type="search" data-js="cnpj" id="fornecedor" name="fornecedor" placeholder="00.000.000/0000-00">
         <button type="submit">Pesquisar</button>
     </form>
     <table class="table">
@@ -120,7 +164,7 @@
                 <tr>
                     <td>{{ fornecedor.nome_fantazia }}</td>
                     <td>{{ fornecedor.cnpj }}</td>
-                    <td>{{ fornecedor.data_de_criacao }}</td>
+                    <td>{{ fornecedor.data_de_criacao | date:'d-m-y' }}</td>
 
                     {% if perms.pessoa.change_fornecedor %}
                         <td> <a href="{% url 'fornecedor_update' fornecedor.id %}">Editar</a> </td>

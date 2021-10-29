@@ -64,13 +64,13 @@ class AtualizarPedido(LoginRequiredMixin, View):
 
             if usuario_adm == usuario:
                 venda = Venda.objects.get(id=data['venda_id'])
-                venda.desconto = data['desconto'].replace(',', '.') or 0
+                venda.desconto = data['desconto'].replace(',', '.').replace('%', '') or 0
                 venda.tipo_de_pagamento_id = data['pagamento'] or 1
                 venda.finalizada = data['finalizada']
                 venda.descricao = data['descricao']
-                venda.valor_recebido = data['valor_recebido'].replace(',', '.')
-                venda.valor_credito = data['valor_credito']
-                venda.valor_debito = data['valor_debito'].replace(',', '.')
+                venda.valor_recebido = data['valor_recebido'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
+                venda.valor_credito = data['valor_credito'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
+                venda.valor_debito = data['valor_debito'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
                 venda.user_id = user_logado
                 venda.venda_id = data['venda_id']
 
@@ -166,8 +166,8 @@ class NovoItemPedido(LoginRequiredMixin, View):
         else:
             item = ItemDoPedido.objects.create(
                 produto_id = produto_id,
-                quantidade_de_itens=request.POST['quantidade'].replace(',', '.'),
-                desconto=request.POST['desconto'].replace(',', '.'),
+                quantidade_de_itens=request.POST['quantidade'].replace(',', '.') or 1,
+                desconto=request.POST['desconto'].replace(',', '.') or 0,
                 venda_id=venda, user_id = user_logado, usuarios_id = usuarioId)
 
             data['venda'] = item.venda
@@ -472,7 +472,7 @@ class CaixaDepositar(LoginRequiredMixin, View):
 
             deposito = Depositar_sacar.objects.create(
                 descricao=request.POST['descricao'],
-                depositar=request.POST['depositar'].replace(',', '.'),
+                depositar=request.POST['depositar'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$',''),
                 caixa_id = id, user_id = user_logado, usuarios_id = usuario,
                 )
             data['deposito'] = deposito
@@ -542,7 +542,7 @@ class CaixaSacar(LoginRequiredMixin, View):
 
             deposito = Depositar_sacar.objects.create(
                 descricao= request.POST['descricao'],
-                sacar= request.POST['sacar'].replace(',', '.'),
+                sacar= request.POST['sacar'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$',''),
                 caixa_id= id, user_id = user_logado, usuarios_id = usuario,
                 )
             data['deposito'] = deposito

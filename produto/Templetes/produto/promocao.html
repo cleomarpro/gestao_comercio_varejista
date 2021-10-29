@@ -20,28 +20,27 @@
     <div> 
         <label> Descrição</label> <br>
             <input style=" width:200px;"  placeholder=" Descrição..." type="text"
-                id="descricao" name="descricao" value='{{ promUpdate.descricao}}' required/>
+                id="descricao" name="descricao"  required/>
     </div>
     <div>
         <label> Desconto a partir</label>  <br>
             <input style=" width:120px;" autofocus="autofocus" placeholder=" Digite a quantidade..."
-                type="text" id="quantidade_promocional" name="quantidade_promocional"
-                value='{{ promUpdate.quantidade_promocional}}' required/>
+                type="text" id="quantidade_promocional" name="quantidade_promocional" required/>
     </div>
     <div>
         <label> Desconto promocional (%)</label> <br>
-            <input style=" width:110px;"  placeholder=" 0,00%" type="text"
-                id="desconto" name="desconto" value='{{ promUpdate.desconto}}' required/>
+            <input style=" width:110px;"  placeholder=" 0,00%" type="number" step=".01" lang="nb"
+                id="desconto" name="desconto"  required/>
     </div>
     <div>
         <label> Data de iníco</label> <br>
             <input style=" width:150px; padding:3px;"type="date" id="myDate" name="data_inicio"
-                value='{{ promUpdate.data_inicio}}' required/>
+                required/>
     </div>
     <div>
         <label> Data de termino</label> <br>
             <input style=" width:150px; padding:3px;" type="date" id="data_termino"
-                name="data_termino"  value='{{ promUpdate.data_termino}}' required/>
+                name="data_termino"  required/>
     </div>
             <hr>
         <button type="submit"> Salvar</button>

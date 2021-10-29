@@ -16,8 +16,8 @@
                 </div>
         <div>
             <label>Valor</label><br>
-            <input style=" width:150px;"  placeholder="Valor..." value="{{gastos_extras.valor}}"
-                type="text" id="valor" name="valor" required/>
+            <input style=" width:150px;"  value="R$ {{gastos_extras.valor | floatformat:2}}"
+                type="text" data-js="money" id="valor" name="valor" required/>
         </div>
             <hr>
             <button type="submit"> Editar</button>

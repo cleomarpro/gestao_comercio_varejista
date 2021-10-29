@@ -15,33 +15,35 @@
          </div>
          <div>
             <label> Segundo nome*</label> <br>
-                <input style=" width:200px;"  placeholder="Segundo nome..." value="{{cliente.segundo_nome}}"
+                <input style=" width:200px;"  placeholder="Ex: da silva..." value="{{cliente.segundo_nome}}"
                     type="text" id="segundo_nome" name="segundo_nome" required/>
         </div>
         <div>
-            <label> Cpf ou cnpj*</label> <br>
-                <input style=" width:200px;"  placeholder=" Cpf ou cnpj..." value="{{cliente.cpf_cnpj}}"
-                    type="text" id="cpf_cnpj" name="cpf_cnpj" required/>
-            </div>
-            <div>
+            <label> Cpf*</label> <br>
+                <input style=" width:200px;"   value="{{cliente.cpf_cnpj}}" placeholder="000.000.000-00" 
+                    type="text" data-js="cpf" id="cpf_cnpj" name="cpf_cnpj" required/>
+        </div>
+       
+        <div>
             <label> Data de nascimento*</label> <br>
-                <input style=" width:180px;"  placeholder=" Data de nascimento.." value="{{cliente.data_de_nascimento}}"
-                    type="date" id="data_de_nascimento" name="data_de_nascimento" required/>
+                <input style=" width:180px;" type="date" id="data_de_nascimento" data-js="date"
+                    name="data_de_nascimento" value="{{cliente.data_de_nascimento | date:'Y-m-d'}}">
             </div>
             <div>
             <label> Sexo*</label> <br>
             <select style=" width:150px;" type="text" id="sexo_id" name="sexo_id" value="{{cliente.sexo}}" required/>
                 <tr>
-                    <option value=''> __Sexo__</option>
+                    <option value='{{cliente.sexo.id}}'>{{cliente.sexo.nome}}</option>
                     <option value="3">Feminino </option>
                     <option value="2">Masculino  </option>
+                    <option value="1">Outro  </option>
                 </tr>
             </select>
         </div>
         <div>
-             <label> Nascionalidade*</label> <br>
+             <label> Nascionalidade</label> <br>
             <select style=" width:140px;" type="text" id="nascionalidade" name="nascionalidade" 
-                value="{{cliente.nascionalidade}}" required/>
+                value="{{cliente.nascionalidade}}" >
                 <tr>
                     <option value=''> __Selecionar__</option>
                     <option >Nacional </option>
@@ -52,25 +54,25 @@
         <div>
 
              <label>Cep</label> <br>
-                <input style=" width:140px;"  placeholder=" Cep..." value="{{cliente.cep}}"
-                    type="text" id="cep" name="cep" />
+                <input style=" width:140px;"  value="{{cliente.cep}}" placeholder="00000-000"
+                    type="text" data-js="cep" id="cep" name="cep" />
         </div>
         <div>
 
             <label> Rua</label> <br>
-                <input style=" width:200px;"  placeholder=" Rua..." value="{{cliente.}}"
+                <input style=" width:200px;"  value="{{cliente.}}" placeholder=" Rua..."
                     type="text" id="rua" name="rua" />
 
         </div>
         <div>
             <label> Quadra</label> <br>
                 <input style=" width:80px;"  placeholder=" Quadra..." value="{{cliente.quadra}}"
-                    type="text" id="quadra" name="quadra" />
+                    type="number" max="999999" id="quadra" name="quadra" />
         </div>
         <div>
             <label> Número</label> <br>
                 <input style=" width:80px;"  placeholder=" Número..." value="{{cliente.numero}}"
-                    type="text" id="numero" name="numero" />
+                    type="number" max="999999" id="numero" name="numero" />
         </div>
         <div>
             <label> Setor</label> <br>
@@ -89,7 +91,7 @@
         </div>
         <div>
             <label> Complemento</label> <br>
-                <input style=" width:180px;"  placeholder=" Complemento..." value="{{cliente.complemento}}"
+                <input style=" width:180px;"  placeholder="Ex: Bloco, ap" value="{{cliente.complemento}}"
                     type="text" id="complemento" name="complemento" />
         </div>
         <div>
@@ -99,22 +101,22 @@
         </div>
         <div>
             <label> Celular</label> <br>
-                <input style=" width:150px;"  placeholder=" Celular..." value="{{cliente.Celular}}"
-                    type="text" id="Celular" name="Celular" />
+                <input style=" width:150px;" value="{{cliente.Celular}}" placeholder="(00) 00000-0000"
+                    type="text" data-js="phone" id="Celular" name="Celular" />
         </div>
         <div>
             <label> Celular 2</label> <br>
-                <input style=" width:150px;"  placeholder=" Celular 2..." value="{{cliente.Celular2}}"
-                    type="text" id="Celular2" name="Celular2" />
+                <input style=" width:150px;" value="{{cliente.Celular2}}" placeholder="(00) 00000-0000"
+                    type="text" data-js="phone" id="Celular2" name="Celular2" />
         </div>
         <div>
             <label> Telefone</label> <br>
-                <input style=" width:150px;" placeholder=" Telefone..." value="{{cliente.Telefone}}"
-                    type="text" id="Telefone" name="Telefone" />
+                <input style=" width:150px;" value="{{cliente.Telefone}}" placeholder="(00) 00000-0000"
+                    type="text" data-js="phone" id="Telefone" name="Telefone" />
         </div>
         <div>
             <label> E-mail</label> <br>
-                <input style=" width:200px;"  placeholder=" E-mail..." value="{{cliente.email}}"
+                <input style=" width:200px;"  placeholder=" exemplo@dominio.com" value="{{cliente.email}}"
                     type="text" id="email" name="email" />
         </div>
                 

@@ -56,7 +56,7 @@ class NovoFornecedor(LoginRequiredMixin, View):
         fornecedor = Fornecedor.objects.create(
             nome_fantazia = request.POST['nome_fantazia'],
             cnpj = request.POST['cnpj'],
-            data_de_criacao = request.POST['data_de_criacao'],
+            data_de_criacao = request.POST['data_de_criacao'] or None,
             nascionalidade = request.POST['nascionalidade'],
             cep = request.POST['cep'],
             rua = request.POST['rua'],
@@ -157,7 +157,7 @@ class FornecedorUpdate(LoginRequiredMixin, View):
             fornecedor.id= id
             fornecedor.nome_fantazia = request.POST['nome_fantazia']
             fornecedor.cnpj = request.POST['cnpj']
-            fornecedor.data_de_criacao = request.POST['data_de_criacao']
+            fornecedor.data_de_criacao = request.POST['data_de_criacao'] or None
             fornecedor.nascionalidade = request.POST['nascionalidade']
             fornecedor.cep = request.POST['cep']
             fornecedor.rua = request.POST['rua']
@@ -226,7 +226,7 @@ class NovoCliente(LoginRequiredMixin, View):
             nome = request.POST['nome'],
             segundo_nome = request.POST['segundo_nome'],
             cpf_cnpj = request.POST['cpf_cnpj'],
-            data_de_nascimento = request.POST['data_de_nascimento'],
+            data_de_nascimento = request.POST['data_de_nascimento'] or None,
             sexo_id = request.POST['sexo_id'],
             nascionalidade = request.POST['nascionalidade'],
             cep = request.POST['cep'],
@@ -327,7 +327,7 @@ class ClienteUpdate(LoginRequiredMixin, UpdateView):
             cliente.nome = request.POST['nome']
             cliente.segundo_nome = request.POST['segundo_nome']
             cliente.cpf_cnpj = request.POST['cpf_cnpj']
-            cliente.data_de_nascimento = request.POST['data_de_nascimento']
+            cliente.data_de_nascimento = request.POST['data_de_nascimento'] or None
             cliente.sexo_id = request.POST['sexo_id']
             cliente.nascionalidade = request.POST['nascionalidade']
             cliente.cep = request.POST['cep']

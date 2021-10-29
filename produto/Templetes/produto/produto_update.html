@@ -43,14 +43,15 @@
                     id="codigo" name="codigo" value="{{produto.codigo}}"  required/>
         </div>
         <div>
-            <label> Porcentagem de lucro</label> <br>
-                <input style=" width:127px;"  placeholder=" 00,00%" type="text" value="{{produto.percentagem_de_lucro}}"
-                    id="percentagem_de_lucro" name="percentagem_de_lucro" required/>
+            <label>Lucro desejado</label> <br>
+                <input style=" width:127px;" type="number" step=".01" lang="nb" 
+                    placeholder="{{produto.percentagem_de_lucro}}" value="{{produto.percentagem_de_lucro}}"
+                        id="percentagem_de_lucro" name="percentagem_de_lucro"> %
         </div>
         <div>
-            <label> Valor da compra</label> <br>
-                <input style=" width:150px;"  placeholder=" Valor da compra..." value="{{produto.valor_compra}}"
-                    type="text" id="valor_compra" name="valor_compra" required/>
+            <label> Valor de compra</label> <br>
+                <input style=" width:150px;"  value="R$ {{produto.valor_compra}}"
+                    type="text" data-js="money" id="valor_compra" name="valor_compra" required/>
         </div>
                 <hr>
                 <button type="submit"> Editar</button>

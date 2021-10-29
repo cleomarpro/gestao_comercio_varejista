@@ -46,17 +46,17 @@
         </select>
         <button  type="submit">Filtrar</button>
     </div>
-    <div>
-        <label>Total das vendas: R$ {{total_vendas.total}}</label><br>
-        <label>Total de desconto: R$ {{total_desconto.total}}</label>
-    </div>
+    
     </form>
     
         <a id="mostrar_filtros"
             href="#" onclick="document.getElementById('form_mobil').style.display='block';">
             Mostrar filtros 
         </a>
-   
+        <div class="dashboard">
+            <label><b> Total das vendas:</b> R$ {{total_vendas.total}}</label><br>
+            <label><b>Total de desconto:</b> R$ {{total_desconto.total}}</label>
+        </div>
     <table class='table'>
       <thead>
         <tr>

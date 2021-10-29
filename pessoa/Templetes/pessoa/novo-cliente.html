@@ -16,35 +16,44 @@
                 <p> NOVO CLIENTE</p>
 
             <hr> 
+           
         <div>
             <label> Nome*</label><br>
-                <input style=" width:200px;"  placeholder=" Nome..." type="text" id="nome" name="nome" required/>
+                <input style=" width:200px;"  placeholder="Nome..." type="text" 
+                maxlength="30" id="nome" name="nome" required/>
         </div>
         <div> 
             <label> Segundo nome*</label><br>
-                <input style=" width:200px;"  placeholder="Segundo nome..." type="text" id="segundo_nome" name="segundo_nome" required/>
+                <input style=" width:200px;"  placeholder="Ex: da silva..." 
+                maxlength="30" type="text" id="segundo_nome" name="segundo_nome" required/>
         </div>
         <div> 
-            <label> Cpf ou cnpj*</label><br>
-                <input style=" width:200px;"  placeholder=" Cpf ou cnpj..." type="text" id="cpf_cnpj" name="cpf_cnpj" required/>
+            <label> Cpf*</label><br>
+                <input style=" width:200px;"  placeholder="000.000.000-00" 
+                type="text" data-js="cpf" minlength="10" id="cpf_cnpj" 
+                name="cpf_cnpj" required/>
+        </div>
+        <br>
+
+        <div> 
+            <label> Data de nascimento</label><br>
+                <input style=" width:180px;"  placeholder=" Data de nascimento.." type="date" 
+                id="data_de_nascimento" name="data_de_nascimento" >
         </div>
         <div> 
-            <label> Data de nascimento*</label><br>
-                <input style=" width:180px;"  placeholder=" Data de nascimento.." type="date" id="data_de_nascimento" name="data_de_nascimento" required/>
-        </div>
-        <div> 
-            <label> Sexo*</label><br>
-            <select style=" width:150px;" type="text" id="sexo_id" name="sexo_id" required/>
+            <label> Sexo</label><br>
+            <select style=" width:150px;" type="text" id="sexo_id" name="sexo_id" >
                 <tr>
-                    <option value=''> __Sexo__</option>
+                    <option value='1'> __Sexo__</option>
                     <option value="3">Feminino </option>
                     <option value="2">Masculino  </option>
+                    <option value="1">Outro  </option>
                 </tr>
             </select>
         </div>
         <div> 
              <label> Nascionalidade*</label><br>
-            <select style=" width:140px;" type="text" id="nascionalidade" name="nascionalidade" required/>
+            <select style=" width:140px;" type="text" id="nascionalidade" name="nascionalidade" >
                 <tr>
                     <option value=''> __Selecionar__</option>
                     <option >Nacional </option>
@@ -55,70 +64,82 @@
         <div> 
 
              <label>Cep</label><br>
-                <input style=" width:140px;"  placeholder=" Cep..." type="text" id="cep" name="cep" />
+                <input style=" width:140px;"  placeholder="00000-000" type="text" data-js="cep"
+                  id="cep" name="cep" />
         </div>
         <div> 
 
             <label> Rua</label><br>
-                <input style=" width:200px;"  placeholder=" Rua..." type="text" id="rua" name="rua" />
+                <input style=" width:200px;"  placeholder=" Rua..." type="text" 
+                maxlength="30" id="rua" name="rua" />
         </div>
         <div> 
             <label> Quadra</label><br>
-                <input style=" width:80px;"  placeholder=" Quadra..." type="text" id="quadra" name="quadra" />
+                <input style=" width:80px;"  placeholder=" Quadra..." type="number" 
+                max="999999999" id="quadra" name="quadra" />
         </div>
         <div> 
             <label> Número</label><br>
-                <input style=" width:80px;"  placeholder=" Número..." type="text" id="numero" name="numero" />
+                <input style=" width:180px;"  placeholder="Casa ou apartamento" type="number" 
+                max="999999999" id="numero" name="numero" />
         </div>
         <div> 
             <label> Setor</label><br>
-                <input style=" width:150px;"  placeholder=" Setor..." type="text" id="setor" name="setor" />
+                <input style=" width:150px;"  placeholder=" Setor..." type="text" 
+                maxlength="30" id="setor" name="setor" />
         </div>
         <div> 
 
             <label> Estado</label><br>
-                <input style=" width:200px;"  placeholder=" Estado..." type="text" id="estado" name="estado" />
+                <input style=" width:200px;"  placeholder=" Estado..." type="text" 
+                maxlength="30" id="estado" name="estado" />
         </div>
         <div> 
 
             <label> Cidade</label><br>
-                <input style=" width:200px;"  placeholder=" Cidade..." type="text" id="cidade" name="cidade" />
+                <input style=" width:200px;"  placeholder=" Cidade..." type="text" 
+                maxlength="30" id="cidade" name="cidade" />
         </div>
         <div> 
 
             <label> Complemento</label><br>
-                <input style=" width:180px;"  placeholder=" Complemento..." type="text" id="complemento" name="complemento" />
+                <input style=" width:180px;"  placeholder="Ex: Bloco, ap, casa" type="text" 
+                maxlength="30" id="complemento" name="complemento" />
         </div>
         <div> 
             <label> Pais</label><br>
-                <input style=" width:100px;"  placeholder=" Pais..." type="text" id="pais" name="pais" />
+                <input style=" width:100px;"  placeholder=" Pais..." type="text" id="pais" 
+                maxlength="30" name="pais" />
         </div>
         <div> 
             <label> Celular:</label><br>
-                <input style=" width:150px;"  placeholder=" Celular..." type="text" id="Celular" name="Celular" />
+                <input style=" width:150px;"  placeholder="(00) 00000-0000" type="text" data-js="phone" id="Celular" name="Celular" />
         </div>
         <div> 
 
             <label> Celular 2</label><br>
-                <input style=" width:150px;"  placeholder=" Celular 2..." type="text" id="Celular2" name="Celular2" />
+                <input style=" width:150px;"  placeholder="(00) 00000-0000" type="text" data-js="phone"
+                    id="Celular2" name="Celular2" />
         </div>
         <div> 
 
             <label> Telefone</label><br>
-                <input style=" width:150px;" placeholder=" Telefone..." type="text" id="Telefone" name="Telefone" />
+                <input style=" width:150px;" placeholder="(00) 00000-0000" type="text" data-js="phone"
+                    id="Telefone" name="Telefone" />
         </div>
         <div> 
             <label> E-mail</label><br>
-                <input style=" width:150px;"  placeholder=" E-mail..." type="text" id="email" name="email" />
+                <input style=" width:200px;"  placeholder=" usuario@dominio.com" type="email" id="email" name="email" />
         </div>
             
             <hr>
             <button  type="submit"> Salvar</button>
     </form>
+    
        <br>
     <form class='campo_de_busca' method="GET" action="{% url 'novo-cliente' %}">
         <label>Buscar clientes</label><br>
-        <input  type="search" id="client" name="client" placeholder="Cpf ou cnpj...">
+        <input  type="search" data-js="cpf" id="client" name="client" placeholder="000.000.000-00">
         <button  type="submit">Buscar</button>
     </form>
     <table class="table">
@@ -141,7 +162,7 @@
                 <tr>
                     <td>{{ cliente.nome }}</td>
                     <td>{{ cliente.cpf_cnpj }}</td>
-                    <td>{{ cliente.data_de_nascimento }}</td>
+                    <td>{{ cliente.data_de_nascimento | date:'d-m-y'}}</td>
 
                     {% if perms.pessoa.change_cliente %}
                     <td>   <a href="{% url 'cliente_update' cliente.id %}">Editar</a> </td>
@@ -156,5 +177,7 @@
     </table>
 
 </div>
-
+<script>
+    
+</script>
 {% endblock %}

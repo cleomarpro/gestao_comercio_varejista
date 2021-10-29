@@ -66,7 +66,7 @@ class GastosExtras(LoginRequiredMixin, View):
 
         gastos_extras = Gastos_extras.objects.create(
             descricao = request.POST['descricao'],
-            valor = request.POST['valor'],
+            valor = request.POST['valor'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$',''),
             user_id = user_logado, usuarios_id = usuarioId
             )
         data['gastos_extras'] = gastos_extras
@@ -75,7 +75,7 @@ class GastosExtras(LoginRequiredMixin, View):
         return render(
              request, 'financeiro/gastos-extras.html',data)
 
-@login_required()
+@login_required() 
 def gastosExtras_delete(request, id):
     user = request.user.has_perm('financeiro.change_gastos_extras')
     if user == False:
@@ -152,7 +152,7 @@ class GastosExtrasUpdate(LoginRequiredMixin, View):
         if usuario_adm == usuarioId: # Verificar autenticidade do usuário
             gastos_extras.id= id
             gastos_extras.descricao = request.POST['descricao']
-            gastos_extras.valor = request.POST['valor']
+            gastos_extras.valor = request.POST['valor'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
             gastos_extras.user_id = user_logado
             gastos_extras.save()
             return redirect('gastos-extras')
@@ -256,7 +256,7 @@ class ContasAreceber(LoginRequiredMixin, View):
 
         conta = Contas.objects.create(
             observacao = request.POST['observacao'],
-            valor = request.POST['valor'].replace(',', '.'),
+            valor = request.POST['valor'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$',''),
             parcelas = request.POST['parcelas'],
             tipo_de_conta_id = request.POST['tipo_de_conta_id'],
             data_de_vencimento = request.POST['data_de_vencimento'],
@@ -349,7 +349,7 @@ class ContaAreceberUpdate(LoginRequiredMixin, View):
             conta.id= id
             conta.observacao = request.POST['observacao']
             if request.POST['valor']:
-                conta.valor = request.POST['valor'].replace(',', '.')
+                conta.valor = request.POST['valor'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
             conta.parcelas = request.POST['parcelas']
             conta.tipo_de_conta_id = request.POST['tipo_de_conta_id']
             if request.POST['data_de_vencimento']:
@@ -433,7 +433,7 @@ class ContasApagar(LoginRequiredMixin, View):
             #for conta in range( parcelas):
             conta = Contas.objects.create(
                 observacao = request.POST['observacao'],
-                valor = request.POST['valor'].replace(',', '.'),
+                valor = request.POST['valor'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$',''),
                 parcelas = request.POST['parcelas'],
                 tipo_de_conta_id = request.POST['tipo_de_conta_id'],
                 data_de_vencimento = request.POST['data_de_vencimento'],
@@ -493,8 +493,8 @@ class ContaApagarUpdate(LoginRequiredMixin, View):
             conta.id= id
             conta.observacao = request.POST['observacao']
             if request.POST['valor']:
-                conta.valor = request.POST['valor'].replace(',', '.')
-            conta.parcelas = request.POST['parcelas']
+                conta.valor = request.POST['valor'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
+            conta.parcelas = request.POST['parcelas'] or 1
             conta.tipo_de_conta_id = request.POST['tipo_de_conta_id']
             if request.POST['data_de_vencimento']:
                 conta.data_de_vencimento = request.POST['data_de_vencimento']

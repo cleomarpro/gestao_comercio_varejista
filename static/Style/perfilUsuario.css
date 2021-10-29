@@ -7,18 +7,19 @@
 
 .usuario{
     background-color: #F0F8FF;
-    margin-left:185px;
+    margin-left:195px;
     width: 600px;
     font-size:15px;
 }
-.usuario h4{
-    background-color: #4F4F4F;
-    color:white;
-    text-align: center;
-    padding:5px;
-    margin-left: 10px;
-    width: 94%;
-    font-size: 25px;
+.usuario a{
+    text-decoration:none;
+}
+.usuario h2{
+    margin-left:195px;
+    background-color: #454549;
+    font-size:18px;
+    color: rgb(245, 241, 241);
+    padding-block: 7px;
 
 }
 .usuario label{

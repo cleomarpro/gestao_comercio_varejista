@@ -10,18 +10,18 @@
         <hr>
         <div>
             <label> Nome fantazia*</label> <br>
-                <input style=" width:200px;"  placeholder=" Nome..." value="{{fornecedor.nome_fantazia}}"
-                type="text" id="nome_fantazia" name="nome_fantazia" required/>
+                <input style=" width:200px;"  placeholder="Nome da empresa..." value="{{fornecedor.nome_fantazia}}"
+                maxlength="50"  type="text" id="nome_fantazia" name="nome_fantazia" required/>
         </div>
         <div>
             <label> Cnpj*</label> <br>
-                <input style=" width:150;"  placeholder="Cnpj..." value="{{fornecedor.cnpj}}"
-                    type="text" id="cnpj" name="cnpj" required/>
+                <input style=" width:150;"  placeholder="00.000.000/0000-00" value="{{fornecedor.cnpj}}"
+                minlength="17" data-js="cnpj"   type="text" id="cnpj" name="cnpj" required/>
         </div>
         <div>
             <label> Data de criação</label> <br>
-                <input style=" width:140px;"  placeholder=" Data de criação:" value="{{fornecedor.data_de_criacao}}"
-                    type="date" id="data_de_criacao" name="data_de_criacao" required/>
+                <input style=" width:140px;"  placeholder=" Data de criação:" value="{{fornecedor.data_de_criacao | date:'Y-m-d'}}"}}"
+                    type="date" id="data_de_criacao" name="data_de_criacao">
         </div>
         <div>
              <label> Nascionalidade</label> <br>
@@ -36,68 +36,97 @@
         </div>
         <div>
              <label>Cep</label> <br>
-                <input style=" width:140px;"  placeholder=" Cep..." value="{{fornecedor.cep}}"
-                    type="text" id="cep" name="cep" />
+                <input style=" width:140px;"  placeholder="00000-000" value="{{fornecedor.cep}}"
+                data-js="cep"  type="text" id="cep" name="cep" />
         </div>
         <div>
             <label> Rua</label> <br>
                 <input style=" width:200px;"  placeholder=" Rua..." value="{{fornecedor.rua}}"
-                    type="text" id="rua" name="rua" />
+                maxlength="50"  type="text" id="rua" name="rua" />
         </div>
         <div>
             <label> Quadra</label> <br>
                 <input style=" width:80px;"  placeholder=" Quadra..." value="{{fornecedor.quadra}}"
-                    type="text" id="quadra" name="quadra" />
+                  max="9999999"  type="number" id="quadra" name="quadra" />
         </div>
         <div>
             <label> Número</label> <br>
                 <input style=" width:80px;"  placeholder=" Número..." value="{{fornecedor.numero}}"
-                    type="text" id="numero" name="numero" />
+                max="9999999"  type="number" id="numero" name="numero" />
         </div>
         <div>
             <label> Setor</label> <br>
                 <input style=" width:150px;"  placeholder=" Setor..." value="{{fornecedor.setor}}"
-                    type="text" id="setor" name="setor" />
+                maxlength="30"  type="text" id="setor" name="setor" />
         </div>
         <div>
             <label> Estado</label> <br>
-                <input style=" width:200px;"  placeholder=" Estado..." value="{{fornecedor.estado}}"
-                    type="text" id="estado" name="estado" />
-        </div>
+                <list style=" width:200px;"  placeholder=" Estado..." 
+                maxlength="30"  type="text" id="estado" name="estado" >
+                    <option value="{{fornecedor.estado}}">{{fornecedor.estado}}</option>
+                    <option value="AC">Acre</option>
+                    <option value="AL">Alagoas</option>
+                    <option value="AP">Amapá</option>
+                    <option value="AM">Amazonas</option>
+                    <option value="BA">Bahia</option>
+                    <option value="CE">Ceará</option>
+                    <option value="DF">Distrito Federal</option>
+                    <option value="ES">Espírito Santo</option>
+                    <option value="GO">Goiás</option>
+                    <option value="MA">Maranhão</option>
+                    <option value="MT">Mato Grosso</option>
+                    <option value="MS">Mato Grosso do Sul</option>
+                    <option value="MG">Minas Gerais</option>
+                    <option value="PA">Pará</option>
+                    <option value="PB">Paraíba</option>
+                    <option value="PR">Paraná</option>
+                    <option value="PE">Pernambuco</option>
+                    <option value="PI">Piauí</option>
+                    <option value="RJ">Rio de Janeiro</option>
+                    <option value="RN">Rio Grande do Norte</option>
+                    <option value="RS">Rio Grande do Sul</option>
+                    <option value="RO">Rondônia</option>
+                    <option value="RR">Roraima</option>
+                    <option value="SC">Santa Catarina</option>
+                    <option value="SP">São Paulo</option>
+                    <option value="SE">Sergipe</option>
+                    <option value="TO">Tocantins</option>
+                </select>
+            </div>
         <div>
             <label> Cidade</label> <br>
                 <input style=" width:200px;"  placeholder=" Cidade..." value="{{fornecedor.cidade}}"
-                    type="text" id="cidade" name="cidade" />
+                  maxlength="30"  type="text" id="cidade" name="cidade" />
         </div>
         <div>
             <label> Complemento</label> <br>
-                <input style=" width:180px;"  placeholder=" Complemento..." value="{{fornecedor.complemento}}"
-                    type="text" id="complemento" name="complemento" />
+                <input style=" width:180px;"  placeholder="Ex:casa, ap, bloco" value="{{fornecedor.complemento}}"
+                  maxlength="30"  type="text" id="complemento" name="complemento" />
         </div>
         <div>
             <label> Pais</label> <br>
                 <input style=" width:100px;"  placeholder=" Pais..." value="{{fornecedor.pais}}"
-                    type="text" id="pais" name="pais" />
+                   maxlength="30" type="text" id="pais" name="pais" />
         </div>
         <div>
             <label> Celular</label> <br>
-                <input style=" width:100px;"  placeholder=" Celular..." value="{{fornecedor.Celular}}"
-                    type="text" id="Celular" name="Celular" />
+                <input style=" width:100px;"  placeholder="(00) 00000-0000" value="{{fornecedor.Celular}}"
+                data-js="phone" type="text" id="Celular" name="Celular" />
         </div>
         <div>
             <label> Celular 2</label> <br>
-                <input style=" width:120px;"  placeholder=" Celular 2..." value="{{fornecedor.Celular2}}"
-                    type="text" id="Celular2" name="Celular2" />
+                <input style=" width:120px;"  placeholder="(00) 00000-0000" value="{{fornecedor.Celular2}}"
+                data-js="phone"  type="text" id="Celular2" name="Celular2" />
         </div>
         <div>
             <label> Telefone</label> <br>
-                <input placeholder=" Telefone..." value="{{fornecedor.Telefone}}"
-                    type="text" id="Telefone" name="Telefone" />
+                <input placeholder="(00) 00000-0000" value="{{fornecedor.Telefone}}"
+                data-js="phone" type="text" id="Telefone" name="Telefone" />
         </div>
         <div>
             <label> E-mail</label> <br>
-                <input   placeholder=" E-mail..." value="{{fornecedor.email}}"
-                    type="text" id="email" name="email" />
+                <input   placeholder="exemplo@dominio.com" value="{{fornecedor.email}}"
+                maxlength="80" type="text" id="email" name="email" />
         </div>
             
             <hr>

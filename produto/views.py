@@ -73,7 +73,7 @@ class NovoProduto(LoginRequiredMixin, View):
                 codigo = request.POST['codigo'],
                 percentagem_de_lucro = request.POST['percentagem_de_lucro'].replace(',', '.'),
                 promocao_id = request.POST['promocao' ],
-                valor_compra = request.POST['valor_compra'].replace(',', '.'),
+                valor_compra = request.POST['valor_compra'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$',''),
                 user_id = user_logado, usuarios_id = usuarioId
                 #imagem = request.POST['imagem'],
                 )
@@ -176,9 +176,10 @@ class ProdutoUpdate(LoginRequiredMixin, View):
             produto.nome = request.POST['nome']
             produto.categoria_id = request.POST['categoria_id']
             produto.codigo = request.POST['codigo']
-            produto.percentagem_de_lucro = request.POST['percentagem_de_lucro'].replace(',', '.')
+            if request.POST['percentagem_de_lucro']:
+                produto.percentagem_de_lucro = request.POST['percentagem_de_lucro'].replace(',', '.')
             produto.promocao_id = request.POST['promocao' ]
-            produto.valor_compra = request.POST['valor_compra'].replace(',', '.')
+            produto.valor_compra = request.POST['valor_compra'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
             produto.user_id = user_logado
             #imagem = request.POST['imagem'],
             produto.save()

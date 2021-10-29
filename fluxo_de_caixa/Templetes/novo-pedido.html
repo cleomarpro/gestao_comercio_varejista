@@ -97,35 +97,36 @@
 
             {%if venda.tipo_de_pagamento_id == '1'%}
                 <label> Valor recebido:</label>
-                    <input style=" width:20%;" type="number" step=".01" lang="nb"
-                        id="valor_recebido"name="valor_recebido" value="{{ venda.valor_recebido}}"  accesskey="c" required/>
+                    <input style=" width:20%;" type="text" data-js="money"
+                        id="valor_recebido"name="valor_recebido" value="R$ {{venda.valor_recebido}}"  accesskey="c" required/>
 
             {%elif venda.tipo_de_pagamento_id == '4'%}
             <label> Cédula</label>
-                <input style=" width:20%;" type="number" step=".01" lang="nb" id="valor_recebido">
+                <input style=" width:20%;" type="text" data-js="money" id="valor_recebido"
+                    name="valor_recebido" value="R$ {{venda.valor_recebido}}" accesskey="c" required/>
             <label for="busca">Débito:</label>
-                <input  style=" width:20%;" type="number" step=".01" lang="nb" id="valor_debito" name="valor_debito"
-                value="{{ venda.valor_debito}}" accesskey="d" required/>
+                <input  style=" width:20%;" type="text" data-js="money" id="valor_debito" name="valor_debito"
+                value="R$ {{venda.valor_debito}}" accesskey="d" required/>
         
             {%elif venda.tipo_de_pagamento_id == '5'%}
             <label> Cédula:</label>
-                <input style=" width:20%;" type="number" step=".01" lang="nb" id="valor_recebido"
-                 name="valor_recebido" value="{{ venda.valor_recebido}}" accesskey="c" required/>
+                <input style=" width:20%;" type="text" data-js="money" id="valor_recebido"
+                 name="valor_recebido" value="R$ {{venda.valor_recebido}}" accesskey="c" required/>
 
             <label >Crédito:</label>
                 <input  style=" width:20%;"
-                type="number" step=".01" lang="nb" id="valor_credito" accesskey="ç"
-                name="valor_credito"  value="{{ venda.valor_credito}}" required/>
+                type="text" data-js="money" id="valor_credito" accesskey="ç"
+                name="valor_credito"  value="R$ {{venda.valor_credito}}" required/>
 
             {%elif venda.tipo_de_pagamento_id == '6'%}
             <label for="busca">Crédito:</label>
                 <input style=" width:20%;"
-                 type="number" step=".01" lang="nb" id="valor_credito" accesskey="ç"
-                name="valor_credito"  value="{{ venda.valor_credito}}" required/>
+                type="text" data-js="money" id="valor_credito" accesskey="ç"
+                name="valor_credito"  value="R$ {{venda.valor_credito}}" required/>
 
             <label for="busca">Débito:</label>
-                <input   style=" width:20%; " type="number" step=".01" lang="nb" accesskey="d"
-                id="valor_debito" name="valor_debito" value="{{ venda.valor_debito}}" required/>
+                <input   style=" width:20%; " type="text" data-js="money" accesskey="d"
+                id="valor_debito" name="valor_debito" value="R$ {{venda.valor_debito}}" required/>
             {% endif%}
 
             <a href="http://gestao.vieworld.com.br/fluxo_de_caixa/novo-pedido" target="_blank">
@@ -161,11 +162,11 @@
             <label> Desconto: </label>
                 <input style=" width:17%;" accesskey="d"
                 type="number" step=".01" lang="nb" name="desconto"
-                    id="desconto" placeholder="0,0%" value="0" required/>
+                    min="0" max="1000" id="desconto" placeholder="0,0%" >
             <label> Quantidade:</label>
                 <input style=" width:17%;" accesskey="q"
                 type="number" step=".01" lang="nb" name="quantidade"
-                    id="quantidade" value="1" required/>
+                min="0" max="999" id="quantidade" value="1">
                 <br>
             <button id="bt_vendas1">Incluir</button>
         </form>
@@ -181,7 +182,7 @@
             <label> Desconto:</label>
                 <input style=" width:17%;" accesskey="d"
                 type="number" step=".01" lang="nb" name="desconto"
-                    id="desconto" placeholder="0,0%" value="0" required disabled=" true">
+                    id="desconto" placeholder="0,0%"  disabled=" true">
             <label> Quantidade:</label>
                 <input style=" width:17%;" accesskey="q"
                 type="number" step=".01" lang="nb" name="quantidade"

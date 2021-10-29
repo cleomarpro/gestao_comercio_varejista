@@ -21,7 +21,7 @@
     </div>
     <div>
         <label>Valor</label><br>
-            <input placeholder="Valor..." type="text" id="valor" name="valor" required/>
+            <input placeholder="R$ 0,00" type="text" data-js="money" name="valor" required/>
     </div>
              <hr>
             <button type="submit"> Salvar</button>
@@ -102,7 +102,7 @@
             {%for gastos_extras in gastos_extras %}
                 <tr>
                     <td>{{ gastos_extras.descricao }}</td>
-                    <td>R$ {{ gastos_extras.valor }}</td>
+                    <td>R$ {{ gastos_extras.valor  | floatformat:2}}</td>
                     <td>{{ gastos_extras.data_hora.date }}</td>
 
                     {% if perms.financeiro.change_gastos_extras %}

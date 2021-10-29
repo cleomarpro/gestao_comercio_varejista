@@ -59,14 +59,14 @@
                     id="codigo" name="codigo"  required/>
         </div>
         <div>
-            <label> Porcentagem de lucro</label> <br>
-                <input style=" width:127px;"  placeholder=" 00,00%" type="text"
-                    id="percentagem_de_lucro" name="percentagem_de_lucro" required/>
+            <label>Lucro desejado</label> <br>
+                <input style=" width:127px;"  placeholder=" 00,00%" type="number"
+                step=".01" lang="nb" id="percentagem_de_lucro" name="percentagem_de_lucro" required/>
         </div>
         <div>
-            <label> Valor da compra</label> <br>
-                <input style=" width:150px;"  placeholder=" Valor da compra..."
-                    type="text" id="valor_compra" name="valor_compra" required/>
+            <label> Valor de compra</label> <br>
+                <input style=" width:150px;"  placeholder="R$ 0,00 "
+                    type="text" data-js="money"id="valor_compra" name="valor_compra" required/>
         </div>
         <hr>
                 <button id="refresh" type="submit"> Salvar</button>
@@ -87,7 +87,7 @@
                     <br>
                     <label> Para feichar, pressione  ( Alt  + X ) !</label>
                     <br>
-            </form>
+            </form> 
          </div>
          {%endif%}
          {% if mensagen_de_erro == false and produto.codigo != None%}
@@ -144,7 +144,7 @@
             <th >Nome</th>
             <th class="col_table">Categoria </th>
             <th >Código</th>
-            <th class="col_table">Valor da compra</th>
+            <th class="col_table">Valor de compra</th>
             <th class="col_table">Lucro estimado(%)</th>
             <th >Valor venal</th>
             <th >Em estoque</th>
