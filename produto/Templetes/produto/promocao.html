@@ -28,8 +28,8 @@
                 type="text" id="quantidade_promocional" name="quantidade_promocional" required/>
     </div>
     <div>
-        <label> Desconto promocional (%)</label> <br>
-            <input style=" width:110px;"  placeholder=" 0,00%" type="number" step=".01" lang="nb"
+        <label> Desconto</label> <br>
+            <input style=" width:220px;"  placeholder="Em porcentagem, Ex: 0,00%" type="number" step=".01" lang="nb"
                 id="desconto" name="desconto"  required/>
     </div>
     <div>
@@ -67,8 +67,8 @@
                     <td class="col_table">{{ promocao.descricao}}</td>
                     <td>{{ promocao.quantidade_promocional | floatformat:2}}</td>
                     <td>{{ promocao.desconto | floatformat:2}}%</td>
-                    <td>{{ promocao.data_inicio}}</td>
-                    <td>{{ promocao.data_termino}}</td>
+                    <td>{{ promocao.data_inicio | date:'d/m/y'}}</td>
+                    <td>{{ promocao.data_termino | date:'d/m/y'}}</td>
 
                     {% if perms.produto.change_promocao %}
                         <td> <a href="{% url 'promocao-update' promocao.id %} ">Editar</a> 

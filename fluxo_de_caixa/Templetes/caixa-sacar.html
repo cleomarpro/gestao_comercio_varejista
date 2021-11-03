@@ -59,7 +59,7 @@
                 <td>{{ sacar.descricao }}</td>
                 <td>R$ {{ sacar.sacar }}</td>
                 <td>{{ sacar.caixa.nome_do_caixa }}</td>
-                <td>{{ sacar.data_hora.date }}</td>
+                <td>{{ sacar.data_hora | date:'d/m/y  H:i' }}</td>
                 <td>{{ sacar.user.username}}</td>
            
               {%endif%}

@@ -59,7 +59,7 @@
               {% if deposito.depositar > 0%}
                 <td>{{ deposito.descricao }}</td>
                 <td>R$ {{ deposito.depositar }}</td>
-                <td>{{ deposito.data_hora.date }}</td>
+                <td>{{ deposito.data_hora | date:'d/m/y  H:i'}}</td>
                 <td>{{ deposito.user.username}}</td>
               {%endif%}
             </tr>

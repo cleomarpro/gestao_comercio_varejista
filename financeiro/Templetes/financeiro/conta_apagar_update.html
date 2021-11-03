@@ -28,7 +28,8 @@
                 <input type="hidden" value='2' name="tipo_de_conta_id">
 
             <label> Data de vencimento:</label> <br>
-                <input style=" width:150px;"  placeholder=" Data de vencimento:" value="{{conta.data_de_vencimento}}"
+                <input style=" width:150px;"  placeholder=" Data de vencimento:" 
+                    value="{{conta.data_de_vencimento | date:'Y-m-d'}}"
                     type="date" id="data_de_vencimento" name="data_de_vencimento">
         </div>
                

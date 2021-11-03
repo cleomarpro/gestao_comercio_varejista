@@ -134,8 +134,8 @@
             <td class="col_table">{{ entrada.fornecedor.nome_fantazia}}</td>
             <td class="col_table">{{ entrada.fornecedor.cnpj}}</td>
             <td>{{ entrada.quantidade}}</td>
-            <td class="col_table">{{ entrada.data_hora.date}}</td>
-            <td class="col_table">{{ entrada.validade_produto}}</td>
+            <td class="col_table">{{ entrada.data_hora.date | date:'d/m/y'}}</td>
+            <td class="col_table">{{ entrada.validade_produto | date:'d/m/y'}}</td>
 
             {% if perms.produto.change_entradamercadoria %}
                 <td> <a href="{% url 'entrada_mercadoria_update' entrada.id %}">Editar</a> 

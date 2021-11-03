@@ -39,9 +39,9 @@
             <td>{{ produto_a_vencer.quantidade}}</td>
             <td>
             {% if produto_a_vencer.validade_produto < today %}
-                 <label style= 'color: red'> {{ produto_a_vencer.validade_produto}}</label>
+                 <label style= 'color: red'> {{ produto_a_vencer.validade_produto | date:'d/m/y'}}</label>
             {% else %}
-                 <label>{{ produto_a_vencer.validade_produto}}</label>
+                 <label>{{ produto_a_vencer.validade_produto | date:'d/m/y'}}</label>
              {% endif %}
             </td>
 

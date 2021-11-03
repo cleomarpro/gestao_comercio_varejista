@@ -103,7 +103,7 @@
                 <tr>
                     <td>{{ gastos_extras.descricao }}</td>
                     <td>R$ {{ gastos_extras.valor  | floatformat:2}}</td>
-                    <td>{{ gastos_extras.data_hora.date }}</td>
+                    <td>{{ gastos_extras.data_hora | date:'d/m/y  H:i'}}</td>
 
                     {% if perms.financeiro.change_gastos_extras %}
                     <td>

@@ -39,7 +39,8 @@
         </div>
         <div>
             <label> Validade do produto</label> <br>
-            <input style=" width:150px; padding: 3px;" value="{{entrada_Mercadoria.validade_produto}}"
+            <input style=" width:150px; padding: 3px;" 
+                value="{{entrada_Mercadoria.validade_produto | date:'Y-m-d'}}"
                 type="date" id="validade_produto" name="validade_produto" >
         </div>
             <hr>

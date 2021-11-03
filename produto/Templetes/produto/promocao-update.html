@@ -20,19 +20,19 @@
                 value='{{ promocao.quantidade_promocional}}' required/>
     </div>
     <div>
-        <label> Desconto promocional (%)</label> <br>
+        <label> Desconto</label> <br>
             <input style=" width:110px;"  placeholder="{{ promocao.desconto}}%" type="number" step=".01" lang="nb"
                 id="desconto" name="desconto" value='{{ promocao.desconto}}' required/>
     </div>
     <div>
         <label> Data de iníco</label> <br>
             <input style=" width:150px; padding:3px;"type="date" id="myDate" name="data_inicio"
-                value='{{ promocao.data_inicio}}' required/>
+                value="{{ promocao.data_inicio | date:'Y-m-d'}}" required/>
     </div>
     <div>
         <label> Data de termino</label> <br>
             <input style=" width:150px; padding:3px;" type="date" id="data_termino"
-                name="data_termino"  value='{{ promocao.data_termino}}' required/>
+                name="data_termino"  value='{{ promocao.data_termino | date:'Y-m-d'}}' required/>
     </div>
         <hr>
         <button type="submit"> Salvar</button>

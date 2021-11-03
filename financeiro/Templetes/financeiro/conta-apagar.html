@@ -108,7 +108,7 @@
                     <td class="col_table">{{ conta.parcelas_pagas }}</td>
                     <td class="col_table">{{ conta.parcelas_restantes }}</td>
                     <td class="col_table">R$ {{ conta.valor_parcela }}</td>
-                    <td >{{ conta.data_de_vencimento }}</td>
+                    <td >{{ conta.data_de_vencimento | date:'d/m/y' }}</td>
                     <td> 
                         {% if perms.financeiro.change_contas %}
                                 <a href="{% url 'conta_apagar_update' conta.id %}">Editar</a> 
