@@ -13,7 +13,17 @@
             <label>Descrição</label><br>
             <input style=" width:150px;"  placeholder=" Descricão..." value="{{gastos_extras.descricao}}"
                  type="text" id="descricao" name="descricao" required/>
-                </div>
+        </div>
+        <div> 
+            <label>Categoria de gastos</label><br>
+                <select style="width:180px;" type="search" id="categoria" name="categoria">
+                    <option value="{{ gastos_extras.gastosExtrasCategoria.id }}">{{ gastos_extras.gastosExtrasCategoria}}</option>
+                    {%for categoria in categoria_de_gastos %}
+                    <option value="{{categoria.id }}">{{ categoria.nome}}</option>
+                    {%endfor%}
+                </select> 
+                <a class="link_add" href="{% url 'categoria_de_gastos' %}">+</a>
+        </div>
         <div>
             <label>Valor</label><br>
             <input style=" width:150px;"  value="R$ {{gastos_extras.valor | floatformat:2}}"

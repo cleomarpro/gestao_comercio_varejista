@@ -41,6 +41,7 @@ class GastosExtras(LoginRequiredMixin, View):
             usuarios__usuario_cliente= usuario, data_hora__month = mes_atual, data_hora__year= ano ).order_by('-id')
         data['gastos_extras']=gastos_extras
         data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(user=user_logado, usuarios=usuario).order_by('-id')
+        data['hoje']= today
         return render(
             request, 'financeiro/gastos-extras.html', data)
        
@@ -75,6 +76,7 @@ class GastosExtras(LoginRequiredMixin, View):
         data['gastos_extras']  = Gastos_extras.objects.filter(
             usuarios__usuario_cliente= usuarioCliente, data_hora__month = mes_atual, data_hora__year=ano ).order_by('-id')
         data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(user=user_logado, usuarios=usuarioCliente).order_by('-id')
+        data['hoje']= today
         return render(
              request, 'financeiro/gastos-extras.html',data)
 
@@ -89,11 +91,10 @@ def gastosExtras_delete(request, id):
     if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
         funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
         usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-        usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        
     else:
         usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
         usuarioId = usuario.id # Obitendo o id  do usuário administrador
-        usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
     
     data  = {}
     gastos_extras= Gastos_extras.objects.get(id= id)
@@ -113,7 +114,7 @@ class GastosExtrasUpdate(LoginRequiredMixin, View):
         user = request.user.has_perm('financeiro.change_gastos_extras')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
+        data={}
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
@@ -125,16 +126,17 @@ class GastosExtrasUpdate(LoginRequiredMixin, View):
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
             usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
 
-        gastos_extras= Gastos_extras.objects.get(id= id)
-        usuario_adm = gastos_extras.usuarios.id
+        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(user=user_logado, usuarios=usuarioCliente).order_by('-id')
+        data['gastos_extras']= Gastos_extras.objects.get(id= id)
+
+        usuario_adm = data['gastos_extras'].usuarios.id
         if usuario_adm == usuarioId: # Verificar autenticidade do usuário
             return render(
-                    request, 'financeiro/gastos_extras_update.html',{'gastos_extras': gastos_extras})
+                    request, 'financeiro/gastos_extras_update.html', data)
         else:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     def post(self, request, id):
-        data = {}
         user = request.user.has_perm('financeiro.change_gastos_extras')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
@@ -144,17 +146,17 @@ class GastosExtrasUpdate(LoginRequiredMixin, View):
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+            
         else:
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
 
         gastos_extras= Gastos_extras.objects.get(id= id)
         usuario_adm = gastos_extras.usuarios.id
         if usuario_adm == usuarioId: # Verificar autenticidade do usuário
             gastos_extras.id= id
             gastos_extras.descricao = request.POST['descricao']
+            gastos_extras.gastosExtrasCategoria_id= request.POST['categoria']
             gastos_extras.valor = request.POST['valor'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
             gastos_extras.user = user_logado
             gastos_extras.save()
@@ -165,7 +167,7 @@ class GastosExtrasUpdate(LoginRequiredMixin, View):
 
 class FiltroGastosExtras( LoginRequiredMixin, View):
     def get(self, request):
-
+        data={}
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
@@ -181,14 +183,28 @@ class FiltroGastosExtras( LoginRequiredMixin, View):
         Mes= request.GET.get('mes',None)
         Ano= request.GET.get('ano',None)
         Dia= request.GET.get('dia',None)
+        Categoria= request.GET.get('categoria',None)
         if Dia:
             gastos_extras = Gastos_extras.objects.filter(
                 usuarios__usuario_cliente= usuario, data_hora__contains = Dia ).order_by('-id')
+       
         if Mes and Ano:
             gastos_extras = Gastos_extras.objects.filter(
                 usuarios__usuario_cliente= usuario, data_hora__year= Ano, data_hora__month= Mes).order_by('-id')
+        
+        if Mes and Ano and Categoria:
+            gastos_extras = Gastos_extras.objects.filter(
+                usuarios__usuario_cliente= usuario, data_hora__year= Ano, 
+                data_hora__month= Mes, gastosExtrasCategoria_id= Categoria).order_by('-id')
+           # total_de_gastos= Gastos_extras.objects.aggregate(total=Sum(("valor")))
+            
+           # data['total_de_gastos']=total_de_gastos
+        data['hoje']= today
+        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
+        data['gastos_extras'] = gastos_extras
+        
         return render(
-            request, 'financeiro/gastos-extras.html', {'gastos_extras': gastos_extras})
+            request, 'financeiro/gastos-extras.html', data)
 class Gastos_extras_categoria(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user.has_perm('financeiro.add_gastosextrascategoria')
@@ -205,12 +221,34 @@ class Gastos_extras_categoria(LoginRequiredMixin, View):
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
             
-            data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(user=user_logado, usuarios=usuarioCliente).order_by('-id')
+            data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(
+                user=user_logado, usuarios=usuarioCliente).order_by('-id')
         return render(
             request, 'financeiro/categoria_de_gastos.html', data)
 
     def post(self, request):
         user = request.user.has_perm('financeiro.add_gastosextrascategoria')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuarioId = usuario.id # Obitendo o id  do usuário administrador
+        
+            categoria = GastosExtrasCategoria.objects.create(
+                nome = request.POST['nome'],
+                user = user_logado, usuarios_id = usuarioId
+            )
+            return redirect('gastos-extras')
+       
+class Gastos_extras_categoriaUpdate(LoginRequiredMixin, View):
+    def get(self, request, id):
+        user = request.user.has_perm('financeiro.change_gastosextrascategoria')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
         data = {}
@@ -223,32 +261,16 @@ class Gastos_extras_categoria(LoginRequiredMixin, View):
         else:
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
-
-            categoria = GastosExtrasCategoria.objects.create(
-                nome = request.POST['nome'],
-                user = user_logado, usuarios_id = usuarioId
-            )
-        return redirect('gastos-extras')
-
-class Gastos_extras_categoriaUpdate(LoginRequiredMixin, View):
-    def get(self, request, id):
-        user = request.user.has_perm('financeiro.add_gastosextrascategoria')
-        if user == False:
-            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-        data = {}
         
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        categoria= GastosExtrasCategoria.objects.get(id= id)
+        usuario_adm = categoria.usuarios.id
+        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+
+            data['categoria'] = GastosExtrasCategoria.objects.get(id=id)
+            return render(
+                request, 'financeiro/categoria_de_gastosUpdate.html', data)
         else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-            
-        data['categoria'] = GastosExtrasCategoria.objects.get(id=id)
-        return render(
-            request, 'financeiro/categoria_de_gastosUpdate.html', data)
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     def post(self, request, id):
         user = request.user.has_perm('financeiro.add_gastosextrascategoria')
@@ -260,22 +282,28 @@ class Gastos_extras_categoriaUpdate(LoginRequiredMixin, View):
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            
+  
         else:
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            
+        
+        categoria= GastosExtrasCategoria.objects.get(id= id)
+        usuario_adm = categoria.usuarios.id
+        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+
             categoria = GastosExtrasCategoria.objects.get(id=id)
             categoria.id=id
             categoria.nome = request.POST['nome']
             categoria.user = user_logado
             categoria.save()
             
-        return redirect('gastos-extras')
+            return redirect('gastos-extras')
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
 @login_required() 
 def categoria_de_gastos_delete(request, id):
-    user = request.user.has_perm('financeiro.change_gastos_extras')
+    user = request.user.has_perm('financeiro.delete_gastosextrascategoria')
     if user == False:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
