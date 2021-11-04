@@ -16,12 +16,20 @@ class Relatorios(models.Model):
     def __str__(self): # METODO CONSTRUTOR
         return self.descricao
 
+class GastosExtrasCategoria(models.Model):
+    nome=models.CharField(max_length=30, blank=True, null=True, verbose_name="Nome")
+    user = models.CharField(max_length=30, blank=True, null=True, verbose_name="Funcionário")
+    usuarios = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
+    def __str__(self): # METODO CONSTRUTOR
+        return self.nome
+
 class Gastos_extras(models.Model):
     descricao=models.CharField(max_length=100, blank=True, verbose_name="Descrição")
     valor = models.DecimalField(max_digits=9, decimal_places=2, blank=False, default=0)
     data_hora = models.DateTimeField(default=timezone.now)
+    gastosExtrasCategoria = models.ForeignKey(GastosExtrasCategoria, blank=True, null=True, on_delete=models.CASCADE)
     arquivo = models.FileField(default=False, blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.CharField(max_length=100,null=True, blank=True)
     usuarios = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
 
     def __str__(self): # METODO CONSTRUTOR
@@ -48,7 +56,8 @@ class Contas(models.Model):
     data_de_vencimento =models.DateField(default=False, blank=True)
     data_hora = models.DateTimeField(default=timezone.now)
     arquivo = models.FileField(default=False, blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_2 = models.CharField(max_length=100,null=True, blank=True)
+    user = models.CharField(max_length=100,null=True, blank=True)
     usuarios = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
 
     def __str__(self): # METODO CONSTRUTOR
@@ -82,7 +91,7 @@ class Pagamento(models.Model):
     contas = models.ForeignKey(Contas, on_delete=models.CASCADE)
     total_pago = models.DecimalField(max_digits=9, decimal_places=0, blank=False, default=0)
     data_hora = models.DateTimeField(default=timezone.now)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.CharField(max_length=100,null=True, blank=True)
     usuarios = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
 
 # Valor pago

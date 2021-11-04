@@ -5,6 +5,7 @@ from .models import(
     Tipo_de_conta,
     Contas,
     Pagamento,
+    GastosExtrasCategoria,
 
 )
 
@@ -12,3 +13,4 @@ admin.site.register(Gastos_extras)
 admin.site.register(Tipo_de_conta)
 admin.site.register(Contas)
 admin.site.register(Pagamento)
+admin.site.register(GastosExtrasCategoria)

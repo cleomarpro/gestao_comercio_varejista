@@ -16,11 +16,21 @@
          <p> ANOTAR GASTOS</p>
         <hr> 
     <div> 
-        <label>Descrição</label><br>
+        <label>Descrição*</label><br>
             <input placeholder=" Descrição..." type="text" id="descricao" name="descricao" required/>
     </div>
+    <div> 
+        <label>Categoria de gastos</label><br>
+            <select style="width:180px;" type="search" id="categoria" name="categoria">
+                <option value="">Selecionar</option>
+                {%for categoria in categoria_de_gastos %}
+                <option value="{{categoria.id}}">{{categoria}}</option>
+                {%endfor%}
+            </select> 
+            <a class="link_add" href="{% url 'categoria_de_gastos' %}">+</a>
+    </div>
     <div>
-        <label>Valor</label><br>
+        <label>Valor*</label><br>
             <input placeholder="R$ 0,00" type="text" data-js="money" name="valor" required/>
     </div>
              <hr>
@@ -89,6 +99,7 @@
         <tr>
           <th >Descrição</th>
           <th >Valor</th>
+          <th >Categoria</th>
           <th>Data</th>
           {% if perms.financeiro.change_gastos_extras %}
           <th >Editar</th>
@@ -103,6 +114,7 @@
                 <tr>
                     <td>{{ gastos_extras.descricao }}</td>
                     <td>R$ {{ gastos_extras.valor  | floatformat:2}}</td>
+                    <td>{{ gastos_extras.gastosExtrasCategoria.nome }}</td>
                     <td>{{ gastos_extras.data_hora | date:'d/m/y  H:i'}}</td>
 
                     {% if perms.financeiro.change_gastos_extras %}
@@ -116,6 +128,7 @@
                         <a href="{% url 'gastos_extras_delete' gastos_extras.id %}">Excluir</a>
                     </td>
                     {% endif%}
+                    
                 </tr>
             {%endfor%}
         </tbody>

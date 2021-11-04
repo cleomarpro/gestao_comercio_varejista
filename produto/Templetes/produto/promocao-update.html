@@ -32,7 +32,7 @@
     <div>
         <label> Data de termino</label> <br>
             <input style=" width:150px; padding:3px;" type="date" id="data_termino"
-                name="data_termino"  value='{{ promocao.data_termino | date:'Y-m-d'}}' required/>
+                name="data_termino"  value="{{ promocao.data_termino | date:'Y-m-d'}}" required/>
     </div>
         <hr>
         <button type="submit"> Salvar</button>

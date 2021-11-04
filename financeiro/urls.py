@@ -1,15 +1,20 @@
 from django.urls import path
 from financeiro import views
-from .views import ( GastosExtras, GastosExtrasUpdate, ContasApagar, ContaAreceberUpdate,
-Relarorio_produtos, Relatorio_diario, Relatorio_mensal, Relatorio_anual,
-FiltroGastosExtras, ContasAreceber, ContaApagarUpdate, Pagamentos, Fatura
-)
+from .views import ( GastosExtras, GastosExtrasUpdate, Gastos_extras_categoria,
+    Gastos_extras_categoriaUpdate,ContasApagar, ContaAreceberUpdate,
+    Relarorio_produtos, Relatorio_diario, Relatorio_mensal, Relatorio_anual,
+    FiltroGastosExtras, ContasAreceber, ContaApagarUpdate, Pagamentos, Fatura
+    )
 
 
 urlpatterns = [
     path('gastos-extras/', GastosExtras.as_view(), name='gastos-extras'),
+
     path('gastos-extras-delete-confirme/(?P<id>\d+)/', views.gastosExtras_delete, name='gastos_extras_delete'),
     path('gastos_extras_update/<int:id>/', GastosExtrasUpdate.as_view(), name='gastos_extras_update'),
+    path('categoria_de_gastos/', Gastos_extras_categoria.as_view(), name='categoria_de_gastos'),
+    path('categoria_de_gastosUpdate/<int:id>/', Gastos_extras_categoriaUpdate.as_view(), name='categoria_de_gastosUpdate'),
+    path('categoria-de-gastos-delete/(?P<id>\d+)/', views.categoria_de_gastos_delete, name='categoria_de_gastos_delete'),
     path('conta-apagar/', ContasApagar.as_view(), name='conta_apagar'),
     path('pagamento/<int:id>/', Pagamentos.as_view(), name='pagamento'),
     path('conta-areceber/', ContasAreceber.as_view(), name='conta_areceber'),
