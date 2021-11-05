@@ -15,7 +15,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
 from usuarios.models import Usuarios
 from pessoa.models import Funcionario
-from django.db.models import Sum
+from django.db.models import Sum 
 from django.db.models import Q
 #from django.contrib.auth.models import User
 #from django.contrib.auth.decorators import login_required
@@ -71,7 +71,7 @@ class AtualizarPedido(LoginRequiredMixin, View):
                 venda.valor_recebido = data['valor_recebido'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
                 venda.valor_credito = data['valor_credito'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
                 venda.valor_debito = data['valor_debito'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
-                venda.user_id = user_logado
+                venda.user = user_logado
                 venda.venda_id = data['venda_id']
 
                 venda.save()
@@ -83,7 +83,7 @@ class AtualizarPedido(LoginRequiredMixin, View):
             if user == False:
                 return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
-            venda = Venda.objects.create(user_id = user_logado, usuarios_id = usuario)
+            venda = Venda.objects.create(user = user_logado, usuarios_id = usuario)
 
         itens = venda.itemdopedido_set.all().order_by('-id')
         data['venda'] = venda
@@ -112,7 +112,7 @@ class NovoPedido(LoginRequiredMixin, View):
         data = {}
         data['venda_id'] = request.POST['venda_id']
 
-        venda = Venda.objects.create(user_id = user_logado, usuarios_id = usuario)
+        venda = Venda.objects.create(user = user_logado, usuarios_id = usuario)
 
         itens = venda.itemdopedido_set.all().order_by('-id')
         data['venda'] = venda
@@ -168,7 +168,7 @@ class NovoItemPedido(LoginRequiredMixin, View):
                 produto_id = produto_id,
                 quantidade_de_itens=request.POST['quantidade'].replace(',', '.') or 1,
                 desconto=request.POST['desconto'].replace(',', '.') or 0,
-                venda_id=venda, user_id = user_logado, usuarios_id = usuarioId)
+                venda_id=venda, user = user_logado, usuarios_id = usuarioId)
 
             data['venda'] = item.venda
             data['itens'] = item.venda.itemdopedido_set.all().order_by('-id')
@@ -368,7 +368,7 @@ class Caixas(LoginRequiredMixin, View):
             usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
 
         caixa = Caixa.objects.filter(usuarios__usuario_cliente= usuario)
-        caixa_user_logado = Caixa.objects.filter(usuarios__usuario_cliente= usuario, funcionario__user__id = user_logado)
+        caixa_user_logado = Caixa.objects.filter(usuarios__usuario_cliente= usuario, funcionario__user = user_logado)
         funcionarios= Funcionario.objects.filter(usuarios__usuario_cliente= usuario)
 
         return render(
@@ -400,7 +400,7 @@ class Caixas(LoginRequiredMixin, View):
         novo_caixa = Caixa.objects.create(
             nome_do_caixa=request.POST['nome_do_caixa'],
             funcionario_id= request.POST['funcionario'],
-            user_id = user_logado, usuarios_id = usuarioId,
+            user = user_logado, usuarios_id = usuarioId,
 
             )
         data['novo_caixa'] = novo_caixa
@@ -473,7 +473,7 @@ class CaixaDepositar(LoginRequiredMixin, View):
             deposito = Depositar_sacar.objects.create(
                 descricao=request.POST['descricao'],
                 depositar=request.POST['depositar'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$',''),
-                caixa_id = id, user_id = user_logado, usuarios_id = usuario,
+                caixa_id = id, user = user_logado, usuarios_id = usuario,
                 )
             data['deposito'] = deposito
             data['depositos'] = Depositar_sacar.objects.filter(caixa__id = id, data_hora__contains= today).order_by('-id')
@@ -543,7 +543,7 @@ class CaixaSacar(LoginRequiredMixin, View):
             deposito = Depositar_sacar.objects.create(
                 descricao= request.POST['descricao'],
                 sacar= request.POST['sacar'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$',''),
-                caixa_id= id, user_id = user_logado, usuarios_id = usuario,
+                caixa_id= id, user = user_logado, usuarios_id = usuario,
                 )
             data['deposito'] = deposito
             data['sacar'] = Depositar_sacar.objects.filter(
@@ -576,7 +576,7 @@ class AbrirFeixarCaixa(LoginRequiredMixin, View):
         if usuario_adm == usuario: # Verificar autenticidade do usuário
 
             historico_do_caixa = Depositar_sacar.objects.filter(
-                Q(estadoDoCaixa='Feixado') | Q(estadoDoCaixa='Aberto'), caixa__id = id, user_id = user_logado,data_hora__contains= today).order_by('-id')
+                Q(estadoDoCaixa='Feixado') | Q(estadoDoCaixa='Aberto'), caixa__id = id, user = user_logado,data_hora__contains= today).order_by('-id')
 
             estado_do_caixa= Depositar_sacar.objects.filter(caixa__id = id).last()
 
@@ -585,7 +585,7 @@ class AbrirFeixarCaixa(LoginRequiredMixin, View):
 
             if DIA and DIA2 :
                 historico_do_caixa = Depositar_sacar.objects.filter(
-                Q(estadoDoCaixa='Feixado') | Q(estadoDoCaixa='Aberto'), data_hora__range= (DIA, DIA2), caixa__id = id, user_id = user_logado, data_hora__contains= today).order_by('-id')
+                Q(estadoDoCaixa='Feixado') | Q(estadoDoCaixa='Aberto'), data_hora__range= (DIA, DIA2), caixa__id = id, user = user_logado, data_hora__contains= today).order_by('-id')
             return render(
                 request, 'abrir-feixar-caixa.html',{
                     'historico_do_caixa':historico_do_caixa,
@@ -620,7 +620,7 @@ class AbrirFeixarCaixa(LoginRequiredMixin, View):
         if usuario_adm == usuario: # Verificar autenticidade do usuário
 
             venda_sedula= Venda.objects.filter(
-                data_hora__contains= today, user_id = user_logado, usuarios_id = usuario).aggregate(total_venda_cedula=Sum('valor_cedula'))
+                data_hora__contains= today, user = user_logado, usuarios_id = usuario).aggregate(total_venda_cedula=Sum('valor_cedula'))
             venda_sedula = venda_sedula['total_venda_cedula']or 0
 
             estado_do_caixa= Depositar_sacar.objects.filter(caixa__id = id).aggregate(vendas=Sum('venda_realizadas'))
@@ -639,61 +639,16 @@ class AbrirFeixarCaixa(LoginRequiredMixin, View):
             deposito = Depositar_sacar.objects.create(
                 descricao= request.POST['descricao'],
                 estadoDoCaixa= request.POST['estadoDoCaixa'],
-                caixa_id= id, user_id = user_logado, usuarios_id = usuario,
+                caixa_id= id, user = user_logado, usuarios_id = usuario,
                 venda_realizadas= ultimas_vendas, depositar= ultimas_vendas,
                 saldo_em_caixa= saldoEmCaixa
                 )
             data['deposito'] = deposito
             data['historico_do_caixa'] = Depositar_sacar.objects.filter(
-                Q(estadoDoCaixa='Feixado') | Q(estadoDoCaixa='Aberto'), caixa__id = id, user_id = user_logado,data_hora__contains= today).order_by('-id')
+                Q(estadoDoCaixa='Feixado') | Q(estadoDoCaixa='Aberto'), caixa__id = id, user = user_logado,data_hora__contains= today).order_by('-id')
             data['estado_do_caixa']= Depositar_sacar.objects.filter(caixa__id = id).last()
 
             return render(
                 request, 'abrir-feixar-caixa.html', data)
         else:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-'''
-python manage.py makemigrations (comando para migrar para o django)
-python manage.py migrate  (comanto para moigra para o banco)
-source venvgestao/bin/activate
-python manage.py shell
- import pdb; pdb.set_trace()
- print(i.query) (visualizar o SQL puro)
- https://www.youtube.com/channel/UCzamMDzpDcv-i_9yg5CScfg (curso de ORM)
-
-mensalista = models.ForeignKey(Mensalista, on_delete=models.CASCADE)
-detalhe = models.TextField()
-email = models.EmailField()
-pago= models.BooleanField(default=False)
-produto=Produto.objects.filter(codigo__iexact=busca).latest('pk').pk Recebe apena a variável pk
-produto=Produto.objects.filter(codigo__iexact=busca).values_list('id', flat=True) or 0   Recebe números
-https://www.youtube.com/watch?v=_k-98frcD_M&ab_channel=SamuelGon%C3%A7alves(salva dois formulário)
-
-'''
-
-'''
-def total_estoque_saida(self):
-tot = self.itemdopedido_set.all().aggregate(
-total_esto=Sum(F('quantidade') - F('produto__estoque'), output_field=DecimalField()))
-['total_esto'] or 0
-self.estoque = tot
-Produto.objects.filter(id=self.id).update(estoque = tot)
-
-@receiver(post_save, sender=ItemDoPedido)
-def update_total_estoque_saida(sender, instance, **kwargs):
-instance.produto.total_estoque_saida()
-'''
-
-'''
-python manage.py makemigrations (comando para migrar para o django)
-python manage.py migrate
-(comanto para moigra para o banco)
-source venvgestao/bin/activate (ativar a venv)
-python -m pip install Pillow (campo de iamgem ou  arquivo)
-
-mensalista = models.ForeignKey(Mensalista, on_delete=models.CASCADE)
-detalhe = models.TextField()
-email = models.EmailField()
-pago= models.BooleanField(default=False)
-'''

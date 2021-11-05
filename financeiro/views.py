@@ -34,13 +34,14 @@ class GastosExtras(LoginRequiredMixin, View):
         else:
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
+       
         today = date.today()
         mes_atual = today.month
         ano = today.year
         gastos_extras = Gastos_extras.objects.filter(
             usuarios__usuario_cliente= usuario, data_hora__month = mes_atual, data_hora__year= ano ).order_by('-id')
         data['gastos_extras']=gastos_extras
-        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(usuarios=usuario).order_by('-id')
+        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
         data['hoje']= today
         return render(
             request, 'financeiro/gastos-extras.html', data)
@@ -75,7 +76,7 @@ class GastosExtras(LoginRequiredMixin, View):
         data['gastos_extras'] = gastos_extras
         data['gastos_extras']  = Gastos_extras.objects.filter(
             usuarios__usuario_cliente= usuarioCliente, data_hora__month = mes_atual, data_hora__year=ano ).order_by('-id')
-        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter( usuarios=usuarioCliente).order_by('-id')
+        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
         data['hoje']= today
         return render(
              request, 'financeiro/gastos-extras.html',data)
@@ -126,7 +127,7 @@ class GastosExtrasUpdate(LoginRequiredMixin, View):
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
             usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
 
-        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(usuarios=usuarioCliente).order_by('-id')
+        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
         data['gastos_extras']= Gastos_extras.objects.get(id= id)
 
         usuario_adm = data['gastos_extras'].usuarios.id
@@ -221,8 +222,7 @@ class Gastos_extras_categoria(LoginRequiredMixin, View):
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
             
-        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(
-            usuarios=usuarioCliente).order_by('-id')
+        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
         return render(
             request, 'financeiro/categoria_de_gastos.html', data)
 
@@ -396,16 +396,16 @@ class ContasAreceber(LoginRequiredMixin, View):
             usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
 
 
-            conta = Contas.objects.create(
-                observacao = request.POST['observacao'],
-                valor = request.POST['valor'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$',''),
-                parcelas = request.POST['parcelas'],
-                tipo_de_conta_id = request.POST['tipo_de_conta_id'],
-                data_de_vencimento = request.POST['data_de_vencimento'],
-                venda_id = request.POST['venda_id'],
-                cliente_id = request.POST['cliente_id'],
-                user = user_logado, usuarios_id = usuarioId
-                )
+        conta = Contas.objects.create(
+            observacao = request.POST['observacao'],
+            valor = request.POST['valor'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$',''),
+            parcelas = request.POST['parcelas'],
+            tipo_de_conta_id = request.POST['tipo_de_conta_id'],
+            data_de_vencimento = request.POST['data_de_vencimento'],
+            venda_id = request.POST['venda_id'],
+            cliente_id = request.POST['cliente_id'],
+            user = user_logado, usuarios_id = usuarioId
+            )
         data['conta'] = conta
         data['conta']  = Contas.objects.filter(usuarios__usuario_cliente= usuarioCliente, tipo_de_conta_id=1, data_de_vencimento__month = mes_atual).order_by('-id') # listar produtos
         data['venda']  = Venda.objects.filter(usuarios__usuario_cliente= usuarioCliente, data_hora__gte = today).order_by('-id')
@@ -453,11 +453,10 @@ class ContaAreceberUpdate(LoginRequiredMixin, View):
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+           
         else:
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
 
         conta = Contas.objects.get(id= id)
         usuario_adm = conta.usuarios.id
@@ -568,14 +567,14 @@ class ContasApagar(LoginRequiredMixin, View):
             #parcelas = request.POST['parcelas']
             #parcelas = int(parcelas)
             #for conta in range( parcelas):
-            conta = Contas.objects.create(
-                observacao = request.POST['observacao'],
-                valor = request.POST['valor'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$',''),
-                parcelas = request.POST['parcelas'],
-                tipo_de_conta_id = request.POST['tipo_de_conta_id'],
-                data_de_vencimento = request.POST['data_de_vencimento'],
-                user = user_logado, usuarios_id = usuarioId
-                )
+        conta = Contas.objects.create(
+            observacao = request.POST['observacao'],
+            valor = request.POST['valor'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$',''),
+            parcelas = request.POST['parcelas'],
+            tipo_de_conta_id = request.POST['tipo_de_conta_id'],
+            data_de_vencimento = request.POST['data_de_vencimento'],
+            user = user_logado, usuarios_id = usuarioId
+            )
                 
         data['conta'] = conta
         data['conta']  = Contas.objects.filter(
@@ -594,11 +593,10 @@ class ContaApagarUpdate(LoginRequiredMixin, View):
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+            
         else:
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
         
         conta = Contas.objects.get(id= id)
         usuario_adm = conta.usuarios.id
@@ -618,11 +616,10 @@ class ContaApagarUpdate(LoginRequiredMixin, View):
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+            
         else:
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
         
         conta = Contas.objects.get(id= id)
         usuario_adm = conta.usuarios.id
@@ -639,8 +636,6 @@ class ContaApagarUpdate(LoginRequiredMixin, View):
             conta.save()
             return redirect('conta_apagar')
         
-            data['conta'] = conta
-            return render(request, 'financeiro/conta_apagar_update.html',data)
         else:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
@@ -656,12 +651,11 @@ def conta_apagar_delete(request, id):
     if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
         funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
         usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-        usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        
     else:
         usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
         usuarioId = usuario.id # Obitendo o id  do usuário administrador
-        usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-    
+        
     conta = Contas.objects.get(id= id)
     usuario_adm = conta.usuarios.id
     if usuario_adm == usuarioId: # Verificar autenticidade do usuário

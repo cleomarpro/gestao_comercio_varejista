@@ -8,7 +8,7 @@ from .models import Produto, Categoria, EntradaMercadoria , Fornecedor, Promocao
 from django.views import View
 from datetime import date, timedelta
 from django.db.models import Q
-from django.views.generic.edit import UpdateView
+#from django.views.generic.edit import UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
@@ -41,7 +41,7 @@ class NovoProduto(LoginRequiredMixin, View):
             'categoria': categoria, 'produto': produto,
             'today': today, 'promocao':promocao
             })
-        pass
+     
     def post(self, request):
         data = {}
         today = date.today()
@@ -74,7 +74,7 @@ class NovoProduto(LoginRequiredMixin, View):
                 percentagem_de_lucro = request.POST['percentagem_de_lucro'].replace(',', '.'),
                 promocao_id = request.POST['promocao' ],
                 valor_compra = request.POST['valor_compra'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$',''),
-                user_id = user_logado, usuarios_id = usuarioId
+                user = user_logado, usuarios_id = usuarioId
                 #imagem = request.POST['imagem'],
                 )
 
@@ -180,7 +180,7 @@ class ProdutoUpdate(LoginRequiredMixin, View):
                 produto.percentagem_de_lucro = request.POST['percentagem_de_lucro'].replace(',', '.')
             produto.promocao_id = request.POST['promocao' ]
             produto.valor_compra = request.POST['valor_compra'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
-            produto.user_id = user_logado
+            produto.user = user_logado
             #imagem = request.POST['imagem'],
             produto.save()
             return redirect('produto')
@@ -276,7 +276,7 @@ class NovaPromocao (LoginRequiredMixin, View):
             data_inicio = request.POST['data_inicio'] ,
             data_termino = request.POST['data_termino' ],
             descricao = request.POST['descricao' ],
-            user_id = user_logado, usuarios_id = usuarioId
+            user = user_logado, usuarios_id = usuarioId
             )
         data['prom'] = promocao
         data['promocao']  = Promocao.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
@@ -294,12 +294,11 @@ class PromocaoUpdate (LoginRequiredMixin, View):
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        
         else:
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-       
+            
         promocao = Promocao.objects.get(id= id)
         usuario_adm= promocao.usuarios.id
         if usuario_adm == usuarioId: # Verificar autenticidade do usuário
@@ -320,11 +319,10 @@ class PromocaoUpdate (LoginRequiredMixin, View):
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+            
         else:
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
 
         promocao = Promocao.objects.get(id= id)
         usuario_adm= promocao.usuarios.id
@@ -337,13 +335,10 @@ class PromocaoUpdate (LoginRequiredMixin, View):
             promocao.data_inicio = request.POST['data_inicio'] 
             promocao.data_termino = request.POST['data_termino' ]
             promocao.descricao = request.POST['descricao' ]
-            promocao.user_id = user_logado
+            promocao.user = user_logado
             promocao.save()
             return redirect('promocao')
-            
-            data['promocao'] = promocao
-            return render(
-                request, 'produto/promocao-update.html', data)
+     
         else:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
@@ -351,16 +346,17 @@ def promocao_delete(request, id):
     user = request.user.has_perm('produto.delete_promocao')
     if user == False:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
     user_logado = request.user # Obitendo o usuário logado
     user_logado = user_logado.id # obitendo o ID do usuário logado
     if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
         funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
         usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-        usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+       
     else:
         usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
         usuarioId = usuario.id # Obitendo o id  do usuário administrador
-        usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+        
 
     data  = {}
 
@@ -393,7 +389,7 @@ class Categoria_de_produto (LoginRequiredMixin, View):
         categoria = Categoria.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
         return render(
             request, 'produto/categoria.html', {'categoria': categoria})
-        pass
+        
     def post(self, request):
         data = {}
         user_logado = request.user # Obitendo o usuário logado
@@ -409,7 +405,7 @@ class Categoria_de_produto (LoginRequiredMixin, View):
 
         categoria = Categoria.objects.create(
             nome = request.POST['nome'],
-            user_id = user_logado, usuarios_id = usuarioId
+            user = user_logado, usuarios_id = usuarioId
             )
         data['categoria'] = categoria
         data['categoria']  = Categoria.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id') # listar produtos
@@ -427,11 +423,11 @@ class CategoriaUpdate(LoginRequiredMixin, View):
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+            
         else:
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+           
 
         categoria = Categoria.objects.get(id=id)
         usuario_adm= categoria.usuarios.id
@@ -452,11 +448,10 @@ class CategoriaUpdate(LoginRequiredMixin, View):
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+            
         else:
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
 
         categoria = Categoria.objects.get(id=id)
         usuario_adm= categoria.usuarios.id
@@ -465,12 +460,10 @@ class CategoriaUpdate(LoginRequiredMixin, View):
             categoria = Categoria.objects.get(id=id)
             categoria.id= id
             categoria.nome = request.POST['nome']
-            categoria.user_id = user_logado
+            categoria.user = user_logado
             categoria.save()
             return redirect('categoria') 
-            data['categoria'] = categoria
-            return render(
-                request, 'produto/categoria_update.html', data)
+
         else:
              return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
@@ -484,12 +477,11 @@ def categoria_delete(request, id):
     if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
         funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
         usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-        usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+
     else:
         usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
         usuarioId = usuario.id # Obitendo o id  do usuário administrador
-        usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-
+       
     categoria = Categoria.objects.get(id=id)
     usuario_adm= categoria.usuarios.id
     if usuario_adm == usuarioId: # Verificar autenticidade do usuário 
@@ -528,7 +520,6 @@ class Entrada_Mercadoria (LoginRequiredMixin, View):
                 'produto': produto, 'fornecedor': fornecedor,
                 'entrada_Mercadoria': entrada_Mercadoria
                 })
-        pass
     def post(self, request):
         today = date.today()
         mes_atual = today.month
@@ -554,7 +545,7 @@ class Entrada_Mercadoria (LoginRequiredMixin, View):
             fornecedor_id= request.POST['fornecedor'],
             quantidade = request.POST['quantidade'].replace(',', '.'),
             validade_produto= request.POST['validade_produto'] or '2000-02-03',
-            user_id = user_logado, usuarios_id = usuarioId
+            user = user_logado, usuarios_id = usuarioId
             )
         data['entrada_Mercadoria']=entrada_Mercadoria
         data['entrada_Mercadoria']=EntradaMercadoria.objects.filter(
@@ -575,12 +566,11 @@ class EntradaMercadoriaUpdate(LoginRequiredMixin, View):
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+            
         else:
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-
+           
         entrada_Mercadoria= EntradaMercadoria.objects.get(id= id)
         usuario_adm= entrada_Mercadoria.usuarios.id
         if usuario_adm == usuarioId: # Verificar autenticidade do usuário
@@ -596,18 +586,16 @@ class EntradaMercadoriaUpdate(LoginRequiredMixin, View):
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
-        data = {}
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+           
         else:
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-
+            
         entrada_Mercadoria= EntradaMercadoria.objects.get(id= id)
         usuario_adm= entrada_Mercadoria.usuarios.id
         if usuario_adm == usuarioId: # Verificar autenticidade do usuário
@@ -619,13 +607,10 @@ class EntradaMercadoriaUpdate(LoginRequiredMixin, View):
             entrada_Mercadoria.quantidade = request.POST['quantidade'].replace(',', '.')
             if request.POST['validade_produto']:
                 entrada_Mercadoria.validade_produto= request.POST['validade_produto']
-            entrada_Mercadoria.user_id = user_logado 
+            entrada_Mercadoria.user_ = user_logado 
             entrada_Mercadoria.save()
             return redirect('entrada-mercadoria')
-            
-            data['entrada_Mercadoria']= entrada_Mercadoria
-            return render(
-                request, 'produto/entrada_mercadoria_update.html', data)
+
         else:
              return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
@@ -639,12 +624,11 @@ def entradaMercadoria_delete(request, id):
     if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
         funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
         usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-        usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+     
     else:
         usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
         usuarioId = usuario.id # Obitendo o id  do usuário administrador
-        usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-
+       
     entrada_Mercadoria= EntradaMercadoria.objects.get(id= id)
     usuario_adm= entrada_Mercadoria.usuarios.id
     if usuario_adm == usuarioId: # Verificar autenticidade do usuário
@@ -725,32 +709,6 @@ class ValidadeProdutos (LoginRequiredMixin, View):
                 })
 
 
-
-'''
-def total_estoque_saida(self):
-tot = self.itemdopedido_set.all().aggregate(
-total_esto=Sum(F('quantidade') - F('produto__estoque'), output_field=DecimalField()))
-['total_esto'] or 0
-self.estoque = tot
-Produto.objects.filter(id=self.id).update(estoque = tot)
-
-@receiver(post_save, sender=ItemDoPedido)
-def update_total_estoque_saida(sender, instance, **kwargs):
-instance.produto.total_estoque_saida()
-'''
-
-'''
-python manage.py makemigrations (comando para migrar para o django)
-python manage.py migrate
-(comanto para moigra para o banco)
-source venvgestao/bin/activate (ativar a venv)
-python -m pip install Pillow (campo de iamgem ou  arquivo)
-
-mensalista = models.ForeignKey(Mensalista, on_delete=models.CASCADE)
-detalhe = models.TextField()
-email = models.EmailField()
-pago= models.BooleanField(default=False)
-'''
 
 
 

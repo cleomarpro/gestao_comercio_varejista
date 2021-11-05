@@ -14,7 +14,7 @@ class Caixa(models.Model):
     nome_do_caixa = models.CharField(max_length=30)
     funcionario = models.ForeignKey(Funcionario, null=True, on_delete=models.CASCADE)
     valor_atualizado = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, default=0)
-    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    user = models.CharField(max_length=100, blank=True, null=True)
     usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
 
     def caixa(self):
@@ -45,7 +45,7 @@ class Depositar_sacar(models.Model):
     sacar = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, default=0)
     caixa = models.ForeignKey(Caixa, null=True, on_delete=models.CASCADE)
     data_hora = models.DateTimeField(default=timezone.now)
-    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    user = models.CharField(max_length=100, blank=True, null=True)
     usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
 
 
@@ -70,10 +70,11 @@ class Venda(models.Model):
     troco = models.DecimalField(max_digits=9, null=True, blank=True,decimal_places=2, default=0)
     tipo_de_pagamento = models.ForeignKey(Tipo_de_pagamento, null=True, on_delete=models.CASCADE)
     descricao = models.CharField(max_length=100, blank=True)
-    finalizada = models.CharField(max_length=20, blank=True)
+    finalizada = models.CharField(max_length=20, blank=True, null=True)
     nfe_emitida = models.BooleanField(default=False)
     data_hora = models.DateTimeField(default=timezone.now)
-    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    user = models.CharField(max_length=100, blank=True, null=True)
+    user_2 =models.CharField(max_length=1000, blank=True, null=True)
     usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -160,7 +161,7 @@ class ItemDoPedido(models.Model):
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
     quantidade_de_itens = models.DecimalField(max_digits=9, decimal_places=2, blank=True,default=1)
     desconto = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True,default=0)
-    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    user = models.CharField(max_length=100, blank=True, null=True)
     usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
 
     def __str__(self):

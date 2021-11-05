@@ -101,7 +101,7 @@ class Pagamento(models.Model):
         Pagamento.objects.filter(id=self.id).update(total_pago = valorPago)
 
     def __str__(self): # METODO CONSTRUTOR
-       return str(self.quantidade_de_parcelasquantidade_de_parcelas)  + ' - ' + str(self.contas.parcelas_restantes) + ' - ' + str(self.contas.valor_parcela)
+       return str(self.quantidade_de_parcelas)  + ' - ' + str(self.contas.parcelas_restantes) + ' - ' + str(self.contas.valor_parcela)
 
 @receiver(post_save, sender= Contas)
 def update_total_contas(sender, instance, **kwargs):

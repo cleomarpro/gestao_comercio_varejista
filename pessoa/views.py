@@ -35,7 +35,7 @@ class NovoFornecedor(LoginRequiredMixin, View):
             fornecedor=Fornecedor.objects.filter(usuarios__usuario_cliente= usuario, cnpj__iexact=busca)
         return render(
             request, 'pessoa/novo-fornecedor.html', {'fornecedor': fornecedor})
-        pass
+
     def post(self, request):
         user = request.user.has_perm('pessoa.add_fornecedor')
         if user == False:
@@ -71,7 +71,7 @@ class NovoFornecedor(LoginRequiredMixin, View):
             Celular2  = request.POST['Celular2'],
             Telefone  = request.POST['Telefone'],
             email = request.POST['email'],
-            user_id = user_logado, usuarios_id = usuarioId
+            user = user_logado, usuarios_id = usuarioId
             )
         data['fornecedor'] = fornecedor
         data['fornecedor']  = Fornecedor.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id') # listar produtos
@@ -89,11 +89,11 @@ def fornecedor_delete(request, id):
     if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
         funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
         usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-        usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        
     else:
         usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
         usuarioId = usuario.id # Obitendo o id  do usuário administrador
-        usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+       
     
     fornecedor = Fornecedor.objects.get(id= id)
     usuario_adm = fornecedor.usuarios.id
@@ -119,11 +119,11 @@ class FornecedorUpdate(LoginRequiredMixin, View):
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+           
         else:
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+            
         
         fornecedor = Fornecedor.objects.get(id= id)
         usuario_adm = fornecedor.usuarios.id
@@ -134,7 +134,6 @@ class FornecedorUpdate(LoginRequiredMixin, View):
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
             
     def post(self, request, id):
-        data = {}
         user = request.user.has_perm('pessoa.change_fornecedor')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
@@ -144,11 +143,11 @@ class FornecedorUpdate(LoginRequiredMixin, View):
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+            
         else:
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+            
         
         fornecedor = Fornecedor.objects.get(id= id)
         usuario_adm = fornecedor.usuarios.id
@@ -172,13 +171,10 @@ class FornecedorUpdate(LoginRequiredMixin, View):
             fornecedor.Celular2  = request.POST['Celular2']
             fornecedor.Telefone  = request.POST['Telefone']
             fornecedor.email = request.POST['email']
-            fornecedor.user_id = user_logado
+            fornecedor.user = user_logado
             fornecedor.save()
             return redirect('novo-fornecedor')
 
-            data['fornecedor'] = fornecedor
-            return render(
-                request, 'pessoa/fornecedor_update.html',data)
         else:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
@@ -204,7 +200,7 @@ class NovoCliente(LoginRequiredMixin, View):
             cliente=Cliente.objects.filter(usuarios__usuario_cliente= usuario, cpf_cnpj__iexact=busca)
         return render(
             request, 'pessoa/novo-cliente.html', {'cliente': cliente})
-        pass
+        
     def post(self, request):
         user = request.user.has_perm('pessoa.add_cliente')
         if user == False:
@@ -242,7 +238,7 @@ class NovoCliente(LoginRequiredMixin, View):
             Celular2  = request.POST['Celular2'],
             Telefone  = request.POST['Telefone'],
             email = request.POST['email'],
-            user_id = user_logado, usuarios_id = usuarioId
+            user = user_logado, usuarios_id = usuarioId
             )
         data['cliente'] = cliente
         data['cliente']  = Cliente.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id') # listar produtos
@@ -259,11 +255,9 @@ def cleinte_delete(request, id):
     if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
         funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
         usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-        usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
     else:
         usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
         usuarioId = usuario.id # Obitendo o id  do usuário administrador
-        usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
 
     cliente = Cliente.objects.get(id= id)
     usuario_adm = cliente.usuarios.id
@@ -288,11 +282,11 @@ class ClienteUpdate(LoginRequiredMixin, UpdateView):
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+            
         else:
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+           
 
         cliente = Cliente.objects.get(id= id)
         usuario_adm = cliente.usuarios.id
@@ -306,18 +300,16 @@ class ClienteUpdate(LoginRequiredMixin, UpdateView):
         user = request.user.has_perm('pessoa.change_cliente')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-        data = {}
 
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+            
         else:
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
 
         cliente = Cliente.objects.get(id= id)
         usuario_adm = cliente.usuarios.id
@@ -343,14 +335,10 @@ class ClienteUpdate(LoginRequiredMixin, UpdateView):
             cliente.Celular2  = request.POST['Celular2']
             cliente.Telefone  = request.POST['Telefone']
             cliente.email = request.POST['email']
-            cliente.user_id = user_logado
+            cliente.user = user_logado
             cliente.save()
             return redirect('novo-cliente')
 
-            data['cliente'] = cliente
-            data['cliente']  = Cliente.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id') # listar produtos
-            return render(
-                request, 'pessoa/cliente_update.html',data)
         else:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 

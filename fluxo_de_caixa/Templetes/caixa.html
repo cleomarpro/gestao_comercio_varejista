@@ -28,7 +28,7 @@
           <select style=" width:230px;" type="select"  name="funcionario" id="funcionario" required/>
               <option value=''> __Selecionar__ </option>
           {% for funcionarios in funcionarios %}
-              <option value='{{funcionarios.id}}'> Nome:{{funcionarios}} </option>
+              <option value='{{funcionarios.id}}'> {{funcionarios.nome}} </option>
           {% endfor %}
           </select >
      </div>

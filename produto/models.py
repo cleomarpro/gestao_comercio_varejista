@@ -15,8 +15,8 @@ from usuarios.models import Usuarios
 #import math
 
 class Categoria (models.Model):
-    nome = models.CharField(max_length=50,blank=True)
-    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    nome = models.CharField(max_length=50, blank=True)
+    user = models.CharField(max_length=100, blank=True, null=True)
     usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
 
 
@@ -29,7 +29,7 @@ class Promocao(models.Model):
     desconto = models.DecimalField(max_digits=9, decimal_places=2, default=0)
     data_inicio = models.DateField(blank=True, null=True)
     data_termino = models.DateField(blank=True, null=True)
-    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    user = models.CharField(max_length=100, blank=True, null=True)
     usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
 
     def __str__(self): # METODO CONSTRUTOR
@@ -48,7 +48,7 @@ class Produto (models.Model):
     estoque = models.DecimalField(max_digits=9, decimal_places=2, default=0)
     data_hora = models.DateTimeField(default=timezone.now)
     imagem = models.ImageField( blank=True)
-    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    user = models.CharField(max_length=100, blank=True, null=True)
     usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
 
 
@@ -83,7 +83,7 @@ class EntradaMercadoria(models.Model):
     quantidade = models.DecimalField(max_digits=9, decimal_places=2, blank=False, default=1)
     data_hora = models.DateTimeField(default=timezone.now)
     validade_produto = models.DateField(blank=True, null=True)
-    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    user = models.CharField(max_length=100, blank=True, null=True)
     usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
 
 
@@ -97,29 +97,4 @@ def update_total_estoque(sender, instance, **kwargs):
 @receiver(post_save, sender=EntradaMercadoria)
 def update_total_entrada(sender, instance, **kwargs):
     instance.produto.etoque_total()
-'''
-def total_estoque_saida(self):
-tot = self.itemdopedido_set.all().aggregate(
-total_esto=Sum(F('quantidade') - F('produto__estoque'), output_field=DecimalField()))
-['total_esto'] or 0
-self.estoque = tot
-Produto.objects.filter(id=self.id).update(estoque = tot)
-
-@receiver(post_save, sender=ItemDoPedido)
-def update_total_estoque_saida(sender, instance, **kwargs):
-instance.produto.total_estoque_saida()
-'''
-
-'''
-python manage.py makemigrations (comando para migrar para o django)
-python manage.py migrate
-(comanto para moigra para o banco)
-source venvgestao/bin/activate (ativar a venv)
-python -m pip install Pillow (campo de iamgem ou  arquivo)
-
-mensalista = models.ForeignKey(Mensalista, on_delete=models.CASCADE)
-detalhe = models.TextField()
-email = models.EmailField()
-pago= models.BooleanField(default=False)
-'''
 
