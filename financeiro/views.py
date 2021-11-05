@@ -40,7 +40,7 @@ class GastosExtras(LoginRequiredMixin, View):
         gastos_extras = Gastos_extras.objects.filter(
             usuarios__usuario_cliente= usuario, data_hora__month = mes_atual, data_hora__year= ano ).order_by('-id')
         data['gastos_extras']=gastos_extras
-        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(user=user_logado, usuarios=usuario).order_by('-id')
+        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(usuarios=usuario).order_by('-id')
         data['hoje']= today
         return render(
             request, 'financeiro/gastos-extras.html', data)
@@ -75,7 +75,7 @@ class GastosExtras(LoginRequiredMixin, View):
         data['gastos_extras'] = gastos_extras
         data['gastos_extras']  = Gastos_extras.objects.filter(
             usuarios__usuario_cliente= usuarioCliente, data_hora__month = mes_atual, data_hora__year=ano ).order_by('-id')
-        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(user=user_logado, usuarios=usuarioCliente).order_by('-id')
+        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter( usuarios=usuarioCliente).order_by('-id')
         data['hoje']= today
         return render(
              request, 'financeiro/gastos-extras.html',data)
@@ -126,7 +126,7 @@ class GastosExtrasUpdate(LoginRequiredMixin, View):
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
             usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
 
-        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(user=user_logado, usuarios=usuarioCliente).order_by('-id')
+        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(usuarios=usuarioCliente).order_by('-id')
         data['gastos_extras']= Gastos_extras.objects.get(id= id)
 
         usuario_adm = data['gastos_extras'].usuarios.id
@@ -221,8 +221,8 @@ class Gastos_extras_categoria(LoginRequiredMixin, View):
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
             
-            data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(
-                user=user_logado, usuarios=usuarioCliente).order_by('-id')
+        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(
+            usuarios=usuarioCliente).order_by('-id')
         return render(
             request, 'financeiro/categoria_de_gastos.html', data)
 
