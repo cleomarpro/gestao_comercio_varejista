@@ -1,0 +1,109 @@
+{% extends 'base.html'%}
+   {% block main%}
+
+<div class='div_Mae'>
+    <h2 class="sub_menu" >&nbsp; MINHAS VENDAS
+        {% if perms.fluxo_de_caixa.add_venda %}
+            <a href="{% url 'atualizar-pedido' %}"> 
+            Adicionar 
+        {% endif %}
+    </a>
+    </h2>
+    
+    <form id="form_mobil" class='campo_de_busca' method="GET" action="{% url 'vendas_pagas' %}">
+    <a id="br_X_mobil" href="#" onclick="document.getElementById
+    ('form_mobil').style.display='none';"> X</a>
+
+    <div>
+        <label>Número do cliente</label> <br>
+        <input style="width:160px" type="search" id="venda" name="venda" placeholder="Número do cliente...">
+            <button  type="submit">Buscar</button>
+    </div>
+    <div>
+        <label>Selecionar o dia</label> <br>
+        <input style=" padding: 3px;" type="date" id="dia" name="dia">
+            <button  type="submit">Filtrar</button>
+    </div>
+    <div>
+        <label>Selecionar o mês</label> <br>
+        <select  type="search" id="mes" name="mes" >
+                <tr>
+                        <option value='{{today.month}}'> __Selecionar__</option>
+                        <option value='1'> -Janeiro</option>
+                        <option value='2'> -Fevereiro</option>
+                        <option value='3'> -Março</option>
+                        <option value='4'> -Abril</option>
+                        <option value='5'> -Maio</option>
+                        <option value='6'> -Junho</option>
+                        <option value='7'> -Julho</option>
+                        <option value='8'> -Agosto</option>
+                        <option value='9'> -Setembro</option>
+                        <option value='10'> -Outubro</option>
+                        <option value='11'> -Novembro</option>
+                        <option value='12'> -Dezembor</option>
+                </tr>
+                 <br>
+        </select>
+        <button  type="submit">Filtrar</button>
+    </div>
+    
+    </form>
+    
+        <a id="mostrar_filtros"
+            href="#" onclick="document.getElementById('form_mobil').style.display='block';">
+            Mostrar filtros 
+        </a>
+        <div class="dashboard">
+            <label><b> Total das vendas:</b> R$ {{total_vendas.total}}</label><br>
+        </div>
+    <table class='table'>
+      <thead>
+        <tr>
+            <th>Cliente</th>
+            <th class="col_table">Data</th>
+            <th>Descrição</th>
+            <th class="col_table">Desconto</th>
+            <th>Valor</th>
+            <th >Ação</th>
+            <th>Estado</th>
+            
+        </tr>
+      </thead>
+      <tbody>
+        {% for venda in vendas %}
+            <tr>
+                <td>{{ venda.id }}</td>
+                <td class="col_table">{{ venda.data_hora | date:'d/m/y  H:i'}}</td>
+                <td >{{ venda.descricao}}</td>
+                <td class="col_table">R$ {{ venda.total_desconto }}</td>
+                <td>R$ {{ venda.valor }}</td>
+                <td> 
+                {% if perms.fluxo_de_caixa.add_venda %}
+                 <a href="{% url 'edit-pedido' venda.id %} "> Editar </a> 
+                {%endif%}
+
+                {% if perms.fluxo_de_caixa.delete_venda %}
+                 <a href="{% url 'delete-pedido' venda.id %} ">Excluir</a> </td>
+                {%endif%}
+
+                <td>
+                    {% if venda.troco < 0  or venda.tipo_de_pagamento_id == None %}
+                        {% if perms.fluxo_de_caixa.change_venda %}
+                         <label> <a Style= 'color: red;' href="{% url 'edit-pedido' venda.id %} "> Pagar </a>  </label>
+                        {% else %}
+                        <label Style= 'color: red;'> Não Pago </label>
+                        {% endif %}
+                    {% else %}
+                        <label>Pago </label>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+</div>
+{% endblock %}
+
+
+
+

@@ -24,10 +24,15 @@
                 <input style=" width:120px;"  placeholder=" parcelas:" value="{{conta.parcelas}}"
                     type="text" id="parcelas" name="parcelas" required/>
         </div>
+        <div>  
+            <label> Juros</label> <br>
+               <input style=" width:120px;" placeholder="{{conta.juros}}%"
+                type="number" step=".01" lang="nb" id="juros" name="juros">
+       </div>
         <div>
                 <input type="hidden" value='2' name="tipo_de_conta_id">
 
-            <label> Data de vencimento:</label> <br>
+            <label> Primeira parcela</label> <br>
                 <input style=" width:150px;"  placeholder=" Data de vencimento:" 
                     value="{{conta.data_de_vencimento | date:'Y-m-d'}}"
                     type="date" id="data_de_vencimento" name="data_de_vencimento">

@@ -71,7 +71,7 @@ class AtualizarPedido(LoginRequiredMixin, View):
                 venda.valor_recebido = data['valor_recebido'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
                 venda.valor_credito = data['valor_credito'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
                 venda.valor_debito = data['valor_debito'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
-                venda.user = user_logado
+                venda.user_2 = user_logado
                 venda.venda_id = data['venda_id']
 
                 venda.save()
@@ -258,6 +258,50 @@ class ListaVendaPorUsuario(LoginRequiredMixin, View):
         data['total_desconto']= total_desconto
         return render(request, 'lista-venda-usuario.html', data)
 
+class ListaVendaPagas(LoginRequiredMixin, View):
+    def get(self, request):
+        data = {}
+
+        user = request.user.has_perm('fluxo_de_caixa.view_venda')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
+        today = date.today()
+
+        Mes= request.GET.get('mes',None)
+        busca= request.GET.get('venda',None)
+        Dia= request.GET.get('dia',None)
+
+        vendas = Venda.objects.filter(
+            data_hora__gte=today, user_2 = user_logado, usuarios__usuario_cliente= usuario).order_by('-id') #__startswith, __contains
+        total_vendas= vendas.aggregate(total=Sum("valor_com_desconto"))
+
+        if Dia:
+            vendas = Venda.objects.filter(
+                data_hora__contains=Dia, user_2 = user_logado, usuarios__usuario_cliente= usuario).order_by('-id')#data_hora__day= Dia
+            total_vendas= vendas.aggregate(total=Sum("valor_com_desconto"))
+
+        if Mes:
+            vendas = Venda.objects.filter(
+                data_hora__year__contains=today.year, data_hora__month__contains=Mes, user_2 = user_logado, usuarios__usuario_cliente= usuario ).order_by('-id')
+            total_vendas= vendas.aggregate(total=Sum("valor_com_desconto"))
+
+        if busca:
+            vendas = Venda.objects.filter(
+                user_2 = user_logado, usuarios__usuario_cliente= usuario, id__icontains=busca)
+            total_vendas= vendas.aggregate(total=Sum("valor_com_desconto"))
+            
+        data['vendas'] = vendas
+        data['total_vendas']= total_vendas
+        return render(request, 'vendas-pagas.html', data)
 
 class EditPedido(LoginRequiredMixin, View):
     def get(self, request, venda):
@@ -620,7 +664,7 @@ class AbrirFeixarCaixa(LoginRequiredMixin, View):
         if usuario_adm == usuario: # Verificar autenticidade do usuário
 
             venda_sedula= Venda.objects.filter(
-                data_hora__contains= today, user = user_logado, usuarios_id = usuario).aggregate(total_venda_cedula=Sum('valor_cedula'))
+                data_hora__contains= today, user_2 = user_logado, usuarios_id = usuario).aggregate(total_venda_cedula=Sum('valor_cedula'))
             venda_sedula = venda_sedula['total_venda_cedula']or 0
 
             estado_do_caixa= Depositar_sacar.objects.filter(caixa__id = id).aggregate(vendas=Sum('venda_realizadas'))

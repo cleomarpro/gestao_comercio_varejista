@@ -33,7 +33,7 @@ class Gastos_extras(models.Model):
     usuarios = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
 
     def __str__(self): # METODO CONSTRUTOR
-        return self.descricao
+        return self.descricao + ' - ' + self.valor
 
 class Tipo_de_conta(models.Model):
     nome=models.CharField(max_length=50, blank=True)
@@ -47,11 +47,13 @@ class Contas(models.Model):
     cliente = models.ForeignKey(Cliente, null=True, blank=True, on_delete=models.CASCADE)
     venda = models.ForeignKey(Venda, null=True, on_delete=models.CASCADE)
     valor = models.DecimalField(max_digits=9, decimal_places=2, blank=False, default=0)
+    valor_com_juros = models.DecimalField(max_digits=9, decimal_places=2, blank=False, null=True, default=0)
     valor_parcela = models.DecimalField(max_digits=9, decimal_places=2, blank=False, default=0)
     parcelas_pagas = models.DecimalField(max_digits=9, decimal_places=0, blank=False, default=0)
     parcelas = models.DecimalField(max_digits=9, decimal_places=0, blank=False, default=0)
     saldo_devedor = models.DecimalField(max_digits=9, decimal_places=2, blank=False, default=0)
     parcelas_restantes = models.DecimalField(max_digits=9, decimal_places=0, blank=False, default=0)
+    juros = models.DecimalField(max_digits=9, decimal_places=2, blank=False, null=True, default=0)
     tipo_de_conta = models.ForeignKey(Tipo_de_conta, on_delete=models.CASCADE)
     data_de_vencimento =models.DateField(default=False, blank=True)
     data_hora = models.DateTimeField(default=timezone.now)
@@ -64,8 +66,14 @@ class Contas(models.Model):
        return str(self.cliente) + ' - ' + str(self.parcelas_restantes)+ ' - ' + str(self.valor)
 
     def total_contas(self):
+#Calculo do valor com juros
+        juros= float(self.juros) / 100
+        total_valor_com_juros = float(self.valor) * (1 + juros)**self.parcelas
+        self.valor_com_juros = total_valor_com_juros
+        Contas.objects.filter(id=self.id).update(valor_com_juros = total_valor_com_juros)
+
 # Calculo do valor da parcela
-        valor_da_parcela = float(self.valor) / float(self.parcelas)
+        valor_da_parcela = float(self.valor_com_juros) / float(self.parcelas) 
         self.valor_parcela = float(valor_da_parcela)
         Contas.objects.filter(id=self.id).update(valor_parcela = valor_da_parcela)
 
@@ -81,7 +89,7 @@ class Contas(models.Model):
         Contas.objects.filter(id=self.id).update(parcelas_restantes = parcelasRestantes)
 
 # Calculo do saldo devedor
-        saldoDevedor = float(self.valor) / float(self.parcelas) * float(self.parcelas_restantes)
+        saldoDevedor = float(self.valor_com_juros) / float(self.parcelas) * float(self.parcelas_restantes)
         self.saldo_devedor = float(saldoDevedor)
         Contas.objects.filter(id=self.id).update(saldo_devedor = saldoDevedor)
 
@@ -102,6 +110,13 @@ class Pagamento(models.Model):
 
     def __str__(self): # METODO CONSTRUTOR
        return str(self.quantidade_de_parcelas)  + ' - ' + str(self.contas.parcelas_restantes) + ' - ' + str(self.contas.valor_parcela)
+
+class ParcelasConta(models.Model):
+    usuarios = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
+    user = models.CharField(max_length=100,null=True, blank=True)
+    numero_da_parcelas = models.CharField(max_length=100,null=True, blank=True)
+    data_de_vencimento =models.DateField(default=False, blank=True)
+    contas = models.ForeignKey(Contas, on_delete=models.CASCADE)
 
 @receiver(post_save, sender= Contas)
 def update_total_contas(sender, instance, **kwargs):

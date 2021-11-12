@@ -3,10 +3,12 @@
 <!-- CDASTRO  DE PRODUTOS -->
 <div class='div_Mae'>
   <h2 class="sub_menu" >&nbsp; CAIXA
+    {% if perms.fluxo_de_caixa.add_caixa %}
     <a 
         href="#" onclick="document.getElementById('form_up').style.display='block';">
             Adicionar 
     </a>
+    {% endif %}
   </h2>
 
     {% if perms.fluxo_de_caixa.add_caixa %}
@@ -36,10 +38,8 @@
           <button  type="submit">Criar</button>
 
     </form>
+    {% endif%}
 
-
-<form class='campo_de_busca1'>
-</form>
     <table class="table">
       <thead>
         <tr>
@@ -64,35 +64,5 @@
         {% endfor %}
       </tbody>
     </table>
-{% else %}
-    <form class='campo_de_busca1'>
-    <h1> Caixa </h1>
-    </form>1>
-    <table class="table"> <!-- tabela do usuário logado-->
-      <thead>
-        <tr>
-          <th >Caixa</th>
-          <th >Saldo</th>
-          <th >Sacar</th>
-          <th >Depositar</th>
-          <th>Estado do caixa</th>
-
-        </tr>
-      </thead>
-      <tbody>
-        {% for caixa in caixa_user_logado %}
-            <tr>
-                <td>{{ caixa.nome_do_caixa }}</td>
-                <td>R$ {{ caixa.valor_atualizado }}</td>
-
-                <td>  <a href="{% url 'caixa-sacar' caixa.id %}">Sacar</a> </td>
-                <td>  <a href="{% url 'caixa-deposito' caixa.id %}">Depositar</a> </td>
-                <td>  <a href="{% url 'abrir-feixar-caixa' caixa.id %}">Visualizar</a> </td>
-                
-            </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    {% endif%}
 </div>
 {% endblock %}

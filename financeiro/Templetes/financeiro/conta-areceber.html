@@ -58,11 +58,16 @@
                 <input value='1' placeholder=" parcelas..."
                     type="text" id="parcelas" name="parcelas" required/>
         </div>
+        <div>  
+            <label> Juros</label> <br>
+               <input style=" width:120px;" placeholder=" 0,00}%"
+                   type="number" id="juros" name="juros" >
+        </div> 
        
                 <input type="hidden" value='1' name="tipo_de_conta_id">
        
         <div> 
-            <label> Data de vencimento</label> <br>
+            <label> Primeira parcela</label> <br>
                 <input style=" width:150px; padding: 3px;"  placeholder=" Data de vencimento:"
                     type="date" id="data_de_vencimento" name="data_de_vencimento" required/>
         
@@ -80,9 +85,10 @@
         
     <div id="div_busca_filtro";>
         <label> Cpf ou Cnpj / Situação do débito</label><br>
-        <input style="width:40%"; type="search" id="client" name="client" placeholder="Cpf ou Cnpj..." >
+        <input style="width:40%"; type="search" id="client" name="client" 
+            data-js="cpf" placeholder="000.00.000-00" >
         
-        <select style="width:110px"; type="search" id="estado_da_conta" name="estado_da_conta" >
+        <select style="width:110px"; type="text" id="estado_da_conta" name="estado_da_conta" >
            <tr >
                 <option value='1'> Selecionar</option>
                 <option value=''> -Contas ativas </option>
@@ -108,13 +114,15 @@
             <th >Cliente</th>
             <th class="col_table">Observação</th>
             <th >Valor</th>
+            <th class="col_table" >Juros</th>
+            <th class="col_table">Valor com juros</th>
             <th class="col_table">ID da venda</th>
             <th class="col_table">Saldo devedor</th>
             <th class="col_table">Total de parcelas</th>
             <th class="col_table" >Parcelas pagas</th>
             <th class="col_table" >Parcelas restantes</th>
             <th class="col_table" >Valor da parcela</th>
-            <th >Data de vencimento</th>
+            <th >Primeira parcela</th>
             <th>Ação</th>
             <th>Pagar</th>
         </tr>
@@ -124,9 +132,11 @@
                 <tr>
                     <td>{{ conta.cliente.nome}}</td>
                     <td class="col_table">{{ conta.observacao}}</td>
-                    <td class="col_table">R$ {{ conta.valor }}</td>
+                    <td >R$ {{ conta.valor }}</td>
+                    <td class="col_table">R$ {{ conta.juros}}</td>
+                    <td class="col_table">R$ {{ conta.valor_com_juros}}</td>
                     <td class="col_table">{{ conta.venda.id}}</td>
-                    <td>R$ {{ conta.saldo_devedor }}</td>
+                    <td class="col_table">R$ {{ conta.saldo_devedor }}</td>
                     <td class="col_table">{{ conta.parcelas }}</td>
                     <td class="col_table">{{ conta.parcelas_pagas }}</td>
                     <td class="col_table">{{ conta.parcelas_restantes }}</td>
@@ -142,9 +152,19 @@
                         {%endif%}
                     </td>
                     <td>
+                    {%if conta.parcelas_restantes == 0%}
                         {% if perms.financeiro.add_pagamento %}
-                            <a href="{% url 'pagamento' conta.id %}">pagar</a> 
+                        <a href="{% url 'pagamento' conta.id %}">Pago</a> 
                         {%endif%}
+
+                    {%else%}
+
+                        {% if perms.financeiro.add_pagamento %}
+                        <a href="{% url 'parcelas' conta.id %}">Parcelas</a> 
+                        {%endif%}
+
+                    {%endif%}
+    
                     </td>
             {%endfor%}
         </tbody>
@@ -153,6 +173,3 @@
 </div>
 
 {% endblock %}
-<!-- <td> <a href="{% url 'GastosExtras_update_cbv' gastos_extras.id %}">Editar</a> </td>
-                    <td> <a href="{% url 'gastos_extras_delete' gastos_extras.id %}">Excluir</a> </td>  -->
-

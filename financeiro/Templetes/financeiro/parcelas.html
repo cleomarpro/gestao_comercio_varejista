@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<div class='div_Mae'>
+    <h2 class="sub_menu" >&nbsp; PARCELAS 
+        
+    </h2>
+    <table class="table">
+     <thead>
+        <tr>
+            <th >Conta</th>
+            <th class="col_table">Parcela</th>
+            <th >Vencimento</th>
+            <th class="col_table">Valor</th>
+            
+            <th>Pagar</th>
+        </tr>
+    </thead>
+        <tbody>
+            {%for parcelas in parcelas%}
+                <tr>
+                    <td>{{ parcelas.contas.id}}</td>
+                    <td class="col_table">{{ parcelas.numero_da_parcelas}}</td>
+                    <td>{{parcelas.data_de_vencimento | date:'d/m/y'}}</td>
+                    <td>R$ {{parcelas.contas.valor_parcela}}</td>
+                    <td>
+                        
+                        
+                                {% if perms.financeiro.add_pagamento %}
+                                <label>  <a Style= 'color: red;' href="{% url 'pagamento' parcelas.contas.id %}">Pagar</a> </label>
+                                {%endif%}
+                            
+                    </td>
+            {%endfor%}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}
+
+

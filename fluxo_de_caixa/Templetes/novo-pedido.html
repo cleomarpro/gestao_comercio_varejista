@@ -139,13 +139,17 @@
     {% if perms.fluxo_de_caixa.add_venda %}
         <form class='caixa' method="POST" action="{% url 'novo-pedido' %}">
             {% csrf_token %}
-            
             <input type="hidden" value="{{venda.id}}" name="venda_id">
-            
             <button id='bt_novo_pedido'  accesskey="n"> Nova venda </button>
-            
         </form>
-        {% endif %}
+    {% else %}
+        <form class='caixa' >
+            {% csrf_token %}
+            <input type="hidden"  name="venda_id">
+            <button id='bt_novo_pedido' disabled=" true" > Nova venda </button>
+        </form>
+        
+    {% endif %}
 
 <br>
 {% if venda %}
@@ -171,7 +175,7 @@
             <button id="bt_vendas1">Incluir</button>
         </form>
     {% else %}
-        <form class='caixa' action="{% url 'novo-item-pedido' venda.id %}" method="POST">
+        <form class='caixa' >
              {% csrf_token %}
 
             <label> Código:</label>
@@ -188,6 +192,7 @@
                 type="number" step=".01" lang="nb" name="quantidade"
                     id="quantidade" value="1" required disabled=" true">
                 <br>
+                <button disabled=" true" id="bt_vendas1">Incluir</button>
         </form>
     {% endif %}
 </div>
@@ -196,46 +201,46 @@
     <div id="divPainel" > 
         {%if venda.tipo_de_pagamento_id == None%}
         <label style=" background-color: #363636;">
-            TOTAL R$ : {{ venda.valor | floatformat:2}} </label>
+            TOTAL: R$ {{ venda.valor | floatformat:2}} </label>
             <br>
             {%endif%}
 
         {%if venda.tipo_de_pagamento_id != None %}
         <label style=" background-color: #363636;">
-            TOTAL A PAGAR R$ : {{ venda.valor_com_desconto | floatformat:2}}</label>
+            TOTAL A PAGAR: R$ {{ venda.valor_com_desconto | floatformat:2}}</label>
                 <br>
                 {%endif%}        
         <label style=" background-color: #2F4F4F;">
-            Desconto R$ :{{venda.total_desconto | floatformat:2}}</label>
+            Desconto: R$ {{venda.total_desconto | floatformat:2}}</label>
              <br>
 
        
         {%if venda.tipo_de_pagamento_id == '1' %}
              {% if venda.troco > 0 %}
         <label style=" background-color: #0000CD;">
-            Troco R$ :{{venda.troco | floatformat:2}}</label>
+            Troco: R$ {{venda.troco | floatformat:2}}</label>
 
             {%endif%}
             {% if venda.troco < 0 %}
         <label style=" background-color: #800000;">
-            Falta R$ :{{venda.troco | floatformat:2}}</label>
+            Falta: R$ {{venda.troco | floatformat:2}}</label>
 
             {%endif%}
         {%elif venda.tipo_de_pagamento_id == '4'%}
              {% if venda.troco > 0 %}
         <label style=" background-color: #0000CD;">
-            Troco R$ :{{venda.troco | floatformat:2}}</label>
+            Troco R$ {{venda.troco | floatformat:2}}</label>
 
             {%endif%}
             {% if venda.troco < 0 %}
         <label style=" background-color: #800000;">
-            Falta R$ :{{venda.troco | floatformat:2}}</label>
+            Falta R$ {{venda.troco | floatformat:2}}</label>
 
             {%endif%}
         {% elif venda.tipo_de_pagamento_id == '4'%}
              {% if venda.troco > 0 %}
         <label style=" background-color: #0000CD;">
-            Troco R$ :{{venda.troco | floatformat:2}}</label>
+            Troco R$ {{venda.troco | floatformat:2}}</label>
 
              {%endif%}
             {% if venda.troco < 0 %}
@@ -246,36 +251,36 @@
         {% elif venda.tipo_de_pagamento_id == '5'%}
             {%if venda.troco > 0 %}
         <label style=" background-color: #0000CD;">
-            Troco R$ :{{venda.troco | floatformat:2}}</label>
+            Troco R$ {{venda.troco | floatformat:2}}</label>
 
              {%endif%}
             {% if venda.troco < 0 %}
         <label style=" background-color: #800000;">
-            Falta R$ :{{venda.troco | floatformat:2}}</label>
+            Falta R$ {{venda.troco | floatformat:2}}</label>
 
             {%endif%}
 
         {%elif venda.tipo_de_pagamento_id == '5'%}
              {% if venda.troco > 0 %}
         <label style=" background-color: #0000CD;">
-            Troco R$ :{{venda.troco | floatformat:2}}</label>
+            Troco R$ {{venda.troco | floatformat:2}}</label>
 
              {%endif%}
             {% if venda.troco < 0 %}
         <label style=" background-color: #800000;">
-            Falta R$ :{{venda.troco | floatformat:2}}</label>
+            Falta R$ {{venda.troco | floatformat:2}}</label>
 
             {%endif%}
 
         {%elif venda.tipo_de_pagamento_id == '6'%}
             {% if venda.troco > 0 %}
         <label style=" background-color: #0000CD;">
-            Troco R$ :{{venda.troco | floatformat:2}}</label>
+            Troco R$ {{venda.troco | floatformat:2}}</label>
 
              {%endif%}
             {% if venda.troco < 0 %}
         <label style=" background-color: #800000;">
-            Falta R$ :{{venda.troco | floatformat:2}}</label>
+            Falta R$ {{venda.troco | floatformat:2}}</label>
 
             {%endif%}
         {%endif%}

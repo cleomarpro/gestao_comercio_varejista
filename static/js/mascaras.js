@@ -55,9 +55,14 @@ const masks = {
 
     percentagem (value) {
       return value
-      .replace(/\D+/g, ',')
-      .replace(/(\d{4})(\d)/g,"$1,$2")
-      .replace(/(,\d{2})\d+?$/, '$1')
+        .replace(/\D+/g, ',')
+        .replace(/(\d{4})(\d)/g,"$1,$2")
+        .replace(/(,\d{2})\d+?$/, '$1')
+    },
+    numero (value) {
+      return value
+        .replace(/\D+/g, '')
+        
     },
   
     usuario_e_senha(value) {

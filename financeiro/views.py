@@ -1,10 +1,11 @@
+import datetime
 from django.shortcuts import render, redirect
 from django.views import View
-from django.views.generic.edit import UpdateView
+#from django.views.generic.edit import UpdateView
 from fluxo_de_caixa.models import Venda
 from fluxo_de_caixa.models import ItemDoPedido
 from django.db.models import Q
-from .models import Contas, Pagamento
+from .models import Contas, Pagamento, ParcelasConta
 from .models import Gastos_extras
 from .models import Tipo_de_conta
 from .models import GastosExtrasCategoria
@@ -12,7 +13,7 @@ from pessoa.models import Cliente
 from pessoa.models import Funcionario
 from produto.models import EntradaMercadoria
 from usuarios.models import Usuarios
-from django.db.models import Sum, Count, F #Avg ,DecimalField, F # Max ExpressionWrapper FloatField DecimalField Sum
+from django.db.models import Sum, Count, F, DecimalField #Avg ,DecimalField, F # Max ExpressionWrapper FloatField DecimalField Sum
 from datetime import date
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -40,6 +41,7 @@ class GastosExtras(LoginRequiredMixin, View):
         ano = today.year
         gastos_extras = Gastos_extras.objects.filter(
             usuarios__usuario_cliente= usuario, data_hora__month = mes_atual, data_hora__year= ano ).order_by('-id')
+        
         data['gastos_extras']=gastos_extras
         data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
         data['hoje']= today
@@ -192,14 +194,13 @@ class FiltroGastosExtras( LoginRequiredMixin, View):
         if Mes and Ano:
             gastos_extras = Gastos_extras.objects.filter(
                 usuarios__usuario_cliente= usuario, data_hora__year= Ano, data_hora__month= Mes).order_by('-id')
-        
+
         if Mes and Ano and Categoria:
             gastos_extras = Gastos_extras.objects.filter(
                 usuarios__usuario_cliente= usuario, data_hora__year= Ano, 
                 data_hora__month= Mes, gastosExtrasCategoria_id= Categoria).order_by('-id')
-           # total_de_gastos= Gastos_extras.objects.aggregate(total=Sum(("valor")))
-            
-           # data['total_de_gastos']=total_de_gastos
+            data['gastos_extr']= gastos_extras.aggregate(total=Sum('valor'))
+        
         data['hoje']= today
         data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
         data['gastos_extras'] = gastos_extras
@@ -394,18 +395,54 @@ class ContasAreceber(LoginRequiredMixin, View):
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
             usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-
+        
+        parcelas = request.POST['parcelas']
+        parcelas = int(parcelas)
+        data_de_vencimento_parcelas = request.POST['data_de_vencimento']
+        data_de_vencimento_parcelas =  datetime.datetime.strptime(data_de_vencimento_parcelas, "%Y-%m-%d")
+        ano = data_de_vencimento_parcelas.year
+        mes = data_de_vencimento_parcelas.month
+        dia = data_de_vencimento_parcelas.day
+        parcela=0
 
         conta = Contas.objects.create(
             observacao = request.POST['observacao'],
             valor = request.POST['valor'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$',''),
-            parcelas = request.POST['parcelas'],
+            parcelas = parcelas or 1,
+            juros = request.POST['juros'].replace(' ','').replace(',','.') or 0,
             tipo_de_conta_id = request.POST['tipo_de_conta_id'],
-            data_de_vencimento = request.POST['data_de_vencimento'],
+            data_de_vencimento = data_de_vencimento_parcelas,
             venda_id = request.POST['venda_id'],
             cliente_id = request.POST['cliente_id'],
             user = user_logado, usuarios_id = usuarioId
             )
+        if conta:
+            parcelas= conta.parcelas
+            id_da_conta = conta.id 
+            for conta in range( parcelas):
+                parcela= parcela + 1
+                if data_de_vencimento_parcelas.month <= 11 :
+                    if parcela >= 2:
+                        mes = mes + 1
+                        data_de_vencimento_parcelas= date(year=ano, month=mes, day=dia)
+                elif mes == 12 and parcela <= 1:
+                    mes = 12
+                    data_de_vencimento_parcelas= date(year=ano, month=mes, day=dia)
+                else:
+                    mes = mes
+                    mes = 1
+                    ano = ano + 1
+                    dia = dia
+                    dia = data_de_vencimento_parcelas.day
+                    data_de_vencimento_parcelas= date(year=ano, month=mes, day=dia)
+                          
+                parcelas = ParcelasConta.objects.create(
+                    contas_id = id_da_conta,
+                    numero_da_parcelas = parcela,
+                    data_de_vencimento = data_de_vencimento_parcelas,
+                    user = user_logado, usuarios_id = usuarioId
+                )
+
         data['conta'] = conta
         data['conta']  = Contas.objects.filter(usuarios__usuario_cliente= usuarioCliente, tipo_de_conta_id=1, data_de_vencimento__month = mes_atual).order_by('-id') # listar produtos
         data['venda']  = Venda.objects.filter(usuarios__usuario_cliente= usuarioCliente, data_hora__gte = today).order_by('-id')
@@ -468,7 +505,6 @@ class ContaAreceberUpdate(LoginRequiredMixin, View):
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
    
     def post(self, request, id):
-        data = {}
         user = request.user.has_perm('financeiro.change_contas')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
@@ -482,6 +518,18 @@ class ContaAreceberUpdate(LoginRequiredMixin, View):
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
        
+        parcelas= int(request.POST['parcelas'])
+        if parcelas < 1:
+            parcelas = 1
+        else:
+            parcelas = request.POST['parcelas']
+        parcelas = int(parcelas)
+        data_de_vencimento_parcelas = request.POST['data_de_vencimento']
+        data_de_vencimento_parcelas =  datetime.datetime.strptime(data_de_vencimento_parcelas, "%Y-%m-%d")
+        ano = data_de_vencimento_parcelas.year
+        mes = data_de_vencimento_parcelas.month
+        dia = data_de_vencimento_parcelas.day
+       
         conta = Contas.objects.get(id= id)
         usuario_adm = conta.usuarios.id
         if usuario_adm == usuarioId: # Verificar autenticidade do usuário
@@ -489,14 +537,48 @@ class ContaAreceberUpdate(LoginRequiredMixin, View):
             conta.observacao = request.POST['observacao']
             if request.POST['valor']:
                 conta.valor = request.POST['valor'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
-            conta.parcelas = request.POST['parcelas']
+            conta.parcelas = parcelas or 1
+            if request.POST['juros']:
+                conta.juros = request.POST['juros'].replace(' ','').replace(',','.')
             conta.tipo_de_conta_id = request.POST['tipo_de_conta_id']
             if request.POST['data_de_vencimento']:
-                conta.data_de_vencimento = request.POST['data_de_vencimento']
+                conta.data_de_vencimento = data_de_vencimento_parcelas
             conta.venda_id = request.POST['venda_id']
             conta.cliente_id = request.POST['cliente_id']
             conta.user = user_logado 
             conta.save()
+
+        if conta:
+            parcela_delete = ParcelasConta.objects.filter(contas_id=id)
+            parcela_delete.delete()
+
+            parcelas= conta.parcelas
+            id_da_conta = conta.id 
+            parcela= 0
+            parcelas= parcelas - int(conta.parcelas_pagas)
+            for conta in range( parcelas):
+                parcela= parcela + 1
+                if data_de_vencimento_parcelas.month <= 11 :
+                    if parcela >= 2:
+                        mes = mes + 1
+                        data_de_vencimento_parcelas= date(year=ano, month=mes, day=dia)
+                elif mes == 12 and parcela <= 1:
+                    mes = 12
+                    data_de_vencimento_parcelas= date(year=ano, month=mes, day=dia)
+                else:
+                    mes = mes
+                    mes = 1
+                    ano = ano + 1
+                    dia = dia
+                    dia = data_de_vencimento_parcelas.day
+                    data_de_vencimento_parcelas= date(year=ano, month=mes, day=dia)
+                          
+                parcelas = ParcelasConta.objects.create(
+                    contas_id = id_da_conta,
+                    numero_da_parcelas = parcela,
+                    data_de_vencimento = data_de_vencimento_parcelas,
+                    user = user_logado, usuarios_id = usuarioId
+                )
             return redirect('conta_areceber')
     
         else:
@@ -564,18 +646,55 @@ class ContasApagar(LoginRequiredMixin, View):
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
             usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-            #parcelas = request.POST['parcelas']
-            #parcelas = int(parcelas)
-            #for conta in range( parcelas):
+        parcelas= int(request.POST['parcelas'])
+        if parcelas < 1:
+            parcelas = 1
+        else:
+            parcelas = request.POST['parcelas']
+        parcelas = int(parcelas)
+        data_de_vencimento_parcelas = request.POST['data_de_vencimento']
+        data_de_vencimento_parcelas =  datetime.datetime.strptime(data_de_vencimento_parcelas, "%Y-%m-%d")
+        ano = data_de_vencimento_parcelas.year
+        mes = data_de_vencimento_parcelas.month
+        dia = data_de_vencimento_parcelas.day
+        parcela=0
+        
         conta = Contas.objects.create(
             observacao = request.POST['observacao'],
             valor = request.POST['valor'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$',''),
-            parcelas = request.POST['parcelas'],
+            parcelas = parcelas,
+            juros = request.POST['juros'].replace(' ','').replace(',','.') or 0,
             tipo_de_conta_id = request.POST['tipo_de_conta_id'],
-            data_de_vencimento = request.POST['data_de_vencimento'],
+            data_de_vencimento = data_de_vencimento_parcelas,
             user = user_logado, usuarios_id = usuarioId
             )
-                
+        if conta:
+            parcelas= conta.parcelas
+            id_da_conta = conta.id 
+            for conta in range( parcelas):
+                parcela= parcela + 1
+                if data_de_vencimento_parcelas.month <= 11 :
+                    if parcela >= 2:
+                        mes = mes + 1
+                        data_de_vencimento_parcelas= date(year=ano, month=mes, day=dia)
+                elif mes == 12 and parcela <= 1:
+                    mes = 12
+                    data_de_vencimento_parcelas= date(year=ano, month=mes, day=dia)
+                else:
+                    mes = mes
+                    mes = 1
+                    ano = ano + 1
+                    dia = dia
+                    dia = data_de_vencimento_parcelas.day
+                    data_de_vencimento_parcelas= date(year=ano, month=mes, day=dia)
+                          
+                parcelas = ParcelasConta.objects.create(
+                    contas_id = id_da_conta,
+                    numero_da_parcelas = parcela,
+                    data_de_vencimento = data_de_vencimento_parcelas,
+                    user = user_logado, usuarios_id = usuarioId
+                )
+
         data['conta'] = conta
         data['conta']  = Contas.objects.filter(
             usuarios__usuario_cliente= usuarioCliente, tipo_de_conta_id=2).order_by('-id') # listar produtos
@@ -606,7 +725,6 @@ class ContaApagarUpdate(LoginRequiredMixin, View):
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     def post(self, request, id):
-        data = {}
         user = request.user.has_perm('financeiro.change_contas')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
@@ -621,6 +739,18 @@ class ContaApagarUpdate(LoginRequiredMixin, View):
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
         
+        parcelas= int(request.POST['parcelas'])
+        if parcelas < 1:
+            parcelas = 1
+        else:
+            parcelas = request.POST['parcelas']
+        parcelas = int(parcelas)
+        data_de_vencimento_parcelas = request.POST['data_de_vencimento']
+        data_de_vencimento_parcelas =  datetime.datetime.strptime(data_de_vencimento_parcelas, "%Y-%m-%d")
+        ano = data_de_vencimento_parcelas.year
+        mes = data_de_vencimento_parcelas.month
+        dia = data_de_vencimento_parcelas.day
+
         conta = Contas.objects.get(id= id)
         usuario_adm = conta.usuarios.id
         if usuario_adm == usuarioId: # Verificar autenticidade do usuário
@@ -628,12 +758,45 @@ class ContaApagarUpdate(LoginRequiredMixin, View):
             conta.observacao = request.POST['observacao']
             if request.POST['valor']:
                 conta.valor = request.POST['valor'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
-            conta.parcelas = request.POST['parcelas'] or 1
+            conta.parcelas = parcelas or 1
+            if request.POST['juros']:
+                conta.juros = request.POST['juros'].replace(' ','').replace(',','.')
             conta.tipo_de_conta_id = request.POST['tipo_de_conta_id']
             if request.POST['data_de_vencimento']:
-                conta.data_de_vencimento = request.POST['data_de_vencimento']
+                conta.data_de_vencimento = data_de_vencimento_parcelas
             conta.user = user_logado
             conta.save()
+        
+        if conta:
+            parcela_delete = ParcelasConta.objects.filter(contas_id=id)
+            parcela_delete.delete()
+
+            parcelas= conta.parcelas
+            id_da_conta = conta.id 
+            parcela= 0
+            parcelas= parcelas - int(conta.parcelas_pagas)
+            for conta in range( parcelas):
+                parcela= parcela + 1
+                if data_de_vencimento_parcelas.month <= 11 :
+                    if parcela >= 2:
+                        mes = mes + 1
+                        data_de_vencimento_parcelas= date(year=ano, month=mes, day=dia)
+                elif mes == 12 and parcela <= 1:
+                    mes = 12
+                    data_de_vencimento_parcelas= date(year=ano, month=mes, day=dia)
+                else:
+                    mes = 1
+                    ano = ano + 1
+                    dia = dia
+                    dia = data_de_vencimento_parcelas.day
+                    data_de_vencimento_parcelas= date(year=ano, month=mes, day=dia)
+                          
+                parcelas = ParcelasConta.objects.create(
+                    contas_id = id_da_conta,
+                    numero_da_parcelas = parcela,
+                    data_de_vencimento = data_de_vencimento_parcelas,
+                    user = user_logado, usuarios_id = usuarioId
+                )
             return redirect('conta_apagar')
         
         else:
@@ -708,15 +871,6 @@ class Pagamentos(LoginRequiredMixin, View):
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
         data = {}
 
-        parcelas = Contas.objects.get(id=id)
-        pagamentos = Pagamento.objects.filter(contas_id = id).order_by('-id')
-        parcela = int(parcelas.parcelas_restantes) + 1
-        parcela = list(range(parcela))
-        
-
-        data['observacao'] = request.POST['observacao']
-        data['quantidade_de_parcelas'] = request.POST['quantidade_de_parcelas']
-
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
@@ -727,34 +881,44 @@ class Pagamentos(LoginRequiredMixin, View):
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuario.id # Obitendo o id  do usuário administrador
             usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-        
+       
         conta = Contas.objects.get(id= id)
         perc_restantes = int(conta.parcelas_restantes)
-        parc_enviadas= int(request.POST['quantidade_de_parcelas'])
         usuario_adm = conta.usuarios.id
         if usuario_adm == usuarioId: # Verificar autenticidade do usuário
-            if perc_restantes > 0 and perc_restantes >= parc_enviadas and parc_enviadas > 0:
+            if perc_restantes >= 1 :
                 pagamento = Pagamento.objects.create(
                     observacao = request.POST['observacao'],
-                    quantidade_de_parcelas = request.POST['quantidade_de_parcelas'],
+                    quantidade_de_parcelas = 1,
                     contas_id = id, user = user_logado, usuarios_id = usuarioId
                     )
+                if pagamento:
+                    parcela_delete = ParcelasConta.objects.filter(contas_id=id)
+                    parcela_delete = parcela_delete.last()
+                    parcela_delete.delete()
+                    
             else:
                 data['mensagem_de_erro'] = 'Você pode ter enviado o número  ( 0 ) ou um valor superior a quantidade de parcelas existente'
                 data['conta'] = Contas.objects.get(id=id)
                 data['pagamentos'] = Pagamento.objects.filter(usuarios__usuario_cliente= usuarioCliente, contas_id = id).order_by('-id')
-                data['parcela'] = parcela
+    
                 return render(
                     request, 'financeiro/pagamento.html',data)
-
             data['pagamentos'] = Pagamento.objects.filter(usuarios__usuario_cliente= usuarioCliente, contas_id = id).order_by('-id')
-            data['parcela'] = parcela
             data['conta'] = Contas.objects.get(id=id)
-            data['pagamentos'] = pagamentos
             return render(
                 request, 'financeiro/pagamento.html',data)
         else:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+
+class Parcelas(LoginRequiredMixin, View):
+    def get(self, request, id):
+        parcelas= ParcelasConta.objects.filter(contas_id=id)
+        
+        return render(
+            request, 'financeiro/parcelas.html', {'parcelas': parcelas})
+
 
 # Relatoriop de produtos
 class Relarorio_produtos(LoginRequiredMixin, View):
@@ -962,7 +1126,6 @@ class Relatorio_anual(LoginRequiredMixin, View):
 
         debito = Venda.objects.filter(
             usuarios__usuario_cliente= usuario, data_hora__year= Ano).aggregate(total_venda_debito=Sum('valor_debito'))
-
 
         invertimento_anual = ItemDoPedido.objects.filter(
             usuarios__usuario_cliente= usuario, venda__data_hora__year=Ano ).aggregate(total_invertimento=Sum('produto__valor_compra'))

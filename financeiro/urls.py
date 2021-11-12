@@ -3,13 +3,12 @@ from financeiro import views
 from .views import ( GastosExtras, GastosExtrasUpdate, Gastos_extras_categoria,
     Gastos_extras_categoriaUpdate,ContasApagar, ContaAreceberUpdate,
     Relarorio_produtos, Relatorio_diario, Relatorio_mensal, Relatorio_anual,
-    FiltroGastosExtras, ContasAreceber, ContaApagarUpdate, Pagamentos, Fatura
+    FiltroGastosExtras, ContasAreceber, ContaApagarUpdate, Pagamentos,Parcelas, Fatura
     )
 
 
 urlpatterns = [
     path('gastos-extras/', GastosExtras.as_view(), name='gastos-extras'),
-
     path('gastos-extras-delete-confirme/(?P<id>\d+)/', views.gastosExtras_delete, name='gastos_extras_delete'),
     path('gastos_extras_update/<int:id>/', GastosExtrasUpdate.as_view(), name='gastos_extras_update'),
     path('categoria_de_gastos/', Gastos_extras_categoria.as_view(), name='categoria_de_gastos'),
@@ -17,6 +16,7 @@ urlpatterns = [
     path('categoria-de-gastos-delete/(?P<id>\d+)/', views.categoria_de_gastos_delete, name='categoria_de_gastos_delete'),
     path('conta-apagar/', ContasApagar.as_view(), name='conta_apagar'),
     path('pagamento/<int:id>/', Pagamentos.as_view(), name='pagamento'),
+    path('parcelas/<int:id>/', Parcelas.as_view(), name='parcelas'),
     path('conta-areceber/', ContasAreceber.as_view(), name='conta_areceber'),
     path('conta-delete-confirme/(?P<id>\d+)/', views.conta_delete, name='conta_delete'),
     path('conta-apagar-delete/(?P<id>\d+)/', views.conta_apagar_delete, name='conta_apagar_delete'),

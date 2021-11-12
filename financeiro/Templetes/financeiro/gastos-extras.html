@@ -101,7 +101,11 @@
             href="#" onclick="document.getElementById('form_mobil').style.display='block';">
             Mostrar filtros 
         </a>
-
+    {% if gastos_extr.total > 0 %}
+        <div class="dashboard">
+            <label><b>&nbsp; Total:</b> R$ {{gastos_extr.total}}</label><br>
+        </div>
+    {%endif%}
     <table class="table">
      <thead>
         <tr>
