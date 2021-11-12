@@ -68,7 +68,7 @@ class Contas(models.Model):
     def total_contas(self):
 #Calculo do valor com juros
         juros= float(self.juros) / 100
-        total_valor_com_juros = float(self.valor) * (1 + juros)**self.parcelas
+        total_valor_com_juros = float(self.valor) * float(1 + juros)**float(self.parcelas)
         self.valor_com_juros = total_valor_com_juros
         Contas.objects.filter(id=self.id).update(valor_com_juros = total_valor_com_juros)
 

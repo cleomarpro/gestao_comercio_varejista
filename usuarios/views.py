@@ -233,7 +233,7 @@ class UpdateFuncionario(LoginRequiredMixin, View):
         usuario_adm = funcionarios.usuarios.usuario_cliente
         if  usuario_adm == usuarioCliente:
             
-            if  senha:
+            if request.POST['password'] != '123':
                 usuario.set_password(senha)
             if user_atualizado != user_antigo:
                 if usuario_exit != 0:
@@ -262,8 +262,7 @@ class UpdateFuncionario(LoginRequiredMixin, View):
             data['usuario'] = usuario
             data['permissoes'] = usuario.groups.all()
             return redirect('novo-funcionario')
-            return render(
-                    request, 'update-funcionario.html', data)
+ 
         else:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
