@@ -49,13 +49,13 @@
          <!-- step=".01" lang="nb" -->   
         <div>
              <label> Parcelas</label> <br>
-                <input style=" width:200px;"  placeholder=" parcelas..."
+                <input style=" width:200px;"  data-js="numero"
                     type="text" id="parcelas" name="parcelas" required value="{{conta.parcelas}}" />
         </div>  
         <div>  
             <label> Juros</label> <br>
                <input style=" width:120px;" placeholder=" {{conta.juros}}%"
-                   type="number" id="juros" name="juros">
+               type="number" step=".01" lang="nb" id="juros" name="juros">
        </div> 
        
                 <input type="hidden" value='1' name="tipo_de_conta_id">
