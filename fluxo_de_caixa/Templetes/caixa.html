@@ -57,8 +57,14 @@
                 <td>{{ caixa.nome_do_caixa }}</td>
                 <td>R$ {{ caixa.valor_atualizado }}</td>
 
-                <td>  <a href="{% url 'caixa-sacar' caixa.id %}">Sacar</a> </td>
-                <td>  <a href="{% url 'caixa-deposito' caixa.id %}">Depositar</a> </td>
+                <td>  
+                  <a href="{% url 'caixa-sacar' caixa.id %}">Sacar</a> 
+                  <a href="{% url 'caixa-deposito' caixa.id %}">Depositar</a> 
+                </td>
+                <td>  
+                  <a href="{% url 'caixa-update' caixa.id %}">Editar</a>
+                  <a href="{% url 'delete-caixa' caixa.id %}">Excluir</a>
+                </td>
                 <td>  <a href="{% url 'abrir-feixar-caixa' caixa.id %}">Visualizar</a> </td>
             </tr>
         {% endfor %}

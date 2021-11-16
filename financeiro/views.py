@@ -194,6 +194,7 @@ class FiltroGastosExtras( LoginRequiredMixin, View):
         if Mes and Ano:
             gastos_extras = Gastos_extras.objects.filter(
                 usuarios__usuario_cliente= usuario, data_hora__year= Ano, data_hora__month= Mes).order_by('-id')
+            data['gastos_extr']= gastos_extras.aggregate(total=Sum('valor'))
 
         if Mes and Ano and Categoria:
             gastos_extras = Gastos_extras.objects.filter(
@@ -914,11 +915,21 @@ class Pagamentos(LoginRequiredMixin, View):
 
 class Parcelas(LoginRequiredMixin, View):
     def get(self, request, id):
-        parcelas= ParcelasConta.objects.filter(contas_id=id)
-        
-        return render(
-            request, 'financeiro/parcelas.html', {'parcelas': parcelas})
+        data={}
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
 
+        data['parcelas']= ParcelasConta.objects.filter(contas_id=id, contas__usuarios__usuario_cliente=usuario)
+        data['conta'] = Contas.objects.get(id=id)
+        data['empresa'] = Usuarios.objects.get(user_id = user_logado)
+        return render(
+            request, 'financeiro/parcelas.html', data)
 
 # Relatoriop de produtos
 class Relarorio_produtos(LoginRequiredMixin, View):

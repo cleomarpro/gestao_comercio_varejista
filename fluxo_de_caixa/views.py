@@ -1,5 +1,6 @@
 #from django.shortcuts import render
 from datetime import date
+from django.contrib.auth.decorators import login_required
 #import datetime
 #from django.db.models import Sum, Count, F #Avg ,DecimalField, F # Max ExpressionWrapper FloatField DecimalField Sum
 #from django.core.exceptions import ValidationError
@@ -14,7 +15,7 @@ from .models import Produto
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
 from usuarios.models import Usuarios
-from pessoa.models import Funcionario
+from pessoa.models import Fornecedor, Funcionario
 from django.db.models import Sum 
 from django.db.models import Q
 #from django.contrib.auth.models import User
@@ -453,6 +454,88 @@ class Caixas(LoginRequiredMixin, View):
         data['funcionarios']= Funcionario.objects.filter(usuarios__usuario_cliente= usuario)
         return render(
             request, 'caixa.html',data)
+
+class CaixasUpdate(LoginRequiredMixin, View):
+    
+    def get(self, request, id):
+        data={}
+        user = request.user.has_perm('fluxo_de_caixa.view_caixa')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
+        
+        caixa = Caixa.objects.get(id=id)
+        usuario_adm = caixa.usuarios.usuario_cliente
+        if usuario_adm == usuario: # Verificar autenticidade do usuário
+        
+            data['caixa'] = Caixa.objects.get(id=id)
+            data['funcionarios']= Funcionario.objects.filter(usuarios__usuario_cliente= usuario)
+            return render( request, 'caixa-update.html', data)
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+    def post(self, request, id):
+        user = request.user.has_perm('fluxo_de_caixa.view_caixa')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+            
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuarioId = usuario.id # Obitendo o id  do usuário administrador
+           
+        caixa = Caixa.objects.get(id=id)
+        usuario_adm = caixa.usuarios.id
+        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+            caixa.nome_do_caixa=request.POST['nome_do_caixa']
+            caixa.funcionario_id= request.POST['funcionario']
+            caixa.user = user_logado
+            caixa.usuarios_id = usuarioId
+            caixa.save()
+            return redirect( 'caixa')
+        else:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+@login_required()
+def caixa_delete(request, id):
+    user = request.user.has_perm('pessoa.delete_fornecedor')
+    if user == False:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+    user_logado = request.user # Obitendo o usuário logado
+    user_logado = user_logado.id # obitendo o ID do usuário logado
+    if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+        funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+        usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+        
+    else:
+        usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+        usuarioId = usuario.id # Obitendo o id  do usuário administrador
+       
+    caixa = Caixa.objects.get(id=id)
+    usuario_adm = caixa.usuarios.id
+    if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+        data  = {}
+        if request.method == 'POST':
+            caixa.delete()
+            return redirect('caixa')
+        else:
+            return render(request, 'delete-caixa.html',data)
+    else:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
 
 class CaixaDepositar(LoginRequiredMixin, View):
 

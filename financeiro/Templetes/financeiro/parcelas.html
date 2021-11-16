@@ -5,14 +5,17 @@
 <div class='div_Mae'>
     <h2 class="sub_menu" >&nbsp; PARCELAS 
         
+    <a id='imprimir_carne' accesskey="i" type="button"  
+        onclick="imprimir_carne()"> Imprimir carnê
+    </a>
     </h2>
     <table class="table">
      <thead>
         <tr>
             <th >Conta</th>
-            <th class="col_table">Parcela</th>
+            <th >Parcela</th>
             <th >Vencimento</th>
-            <th class="col_table">Valor</th>
+            <th >Valor</th>
             
             <th>Pagar</th>
         </tr>
@@ -21,7 +24,7 @@
             {%for parcelas in parcelas%}
                 <tr>
                     <td>{{ parcelas.contas.id}}</td>
-                    <td class="col_table">{{ parcelas.numero_da_parcelas}}</td>
+                    <td >{{ parcelas.numero_da_parcelas}}</td>
                     <td>{{parcelas.data_de_vencimento | date:'d/m/y'}}</td>
                     <td>R$ {{parcelas.contas.valor_parcela}}</td>
                     <td>
@@ -35,8 +38,99 @@
             {%endfor%}
         </tbody>
     </table>
+    <br>
+    <br>
+<div id="carne" style='margin-left:210px; width:350px; border:5px; display:none;'> 
+    ------Via da empresa!------
+    <hr>
+    <label> <b>{{ empresa.nome_fantazia}}</b></label><br>
+    <label> <b>Cnpj:</b> {{ empresa.cpf_cnpj}}</label><br>
+    <hr>
+    <label> <b>Conta:</b> {{ conta.id}}</label><br>
+    <label > <b>Total do débito: R$ </b> {{ conta.valor}}</label><br>
+    <label> <b>Cliente:</b>{{conta.cliente.nome}} <br>
+    <b>Cnpj/Cpf:</b>{{conta.cliente.cpf_cnpj}}
+    </label><br>
+    <label> <b>Data:</b> {{conta.data_hora | date:'d/m/y'}}</label>
+    <hr>
+    <br>
+    <br>
+    <hr>
+    <label>ASSINATRRA </label>
+    <br>
+    <br>
+    <hr>
+    <label>ASSINATRRA DO CLIENTE</label>
+    <br>
+    <br>
+    ------- x ------
+    <br>
+    <br>
+    ------via do cliente!------
+    <hr>
+    <label> <b> {{ empresa.nome_fantazia}}</b></label><br>
+    <label> <b>Cnpj: </b> {{ empresa.cpf_cnpj}}</label><br>
+    <hr>
+    <label> <b>Conta: </b> {{ conta.id}}</label><br>
+    <label > <b>Total do débito: R$ </b> {{ conta.valor}}</label><br>
+    <label> <b>Cliente: </b> {{conta.cliente.nome}} <br>
+    <b>Cnpj/Cpf: </b> {{conta.cliente.cpf_cnpj}}
+    </label><br>
+    <label> <b>Data:</b> {{conta.data_hora | date:'d/m/y'}}</label>
+    <hr>
+    <br>
+    <br>
+    <hr>
+    <label>ASSINATRRA</label>
+    <br>
+    <br>
+    <hr>
+    <label>ASSINATRRA DO CLIENTE</label>
+    <br>
+    <br>
+    <br>
+    <br>
+    {%for parcelas in parcelas%}
+        ------- x ------
+        <br>
+        <br>
+        <br>
+
+        <label > <b>PARCELAS:</b> {{ parcelas.numero_da_parcelas}}</label><br>
+        <hr>
+        <label> <b>Valor da parcela:</b> R$ {{parcelas.contas.valor_parcela}}</label><br>
+        <label> <b>Vence em:</b> {{parcelas.data_de_vencimento | date:'d/m/y'}}</label>
+        <br>
+        <br>
+        <br>
+        <hr>
+        <label>ASSINATRRA</label>
+        <br>
+        <br>
+        <br>
+        <br>
+        
+{%endfor%}
 
 </div>
+
+<script >
+    function imprimir_carne(){
+        var pegar_dados = document.getElementById('carne').innerHTML;
+
+        var janela = window.open('','','width=400,heigth=600');
+        janela.document.write("<html><head>");
+        janela.document.write("<title>PDF</title></head>");
+        janela.document.write("<body>");
+        janela.document.write(pegar_dados);
+        janela.document.write("</body><html>");
+        janela.print();
+        janela.close();
+    }
+</script>
+</div>
+
+
 
 {% endblock %}
 

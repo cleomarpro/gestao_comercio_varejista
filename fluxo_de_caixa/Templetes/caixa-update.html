@@ -1,0 +1,41 @@
+{% extends 'base.html'%}
+{% block main%}
+<!-- CDASTRO  DE PRODUTOS -->
+<div class='div_Mae'>
+  <h2 class="sub_menu" >&nbsp; EDITAR CAIXA
+    {% if perms.fluxo_de_caixa.add_caixa %}
+    <a 
+    href="{% url 'caixa'%}">
+            Voltar 
+    </a>
+    {% endif %}
+  </h2>
+
+    {% if perms.fluxo_de_caixa.add_caixa %}
+    <form class='formulario' method="POST" >
+    
+   <hr> 
+   {% csrf_token %}
+   <div> 
+      <label for="busca"> Nome</label> <br>
+        <input style=" width:200px;" type="text" id="nome_do_caixa" name="nome_do_caixa"
+            placeholder="Nome do novo caixa..." value="{{caixa.nome_do_caixa}}" required/>
+    </div>
+    <div>
+      <label> Funcioário responsável</label> <br>
+          <select style=" width:230px;" type="select"  name="funcionario" id="funcionario" required/>
+              <option value='{{caixa.funcionario.id}}'> {{caixa.funcionario.nome}} </option>
+          {% for funcionarios in funcionarios %}
+              <option value='{{funcionarios.id}}'> {{funcionarios.nome}} </option>
+          {% endfor %}
+          </select >
+     </div>
+          <hr>
+          <button  type="submit">Editar</button>
+
+    </form>
+    {% endif%}
+
+    
+</div>
+{% endblock %}

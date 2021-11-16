@@ -1,10 +1,12 @@
 
 
+from fluxo_de_caixa import views
 from django.urls import path
 from .views import (
-    NovoPedido, NovoItemPedido, ListaVendas, AtualizarPedido,
+    NovoPedido, NovoItemPedido, ListaVendas, AtualizarPedido, 
     EditPedido, DeletePedido, DeleteItemPedido, ListaVendaPagas,
-    CaixaDepositar, CaixaSacar, Caixas, ListaVendaPorUsuario, AbrirFeixarCaixa
+    CaixaDepositar, CaixaSacar, Caixas, CaixasUpdate,
+    ListaVendaPorUsuario, AbrirFeixarCaixa
 )
 
 
@@ -22,6 +24,8 @@ urlpatterns = [
     path('caixa-sacar/<int:id>/', CaixaSacar.as_view(), name="caixa-sacar"),
     path('abrir-feixar-caixa/<int:id>/', AbrirFeixarCaixa.as_view(), name="abrir-feixar-caixa"),
     path('caixa/', Caixas.as_view(), name="caixa"),
+    path('caixa-update/<int:id>/', CaixasUpdate.as_view(), name='caixa-update'),
+    path('delete-caixa/(?P<id>\d+)/', views.caixa_delete, name='delete-caixa'),
 ]
 
 '''
