@@ -953,10 +953,10 @@ class Relarorio_produtos(LoginRequiredMixin, View):
         item_de_pedido = ItemDoPedido.objects.filter(
                 usuarios__usuario_cliente= usuario, venda__data_hora__year= ano_atual, venda__data_hora__month= MES ).values(
                 'produto__id', 'produto__nome').annotate(
-                    quantidade =Count('quantidade_de_itens')).annotate(lucro_obtido=Sum(F(
-                        'produto__valor_venal') - F('produto__valor_compra'))).annotate(
-                            total_investimento=Sum('produto__valor_compra')).annotate(total_venda=Sum(
-                            'produto__valor_venal'))
+                    quantidade =Sum('quantidade_de_itens')).annotate(lucro_obtido=Sum(F(
+                        'produto__valor_venal') * F('quantidade_de_itens') - F('produto__valor_compra') * F('quantidade_de_itens'))).annotate(
+                            total_investimento=Sum(F('produto__valor_compra') * F('quantidade_de_itens'))).annotate(total_venda=Sum(
+                            F('produto__valor_venal') * F('quantidade_de_itens')))
 
         Ano= request.GET.get('ano',None)
         Mes= request.GET.get('mes',None)
@@ -966,10 +966,10 @@ class Relarorio_produtos(LoginRequiredMixin, View):
             item_de_pedido = ItemDoPedido.objects.filter(
                 usuarios__usuario_cliente= usuario, venda__data_hora__year= Ano, venda__data_hora__month= Mes ).values(
                 'produto__id', 'produto__nome').annotate(
-                    quantidade =Count('quantidade_de_itens')).annotate(lucro_obtido=Sum(F(
-                        'produto__valor_venal') - F('produto__valor_compra'))).annotate(
-                            total_investimento=Sum('produto__valor_compra')).annotate(total_venda=Sum(
-                            'produto__valor_venal')).order_by(Filtro)
+                    quantidade =Sum('quantidade_de_itens')).annotate(lucro_obtido=Sum(F(
+                        'produto__valor_venal') * F('quantidade_de_itens') - F('produto__valor_compra') * F('quantidade_de_itens'))).annotate(
+                            total_investimento=Sum('produto__valor_compra') * F('quantidade_de_itens')).annotate(total_venda=Sum(
+                            'produto__valor_venal') * F('quantidade_de_itens')).order_by(Filtro)
         return render(
             request, 'financeiro/relatorio-produtos.html', {'item_de_pedido': item_de_pedido, 'ano_atual':ano_atual, 'MES': MES})
 
@@ -994,7 +994,8 @@ class Relatorio_diario(LoginRequiredMixin, View):
         if Dia == None:
             Dia= today
         invertimento_do_dia = ItemDoPedido.objects.filter(
-            usuarios__usuario_cliente= usuario, venda__data_hora__contains= Dia ).aggregate(total_invertimento=Sum('produto__valor_compra'))
+            usuarios__usuario_cliente= usuario, venda__data_hora__contains= Dia ).aggregate(
+                total_invertimento=Sum(F('produto__valor_compra') * F('quantidade_de_itens')))
         invertimento_do_dia = invertimento_do_dia['total_invertimento'] or 0
 
         vendas_do_dia = Venda.objects.filter(usuarios__usuario_cliente= usuario, data_hora__contains= Dia ).aggregate(total_venda=Sum('valor'))
@@ -1061,7 +1062,8 @@ class Relatorio_mensal(LoginRequiredMixin, View):
         Mes= request.GET.get('mes',None)
 
         invertimento = ItemDoPedido.objects.filter(
-            usuarios__usuario_cliente= usuario, venda__data_hora__month= Mes, venda__data_hora__year= ano_atual ).aggregate(total_invertimento=Sum('produto__valor_compra'))
+            usuarios__usuario_cliente= usuario, venda__data_hora__month= Mes, venda__data_hora__year= ano_atual ).aggregate(
+                total_invertimento=Sum(F('produto__valor_compra') * F('quantidade_de_itens')))
         valor_invertimento = invertimento['total_invertimento'] or 0
 
         vendas = Venda.objects.filter(usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual ).aggregate(total_venda=Sum('valor'))
@@ -1139,7 +1141,8 @@ class Relatorio_anual(LoginRequiredMixin, View):
             usuarios__usuario_cliente= usuario, data_hora__year= Ano).aggregate(total_venda_debito=Sum('valor_debito'))
 
         invertimento_anual = ItemDoPedido.objects.filter(
-            usuarios__usuario_cliente= usuario, venda__data_hora__year=Ano ).aggregate(total_invertimento=Sum('produto__valor_compra'))
+            usuarios__usuario_cliente= usuario, venda__data_hora__year=Ano ).aggregate(
+                total_invertimento=Sum(F('produto__valor_compra') * F('quantidade_de_itens')))
         invertimento_anual = invertimento_anual['total_invertimento'] or 0
 
         lucro_anual= venda_desse_ano - invertimento_anual
