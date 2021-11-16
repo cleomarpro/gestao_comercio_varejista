@@ -1019,11 +1019,11 @@ class Relatorio_diario(LoginRequiredMixin, View):
         gastos_extras_diario = Gastos_extras.objects.filter(
             usuarios__usuario_cliente= usuario, data_hora__contains=Dia ).aggregate(gastos = Sum('valor'))
 
-        Contas_diario_a_receber = Contas.objects.filter(
-            usuarios__usuario_cliente= usuario, data_de_vencimento__contains=Dia, tipo_de_conta__id=1).aggregate(total_conta = Sum('saldo_devedor'))
+        Contas_diario_a_receber = ParcelasConta.objects.filter(
+            usuarios__usuario_cliente= usuario, data_de_vencimento__contains=Dia, contas__tipo_de_conta__id=1).aggregate(total_conta = Sum('contas__valor_parcela'))
 
-        Contas_diario_a_pagar = Contas.objects.filter(
-            usuarios__usuario_cliente= usuario, data_de_vencimento__contains=Dia, tipo_de_conta__id=2).aggregate(total_conta = Sum('saldo_devedor'))
+        Contas_diario_a_pagar = ParcelasConta.objects.filter(
+            usuarios__usuario_cliente= usuario, data_de_vencimento__contains=Dia, contas__tipo_de_conta__id=2).aggregate(total_conta = Sum('contas__valor_parcela'))
 
         return render(
                 request, 'financeiro/relatorio-diario.html', {
@@ -1086,11 +1086,11 @@ class Relatorio_mensal(LoginRequiredMixin, View):
         desconto_po_mes = Venda.objects.filter(
             usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual ).aggregate(total_desconto=Sum('total_desconto'))
 
-        Contas_mensal_a_receber = Contas.objects.filter(
-            usuarios__usuario_cliente= usuario, data_de_vencimento__month= Mes, tipo_de_conta__id=1, data_de_vencimento__year= ano_atual).aggregate(total_conta = Sum('saldo_devedor'))
+        Contas_mensal_a_receber = ParcelasConta.objects.filter(
+            usuarios__usuario_cliente= usuario, data_de_vencimento__month= Mes, contas__tipo_de_conta__id=1, data_de_vencimento__year= ano_atual).aggregate(total_conta = Sum('contas__valor_parcela'))
 
-        Contas_mensal_a_pagar = Contas.objects.filter(
-            usuarios__usuario_cliente= usuario, data_de_vencimento__month= Mes, tipo_de_conta__id=2, data_de_vencimento__year= ano_atual).aggregate(total_conta = Sum('saldo_devedor'))
+        Contas_mensal_a_pagar = ParcelasConta.objects.filter(
+            usuarios__usuario_cliente= usuario, data_de_vencimento__month= Mes, contas__tipo_de_conta__id=2, data_de_vencimento__year= ano_atual).aggregate(total_conta = Sum('contas__valor_parcela'))
 
         return render(request, 'financeiro/relatorio-mensal.html', {
             'vendas': vendas,
@@ -1153,11 +1153,11 @@ class Relatorio_anual(LoginRequiredMixin, View):
         desconto_po_anual = Venda.objects.filter(
             usuarios__usuario_cliente= usuario, data_hora__year= Ano ).aggregate(total_desconto=Sum('total_desconto'))
 
-        Contas_anual_a_receber = Contas.objects.filter(
-            usuarios__usuario_cliente= usuario, data_de_vencimento__year= Ano, tipo_de_conta__id=1).aggregate(total_conta = Sum('saldo_devedor'))
+        Contas_anual_a_receber = ParcelasConta.objects.filter(
+            usuarios__usuario_cliente= usuario, data_de_vencimento__year= Ano, contas__tipo_de_conta__id=1).aggregate(total_conta = Sum('contas__valor_parcela'))
 
-        Contas_anual_a_pagar = Contas.objects.filter(
-            usuarios__usuario_cliente= usuario, data_de_vencimento__year= Ano, tipo_de_conta__id=2).aggregate(total_conta = Sum('saldo_devedor'))
+        Contas_anual_a_pagar = ParcelasConta.objects.filter(
+            usuarios__usuario_cliente= usuario, data_de_vencimento__year= Ano, contas__tipo_de_conta__id=2).aggregate(total_conta = Sum('contas__valor_parcela'))
 
         return render(
                 request, 'financeiro/relatorio-anual.html', {
