@@ -51,7 +51,7 @@
           <th >Vendas em sedula</th>
           <th >Valor depositado</th>
           <th >Data</th>
-          <th >Usuário</th>
+          <th >Usuário id</th>
 
 
         </tr>
@@ -64,7 +64,7 @@
                 <td>R$ {{ caixa.venda_realizadas }}</td>
                 <td>R$ {{ caixa.depositar }}</td>
                 <td>{{caixa.data_hora | date:'d/m/y  H:i'}}</td>
-                <td>{{caixa.user.username }}</td>
+                <td>{{caixa.user }}</td>
 
             </tr>
         {% endfor %}

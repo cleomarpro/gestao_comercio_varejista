@@ -35,6 +35,19 @@
   margin-right: 10px;
 }
 
+.sub_menu input{
+  position:absolute;
+  right:1px;
+  text-decoration: none;
+  color:rgb(14, 13, 13); 
+  border: 1px solid #e5e7ed;
+  background-color: rgb(195, 195, 207);
+  border-radius: 1px;
+  padding: 3px;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
 .formulario{
   background-color: #F0F8FF;
   margin-left:195px;

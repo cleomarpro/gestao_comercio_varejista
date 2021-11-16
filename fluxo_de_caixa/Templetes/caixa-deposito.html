@@ -60,7 +60,7 @@
                 <td>{{ deposito.descricao }}</td>
                 <td>R$ {{ deposito.depositar }}</td>
                 <td>{{ deposito.data_hora | date:'d/m/y  H:i'}}</td>
-                <td>{{ deposito.user.username}}</td>
+                <td>{{ deposito.user}}</td>
               {%endif%}
             </tr>
         {% endfor %}
