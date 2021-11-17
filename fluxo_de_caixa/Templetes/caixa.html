@@ -45,10 +45,11 @@
         <tr>
           <th >Caixa</th>
           <th >Saldo</th>
-          <th >Sacar</th>
-          <th >Depositar</th>
-          <th>Estado do caixa</th>
-
+          <th >Acão</th>
+          {% if perms.fluxo_de_caixa.add_caixa %}
+          <th>Alterar</th>
+          {% endif %}
+          <th >Estado do caixa</th>
         </tr>
       </thead>
       <tbody>
@@ -58,13 +59,15 @@
                 <td>R$ {{ caixa.valor_atualizado }}</td>
 
                 <td>  
-                  <a href="{% url 'caixa-sacar' caixa.id %}">Sacar</a> 
+                  <a href="{% url 'caixa-sacar' caixa.id %}">Sacar</a> /
                   <a href="{% url 'caixa-deposito' caixa.id %}">Depositar</a> 
                 </td>
+                {% if perms.fluxo_de_caixa.add_caixa %}
                 <td>  
-                  <a href="{% url 'caixa-update' caixa.id %}">Editar</a>
+                  <a href="{% url 'caixa-update' caixa.id %}">Editar</a> 
                   <a href="{% url 'delete-caixa' caixa.id %}">Excluir</a>
                 </td>
+                {% endif %}
                 <td>  <a href="{% url 'abrir-feixar-caixa' caixa.id %}">Visualizar</a> </td>
             </tr>
         {% endfor %}

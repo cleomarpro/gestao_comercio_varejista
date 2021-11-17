@@ -924,10 +924,10 @@ class Parcelas(LoginRequiredMixin, View):
         else:
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
-
+            empresa = Usuarios.objects.get(user_id = user_logado)
+            data['empresa'] = empresa
         data['parcelas']= ParcelasConta.objects.filter(contas_id=id, contas__usuarios__usuario_cliente=usuario)
         data['conta'] = Contas.objects.get(id=id)
-        data['empresa'] = Usuarios.objects.get(user_id = user_logado)
         return render(
             request, 'financeiro/parcelas.html', data)
 
