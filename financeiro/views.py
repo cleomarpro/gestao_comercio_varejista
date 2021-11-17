@@ -2,7 +2,7 @@ import datetime
 from django.shortcuts import render, redirect
 from django.views import View
 #from django.views.generic.edit import UpdateView
-from fluxo_de_caixa.models import Venda
+from fluxo_de_caixa.models import Depositar_sacar, Venda
 from fluxo_de_caixa.models import ItemDoPedido
 from django.db.models import Q
 from .models import Contas, Pagamento, ParcelasConta
@@ -1205,11 +1205,11 @@ class Fatura(LoginRequiredMixin, View):
             item_do_pedito = item_do_pedito['count'] or 0
             
             Contas_a_receber = Contas.objects.filter(
-                usuarios__usuario_cliente= usuario, data_hora__month= Mes, tipo_de_conta__id=1, data_hora__year= ano_atual).aggregate(count= Count('id'))
+                usuarios__usuario_cliente= usuario, data_hora__month= Mes, tipo_de_conta__id=1, data_hora__year= ano_atual).aggregate(count= Sum('parcelas'))
             Contas_a_receber = Contas_a_receber['count'] or 0
 
             Contas_a_pagar = Contas.objects.filter(
-                usuarios__usuario_cliente= usuario, data_hora__month= Mes, tipo_de_conta__id=2, data_hora__year= ano_atual).aggregate(count= Count('id'))
+                usuarios__usuario_cliente= usuario, data_hora__month= Mes, tipo_de_conta__id=2, data_hora__year= ano_atual).aggregate(count= Sum('parcelas'))
             Contas_a_pagar = Contas_a_pagar['count'] or 0
 
             gastos_extras = Gastos_extras.objects.filter(
@@ -1220,7 +1220,10 @@ class Fatura(LoginRequiredMixin, View):
                 usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual).aggregate(count= Count('id'))
             entrada_ee_mercadoria = entrada_ee_mercadoria['count'] or 0
 
-            total_de_registros= vendas + item_do_pedito + Contas_a_receber + Contas_a_pagar + entrada_ee_mercadoria + gastos_extras
+            caixa= Depositar_sacar.objects.filter(usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual).aggregate(count= Count('id'))
+            caixa = caixa['count'] or 0
+
+            total_de_registros= vendas + item_do_pedito + Contas_a_receber + Contas_a_pagar + entrada_ee_mercadoria + gastos_extras + caixa
             
             if total_de_registros <= 750:
                 total_a_pagar = total_de_registros * 4 / 100
@@ -1237,6 +1240,7 @@ class Fatura(LoginRequiredMixin, View):
         data['total_de_registros']= total_de_registros
         data['gastos_extras']= gastos_extras
         data['total_a_pagar']= total_a_pagar
+        data['caixa']= caixa
 
         return render( request, 'financeiro/fatura.html', data)
 
