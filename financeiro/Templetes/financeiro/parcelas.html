@@ -6,7 +6,7 @@
     <h2 class="sub_menu" >&nbsp; PARCELAS 
         
     <a id='imprimir_carne' accesskey="i" type="button"  
-        onclick="imprimir_carne()"> Imprimir carnê
+        onclick="imprimir_carne()"> Imprimir
     </a>
     </h2>
     <table class="table">
@@ -41,76 +41,82 @@
     <br>
     <br>
 <div id="carne" style='margin-left:210px; width:350px; border:5px; display:none;'> 
-    ------Via da empresa!------
-    <hr>
-    <label> <b>{{ empresa.nome_fantazia}}</b></label><br>
-    <label> <b>Cnpj:</b> {{ empresa.cpf_cnpj}}</label><br>
-    <hr>
-    <label> <b>Conta:</b> {{ conta.id}}</label><br>
-    <label > <b>Total do débito: R$ </b> {{ conta.valor}}</label><br>
-    <label> <b>Cliente:</b>{{conta.cliente.nome}} <br>
-    <b>Cnpj/Cpf:</b>{{conta.cliente.cpf_cnpj}}
+    01 via
+    <br>
+    <br>
+    <label><b> NOTA PROMISSÓRIA</b></label>
+    <br>
+    <br>
+    <label> <b>- Id da conta: </b> {{ conta.id}}</label><br>
+    <label> <b>- Data do contrato:</b> {{conta.data_hora | date:'d/m/y'}}</label> <br>
+    <label> <b>- Total do débito: R$ </b> {{ conta.valor}}</label><br>
+    <label> <b>- Total de parcelas: </b> {{ conta.parcelas}}</label><br>
+    <label> <b>- Valor da parcelas: </b> {{ conta.valor_parcela}}</label><br>
+    <label> <b>- Primeira parcela em: R$ </b> {{ conta.data_de_vencimento | date:'d/m/y'}}</label><br>
+    <br>
+    <label><b> - Beneficiário:</label></b> {{ empresa.nome_fantazia}}</b> </label><br>
+    <label><b>- Cpf/Cnpj: </b> {{ empresa.cpf_cnpj}}</label><br>
+    <br>
+    <label> <b>- Contratante: </b> {{conta.cliente.nome}} <br>
+    <b>- Cnpj/Cpf: </b> {{conta.cliente.cpf_cnpj}}
     </label><br>
-    <label> <b>Data:</b> {{conta.data_hora | date:'d/m/y'}}</label>
-    <hr>
     <br>
     <br>
     <hr>
-    <label>ASSINATURA </label>
+    <label>-Assinatura do Beneficiário</label>
     <br>
     <br>
     <hr>
-    <label>ASSINATURA DO CLIENTE</label>
+    <label>Assinatura do Contratante</label>
     <br>
     <br>
-    ------- x ------
+    ✂------ ✂ ------
     <br>
     <br>
-    ------via do cliente!------
-    <hr>
-    <label> <b> {{ empresa.nome_fantazia}}</b></label><br>
-    <label> <b>Cnpj: </b> {{ empresa.cpf_cnpj}}</label><br>
-    <hr>
-    <label> <b>Conta: </b> {{ conta.id}}</label><br>
-    <label > <b>Total do débito: R$ </b> {{ conta.valor}}</label><br>
-    <label> <b>Cliente: </b> {{conta.cliente.nome}} <br>
-    <b>Cnpj/Cpf: </b> {{conta.cliente.cpf_cnpj}}
+    02 via
+    <br>
+    <br>
+    <label><b> NOTA PROMISSÓRIA</b></label>
+    <br>
+    <br>
+    <label> <b>- Id da conta: </b> {{ conta.id}}</label><br>
+    <label> <b>- Data do contrato:</b> {{conta.data_hora | date:'d/m/y'}}</label> <br>
+    <label> <b>- Total do débito: R$ </b> {{ conta.valor}}</label><br>
+    <label> <b>- Total de parcelas: </b> {{ conta.parcelas}}</label><br>
+    <label> <b>- Valor da parcelas: </b> {{ conta.valor_parcela}}</label><br>
+    <label> <b>- Primeira parcela em: R$ </b> {{ conta.data_de_vencimento | date:'d/m/y'}}</label><br>
+    <br>
+    <label><b> - Beneficiário:</label>b> {{ empresa.nome_fantazia}}</b> </label><br>
+    <label><b>- Cpf/Cnpj: </b> {{ empresa.cpf_cnpj}}</label><br>
+    <br>
+    <label> <b>- Contratante: </b> {{conta.cliente.nome}} <br>
+    <b>- Cnpj/Cpf: </b> {{conta.cliente.cpf_cnpj}}
     </label><br>
-    <label> <b>Data:</b> {{conta.data_hora | date:'d/m/y'}}</label>
-    <hr>
     <br>
     <br>
     <hr>
-    <label>ASSINATURA</label>
+    <label>-Assinatura do Beneficiário</label>
     <br>
     <br>
     <hr>
-    <label>ASSINATURA DO CLIENTE</label>
-    <br>
-    <br>
+    <label>Assinatura do Contratante</label>
     <br>
     <br>
     {%for parcelas in parcelas%}
-        ------- x ------
+        ✂------ ✂ ------
         <br>
         <br>
-        <br>
-
         <label > <b>PARCELAS:</b> {{ parcelas.numero_da_parcelas}}</label><br>
+        <label> <b>- Id da conta: </b> {{ conta.id}}</label><br>
+        <label> <b>- Valor da parcela:</b> R$ {{parcelas.contas.valor_parcela}}</label><br>
+        <label> <b>- Vence em:</b> {{parcelas.data_de_vencimento | date:'d/m/y'}}</label>
+        <br>
+        <br>
         <hr>
-        <label> <b>Valor da parcela:</b> R$ {{parcelas.contas.valor_parcela}}</label><br>
-        <label> <b>Vence em:</b> {{parcelas.data_de_vencimento | date:'d/m/y'}}</label>
+        <label>Assinatura do Beneficiário</label>
         <br>
         <br>
-        <br>
-        <hr>
-        <label>ASSINATURA</label>
-        <br>
-        <br>
-        <br>
-        <br>
-        
-{%endfor%}
+    {%endfor%}
 
 </div>
 
@@ -118,7 +124,7 @@
     function imprimir_carne(){
         var pegar_dados = document.getElementById('carne').innerHTML;
 
-        var janela = window.open('','','width=600');
+        var janela = window.open('25%');
         janela.document.write("<html><head>");
         janela.document.write("<title>PDF</title></head>");
         janela.document.write("<body>");
