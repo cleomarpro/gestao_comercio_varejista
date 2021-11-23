@@ -1,15 +1,51 @@
 {% extends 'base.html'%}
 {% block main%}
 <div class='div_Mae'>
-    <h2 class="sub_menu" style="width: 350px;">&nbsp; RESUMO DA FATURA</h2> 
+    <h2 class="sub_menu">&nbsp; FATURA
+        <a style='color:red;' href="#" onclick="document.getElementById('form_up').style.display='block';"> Informações
+        </a>
+    </h2> 
+    <form id="form_up" class='formulario' style="display: none;"> 
+        <a id="termo_buttao" href="#" onclick="document.getElementById
+              ('form_up').style.display='none';"> X</a>
+        <p> AVISOS E INFORMAÇÕES!</p>
+        <hr>
+        <p style='font-size: 16px; text-align: center; color: rgb(27, 23, 23);'> Como o sistema é cobrado</p>
+        <p style='font-size: 14px; color: rgb(32, 28, 28);'>  O sistema só será cobrado quando a fatura exceder a R$5,00 (Cinco reais ), 
+            depois será cobrado R$0,4(quatro centavos) por registro no banco de dados 
+            até atingir 750 registro, o equivalente a R$30,00 (Trinta reais),
+            depois diminuirá o valor para R$0,2 (dois centavos) por registro </p>
+        <p style='font-size: 14px; color: rgb(27, 23, 23);'> </p>
+    </form>
+<!-- 
+    <form class='campo_de_busca' method="GET" action="{% url 'relatorio_mensal' %}">
+    
+            <select style=" width:180px;" type="select"  name="mes" id="mes"  >
+            <option value="{{MES}}" >Escolha um mês </option>
+            <option value="01" >Janeiro </option>
+            <option value="02" >Fevereiro</option>
+            <option value="03" >Março</option>
+            <option value="04" >Abril </option>
+            <option value="05" >Maio</option>
+            <option value="06" >Junio</option>
+            <option value="07" >Julho </option>
+            <option value="08" >Agosto</option>
+            <option value="09" >Setembro</option>
+            <option value="10" >Outubro </option>
+            <option value="11" >Novembroo</option>
+            <option value="12" >Dezembro</option>
+        </select >
+    
+       <button  type="submit">Filtrar</button>
 
-     <table class="table" style="width: 350px; text-align: left; font-size: 18px; important">
+    </form >  -->
+     <table class='table'>
         <thead  >
            <tr>
                <th  style=" padding: 8px; important">Descricão</th>
-               <th style=" padding: 8px; important">Valores</th>
+               <th style=" padding: 8px; important">Registros</th>
            
-           </tr>
+           </tr> 
        </thead>
       
            <tbody >
@@ -43,18 +79,53 @@
                 <td style="text-align: left; background-color: #C6E2FF; important"> Caixa </td>
                 <td style=" background-color: #C6E2FF; important" > {{caixa}} </td>
             </tbody>
-            <tbody>
-                <td style="text-align: left; background-color: #C6E2FF; important"> TOTAL DE REGISTRO </td>
-                <td style=" background-color: #C6E2FF; important"> {{total_de_registros}} </td>
-            </tbody>
-            <tbody>
-                <td style="text-align: left; background-color: #2b67c2; important"> TOTAL A PAGAR </td>
-                <td style=" background-color: #2b67c2; important"> R$ {{total_a_pagar | floatformat:2}} </td>
-        </tbody>
-            
-
+          
        </table>
-    
+            <div class="dashboard" style='font-size: 15px; padding: 5px;'>
+                <label><b> TOTAL DE REGISTRO:</b> {{total_de_registros}} </label><br>
+            </div>
+            <div class="dashboard" style='font-size: 15px; padding: 5px;'>
+                <label><b> TOTAL DO DÉBITO:</b>R$ {{total_a_pagar | floatformat:2}}</label><br>
+    </div>
+       <h2 class="sub_menu" style='text-align:center;'>&nbsp; Resumo</h2>
+            <div class="dashboard" style='font-size: 18px; padding: 5px;'>
+                <label><b> Fechamento da fatura:</b> {{today | date:'01/m/Y'}}</label><br>
+            </div>
+            <div class="dashboard" style='font-size: 18px; padding: 5px;'>
+                <label><b> Total a pagar:</b> R$ {{fatura}}</label><br>
+            </div>
+        {%if today.month > 23 %}
+            <div class="dashboard" style='font-size: 18px; padding: 5px;'>
+                <label><b> Dta de vencimento:</b>{{today | date:'10/m/Y'}}</label><br>
+            </div>
+            
+            
+            <div class="dashboard " style='font-size: 18px; padding: 5px;'>
+                <label ><b> Forma de pagamento:</b> Pix {{total_vendas.total}}</label> 
+                <a style='color: rgb(9, 35, 232);'>Escolher outra</a> <br>
+            </div>
+            <div class="dashboard">
+                <button style='width:200px; background-color:rgb(26, 25, 25); color:white;' > Pagar fatura</button>
+            </div>
+            <br>
+    <h2 class="sub_menu" style='text-align:center;'>&nbsp; Débitos em atraso</h2>
+    <table class='table'>
+        <thead >
+           <tr>
+               <th  >Mês</a></th>
+               <th > Vencida em</a></th>
+               <th > Valor</th>
+               <th > Ação</th>
+           </tr> 
+       </thead>
+        <tbody>
+            <td > Novembro </td>
+            <td > 10-11-2021 </td>
+            <td > R$ {{total_a_pagar | floatformat:2}} </td>
+            <td> Pagar </td>
+        </tbody>
+       </table>
+       {%endif%}
     <br>
 </div>
 {% endblock %}

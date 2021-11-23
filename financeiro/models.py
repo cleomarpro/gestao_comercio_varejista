@@ -67,16 +67,17 @@ class Contas(models.Model):
 
     def total_contas(self):
 #Calculo do valor com juros
-        juros= float(self.juros) / 100 #obtendo juros em porcentagem
-        total_de_parcela= float(self.parcelas) 
-        valor_do_debito= float(self.valor)
-        total_valor_com_juros = ((1 + juros)**total_de_parcela - 1) / ((1 + juros)**total_de_parcela * juros)
-        total_valor_com_juros = valor_do_debito / total_valor_com_juros * total_de_parcela
-        #total_valor_com_juros = valor_do_debito * (1 + juros)**total_de_parcela # Juros composto
-       # total_valor_com_juros = float(self.valor) * float(self.juros) / 100 juros simples
-       # total_valor_com_juros = total_valor_com_juros + float(self.valor) # juros simples
-        self.valor_com_juros = total_valor_com_juros
-        Contas.objects.filter(id=self.id).update(valor_com_juros = total_valor_com_juros)
+        if float(self.juros) > 0 :
+            juros= float(self.juros) / 100 #obtendo juros em porcentagem
+            total_de_parcela= float(self.parcelas) 
+            valor_do_debito= float(self.valor)
+            total_valor_com_juros = ((1 + juros)**total_de_parcela - 1) / ((1 + juros)**total_de_parcela * juros)
+            total_valor_com_juros = valor_do_debito / total_valor_com_juros * total_de_parcela
+            #total_valor_com_juros = valor_do_debito * (1 + juros)**total_de_parcela # Juros composto
+            # total_valor_com_juros = float(self.valor) * float(self.juros) / 100 juros simples
+            # total_valor_com_juros = total_valor_com_juros + float(self.valor) # juros simples
+            self.valor_com_juros = total_valor_com_juros
+            Contas.objects.filter(id=self.id).update(valor_com_juros = total_valor_com_juros)
 
 # Calculo do valor da parcela
         valor_da_parcela = float(self.valor_com_juros) / float(self.parcelas) 

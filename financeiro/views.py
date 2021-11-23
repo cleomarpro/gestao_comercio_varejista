@@ -1227,10 +1227,17 @@ class Fatura(LoginRequiredMixin, View):
             
             if total_de_registros <= 750:
                 total_a_pagar = total_de_registros * 4 / 100
+                
             else:
                 total_a_pagar = total_de_registros * 2 / 100
                 total_a_pagar = total_a_pagar + 15
                 
+            if total_de_registros <= 125:
+                fatura= 'R$ 0,00' 
+                data['fatura']= fatura
+            else:
+                fatura= total_a_pagar
+                data['fatura']= fatura
 
         data['vendas']= vendas
         data['item_do_pedito']= item_do_pedito
@@ -1241,6 +1248,8 @@ class Fatura(LoginRequiredMixin, View):
         data['gastos_extras']= gastos_extras
         data['total_a_pagar']= total_a_pagar
         data['caixa']= caixa
+        data['today']= today
+        
 
         return render( request, 'financeiro/fatura.html', data)
 
