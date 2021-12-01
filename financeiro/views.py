@@ -12,7 +12,7 @@ from .models import GastosExtrasCategoria
 from pessoa.models import Cliente
 from pessoa.models import Funcionario
 from produto.models import EntradaMercadoria
-from usuarios.models import Usuarios
+from usuarios.models import Cobranca, Usuarios
 from django.db.models import Sum, Count, F, DecimalField #Avg ,DecimalField, F # Max ExpressionWrapper FloatField DecimalField Sum
 from datetime import date
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -1192,10 +1192,20 @@ class Fatura(LoginRequiredMixin, View):
         today = date.today()
         ano_atual = today.year
         MES = today.month
-        Mes= request.GET.get('mes',None)
-        if Mes == None:
-            Mes= MES
-
+        if MES <= 11:
+            mes = MES + 1
+        else:
+            mes = 1
+        dia = today.day
+        data_atual= date(day=dia, month=mes, year=ano_atual)
+        data_de_vencimento = request.GET.get('data_de_vencimento') or str(ano_atual)+'-'+ str(MES)
+        if data_de_vencimento !=None:
+            data_de_vencimento =  datetime.datetime.strptime(data_de_vencimento, "%Y-%m")
+            Mes = data_de_vencimento.month
+            ano_atual = data_de_vencimento.year
+        if data_de_vencimento != None:
+            Mes= Mes
+    
             vendas = Venda.objects.filter(
                 usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual ).aggregate(count= Count('id'))
             vendas = vendas['count'] or 0
@@ -1216,14 +1226,14 @@ class Fatura(LoginRequiredMixin, View):
                 usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual).aggregate(count= Count('id'))
             gastos_extras = gastos_extras['count'] or 0
 
-            entrada_ee_mercadoria = EntradaMercadoria.objects.filter(
+            entrada_de_mercadoria = EntradaMercadoria.objects.filter(
                 usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual).aggregate(count= Count('id'))
-            entrada_ee_mercadoria = entrada_ee_mercadoria['count'] or 0
+            entrada_de_mercadoria = entrada_de_mercadoria['count'] or 0
 
             caixa= Depositar_sacar.objects.filter(usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual).aggregate(count= Count('id'))
             caixa = caixa['count'] or 0
 
-            total_de_registros= vendas + item_do_pedito + Contas_a_receber + Contas_a_pagar + entrada_ee_mercadoria + gastos_extras + caixa
+            total_de_registros= vendas + item_do_pedito + Contas_a_receber + Contas_a_pagar + entrada_de_mercadoria + gastos_extras + caixa
             
             if total_de_registros <= 750:
                 total_a_pagar = total_de_registros * 4 / 100
@@ -1234,22 +1244,23 @@ class Fatura(LoginRequiredMixin, View):
                 
             if total_de_registros <= 125:
                 fatura= 'R$ 0,00' 
-                data['fatura']= fatura
             else:
                 fatura= total_a_pagar
-                data['fatura']= fatura
-
-        data['vendas']= vendas
-        data['item_do_pedito']= item_do_pedito
-        data['Contas_a_receber']= Contas_a_receber
-        data['Contas_a_pagar']= Contas_a_pagar
-        data['entrada_ee_mercadoria']= entrada_ee_mercadoria
-        data['total_de_registros']= total_de_registros
-        data['gastos_extras']= gastos_extras
-        data['total_a_pagar']= total_a_pagar
-        data['caixa']= caixa
-        data['today']= today
-        
+                
+            data['debito_em_aberto'] = Cobranca.objects.filter(usuarios__usuario_cliente= usuario, estado_do_debito = 'Pedente')
+            data['debito_em_atraso'] = Cobranca.objects.filter(usuarios__usuario_cliente= usuario, estado_do_debito = 'Não pago')
+            data['vendas']= vendas
+            data['item_do_pedito']= item_do_pedito
+            data['Contas_a_receber']= Contas_a_receber
+            data['Contas_a_pagar']= Contas_a_pagar
+            data['entrada_de_mercadoria']= entrada_de_mercadoria
+            data['total_de_registros']= total_de_registros
+            data['gastos_extras']= gastos_extras
+            data['total_a_pagar']= total_a_pagar
+            data['caixa']= caixa
+            data['today']= today
+            data['fatura']= fatura
+            data['data_atual'] = data_atual
 
         return render( request, 'financeiro/fatura.html', data)
 

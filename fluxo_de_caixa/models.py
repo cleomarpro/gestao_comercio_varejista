@@ -5,7 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from produto.models import Produto
 from django.contrib.auth.models import User
-from usuarios.models import Usuarios
+from usuarios.models import Cobranca, Usuarios
 from pessoa.models import Funcionario
 from datetime import date
 #import datetime
@@ -163,7 +163,7 @@ class ItemDoPedido(models.Model):
     desconto = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True,default=0)
     user = models.CharField(max_length=100, blank=True, null=True)
     usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
-
+   
     def __str__(self):
         return str(self.venda.id) + ' - ' + str(self.produto.nome) + ' - ' + str(self.desconto) + ' - ' + str(self.quantidade_de_itens)  + ' - ' + str(self.produto.valor_venal)
 
@@ -182,53 +182,3 @@ def update_vendas_total2(sender, instance, **kwargs):
 @receiver(post_save, sender=Depositar_sacar)
 def update_vendas_caixa(sender, instance, **kwargs):
     instance.caixa.caixa()
-
-#https://medium.com/@beatrizuezu/visualizando-query-sql-a-partir-do-orm-django-5771370a9c55
-#reset_queries()
-#python -m pip install Pillow
-#python manage.py runserver
-#import pdb; pdb.set_trace() (para debugar, e execulta o servidor no modo manual)
-#ItemDoPedido.objects.all().aggregate(tot=Sum (F('desconto') + F('impostos'),output_field=FloatField()))
-# source venvgestao/bin/activate
-
-#python manage.py shell (depois da venv ligada, execultar esse comando para entrar no chel)
-#from vendas.models import Venda (importando uma tabela especifica)
-#exit()  ( sair do shell)
-#Venda.objects.all()  ( buscando toda a tabela)
-#Venda.objects.filter(id=2)  (filto por id)
-#Venda.objects.all().order_by('id') (ordem crescente)
-#Venda.objects.all().order_by('-id') (ordem decrescente)
-#Venda.objects.all().order_by('nome','id') (ordem por nome crescente)
-#Venda.objects.all().order_by('-nome','id') (ordem por nome decrescente)
-#Venda.objects.last() (ultimo objrto)
-#ManyToManyFilder (campos mutos para muitos)
-#https://django-portuguese.readthedocs.io/en/1.0/ref/models/fields.html (referéncia de campos)
-#f=len(b) (len, serve para contar item em uma listas)
-#b[0] (exibe o primeiro item da lista)
-#b.append(' novas coisas') (adiciona novas coisas na lista)
-# l = {b["produto__id"]}
-# l = (b["produto__id"])
-# disctict() (Serve para não trazer números diferentes)
-# values_list (transformar um dicionário em lista)
-#Produto.objects.values("estoque") (buscar produtos de determinada coluna)
-'''
-qs1 = Table1.objects.values("user_id", "created_at")    (unir campos de duas tabelas)
-qs2 = Table2.objects.values("user_id", "created_at")
-qs1.union(qs2).order_by("created_at")
-'''
-#from django.db.models import F ( F= expressão, serve para manipular dados de campos em tabelas diferentes)
-
-#Pessoa.objects.create(nome='Guilherme', email='gui@alura.com') ( criar objetos)
-#pessoa = Pessoa.objects.get(nome='Guilherme') (buscar )
-'''
-pessoa.email = 'guilherme@alura.com'
-pessoa.save() (inserir dados espesificos)
-'''
-'''
-pessoa.email = 'guilherme@alura.com'
-pessoa.delete() (excluir dados espesificos)
-'''
-#receitas_publicadas = Receita.objects.filter(publicada=True)  (filtrar objetos)
-#receita_publicada_chocolate = Receita.objects.filter(publicada=True, nome_receita='Bolo de chocolate') ( filtros por vários campos)
-
-#https://www.pythonanywhere.com/user/cleomarPro/files/home/cleomarPro/vieworld/vendas/models.py?edit

@@ -3,7 +3,7 @@
 from django.urls import path
 from usuarios import views
 from .views import (
-    NovoUsuario, NovoFuncionario, UpdateFuncionario, UpdateUsuario
+    NovoUsuario, NovoFuncionario, UpdateFuncionario, UpdateUsuario, Cobrancas, Usuario, CobrancaUpdate
 )
 
 urlpatterns = [
@@ -12,4 +12,7 @@ urlpatterns = [
     path('update-funcionario/(?P<id>\d+)/', UpdateFuncionario.as_view(), name='update-funcionario'),
     path('delete-funcionario/(?P<id>\d+)/', views.funcionarioDelete, name='delete-funcionario'),
     path('update-usuario/', UpdateUsuario.as_view(), name='update-usuario'),
+    path('cobranca/(?P<id>\d+)/', Cobrancas.as_view(), name='cobranca'),
+    path('usuarios', Usuario.as_view(), name='usuarios'),
+    path('cobranca-update/(?P<id>\d+)/', CobrancaUpdate.as_view(), name='cobranca-update'),
 ]

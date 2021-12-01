@@ -1,13 +1,12 @@
 
 from django.db import models
+#from django.db.models import Count
 from django.utils import timezone
 from django.contrib.auth.models import User
-#from pessoa.models import Funcionario
 
 class Plano(models.Model):
     nome = models.CharField(max_length=30)
     #user = models.ForeignKey(User, on_delete=models.CASCADE)
-
 
     def __str__(self):
         return str(self.nome)+'-'+str(self.id)
@@ -42,3 +41,18 @@ class Usuarios(models.Model):
 
     def __str__(self):
         return str(self.id)+ ' Usuário ' + str(self.usuario_cliente) + ' User' + str(self.user.id)
+
+    
+class Cobranca(models.Model):
+    valor = models.DecimalField(max_digits=9, decimal_places=2, default=0)
+    mes_referente = models.DateField(null= True, blank=True, verbose_name="Data de criação")
+    data_de_vencimento = models.DateField(null= True, blank=True, verbose_name="Data de criação")
+    estado_do_debito = models.CharField(max_length=50, blank=True)
+    registros = models.CharField(max_length=20, blank=True)
+    link_de_cobranca = models.CharField(max_length=300, blank=True)
+    usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
+
+   
+    def __str__(self):
+        return str(self.nome)+'-'+str(self.id)
+    

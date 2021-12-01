@@ -17,115 +17,228 @@
             depois diminuirá o valor para R$0,2 (dois centavos) por registro </p>
         <p style='font-size: 14px; color: rgb(27, 23, 23);'> </p>
     </form>
-<!-- 
-    <form class='campo_de_busca' method="GET" action="{% url 'relatorio_mensal' %}">
+
+    <form class='campo_de_busca' method="GET" action="{% url 'fatura' %}" >
     
-            <select style=" width:180px;" type="select"  name="mes" id="mes"  >
-            <option value="{{MES}}" >Escolha um mês </option>
-            <option value="01" >Janeiro </option>
-            <option value="02" >Fevereiro</option>
-            <option value="03" >Março</option>
-            <option value="04" >Abril </option>
-            <option value="05" >Maio</option>
-            <option value="06" >Junio</option>
-            <option value="07" >Julho </option>
-            <option value="08" >Agosto</option>
-            <option value="09" >Setembro</option>
-            <option value="10" >Outubro </option>
-            <option value="11" >Novembroo</option>
-            <option value="12" >Dezembro</option>
-        </select >
-    
+     <input style=" width:180px;" type="month"  name="data_de_vencimento" id="data_de_vencimento" >
+       
        <button  type="submit">Filtrar</button>
 
-    </form >  -->
+    </form >
      <table class='table'>
         <thead  >
            <tr>
                <th  style=" padding: 8px; important">Descricão</th>
                <th style=" padding: 8px; important">Registros</th>
-           
+               <th style=" padding: 8px; important">&nbsp;</th>
+                <th style=" padding: 8px; important">&nbsp;</th>
+                <th style=" padding: 8px; important">&nbsp;</th>
+                <th class="col_table" style=" padding: 8px; important">&nbsp;</th>
            </tr> 
        </thead>
       
            <tbody >
                 <td style="text-align: left;background-color: #C6E2FF; important" > Vendas </td>
                 <td style=" background-color: #C6E2FF; important">{{ vendas}}</td>
+                <!-- Somente para preecher a tabela -->
+                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
+                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
+                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
+                    <td class="col_table" style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
+        
            </tbody>
             
             <tbody>
                 <td style="text-align: left; important"> Item do pedito </td>
                 <td> {{item_do_pedito}} </td>
+                <!-- Somente para preecher a tabela -->
+                    <td style=" padding: 8px; important">&nbsp;</td>
+                    <td style=" padding: 8px; important">&nbsp;</td>
+                    <td style=" padding: 8px; important">&nbsp;</td>
+                    <td class="col_table" style="   padding: 8px; important">&nbsp;</td>
             </tbody>
             <tbody>
                 <td style="text-align: left;background-color: #C6E2FF; important"> Contas a receber </td>
                 <td style=" background-color: #C6E2FF; important"> {{Contas_a_receber}} </td>
+                <!-- Somente para preecher a tabela -->
+                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
+                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
+                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
+                    <td class="col_table" style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
 
             </tbody>
             <tbody>
                 <td style="text-align: left; important"> Contas a pagar </td>
                 <td> {{Contas_a_pagar}} </td>
+                <!-- Somente para preecher a tabela -->
+                    <td style="   padding: 8px; important">&nbsp;</td>
+                    <td style="  padding: 8px; important">&nbsp;</td>
+                    <td style="   padding: 8px; important">&nbsp;</td>
+                    <td class="col_table" style="   padding: 8px; important">&nbsp;</td>
             </tbody>
             <tbody>
                 <td style="text-align: left; background-color: #C6E2FF; important"> Gastos extras </td>
                 <td style=" background-color: #C6E2FF; important" > {{gastos_extras}} </td>
+                <!-- Somente para preecher a tabela -->
+                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
+                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
+                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
+                    <td class="col_table" style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
             </tbody>
             <tbody>
                 <td style="text-align: left; important"> Entrada de mercadorias </td>
-                <td> {{entrada_ee_mercadoria}} </td>
+                <td> {{entrada_de_mercadoria}} </td>
+                <!-- Somente para preecher a tabela -->
+                    <td style=" padding: 8px; important">&nbsp;</td>
+                    <td style=" padding: 8px; important">&nbsp;</td>
+                    <td style=" padding: 8px; important">&nbsp;</td>
+                    <td class="col_table" style="   padding: 8px; important">&nbsp;</td>
 
             </tbody>
             <tbody>
                 <td style="text-align: left; background-color: #C6E2FF; important"> Caixa </td>
                 <td style=" background-color: #C6E2FF; important" > {{caixa}} </td>
+                <!-- Somente para preecher a tabela -->
+                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
+                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
+                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
+                    <td class="col_table" style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
             </tbody>
-          
-       </table>
-            <div class="dashboard" style='font-size: 15px; padding: 5px;'>
-                <label><b> TOTAL DE REGISTRO:</b> {{total_de_registros}} </label><br>
-            </div>
-            <div class="dashboard" style='font-size: 15px; padding: 5px;'>
-                <label><b> TOTAL DO DÉBITO:</b>R$ {{total_a_pagar | floatformat:2}}</label><br>
-    </div>
-       <h2 class="sub_menu" style='text-align:center;'>&nbsp; Resumo</h2>
-            <div class="dashboard" style='font-size: 18px; padding: 5px;'>
-                <label><b> Fechamento da fatura:</b> {{today | date:'01/m/Y'}}</label><br>
-            </div>
-            <div class="dashboard" style='font-size: 18px; padding: 5px;'>
-                <label><b> Total a pagar:</b> R$ {{fatura}}</label><br>
-            </div>
-        {%if today.month > 23 %}
-            <div class="dashboard" style='font-size: 18px; padding: 5px;'>
-                <label><b> Dta de vencimento:</b>{{today | date:'10/m/Y'}}</label><br>
-            </div>
-            
-            
-            <div class="dashboard " style='font-size: 18px; padding: 5px;'>
-                <label ><b> Forma de pagamento:</b> Pix {{total_vendas.total}}</label> 
-                <a style='color: rgb(9, 35, 232);'>Escolher outra</a> <br>
-            </div>
-            <div class="dashboard">
-                <button style='width:200px; background-color:rgb(26, 25, 25); color:white;' > Pagar fatura</button>
-            </div>
+            <tbody>
+                 <!-- Somente para Separar as tabelas -->
+                <td style=" background-color: #ffffff; important">&nbsp; </td> 
+                <td style=" background-color: #ffffff; important"> &nbsp;</td>
+                <td style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>
+                <td style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>
+                <td style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>
+                <td class="col_table" style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>
+            </tbody>
+
+        <thead  >
+            <tr>
+                <th  style=" padding: 8px; important">Resumo</th>
+                 <!-- Somente para preecher a tabela -->
+                    <th style=" padding: 8px; important">&nbsp;</th>
+                    <th style=" padding: 8px; important">&nbsp;</th>
+                    <th style=" padding: 8px; important">&nbsp;</th>
+                    <th style=" padding: 8px; important">&nbsp;</th>
+                    <th class="col_table" style=" padding: 8px; important">&nbsp;</th>
+                    
+            </tr> 
+        </thead>
+        <br>
+            <tbody>
+                <td style="text-align: left; important"> TOTAL DE REGISTRO</td>
+                <td> {{total_de_registros}} </td>
+                <!-- Somente para preecher a tabela -->
+                    <td style="  padding: 8px; important">&nbsp;</td>
+                    <td style="  padding: 8px; important">&nbsp;</td>
+                    <td style="  padding: 8px; important">&nbsp;</td>
+                    <td class="col_table" style="  padding: 8px; important">&nbsp;</td>
+            </tbody>
+            <tbody>
+                <td style="text-align: left; important"> TOTAL DO DÉBITO</td>
+                <td> R$ {{total_a_pagar | floatformat:2}}</td>
+                <!-- Somente para preecher a tabela -->
+                    <td style="  padding: 8px; important">&nbsp;</td>
+                    <td style=" padding: 8px; important">&nbsp;</td>
+                    <td style=" padding: 8px; important">&nbsp;</td>
+                    <td class="col_table" style=" padding: 8px; important">&nbsp;</td>
+            </tbody>
+            <tbody>
+                <td style="text-align: left; important">FECHAMENTO DA FATURA</td>
+                <td> {{data_atual | date:'01/m/Y'}}</td>
+                <!-- Somente para preecher a tabela -->
+                    <td style="  padding: 8px; important">&nbsp;</td>
+                    <td style="  padding: 8px; important">&nbsp;</td>
+                    <td style=" padding: 8px; important">&nbsp;</td>
+                    <td class="col_table" style="  padding: 8px; important">&nbsp;</td>
+            </tbody>
+
+                <tbody>
+                    <!-- Somente para Separar as tabelas -->
+                        <td style=" background-color: #ffffff; important">&nbsp; </td> 
+                        <td style=" background-color: #ffffff; important"> &nbsp;</td>
+                        <td style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>
+                        <td style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>
+                        <td style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>
+                        <td class="col_table" style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>>
+                </tbody>
+        <thead>
+            <tr> 
+                <th style=" background-color: rgb(245, 222, 52); important">Débito em aberto </th>
+            </tr>
+        </thead>
+        <thead  >
+            <tr>
+                <th >Registros</th>
+                <th >Valor</th>
+                <th class="col_table"> Mês referente</th>
+                <th > data de vencimento </th>
+                <th > Estado</th>
+                <th > Ação </th>    
+            </tr> 
+        </thead>
             <br>
-    <h2 class="sub_menu" style='text-align:center;'>&nbsp; Débitos em atraso</h2>
-    <table class='table'>
-        <thead >
-           <tr>
-               <th  >Mês</a></th>
-               <th > Vencida em</a></th>
-               <th > Valor</th>
-               <th > Ação</th>
-           </tr> 
-       </thead>
-        <tbody>
-            <td > Novembro </td>
-            <td > 10-11-2021 </td>
-            <td > R$ {{total_a_pagar | floatformat:2}} </td>
-            <td> Pagar </td>
-        </tbody>
-       </table>
-       {%endif%}
-    <br>
+            {% for debito_em_aberto in debito_em_aberto%}
+                <tbody>
+                        <tr>
+                            <td style="text-align: left;">{{debito_em_aberto.registros}}</td>
+                            <td style="text-align: left;">{{debito_em_aberto.valor}}</td>
+                            <td class="col_table" style="text-align: left;"> {{debito_em_aberto.mes_referente | date:'01/m/Y'}}</td>
+                            <td style="text-align: left;"> {{debito_em_aberto.data_de_vencimento  | date:'10/m/Y'}}</td>
+                            <td style="text-align: left;"> {{debito_em_aberto.estado_do_debito}}</td>
+                            <td><a href="{{debito_em_aberto.link_de_cobranca}}">Pagar</a></td>
+                        </tr>
+                    
+                </tbody>
+            {%endfor%}
+
+            <tbody>
+                <!-- Somente para Separar as tabelas -->
+                    <td style=" background-color: #ffffff; important">&nbsp; </td> 
+                    <td style=" background-color: #ffffff; important"> &nbsp;</td>
+                    <td style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>
+                    <td style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>
+                    <td style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>
+                    <td class="col_table" style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>>
+            </tbody>
+        <thead>
+            <tr> 
+                <th style=" background-color: rgb(238, 54, 54); important">Débito em atraso </th>
+            </tr>
+        </thead>
+        <thead  >
+            <tr>
+                <th >Registros</th>
+                <th >Valor</th>
+                <th class="col_table"> Mês referente</th>
+                <th > data de vencimento </th>
+                <th > Estado</th>
+                <th > Ação </th>
+            
+            </tr> 
+        </thead>
+        <br>
+        {% for debito_em_atraso in debito_em_atraso%}
+            <tbody>
+                    <tr>
+                        <td style="text-align: left;">{{debito_em_atraso.registros}}</td>
+                        <td style="text-align: left;">{{debito_em_atraso.valor}}</td>
+                        <td class="col_table" style="text-align: left;"> {{debito_em_atraso.mes_referente | date:'01/m/Y'}}</td>
+                        <td style="text-align: left;"> {{debito_em_atraso.data_de_vencimento | date:'10/m/Y'}}</td>
+                        <td style="text-align: left;"> {{debito_em_atraso.estado_do_debito}}</td>
+                        <td><a href="{{debito_em_aberto.link_de_cobranca}}">Pagar</a></td>
+                    
+                    </tr>
+                
+            </tbody>
+        {%endfor%}
+       </table> 
+       <br> 
+       <br> 
+       <br> 
+       <br> 
+       <br> 
 </div>
 {% endblock %}
