@@ -366,7 +366,7 @@ class Cobrancas(LoginRequiredMixin, View):
                 total_a_pagar = total_a_pagar + 15
                 
             if total_de_registros <= 125:
-                fatura= 'R$ 0,00' 
+                fatura= 0
             else:
                 fatura= total_a_pagar
                 
