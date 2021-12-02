@@ -1,6 +1,6 @@
 
 db.gestao_vendas
-venvgestao/
+venvGestao/
 *.sqlite3
 *.idea
 *pyc
