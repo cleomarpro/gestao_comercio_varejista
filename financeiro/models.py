@@ -78,6 +78,10 @@ class Contas(models.Model):
             # total_valor_com_juros = total_valor_com_juros + float(self.valor) # juros simples
             self.valor_com_juros = total_valor_com_juros
             Contas.objects.filter(id=self.id).update(valor_com_juros = total_valor_com_juros)
+        else:
+            valor_com_juros = float(self.valor)
+            self.valor_com_juros = valor_com_juros
+            Contas.objects.filter(id=self.id).update(valor_com_juros = valor_com_juros)
 
 # Calculo do valor da parcela
         valor_da_parcela = float(self.valor_com_juros) / float(self.parcelas) 
@@ -112,7 +116,7 @@ class Pagamento(models.Model):
 # Valor pago
     def pagamento(self):
         valorPago = float(self.quantidade_de_parcelas) * float(self.contas.valor_parcela)
-        self.total_pago = valorPago
+        self.total_pago = float(valorPago)
         Pagamento.objects.filter(id=self.id).update(total_pago = valorPago)
 
     def __str__(self): # METODO CONSTRUTOR

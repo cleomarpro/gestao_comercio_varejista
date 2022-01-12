@@ -31,9 +31,7 @@
         <input style=" width:200px;" type='text' id='observacao' name='observacao'>
       </div>
       
-    
          <hr>
-       
         <button  type="submit">Pagar</button>
         
 </form>
@@ -73,7 +71,7 @@
                 <td class="col_table">{{ pagamentos.observacao }}</td>
                 <td>{{ pagamentos.quantidade_de_parcelas }}</td>
                 <td>{{ pagamentos.data_hora  | date:'d/m/y H:i' }}</td>
-                <td>R$ {{ pagamentos.total_pago }}</td>
+                <td>R$ {{ pagamentos.contas.valor_parcela | floatformat:2 }}</td>
 
 
             </tr>
