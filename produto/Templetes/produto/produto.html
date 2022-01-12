@@ -59,6 +59,11 @@
                     id="codigo" name="codigo"  required/>
         </div>
         <div>
+            <label> Valor de compra</label> <br>
+                <input style=" width:150px;"  placeholder="R$ 0,00 "
+                    type="text" data-js="money"id="valor_compra" name="valor_compra" required/>
+        </div>
+        <div>
             <label>Lucro desejado/Valor venal</label> <br>
                 <input style=" width:100px;"  placeholder=" 00,00%" type="number"
                 step=".01" lang="nb" id="percentagem_de_lucro" name="percentagem_de_lucro" />
@@ -66,11 +71,7 @@
                 <input style=" width:100px;"  placeholder="R$ 0,00 "
                     type="text" data-js="money"id="valor_venal" name="valor_venal">
         </div>
-        <div>
-            <label> Valor de compra</label> <br>
-                <input style=" width:150px;"  placeholder="R$ 0,00 "
-                    type="text" data-js="money"id="valor_compra" name="valor_compra" required/>
-        </div>
+       
         <hr>
                 <button id="refresh" type="submit"> Salvar</button>
     </form>

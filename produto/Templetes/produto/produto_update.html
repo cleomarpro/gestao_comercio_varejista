@@ -43,19 +43,20 @@
                     id="codigo" name="codigo" value="{{produto.codigo}}"  required/>
         </div>
         <div>
-            <label>Lucro desejado/ Valor venal</label> <br>
-                <input style=" width:127px;" type="number" step=".01" lang="nb" 
-                    placeholder="{{produto.percentagem_de_lucro}}" value="{{produto.percentagem_de_lucro}}"
-                        id="percentagem_de_lucro" name="percentagem_de_lucro"> %
-
-                <input style=" width:100px;"  placeholder="R$ 0,00 "
-                    type="text" data-js="money"id="valor_venal" name="valor_venal" value="{{produto.valor_venal}}">
-        </div>
-        <div>
             <label> Valor de compra</label> <br>
                 <input style=" width:150px;"  value="R$ {{produto.valor_compra}}"
                     type="text" data-js="money" id="valor_compra" name="valor_compra" required/>
         </div>
+        <div>
+            <label>Lucro estimado/ Valor venal</label> <br>
+                <input style=" width:70px;" type="number" step=".01" lang="nb" 
+                    placeholder="{{produto.percentagem_de_lucro}}" value="{{produto.percentagem_de_lucro}}"
+                        id="percentagem_de_lucro" name="percentagem_de_lucro"> ou 
+
+                <input style=" width:80px;"  placeholder="R$ 0,00 "
+                    type="text" data-js="money"id="valor_venal" name="valor_venal" value="{{produto.valor_venal}}">
+        </div>
+       
                 <hr>
                 <button type="submit"> Editar</button>
     </form>
