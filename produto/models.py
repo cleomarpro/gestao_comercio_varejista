@@ -73,9 +73,11 @@ class Produto (models.Model):
         self.estoque= total2
         Produto.objects.filter(id=self.id).update(estoque = total2)
 
-        valor_produto= float(self.valor_compra) * float(self.percentagem_de_lucro) / 100 + float(self.valor_compra)
-        self.valor_venal = valor_produto
-        Produto.objects.filter(id=self.id).update(valor_venal = valor_produto)
+        valor_venal= float(self.percentagem_de_lucro)
+        if valor_venal > 0:
+            valor_produto= float(self.valor_compra) * float(self.percentagem_de_lucro) / 100 + float(self.valor_compra)
+            self.valor_venal = valor_produto
+            Produto.objects.filter(id=self.id).update(valor_venal = valor_produto)
 
 class EntradaMercadoria(models.Model):
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)

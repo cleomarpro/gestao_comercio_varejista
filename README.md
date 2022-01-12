@@ -93,7 +93,10 @@ sudo service apache2 reload (reiniciar o servido aplicando mudanças de configur
 
 # comandos ubunto(linux)
 
+- sudo chmod -R 777 nomeDaPasta (da permissão total a determinada pasta)
+- sudo vim diretórioDoArquivo (editar arquivo no ubunto CMD)
 - mkdir nomeDaPasta (criar pasta)
+
 
 # DADOS NECESSÁRIO PARA INICIAR O SISTEMA
 

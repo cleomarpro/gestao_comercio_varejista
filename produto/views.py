@@ -42,7 +42,7 @@ class NovoProduto(LoginRequiredMixin, View):
             'today': today, 'promocao':promocao
             })
      
-    def post(self, request):
+    def post(self, request): 
         data = {}
         today = date.today()
         #data['imagem'] = request.POST['imagem']
@@ -71,7 +71,8 @@ class NovoProduto(LoginRequiredMixin, View):
                 nome = request.POST['nome'],
                 categoria_id = request.POST['categoria_id'],
                 codigo = request.POST['codigo'],
-                percentagem_de_lucro = request.POST['percentagem_de_lucro'].replace(',', '.'),
+                percentagem_de_lucro = request.POST['percentagem_de_lucro'].replace(',', '.') or 0,
+                valor_venal = request.POST['valor_venal'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','') or 0,
                 promocao_id = request.POST['promocao' ],
                 valor_compra = request.POST['valor_compra'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$',''),
                 user = user_logado, usuarios_id = usuarioId
@@ -178,6 +179,7 @@ class ProdutoUpdate(LoginRequiredMixin, View):
             produto.codigo = request.POST['codigo']
             if request.POST['percentagem_de_lucro']:
                 produto.percentagem_de_lucro = request.POST['percentagem_de_lucro'].replace(',', '.')
+            produto.valor_venal = request.POST['valor_venal'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','') or 0
             produto.promocao_id = request.POST['promocao' ]
             produto.valor_compra = request.POST['valor_compra'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
             produto.user = user_logado
