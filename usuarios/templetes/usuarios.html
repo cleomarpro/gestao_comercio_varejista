@@ -28,28 +28,32 @@
             <table class="table">
                 <thead>
                    <tr>
-                       <th >Id / usuário</th>
+                       <th >Id / Usuario</th>
+                       <th >Nome/Nome fantazia</th>
                        <th >Cpf/Cnpj</th>
                        <th > E-mail</th>
                        <th > Telefone </th>
+                    {% if cobranca%}
                        <th > Registros</th>
                        <th > Valor </th>
                        <th > Estado </th>
-                       <th>Ação</th>
+                    {% endif %}
+                        <th>Ação</th>
                    </tr>
                </thead>
                 {% if cobranca %}
                    <tbody>
                        {%for cobranca in cobranca%}
                            <tr>
-                            <td> {{cobranca.usuarios.id}} {{cobranca.usuarios.nome_fantazia}}</td>
+                            <td> {{cobranca.usuarios.id}} / {{cobranca.usuarios.user.username}}</td>
+                            <td> {{cobranca.usuarios.nome_fantazia}} </td>
                             <td> {{cobranca.usuarios.cpf_cnpj}} </td>
                             <td> {{cobranca.usuarios.email}} </td>
                             <td> {{cobranca.usuarios.Telefone}} </td>
                             <td> {{cobranca.registros}} </td>
                             <td> {{cobranca.valor}} </td>
-                            <td> {{cobranca.estado_do_debito}} </td>
                             <td> <a href="{% url 'cobranca' cobranca.usuarios.id %}"> Visualizar </a></td>
+                            <td> {{cobranca.estado_do_debito}} </td>
                            </tr>
                        {%endfor%}
                    </tbody>
@@ -57,13 +61,11 @@
                    <tbody>
                     {%for usuario in usuario%}
                         <tr>
-                         <td> {{usuario.id}} {{usuario.usuarios.nome_fantazia}}</td>
+                         <td> {{usuario.id}} / {{usuario.user.username}}</td>
+                         <td> {{usuario.nome_fantazia}} </td>
                          <td> {{usuario.cpf_cnpj}} </td>
                          <td> {{usuario.email}} </td>
                          <td> {{usuario.Telefone}} </td>
-                         <td> {{cobranca.registros}} </td>
-                         <td> {{cobranca.valor}} </td>
-                         <td> {{cobranca.estado_do_debito}} </td>
                          <td> <a href="{% url 'cobranca' usuario.id %}"> Visualizar fatura </a></td>
                         </tr>
                     {%endfor%}

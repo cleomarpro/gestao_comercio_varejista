@@ -305,9 +305,9 @@ def funcionarioDelete(request, id):
 
 class Cobrancas(LoginRequiredMixin, View):
     def get(self, request, id):
-       # user = request.user.has_perm('cobranca.view_cobranca')
-       # if user == False:
-           # return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        user = request.user.has_perm('cobranca.view_cobranca')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
         usuario_celecionado = Usuarios.objects.get(id = id)
         usuario_celecionado = usuario_celecionado.id
@@ -321,13 +321,14 @@ class Cobrancas(LoginRequiredMixin, View):
             mes = 12
         dia = today.day
         data_atual= date(day=dia, month=mes, year=ano_atual)
-        data_de_vencimento = request.GET.get('data_de_vencimento') or str(ano_atual)+'-'+ str(mes)
+        data_de_vencimento =  str(ano_atual)+'-'+ str(mes)
         if data_de_vencimento !=None:
             data_de_vencimento =  datetime.datetime.strptime(data_de_vencimento, "%Y-%m")
             Mes = data_de_vencimento.month
             ano_atual = data_de_vencimento.year
         if data_de_vencimento != None:
-            Mes = MES
+            Mes= mes
+    
             vendas = Venda.objects.filter(
                 usuarios__usuario_cliente= usuario_celecionado, data_hora__month= Mes, data_hora__year= ano_atual ).aggregate(count= Count('id'))
             vendas = vendas['count'] or 0
@@ -335,7 +336,7 @@ class Cobrancas(LoginRequiredMixin, View):
             item_do_pedito = ItemDoPedido.objects.filter(
                 usuarios__usuario_cliente= usuario_celecionado, venda__data_hora__month= Mes, venda__data_hora__year= ano_atual ).aggregate(count= Count('id'))
             item_do_pedito = item_do_pedito['count'] or 0
-           
+            
             Contas_a_receber = Contas.objects.filter(
                 usuarios__usuario_cliente= usuario_celecionado, data_hora__month= Mes, tipo_de_conta__id=1, data_hora__year= ano_atual).aggregate(count= Sum('parcelas'))
             Contas_a_receber = Contas_a_receber['count'] or 0
