@@ -38,7 +38,6 @@ class Gastos_extras(models.Model):
 class Tipo_de_conta(models.Model):
     nome=models.CharField(max_length=50, blank=True)
     
-
     def __str__(self): # METODO CONSTRUTOR
        return self.nome
 
