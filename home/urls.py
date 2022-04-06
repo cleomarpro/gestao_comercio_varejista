@@ -7,6 +7,7 @@ from .views import (
 urlpatterns = [
     #path('', views.home),
     path('', views.home, name='inicio'),
+    path('manual/', views.manual, name='manual'),
     path('tela_inicial/', views.TelaInicial, name='tela_inicial'),
     path('usuario/', Usuario.as_view(), name='usuario'),
 ]

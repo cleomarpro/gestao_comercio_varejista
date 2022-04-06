@@ -9,6 +9,9 @@ from usuarios.models import Usuarios, Plano
 
 def home(request):
     return render(request,'home.html')
+def manual(request):
+    return render(request,'manual.html')
+
 @login_required()
 def TelaInicial(request):
     return render(request,'tela_inicial.html')
