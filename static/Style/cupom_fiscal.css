@@ -21,7 +21,7 @@
     width: 350px;
     padding: 10px;
     border: 1px solid #303131;
-    border-radius: 2px
+    border-radius: 2px;
     display:none;
 
 }
@@ -60,7 +60,7 @@
 }
 
 .cupom_fiscal th {
-    margin-left: -30px:
+    margin-left: -30px;
     text-align: center;
     width:35%;
 }
@@ -70,7 +70,7 @@
 }
 
 .cupom_fiscal tr {
-    margin-left: -30px:
+    margin-left: -30px;
     text-align: center;
     width:35%;
 }
