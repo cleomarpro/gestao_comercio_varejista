@@ -2,27 +2,29 @@
 
 
 
-1. git config --global user.name "usuário" (criando usuário do git, utiliza o mesmo do github)
-2. git config --global user.email "email" (E-mail do github)
-3. git config --global user.name (visualizar usuário utilizado)
-4. git config --global user.email(visualizar email utilizado)
-5. git clone  https://github.com/cleomarpro/gestao_varejo.git (clonando o projeto na maquina local)
-6. Linux:  python3 -m  venv  nome da venv.   Windous: python -m venv myvenv (criar virtula enve na mesma pasta do projeto)
-7. Linux: source NomeDaVenv/bin/activate.
+1. crie uma pasta com o nome do projeto
+2. Linux:  python3 -m  venv  nome da venv.   Windous: python -m venv myvenv (criar virtula enve na mesma pasta do projeto)
+3. Linux: source NomeDaVenv/bin/activate.
     bash no windows: source NomeDaVenv/Scripts/activate,
     Windows: NomeDaVenv\Scripts\activate (ativar a venv)
-8. criar o arquivo .env e colocar essa chave SECRET_KEY= HgHjUyGbFbgHJmJjHmGf (arquivo para guardadr chaves)
-9. pip install -r requirements.txt (comando para instalar os  requirements.txt)
+4. git init (Crie um repositório git)
+5. git config --global user.name "usuário" (criando usuário do git, utilizando o mesmo do github)
+6. git config --global user.email "email" (E-mail do github)
+7. git config --global user.name (visualizar usuário utilizado)
+8. git config --global user.email(visualizar email utilizado)
+9. git clone  https://github.com/cleomarpro/gestao_varejo.git (clonando o projeto na maquina local)
+10. criar o arquivo .env e colocar essa chave SECRET_KEY= HgHjUyGbFbgHJmJjHmGf (arquivo para guardadr chaves)
+11. pip install -r requirements.txt (comando para instalar os  requirements.txt)
 10. python manage.py migrate (fazer as migrações)
-11. Criando o admin:  python manage.py createsuperuser (criar o super usuário)
+11.  python manage.py createsuperuser (criar o super usuário)
 12. python manage.py runserver (iniciar o servidor)
 
-#INICIAR UM PROJETO DO ZERO
+# INICIAR UM PROJETO DO ZERO
 
 1. Criar uma pasta para o projeto
 #2. Linux:  python3 -m  venv  nome da venv ou virtualenv venvGestao,  Windous: python -m venv myvenv (criar virtula enve na mesma pasta do projeto)
 3. Linux=  source nome da venv/bin/activate. Windows: nome da venv\Sicrpts\activate (ativar a venv)
-=======
+
 #3. Linux: source NomeDaVenv/bin/activate.
     bash no windows: source NomeDaVenv/Scripts/activate,
     Windows: NomeDaVenv\Scripts\activate (ativar a venv)
@@ -36,6 +38,19 @@
 11 deactivate (desligar o servidor)
 12 pip freeze (Visualizar os requirements.txt)
 23 pip freeze > requirements.txt (Criar a pastas e os requirements.txt)
+
+# CONFIGURAT SSH DO GIT HUB
+
+1. Criar chave (ssh-keygen -f ~/.ssh/nome_da_chave)
+2. local do arquivo chave (cd ~/.ssh/)
+3. abrir o arquivo e copiar a achave (cat id_ed25519.pub)
+4. acessar o gitHub, pefil > setting > chave SSH e GPG > nova chave SSH > cole a chave > em titulo, de um nome para sua chave > clique em Add SSH key
+5. adicione seu repositório git (git remote add origin endereço ssh) o endereço ssh esta em, acessa o gitHub > clique no seu projeto > code > ssh e copia o endereço
+
+# Resolvendo problemas com PIP´
+
+1. Voltar a versção original do pip (python -m ensurepip)
+2. Atualizar o pip ( python -m pip install --upgrade pip )
 
 # COMANDOS MAIS UTILIZADOS
 
@@ -79,7 +94,7 @@
 - incluir arquivo no gitignore apos ter comitado 
     (1: é necessário excluir o arquivo do repositório, 2:listar o arquivo no gitignore, 3:commitar novalmente)
 
-#COMANDOS DO apache2
+# COMANDOS DO apache2
 
 - /var/log/apache2$ (DIRETÓRIO DO APACHE2)
 
