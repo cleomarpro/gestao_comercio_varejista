@@ -39,6 +39,14 @@
 12 pip freeze (Visualizar os requirements.txt)
 23 pip freeze > requirements.txt (Criar a pastas e os requirements.txt)
 
+# CONFIGURAT SSH DO GIT HUB
+
+1. Criar chave (ssh-keygen -f ~/.ssh/nome_da_chave)
+2. local do arquivo chave (cd ~/.ssh/)
+3. abrir o arquivo e copiar a achave (cat id_ed25519.pub)
+4. acessar o gitHub, pefil > setting > chave SSH e GPG > nova chave SSH > cole a chave > em titulo, de um nome para sua chave > clique em Add SSH key
+5. adicione seu repositório git (git remote add origin endereço ssh) o endereço ssh esta em, acessa o gitHub > clique no seu projeto > code > ssh e copia o endereço
+
 # COMANDOS MAIS UTILIZADOS
 
 1. python manage.py makemigrations ( prepara os dados para a migração )
