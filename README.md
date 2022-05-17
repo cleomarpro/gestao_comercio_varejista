@@ -47,6 +47,10 @@
 4. acessar o gitHub, pefil > setting > chave SSH e GPG > nova chave SSH > cole a chave > em titulo, de um nome para sua chave > clique em Add SSH key
 5. adicione seu repositório git (git remote add origin endereço ssh) o endereço ssh esta em, acessa o gitHub > clique no seu projeto > code > ssh e copia o endereço
 
+# Resolvendo problemas com PIP´
+
+1. Voltar a versção original do pip (python -m ensurepip)
+2. Atualizar o pip ( python -m pip install --upgrade pip )
 # COMANDOS MAIS UTILIZADOS
 
 1. python manage.py makemigrations ( prepara os dados para a migração )
