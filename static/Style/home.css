@@ -16,7 +16,7 @@
     margin-top:75px;
 }
 .form_icone{
-    
+
     width: 50%;
     margin-top: -170px;
     margin-left: 50%;
@@ -30,7 +30,7 @@
 }
 
 .linck_contato{
-    
+
     color: black;
     font-size: 18px;
     text-decoration: none;
@@ -62,7 +62,7 @@
     background-color: rgb(146, 142, 142);
     font-size: 20px;
     padding: 5px;
-    
+
 }
 
 .div_cabesalho2 a{
@@ -78,7 +78,7 @@
     border: 1px solid #0e0e0d;
     border-radius: 7px;
     padding: 8px;
-    
+
 }
 
 #link_cadastrar{
@@ -88,7 +88,7 @@
     border: 1px solid #0e0e0d;
     border-radius: 7px;
     padding: 8px;
-    
+
 }
 #usuario{
     margin-left: 10px;
@@ -103,8 +103,8 @@
     border-radius: 7px;
     padding: 10px;
     font-size: 18px;
-    
-    
+
+
 }
 .p_sub_titilo{
     color: black;
@@ -135,9 +135,9 @@
     color: white;
     border: 1px solid #f5f5f0;
     border-radius: 7px;
-    margin:25%;
+    margin-left:25%;
     padding: 8px;
-    
+
 }
 #id_new_password1{
     margin-top: 5px;
@@ -169,12 +169,12 @@
 #termo_buttao{
     font-size: 20px;
     color:rgb(235, 10, 13);
-    
+
 }
 #img{
     width:50%;
     text-align: center;
-    
+
 }
 @media (max-width: 768px) {
     .form_logim{
@@ -223,7 +223,7 @@
     margin-left: 3px;
     color:white;
     font-size: 18px;
-    
+
 }
 #id_password{
     width: 91%;

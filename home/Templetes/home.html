@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 
 <html lang= "pt-br" >
-   
+
 <head >
     <meta charcet="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-   
+
     <title>VieWorld  </title>
     <link rel = "icon" type = "image/png" href = "{% static 'img/v.png' %}"/>
 
@@ -15,56 +15,57 @@
     <meta charcet="UTF-8">
     <meta name="cor" content="width=device-width,initial=scale=1">
     <meta name="description" content="Mercada varejista">
-    <meta name="keyWords" content="fluxo de caixa, gestão, controle de estoque, vieworld, varejo"> 
+    <meta name="keyWords" content="fluxo de caixa, gestão, controle de estoque, vieworld, varejo">
     <meta name="author" content="cor">
 </head>
 <body>
-    
+
 <div class="div_mae">
     <h1 style="font-size: 40px;" class="cabesalho" >VieWorld</h1>
     <div class="div_cabesalho2">
-        
+
        {%if user.is_authenticated%}
                 <label id='login'> <a href="{% url 'logout' %}"> Sair </a> </label>
                 <label id="link_cadastrar"><a href="{% url 'usuario' %}">Área de trabalho</a></label>
-            
+
                 <label id='usuario'>Olá <a href="{% url 'usuario' %}">
                     {%if user.first_name %} {{user.first_name}}  {%else %} {{user}} {%endif%}</a> </label>
                     <br>
                     <br>
             {%else%}
                 <label id='login'> <a href="{% url 'login' %}">Entra</a> </label>
-                
+
                 <label id="link_cadastrar"><a href="{% url 'novo-usuario' %}">Cadastrar-se</a></label>
                 <label id='usuario'> </label>
                 <br>
                 <br>
             {%endif%}
-            
+
    </div>
-        
-        
+
+
             <br>
             <img id="img" src="{% static 'img/vw_capa.png' %}" width="500px" all=" ">
         <br>
+        <!--
         <form class="form_icone">
- 
+
                 <a class="linck_contato" href="https://wa.me/message/QIUAIFFF7XP3N1" >
                 <img class="icone" src="{% static 'img/whatsapp.png' %}" width="200px" all=" ">  </a>
 
-                <a class="linck_contato" href="https://www.facebook.com/vieworld.com.br" >  
+                <a class="linck_contato" href="https://www.facebook.com/vieworld.com.br" >
                     <img class="icone" src="{% static 'img/facebook.png' %}" width="200px" all=" "> </a>
-                
-                <a class="linck_contato" href="https://www.instagram.com/vieworld.com.br/" > 
+
+                <a class="linck_contato" href="https://www.instagram.com/vieworld.com.br/" >
                     <img class="icone" src="{% static 'img/instagram.png' %}" width="200px" all=" "> </a>
-            
+
         </form>
 <br>
 <br>
 <br>
         <P class="p_sub_titilo">QUEM SOMOS</P>
         <form class="form_tela_inicial">
-                
+
                 <p>
                     A vieworlde é uma empresa de TI (Tecnologia da Informação)
                      que oferece software como serviço, com o foco no comércio varejista
@@ -73,10 +74,10 @@
             <br>
             <P class="p_sub_titilo" >NOSSOS OBJETIVOS</P>
         <form class="form_tela_inicial">
-            
+
             <p>
-                Auxiliar nas rotinas do dia  a dia da sua empresa e na gestão, com isso, 
-                sua empresa terra um controle  melhor das rotinas 
+                Auxiliar nas rotinas do dia  a dia da sua empresa e na gestão, com isso,
+                sua empresa terra um controle  melhor das rotinas
                 diárias e conseguirá fazer planejamentos de pequenos e longo prazo com eficiência
             </p>
         </form>
@@ -87,14 +88,14 @@
                  Fluxo de caixa, caixa, contas
                  a pagar, contas a receber, gastos extras, promoção de produtos,
                 relatórios diário, mensal, anual, controle de usuários e em breve NFe e NFCe
-            
+
             </p>
         </form>
         <br>
         <p class="p_sub_titilo" >PREÇO</p>
         <form class="form_tela_inicial">
-            - O sistema só será cobrado quando a fatura exceder a R$5,00 (Cinco reais ), 
-            depois será cobrado R$0,4(quatro centavos) por registro no banco de dados 
+            - O sistema só será cobrado quando a fatura exceder a R$5,00 (Cinco reais ),
+            depois será cobrado R$0,4(quatro centavos) por registro no banco de dados
             até atingir 750 registro, o equivalente a R$30,00 (Trinta reais),
             depois diminuirá o valor para R$0,2 (dois centavos) por registro
             <br>
@@ -107,10 +108,11 @@
             <p>
         </form>
         <br>
+        -->
     <br>
     <br>
     <br>
-        
+
 </div>
 </body>
 </html>

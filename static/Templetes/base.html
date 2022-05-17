@@ -33,7 +33,7 @@
 </head>
 
 <body>
-    
+
  <!-- //// meunu ////-->
     <h1 class="divCabesalho">VieWorld</h1>
  <div class= "div_menu">
@@ -44,13 +44,13 @@
         <ul >
             {%if user.is_authenticated%}
                 <li > <a style=" color: #CD0000;" href="{% url 'logout'%}">Sair</a> </li>
-                <label> Olá <a style=" color: #1459ee; font-size: 20px;" href="{% url 'usuario'%}"> 
+                <label> Olá <a style=" color: #1459ee; font-size: 20px;" href="{% url 'usuario'%}">
                       {%if user.first_name %} {{user.first_name}}  {%else %} {{user}} {%endif%}</a> </label>
             {%else%}
                 <li > <a style=" color: blue;" href="{% url 'login' %}">Entra</a> </li>
              {%endif%}
              <br>
-             <li> <a href="{% url 'manual' %}">Manual do usuário </a>  </li>
+             <!-- <li> <a href="{% url 'manual' %}">Manual do usuário </a>  </li> -->
                 --------------------------- <br>
                 <li> <a href="{% url 'inicio' %}">HOME</a> </li>
                 --------------------------- <br>
@@ -117,7 +117,7 @@
                 ---------------------------
             {%endif%}
             {% if perms.produto.add_produto %}
-                <li> <a href="{% url 'fatura' %}">-Resumo da fatura</a></li>
+               <!-- <li> <a href="{% url 'fatura' %}">-Resumo da fatura</a></li> -->
                 <li> <a href="{% url 'relatorio-produtos' %}">-Relatório por produto</a></li>
                 <li> <a href="{% url 'relatorio_mensal' %}">-Relatório mensal</a></li>
                 <li> <a href="{% url 'relatorio_anual' %}">-Relatório anual</a></li>
