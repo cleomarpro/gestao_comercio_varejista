@@ -9,7 +9,7 @@
     <title> VieWorld  </title>
 
     <script type="module" src="{% static 'js/mascaras.js' %}"></script>
-    <link rel="stylesheet" href= "{% static 'Style/home.css'%}">
+    <link rel="stylesheet" href= "{% static 'Style/login_cadastro.css'%}">
 
     <meta charcet="UTF-8">
     <meta name="cor" content="width=device-width,initial=scale=1">
@@ -20,10 +20,10 @@
 <body>
    
 
-    <div class='div_mae'>
+    <div class='container'>
         
         
-        <form class='form_logim' method="post" action="{% url 'login' %}">
+        <form class='login' method="post" action="{% url 'login' %}">
             <P  style="color:black; font-size: 25px;">VieWorld</P>
             {% csrf_token %}
 
@@ -43,12 +43,12 @@
             {% endif %}
             
                 <hr>
-            <label id="username">Usuário:</label> <br>
-                <td>{{ form.username }}</td>
+            <label >Usuário:</label> <br>
+                <td class="username">{{ form.username }}</td>
                 <br>
               <br>
-            <label id="password">Senha:</label> <br>
-                <td>{{ form.password }}</td>
+            <label >Senha:</label> <br>
+                <td class="password">{{ form.password }}</td>
               <br>
               <br>
             <input id='bt_login' type="submit" value="Entrar">
@@ -61,7 +61,7 @@
                 
             <br>
                     <hr>
-            <button id="bt_cadastrar"><a href="{% url 'novo-usuario' %}">Cadastre-se!</a></button>
+            <label id="bt_cadastrar"><a href="{% url 'novo-usuario' %}">Cadastre-se!</a></label>
             <br>
             <br>
             

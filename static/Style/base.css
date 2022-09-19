@@ -1,0 +1,65 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Montaga&display=swap');
+@import url('https://fonts.googleapis.com/css2? família=David+Libre&família=Montaga&família=Poppins:wght@300&família=Fonte+Sans+Pro&display=swap');
+html, body {
+    min-height: 100%;
+}
+body {
+    padding: 10;
+    margin: 10;
+}
+
+.div_cabesalho2{
+    color:white;
+    position: fixed;
+    width:100%;
+    margin-top: 0px;
+    margin-left: -8px;
+    background-color: rgb(102, 99, 37);
+    font-size: 20px;
+    padding: 5px;
+
+}
+
+.div_cabesalho2 a{
+    text-decoration: none;
+    color:rgb(255, 254, 254);
+    font-size: 18px;
+}
+#login_logout{
+    position: absolute;
+    right: 15px;
+    padding: 8px;
+
+}
+
+#link_cadastrar{
+    position: absolute;
+    right: 80px;
+    padding: 8px;
+
+}
+#usuario{
+    position: absolute;
+    margin-left: 10px;
+    color: rgb(249, 247, 247);
+    padding: 8px;
+}
+
+#img{
+    width:100px;
+    text-align: center;
+
+}
+      
+footer {
+    position: absolute;
+    bottom: 0;
+    background-color: rgb(102, 99, 37);
+    color: #FFF;
+    width: 100%;
+    height: 100px;    
+    text-align: center;
+    line-height: 100px;
+    margin-left: -8px;
+}

@@ -6,7 +6,7 @@
 
 #div_tabela{
     border: 1px solid #303131;
-    border-radius: 10px
+    border-radius: 10px;
     overflow-y:auto;
     overflow-x:auto;
     height: 208px;

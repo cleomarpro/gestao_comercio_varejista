@@ -9,7 +9,7 @@
     <title> VieWorld  </title>
 
     <script type="module" src="{% static 'js/mascaras.js' %}"></script>
-    <link rel="stylesheet" href= "{% static 'Style/home.css'%}">
+    <link rel="stylesheet" href= "{% static 'Style/login_cadastro.css'%}">
 
     <meta charcet="UTF-8">
     <meta name="cor" content="width=device-width,initial=scale=1">
@@ -20,10 +20,10 @@
 <body>
 
 
-    <div class='div_mae'>
+    <div class='container'>
 
-        <form class='form_logim' method="post" action="{% url 'novo-usuario' %}">
-            <P  style="color:black; font-size: 25px;">VieWorld</P>
+        <form class='cadastro' method="post" action="{% url 'novo-usuario' %}">
+            <P  class="p_sub_titilo">VieWorld</P>
             {% csrf_token %}
             <hr>
             {% if mensagen_de_erro_usuario %}
@@ -56,13 +56,13 @@
                 <hr>
                 <!--
                     <p style="color:black; font-size: 16px;">
-                        Ao clicar em Cadastre-se, você concorda com nossos
+                        Ao clicar em Cadastre, você concorda com nossos
                         <a style="color:rgb(226, 15, 15);" href="#" onclick="document.getElementById
                             ('termo_e_condicao_de_uso').style.display='block';">
                                 Termos e condição de uso </a>
                     </p>
                 -->
-            <input id='bt_login' type="submit" value="Cadastre-se">
+            <input id='bt_login' type="submit" value="Cadastrar">
             <br>
             <br>
 
