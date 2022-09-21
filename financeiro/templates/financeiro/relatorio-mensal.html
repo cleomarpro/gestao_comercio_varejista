@@ -1,8 +1,5 @@
 {% extends 'base.html'%}
-
-   {% block main%}
-
-<div class='div_Mae'>
+{% block main%}
 <h2 class="sub_menu_relat" >&nbsp; RELATÓRIO MENSAL </h2>
 <form class='campo_de_busca_relat' method="GET" action="{% url 'relatorio_mensal' %}">
     <div>
@@ -60,9 +57,8 @@
     <br>
     <label>Contas a pagar: R$ {{Contas_mensal_a_pagar.total_conta | floatformat:2}} </label>
       <br>
-
 </form>
-</div>
+<br>
 {% endblock %}
 
 

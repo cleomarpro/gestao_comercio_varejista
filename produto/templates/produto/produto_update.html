@@ -2,7 +2,7 @@
 
 {% block main %}
 
-<div class='div_Mae'>
+<br>
     <h2 class="sub_menu" >&nbsp; PRODUTO <a href="{% url 'produto' %}"> Cancelar</a></h2>
     <form  style="display:block;" id='formulario' class='formulario'  method="POST" >
         {% csrf_token %}
@@ -78,8 +78,7 @@
                     <br>
             </form>
          </div>
-        {%endif%}
-</div>
+    {%endif%}
 {% endblock %}
 
 

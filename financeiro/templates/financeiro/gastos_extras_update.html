@@ -2,8 +2,8 @@
 
 {% block main %}
 
-<div class='div_Mae'>
-    <h2 class="sub_menu" >&nbsp; GASTOS EXTRAS  <a href="{% url 'gastos-extras' %}">Cancelar</a> </h2>
+<br>
+    <h2 class="sub_menu" >CONTROLE DE GASTOS <a href="{% url 'gastos-extras' %}">Cancelar</a> </h2>
     <form class='formulario' method="POST" >
          {% csrf_token %}
     
@@ -33,6 +33,5 @@
             <button type="submit"> Editar</button>
     </form>
     <br>
-</div>
 
 {% endblock %}

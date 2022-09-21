@@ -1,14 +1,12 @@
 {% extends 'base_caixa.html'%}
 
 {% block main%}
-
-<div class=div_Mae>
-
+<br>
 <form class='formulario' method="GET" action="{% url 'buscar-produtos' %}">
           <label for="busca"> Buscar produto</label>
 
           <input style=" width:200px;" type="text" id="produt" name="produt" >
-          <button style=" width:80px; !important" type="submit">OK</button>
+          <button style=" width:80px;" type="submit">OK</button>
 
 </form>
 
@@ -29,7 +27,5 @@
         {% endfor %}
       </tbody>
     </table>
-</div>
-
 </div>
 {% endblock %}

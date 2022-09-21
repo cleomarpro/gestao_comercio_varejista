@@ -37,7 +37,9 @@
     
     <div class="div_cabesalho2">
         {% block cabesalho%}
-            <img id="img" src="{% static 'img/logo_marca.png' %}" width="500px" all=" ">
+        <a href="{% url 'inicio' %}">
+            <img id="img" src="{% static 'img/logo_marca.png' %}" width="500px" all=" "> 
+        </a>
                 {%if user.is_authenticated%}
                     <label id='login_logout'> <a href="{% url 'logout' %}"> Sair </a> </label>
                     <label> <a id='usuario' href="{% url 'usuario' %}"> Olá
@@ -53,12 +55,13 @@
         {% endblock%}
     </div>
         
-    <div>
+    <div id="div_main">
         {% block main%}
             deu certo
         {% endblock main %}
     </div>
-
+    <br>
+    <br>
     <footer>    
         {% block footer %}
         <a href="https://www.instagram.com/vieworld.com.br/?next=%2F"> <img id="im" src="{% static 'img/insta1.png' %}"width="140px"></a>

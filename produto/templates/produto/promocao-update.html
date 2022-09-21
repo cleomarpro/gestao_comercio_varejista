@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block main %}
-<div class='div_Mae'>
+<br>
     <h2 class="sub_menu" >&nbsp; PROMOÇÃO <a href="{% url 'promocao' %}"> Cancelar</a></h2>
     <form class='formulario' method="POST" >
         {% csrf_token %}
@@ -38,5 +38,4 @@
         <button type="submit"> Salvar</button>
     </form>
     <br>
-</div>
 {% endblock %}

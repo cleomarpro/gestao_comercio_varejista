@@ -1,7 +1,6 @@
 {% extends 'base.html'%}
-   {% block main%}
-
-<div class='div_Mae'>
+{% block main%}
+<br>
     <h2 class="sub_menu" >&nbsp; MINHAS VENDAS
         {% if perms.fluxo_de_caixa.add_venda %}
             <a href="{% url 'atualizar-pedido' %}"> 
@@ -105,7 +104,6 @@
         {% endfor %}
       </tbody>
     </table>
-</div>
 {% endblock %}
 
 

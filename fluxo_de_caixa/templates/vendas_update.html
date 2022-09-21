@@ -1,9 +1,6 @@
 {% extends 'base.html'%}
-
-  {% block main%}
-
-
-<div class=div_Mae>
+{% block main%}
+<br>
     <div >
 
         <form class='formulario' action="{% url 'vendas_update' vendas.id%}" method="POST">
@@ -20,6 +17,4 @@
 
 
     </div>
-</div>
-
 {% endblock %}

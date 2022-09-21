@@ -2,7 +2,7 @@
 
 {% block main %}
 
-<div class='div_Mae'>
+<br>
     <h2 class="sub_menu" >&nbsp; CATEGORIA <a href="{% url 'categoria' %}">Cancelar</a></h2>
     <form class='formulario' method="POST" >
          {% csrf_token %}
@@ -17,7 +17,6 @@
             <button type="submit"> Editar</button>
     </form>
      <br>
-</div>
 {% endblock %}
 
 

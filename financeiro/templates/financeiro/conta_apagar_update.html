@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
 
 {% block main %}
-
-<div class='div_Mae'>
+<br>
     <h2 class="sub_menu" >&nbsp; CONTA A PAGAR <a href="{% url 'conta_apagar' %}">Cancelar</a></h2>
     <form class='formulario' method="POST" >
         {% csrf_token %}
@@ -41,8 +40,6 @@
             <hr>
             <button type="submit"> Editar</button>
         </form>
-    <br>
-</div>
 {% endblock %}
 <!-- <td> <a href="{% url 'GastosExtras_update_cbv' gastos_extras.id %}">Editar</a> </td>
                     <td> <a href="{% url 'gastos_extras_delete' gastos_extras.id %}">Excluir</a> </td>  -->

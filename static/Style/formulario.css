@@ -5,31 +5,22 @@
 @import url('https://fonts.googleapis.com/css?family=Courier+Prime&display=swap');
 @import url('https://fonts.googleapis.com/css2? família=David+Libre&família=Montaga&família=Poppins:wght@300&família=Fonte+Sans+Pro&display=swap');
 
-.div_Mae{
-  margin-top:80px;
-  font-family: 'Source Sans Pro', sans-serif;
-  
-}
 .sub_menu{
-  margin-left:195px;
-  background-color: #454549;
-  font-size:18px;
-  color: rgb(245, 241, 241);
-  padding-block: 7px;
-
+  color:rgb(10, 9, 9);
+  position: static;
+  width:100%;
+  margin-top: 30px;
+  font-size: 15px;
+  line-height: 20px;
 }
 .dashboard{
   background-color:rgb(185, 233, 254);
-  margin-left: 195px;
 }
 .sub_menu a{
   position:absolute;
   right:1px;
   text-decoration: none;
-  color:rgb(14, 13, 13); 
-  border: 1px solid #e5e7ed;
-  background-color: rgb(195, 195, 207);
-  border-radius: 1px;
+  color:rgb(61, 78, 235); 
   padding: 3px;
   font-size: 14px;
   margin-right: 10px;
@@ -49,20 +40,14 @@
 }
 
 .formulario{
-  background-color: #F0F8FF;
-  margin-left:195px;
+  background-color: #d1c570;
   font-size:18px;
-
 }
 .formulario a{
-  
   position:absolute;
   right:10px;
   color: #b81616;
-  font-size: 18px;
-  background-color: #e5e7ed;
-  border: 1px solid #b3b3bf;
-  border-radius: 3px;
+  font-size: 22px;
   margin-left: 5px;
   padding-left: 2px;
   padding-right: 2px;
@@ -86,7 +71,7 @@
 .bt_xx{
     position:absolute;
     margin-left:-10px;
-    margin-top:-47px~;
+    margin-top:-47px;
 }
 
 .bt_Novo{

@@ -1,7 +1,7 @@
 {% extends 'base.html'%}
 {% block main%}
 <!-- CDASTRO  DE PRODUTOS -->
-<div class='div_Mae'>
+<br>
   <h2 class="sub_menu" >&nbsp; PAGAMENTO  </h2>
 <form class='formulario' method="POST">
     {% csrf_token %}
@@ -78,21 +78,4 @@
         {% endfor %}
       </tbody>
     </table>
-
-    
-</div>
 {% endblock %}
-
-
-<!--
-<select style=" width:200px;" type="select"  name="contas"
-            id="contas" value= '0' required/>
-            <tr>
-                <option value=''> __Selecionar o conta__</option>
-            {% for conta in conta %}
-                    <option value='{{conta.id}}'> {{conta}}</option>
-            {% endfor %}
-            </tr>
-        </select>
-        <br>
--->

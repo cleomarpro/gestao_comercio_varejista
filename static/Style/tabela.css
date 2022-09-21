@@ -8,12 +8,12 @@
 .table{
     background-color: #F0F8FF;
     font-size:15px;
-    margin-left:195px;
+    margin-left:0px;
     font-family: 'Source Sans Pro', sans-serif;
 }
 
 .table th{
-    background-color: #B0C4DE;
+    background-color: #7b7338;
     font-size: 16px;
     padding:5px;
     width: 15%;
@@ -26,7 +26,7 @@
 .table td{
     text-align: center;
     font-size: 16px;
-    background-color: #c5d1df;
+    background-color: #cdc586;
 }
 
 @media (max-width: 768px) {

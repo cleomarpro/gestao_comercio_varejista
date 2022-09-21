@@ -8,16 +8,22 @@ body {
     padding: 10;
     margin: 10;
 }
-
+#div_main{
+    overflow-y:auto;
+    overflow-x:auto;
+    
+}
 .div_cabesalho2{
     color:white;
     position: fixed;
     width:100%;
-    margin-top: 0px;
+    margin-top: -10px;
     margin-left: -8px;
     background-color: rgb(102, 99, 37);
     font-size: 20px;
     padding: 5px;
+    height: 35px;
+    line-height: 10px;
 
 }
 
@@ -53,13 +59,13 @@ body {
 }
       
 footer {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     background-color: rgb(102, 99, 37);
     color: #FFF;
     width: 100%;
-    height: 50px;    
+    height: 30px;    
     text-align: center;
-    line-height: 50px;
+    line-height: 40px;
     margin-left: -8px;
 }

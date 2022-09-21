@@ -1,7 +1,6 @@
 {% extends 'base.html'%}
 {% block main%}
-<!-- CDASTRO  DE PRODUTOS -->
-<div class='div_Mae'>
+<br>
   <h2 class="sub_menu" >&nbsp; CAIXA
     {% if perms.fluxo_de_caixa.add_caixa %}
     <a 
@@ -73,5 +72,4 @@
         {% endfor %}
       </tbody>
     </table>
-</div>
 {% endblock %}

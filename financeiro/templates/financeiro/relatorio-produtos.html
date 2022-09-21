@@ -1,8 +1,6 @@
 {% extends 'base.html'%}
-
-   {% block main%}
-
-<div class=div_Mae>
+{% block main%}
+<br>
   <h2 class="sub_menu" >&nbsp; RELATÓRIO POR PRODUTO 
   <a style="color:brown;"
   href="#" onclick="document.getElementById('form_up').style.display='block';"> Importante saber 
@@ -82,46 +80,6 @@
         {% endfor %}
       </tbody>
     </table>
-
+    <br>
+<br>
 {% endblock %}
-
-
-
-<!--
-   <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">ID da venda</th>
-          <th scope="col">Nome do produto</th>
-          <th scope="col">ID do produto</th>
-          <th scope="col">Valor do produto</th>
-          <th scope="col">Quantidade</th>
-          <th scope="col">Desconto</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for item_de_pedido in item_de_pedido %}
-            <tr>
-                <td>{{ item_de_pedido.venda.id }}</td>
-                <td>{{ item_de_pedido.produto.nome }}</td>
-                <td>{{ item_de_pedido.produto.id }}</td>
-                <td>{{ item_de_pedido.produto.valor_venda }}</td>
-                <td>{{ item_de_pedido.quantidade_de_itens}}</td>
-                <td>{{ item_de_pedido.desconto }}</td>
-            </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    {% regroup cities by country as country_list %}
-
-<ul>
-    {% for country in country_list %}
-        <li>{{ country.grouper }}
-            <ul>
-            {% for city in country.list %}
-                <li>{{ city.name }}: {{ city.population }}</li>
-            {% endfor %}
-            </ul>
-        </li>
-    {% endfor %}
--->

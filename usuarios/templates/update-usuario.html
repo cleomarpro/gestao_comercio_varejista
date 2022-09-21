@@ -1,128 +1,125 @@
 {% extends 'base.html' %}
 {% block main %}
-<div class='div_Mae'>
-    <form class='formulario' action="{% url 'update-usuario' %}" method="POST" >
-         {% csrf_token %}
-    <h2 class="sub_menu" style="margin-left: 0px;">
-        &nbsp;Atualizar meus dados
-    </h2>
-             <br>
-             
-        <p style= "font-size: 20px;"><b>INFORMACÕES DA CONTA </b></p>
-        <hr>
-        <div>
-            <label> Nome Fantazia</label> <br>
-            <input  type="text" id="nome_fantazia" placeholder="Nome da empresa"
-                name="nome_fantazia" value= "{{usuario.nome_fantazia}}" >
-        </div>
-        <div>
-            <label>Cnpj</label><br>
-                <input style=" width:200px;"  type="text" value= "{{usuario.cpf_cnpj}}"
-                   data-js="cnpj" placeholder="000.000.000-00" id="cpf_cnpj" 
-                   minlength="18" name="cpf_cnpj" required/>
-        </div>
-        <div>
+<br>
+<form class='formulario' action="{% url 'update-usuario' %}" method="POST" >
+    {% csrf_token %}
+<h2 class="sub_menu" style="margin-left: 0px;">
+&nbsp;Atualizar meus dados
+</h2>
+        <br>
         
-             <!--
-            <label> Plano:</label>
-                <input style=" width:200px;"  type="text" id="plano" 
-                    name="plano" value= "{{usuario.plano.nome}}" >
-             <br>
-              -->
-            <label> Razão social</label> <br>
-                <input style=" width:200px;"  type="text" id="razao_social" 
-                  maxlength="30"  name="razao_social" value= "{{usuario.razao_social}}" >
-        </div>
-        <div>
-             <label> Data de criação </label> <br>
-             <input style=" width:150px;" type="date" id="data_de_criacao" 
-             value= "{{usuario.data_de_criacao | date:'Y-m-d'}}"  name="data_de_criacao" >
-        </div>
-        <div>
-            <label> Inscrição  estadual</label> <br>
-                <input style=" width:180px;" type="text" id="inscricao_estadual" 
-                  name="inscricao_estadual" value= "{{usuario.inscricao_estadual}}" >
-        </div>
-        <div>
-             <label> Inscrição  municipal</label> <br>
-            <input style=" width:140px;" type="text" id="inscricao_municipal" 
-            maxlength="30" name="inscricao_municipal" value= "{{usuario.inscricao_municipal}}" >
-        </div>
-        <div>
-             <label>Nascionalidade</label> <br>
-                <input style=" width:140px;"  type="text" id="nascionalidade"
-                maxlength="30" placeholder="Nascionalidade..." name="nascionalidade" value= "{{usuario.nascionalidade}}" >
-        </div>
-        
-        <p style="font-size: 20px;"><b>ENDEREÇO</b></p>
-            <hr>
-        <div>
-            <label> CEP</label> <br>
-            <input style=" width:200px;"  type="text" data-js="cep" id="cep"
-                 name="cep" value= "{{usuario.cep}}"  placeholder="00000-000">
-        </div>
-        <div>
-            <label> Rua</label> <br>
-                <input style=" width:200px;"  value= "{{usuario.rua}}" 
-                maxlength="30" type="text" id="rua" name="rua" placeholder="Rua..." />
-        </div>
-        <div>
-            <label> Quadra</label> <br>
-                <input style=" width:80px;"  placeholder=" Quadra..." 
-                type="number" max="999999999" id="quadra" name="quadra" value= "{{usuario.quadra}}" >
-        </div>
-        <div>
-            <label> Número</label> <br>
-                <input style=" width:80px;"  placeholder=" Número..." 
-                type="number" max="999999999" id="numero" name="numero" value= "{{usuario.numero}}" >
-        </div>
-        <div>
-            <label> Setor:</label> <br>
-                <input style=" width:150px;"  placeholder=" Setor..."
-                maxlength="30" type="text" id="setor" name="setor" value= "{{usuario.setor}}" >
-        </div>
-        <div>
-            <label> Estado</label> <br>
-                <input style=" width:200px;"  placeholder=" Estado..." 
-                maxlength="30" type="text" id="estado" name="estado" value= "{{usuario.estado}}" >
-        </div>
-        <div>
-            <label> Cidade</label> <br>
-                <input style=" width:200px;"  placeholder=" Cidade..." 
-                maxlength="30" type="text" id="cidade" name="cidade" value= "{{usuario.cidade}}" >
-        </div>
-        <div>
-            <label> Complemento</label> <br>
-                <input style=" width:180px;"  placeholder="Ex: casa, ap, bloco" 
-                maxlength="30" type="text" id="complemento" name="complemento" value= "{{usuario.complemento}}" >
-        </div>
-        <div>
-            <label> Pais</label> <br>
-                <input style=" width:100px;"  placeholder=" Pais..." type="text" 
-                maxlength="30"  id="pais" name="pais" value= "{{usuario.pais}}" >
-        </div>
-        
-        <p style=" font-size: 20px;"><b>CONTATO</b></p>
-            <hr>
-        <div>
-            <label> Celular</label> <br>
-                <input style=" width:150px;"  placeholder=" (00) 00000-0000" 
-                type="text" data-js="phone"  id="Celular" name="Celular" value= "{{usuario.Celular}}" >
-        </div>
-        <div>
-            <label> Telefone</label> <br>
-                <input placeholder="(00) 0000-0000" type="text" data-js="phone" 
-                    id="Telefone" name="Telefone" value= "{{usuario.Telefone}}" >
-        </div>
-        <div>
-            <label> E-mail</label> <br>
-                <input   placeholder="exemplo@dominio.com" type="email" id="email" 
-                    name="email" value= "{{usuario.email}}" >
-        </div>
-        
-               <hr>
-            <button  type="submit"> Atualizar</button>
-   
+<p style= "font-size: 20px;"><b>INFORMACÕES DA CONTA </b></p>
+<hr>
+<div>
+    <label> Nome Fantazia</label> <br>
+    <input  type="text" id="nome_fantazia" placeholder="Nome da empresa"
+        name="nome_fantazia" value= "{{usuario.nome_fantazia}}" >
+</div>
+<div>
+    <label>Cnpj</label><br>
+        <input style=" width:200px;"  type="text" value= "{{usuario.cpf_cnpj}}"
+            data-js="cnpj" placeholder="000.000.000-00" id="cpf_cnpj" 
+            minlength="18" name="cpf_cnpj" required/>
+</div>
+<div>
+
+        <!--
+    <label> Plano:</label>
+        <input style=" width:200px;"  type="text" id="plano" 
+            name="plano" value= "{{usuario.plano.nome}}" >
+        <br>
+        -->
+    <label> Razão social</label> <br>
+        <input style=" width:200px;"  type="text" id="razao_social" 
+            maxlength="30"  name="razao_social" value= "{{usuario.razao_social}}" >
+</div>
+<div>
+        <label> Data de criação </label> <br>
+        <input style=" width:150px;" type="date" id="data_de_criacao" 
+        value= "{{usuario.data_de_criacao | date:'Y-m-d'}}"  name="data_de_criacao" >
+</div>
+<div>
+    <label> Inscrição  estadual</label> <br>
+        <input style=" width:180px;" type="text" id="inscricao_estadual" 
+            name="inscricao_estadual" value= "{{usuario.inscricao_estadual}}" >
+</div>
+<div>
+        <label> Inscrição  municipal</label> <br>
+    <input style=" width:140px;" type="text" id="inscricao_municipal" 
+    maxlength="30" name="inscricao_municipal" value= "{{usuario.inscricao_municipal}}" >
+</div>
+<div>
+        <label>Nascionalidade</label> <br>
+        <input style=" width:140px;"  type="text" id="nascionalidade"
+        maxlength="30" placeholder="Nascionalidade..." name="nascionalidade" value= "{{usuario.nascionalidade}}" >
 </div>
 
+<p style="font-size: 20px;"><b>ENDEREÇO</b></p>
+    <hr>
+<div>
+    <label> CEP</label> <br>
+    <input style=" width:200px;"  type="text" data-js="cep" id="cep"
+            name="cep" value= "{{usuario.cep}}"  placeholder="00000-000">
+</div>
+<div>
+    <label> Rua</label> <br>
+        <input style=" width:200px;"  value= "{{usuario.rua}}" 
+        maxlength="30" type="text" id="rua" name="rua" placeholder="Rua..." />
+</div>
+<div>
+    <label> Quadra</label> <br>
+        <input style=" width:80px;"  placeholder=" Quadra..." 
+        type="number" max="999999999" id="quadra" name="quadra" value= "{{usuario.quadra}}" >
+</div>
+<div>
+    <label> Número</label> <br>
+        <input style=" width:80px;"  placeholder=" Número..." 
+        type="number" max="999999999" id="numero" name="numero" value= "{{usuario.numero}}" >
+</div>
+<div>
+    <label> Setor:</label> <br>
+        <input style=" width:150px;"  placeholder=" Setor..."
+        maxlength="30" type="text" id="setor" name="setor" value= "{{usuario.setor}}" >
+</div>
+<div>
+    <label> Estado</label> <br>
+        <input style=" width:200px;"  placeholder=" Estado..." 
+        maxlength="30" type="text" id="estado" name="estado" value= "{{usuario.estado}}" >
+</div>
+<div>
+    <label> Cidade</label> <br>
+        <input style=" width:200px;"  placeholder=" Cidade..." 
+        maxlength="30" type="text" id="cidade" name="cidade" value= "{{usuario.cidade}}" >
+</div>
+<div>
+    <label> Complemento</label> <br>
+        <input style=" width:180px;"  placeholder="Ex: casa, ap, bloco" 
+        maxlength="30" type="text" id="complemento" name="complemento" value= "{{usuario.complemento}}" >
+</div>
+<div>
+    <label> Pais</label> <br>
+        <input style=" width:100px;"  placeholder=" Pais..." type="text" 
+        maxlength="30"  id="pais" name="pais" value= "{{usuario.pais}}" >
+</div>
+
+<p style=" font-size: 20px;"><b>CONTATO</b></p>
+    <hr>
+<div>
+    <label> Celular</label> <br>
+        <input style=" width:150px;"  placeholder=" (00) 00000-0000" 
+        type="text" data-js="phone"  id="Celular" name="Celular" value= "{{usuario.Celular}}" >
+</div>
+<div>
+    <label> Telefone</label> <br>
+        <input placeholder="(00) 0000-0000" type="text" data-js="phone" 
+            id="Telefone" name="Telefone" value= "{{usuario.Telefone}}" >
+</div>
+<div>
+    <label> E-mail</label> <br>
+        <input   placeholder="exemplo@dominio.com" type="email" id="email" 
+            name="email" value= "{{usuario.email}}" >
+</div>
+
+        <hr>
+    <button  type="submit"> Atualizar</button>
 {% endblock %}

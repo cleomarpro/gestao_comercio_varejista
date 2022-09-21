@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
-
 {% block main %}
-
-<div class='div_Mae'>
+<br>
     <h2 class="sub_menu" >&nbsp; FORNECEDOR <a href="{% url 'novo-fornecedor' %}">Cancelar</a></h2>
     <form class='formulario'  method="POST" >
          {% csrf_token %}
@@ -132,5 +130,4 @@
             <hr>
             <button  type="submit"> Editar</button>
   </form>
-</div>
 {% endblock %}

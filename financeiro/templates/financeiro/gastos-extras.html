@@ -1,9 +1,8 @@
 {% extends 'base.html' %}
 
 {% block main %}
-
-<div class='div_Mae'>
-    <h2 class="sub_menu" >&nbsp;GASTOS EXTRAS 
+    <br>
+    <h2 class="sub_menu" >CONTROLE DE GASTOS
         <a 
             href="#" onclick="document.getElementById('form_up').style.display='block';">
                 Adicionar 
@@ -13,7 +12,6 @@
          {% csrf_token %}
          <a id="termo_buttao" href="#" onclick="document.getElementById
          ('form_up').style.display='none';"> X</a>
-         <p> ANOTAR GASTOS</p>
         <hr> 
     <div> 
         <label>Descrição*</label><br>
@@ -36,7 +34,7 @@
              <hr>
             <button type="submit"> Salvar</button>
     </form>
-        <br>
+
 <!-- formulário de filtro -->
     <form id="form_mobil" class='campo_de_busca' method="GET" action="{% url 'filtro_gastos_extras' %}">
         <a id="br_X_mobil" href="#" onclick="document.getElementById
@@ -146,6 +144,6 @@
         </tbody>
     </table>
 
-</div>
+
 
 {% endblock %}

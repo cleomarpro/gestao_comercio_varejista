@@ -2,7 +2,7 @@
 
 {% block main %}
 
-<div class= 'div_Mae'>
+<br>
     <h2 class="sub_menu" >&nbsp; ENTRADA DE MERCADORIA <a href="{% url 'entrada-mercadoria' %}">Cancelar</a></h2>
     <form class='formulario' method="POST" >
         {% csrf_token %}
@@ -46,7 +46,5 @@
             <hr>
             <button type="submit"> Editar</button>
     </form>
-    <br>
-</div>
-
+    
 {% endblock %}

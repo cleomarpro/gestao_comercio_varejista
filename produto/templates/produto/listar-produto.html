@@ -2,7 +2,7 @@
 
 {% block main %}
 
-<div class=div_Mae>
+<br>
   <h2 class="sub_menu" >&nbsp; PRODUTOS</h2> 
     <form class='campo_de_busca' method="GET" action="{% url 'listar-produto' %}">
       <label>Código do produto</label><br>
@@ -43,7 +43,5 @@
         {% endfor %}
       </tbody>
     </table>
-
-</div>
 
 {% endblock %}
