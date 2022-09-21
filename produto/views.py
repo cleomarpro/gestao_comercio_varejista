@@ -555,7 +555,7 @@ class Entrada_Mercadoria (LoginRequiredMixin, View):
         data['produto']  = Produto.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
         data['fornecedor']  = Fornecedor.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
         return render(
-            request, 'produto/entrada-mercadoria.html', data)
+            request, 'produto/templates/entrada-mercadoria.html', data)
 
 class EntradaMercadoriaUpdate(LoginRequiredMixin, View):
     def get(self, request, id):
