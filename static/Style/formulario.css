@@ -6,12 +6,16 @@
 @import url('https://fonts.googleapis.com/css2? família=David+Libre&família=Montaga&família=Poppins:wght@300&família=Fonte+Sans+Pro&display=swap');
 
 .sub_menu{
+  background-color: #969165;
   color:rgb(10, 9, 9);
   position: static;
   width:100%;
   margin-top: 30px;
   font-size: 15px;
-  line-height: 20px;
+  line-height: 30px;
+}
+.sub_menu h2{
+  margin-left: 10px;
 }
 .dashboard{
   background-color:rgb(185, 233, 254);
@@ -22,12 +26,12 @@
   text-decoration: none;
   color:rgb(61, 78, 235); 
   padding: 3px;
-  font-size: 14px;
+  font-size: 16px;
   margin-right: 10px;
 }
 
 .sub_menu input{
-  position:absolute;
+  position:absolute; 
   right:1px;
   text-decoration: none;
   color:rgb(14, 13, 13); 
