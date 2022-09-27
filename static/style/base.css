@@ -8,10 +8,7 @@ body {
     padding: 10;
     margin: 10;
 }
-#div_main{
-    overflow-y:auto;
-    overflow-x:auto;
-}
+
 .div_cabesalho2{
     color:white;
     position: fixed;

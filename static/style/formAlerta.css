@@ -43,41 +43,40 @@
     border: 1px solid #f5f5f0;
     border-radius: 7px;
     margin:0% 25% 25% 25% ;
-    padding: 8px;"
+    padding: 8px;
 }
-@media (max-width: 600px) {
+@media (max-width: 768px){
     .mensagem_de_erro{
-        margin-left: 0px;
         width: 100%;
-        margin: 0px;
     }
-
-@media (max-width:768px) {
-    .butao_X{
-        background-color:rgb(245, 245, 249);
-        color:rgb(216, 6, 6);
-        margin-left: 50%;
-        margin-top: -400px;
-        padding-: 5%;
-        
-    }
-    }
-
 .divAlerta{
-    margin-left: 0px;
-    width: 90%;
+    width: 100%;
     text-align: center;
 }
 
 .formAlerta{
-    margin-left:0px;
     margin-top: -400px;
-    width: 100%;
-   
-
+    width: 95%;
+    margin-left:0px;
+    padding: 0px;
+}
+#div_caixa div{
+    display:block;
 }
 #atalho{
     display:none;
 }
 }
 
+@media (max-width:768px) {
+    .butao_X{
+        position:absolute;
+        right:30px;
+        background-color:rgb(245, 245, 249);
+        color:rgb(216, 6, 6);
+        margin-left: 50px;
+        margin-top: -400px;
+        padding: 5px;
+        
+    }
+}

@@ -5,19 +5,18 @@
 @import url('https://fonts.googleapis.com/css?family=Courier+Prime&display=swap');
 
 @media (max-width: 768px) {
-   
+
 #div_caixa{
     display: block;
-    width: 100%;
+    width: 98%;
 }
-.div_painel_tabela{
+#div_painel_tabela{
     width: 100%;
     margin-left: -10px;
     padding: 0px;
 }
 #div_caixa div{
     margin-left: 0px;
-    width:100%;
 }
 .caixa{
     width: 100%;
@@ -26,7 +25,7 @@
 #divPainel{
     margin-top: -30px;
     margin-left: 0px;
-    width: 95%;
+    width: 100%;
     padding:0px;
 }
 #divPainel label{
@@ -55,6 +54,6 @@
 #bt_vendas2{
     width: 142px;
     position:absolute;
-    right:8px;
+    right:15px;
 }
 }

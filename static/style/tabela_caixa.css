@@ -11,7 +11,7 @@
     overflow-x:auto;
     height: 208px;
     font-size:16px;
-    width: 350px;
+    width: 100%;
 }
 
 #div_tabela table{
@@ -42,7 +42,7 @@
     #div_tabela{
         margin-top: -40px;
         margin-left: -10px;
-        
+        width: 100%;
         
     }
 

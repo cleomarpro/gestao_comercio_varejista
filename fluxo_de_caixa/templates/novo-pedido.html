@@ -278,7 +278,7 @@
             {%endif%}
         {%endif%}
     </div>
-    <br>
+    
     <div id="div_tabela" > 
         <table >
             <thead>
@@ -419,12 +419,14 @@
             <p style="text-align: center;"> Assinatura</p>
             <br>
     </div>
-    <div>
-        <input id='bt_visualizar_cupom' accesskey="i" 
-            type="button" value="Imprimir Cupom" onclick="imprimir_cupom_fiscal()">
-    </div>
-    <br>
+    
 </div>
+<div>
+    <input id='bt_visualizar_cupom' accesskey="i" 
+        type="button" value="Imprimir Cupom" onclick="imprimir_cupom_fiscal()">
+</div>
+<br>
+<br>
 <script >
     function imprimir_cupom_fiscal(){
         var pegar_dados = document.getElementById('div_cupomFiscal').innerHTML;

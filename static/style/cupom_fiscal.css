@@ -22,7 +22,6 @@
     padding: 10px;
     border: 1px solid #303131;
     border-radius: 2px;
-    display:none;
 
 }
 .cupom_fiscal labem{
@@ -40,13 +39,13 @@
     margin-top:00px;
 }
 #bt_visualizar_cupom{
-    margin-top:-19px;
+    position: absolute;
+    margin-top:19px;
     border: 1px solid #303131;
     border-radius: 2px;
     color:white;
     background-color: #4F4F4F;
-    margin-left:622px;
-    position:absolute;
+    margin-left:300px;
     width: 150px;
 }
 
@@ -55,18 +54,10 @@
     font-size: 12px;
 }
 
-.cupom_fiscal thead{
-
-}
-
 .cupom_fiscal th {
     margin-left: -30px;
     text-align: center;
     width:35%;
-}
-
-.cupom_fiscal tbody {
-
 }
 
 .cupom_fiscal tr {
@@ -75,13 +66,10 @@
     width:35%;
 }
 
-.cupom_fiscal td {
-
-}
 @media (max-width: 768px) {
 #bt_visualizar_cupom{
+    margin-top: -10px;
    margin-left: 0px;
-   display:none;
 }
 .cupom_fiscal{
     position:absolute;
@@ -110,5 +98,4 @@
     margin-top:0px;
 }
 }
-position:static;
 
