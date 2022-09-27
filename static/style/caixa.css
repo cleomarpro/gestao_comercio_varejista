@@ -6,15 +6,16 @@
 
 
 
-#div_caixa div{
-    margin-left:190px;
-    width:900px;
+#div_caixa{ 
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
-#div_caixa div div{
+#div_caixa div{
     display:inline-block;
     margin-left:10px;
-    width:400px;
 }
 #divPainel {
     height: 130px;
@@ -31,19 +32,18 @@
     
 }
 #div_painel_tabela{
-    width: 400px;
+    width: 350px;
+    margin-top: 35px;
 }
 .caixa{
-    background-color: #F0F8FF;
-    width: 100%;
+    background-color: #bab184;
     font-size: 16;
-    height: 90px;
-
 }
 
 .caixa ul{
     padding: 10px;
     width: 450px;
+    height: 500px;
 }
 
 .caixaVenda ul{
@@ -92,7 +92,8 @@
     background-color: #4F4F4F;
   }
 #bt_vendas2{
-    margin-left: 100px;
+    position: flex;
+    margin-left: 170px;
     margin-top:0px;
     border: 1px solid #303131;
     border-radius: 2px;
@@ -106,25 +107,18 @@
 }
 
 #bt_novo_pedido{
-   margin-top:-138px;
-   margin-left:289px;
-   border: 1px solid #303131;
-   border-radius: 5px;
-   color:black;
-   background-color: #c7cdd8;
-   position:absolute;
-   padding-block: 5px;
-   width: 110px;
-
+    text-align: center;
+    color:rgb(252, 250, 250);
+    padding-block: 5px;
+    width: 100%;
+    border: 1px solid #303131;
+    border-radius: 2px;
+    background-color: #4F4F4F;
  }
 
  .bt_deletar{
    margin-left:220px;
-   border: 1px solid #303131;
-   border-radius: 10px;
-   color:white;
    width: 420px;
    margin-top:-20px;
-   background-color: red;
    margin-bottom: 30px;
   }

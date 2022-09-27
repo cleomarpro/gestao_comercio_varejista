@@ -11,6 +11,7 @@
     overflow-x:auto;
     height: 208px;
     font-size:16px;
+    width: 350px;
 }
 
 #div_tabela table{
@@ -39,8 +40,9 @@
 }
 @media (max-width: 768px) {
     #div_tabela{
-       margin-top: -40px;
-        height: 150px;
+        margin-top: -40px;
+        margin-left: -10px;
+        
         
     }
 

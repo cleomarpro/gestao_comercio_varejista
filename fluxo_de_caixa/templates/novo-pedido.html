@@ -1,20 +1,17 @@
 {% extends 'base.html'%}
 {% block main%}
 <br>
-<div class='div_Mae' style="margin-left:0px;">
-    
 <!-- Caixa-->
 <div id="div_caixa">
-<div>
 <div>
     <h2 class="sub_menu" style="width:100%; margin-left: 0px;">&nbsp; CLIENTE: {{venda.id}} </h2>
     <form id="caixa_id" class='caixa' method="POST" action="{% url 'atualizar-pedido' %}">
         {% csrf_token %}
         {% if venda %}
-        <button id="bt_vendas1" accesskey="a" click='2' > Atualizar  </button>
-    {% else %}
-        <button id="bt_vendas1" > Iniciar </button>
-    {% endif %} 
+            <button id="bt_vendas1" accesskey="a" click='2' > Atualizar  </button>
+        {% else %}
+            <button id="bt_vendas1" > Iniciar </button>
+        {% endif %} 
     <button id="bt_vendas2" >
         <a accesskey="v" click='1' href="{% url 'lista-vendas'%}">Visualizar vendas</a>
     </button>
@@ -132,7 +129,7 @@
                 <label style=" display: none;"; class='bt_finalizar' for="finalizada"> Finalizar</label>
             </a>
                 <input style=" display: none;"; class='bt_checkbo' type="checkbox" id="finalizada" name="finalizada" value="True" >
-           
+           <hr>
         </form>
     
     {% if perms.fluxo_de_caixa.add_venda %}
@@ -147,12 +144,9 @@
             <input type="hidden"  name="venda_id">
             <button id='bt_novo_pedido' disabled=" true" > Nova venda </button>
         </form>
-        
     {% endif %}
-
-<br>
+    <br>
 {% if venda %}
-    
     {% if perms.fluxo_de_caixa.add_venda %}
         <form class='caixa' action="{% url 'novo-item-pedido' venda.id %}" method="POST">
              {% csrf_token %}
@@ -312,14 +306,12 @@
         </table>
     </div>
 </div>
-</div>
-</div>
 
     {% if mensagen_de_erro %}
     <div id="div_alerta" class="divAlerta">
         <a href="#" onclick="document.getElementById('div_alerta').style.display='none';">
         <input class="butao_X" type="button" value="X" autofocus="autofocus", accesskey="x"> </a>
-        <form class='formAlerta'>
+        <div class='formAlerta'>
             <label> ALERTA!</label>
                 <br>
                 <label style=" color: #EE3B3B; ";> {{mensagen_de_erro}} </label>
@@ -329,7 +321,7 @@
                 <label id='atalho'> Para feichar, pressione  ( Alt  + X ) !</label>
                 <label id='fechar'> Toque na tela para sair!</label>
                 <br>
-        </form>
+        </div>
     </div>
 
     {% endif %}
@@ -340,7 +332,6 @@
         <br>
 <!-- cupom fiscal-->
     <div id="div_cupomFiscal" class="cupom_fiscal" style="display:none;" >
-       <form >
             <hr>
             <label style="text-align: center;" >ESTE CUPOM NÃO POSSUI VALOR FISCAL</label>
             <hr>
@@ -427,14 +418,12 @@
             <hr>
             <p style="text-align: center;"> Assinatura</p>
             <br>
-        </form>
     </div>
     <div>
         <input id='bt_visualizar_cupom' accesskey="i" 
             type="button" value="Imprimir Cupom" onclick="imprimir_cupom_fiscal()">
     </div>
     <br>
-</div>
 </div>
 <script >
     function imprimir_cupom_fiscal(){
