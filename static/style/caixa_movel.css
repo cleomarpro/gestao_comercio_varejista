@@ -12,15 +12,15 @@
 }
 .div_painel_tabela{
     width: 100%;
-    margin-left: 20px;
+    margin-left: -10px;
     padding: 0px;
 }
 #div_caixa div{
     margin-left: 0px;
-    width:98%;
+    width:100%;
 }
 .caixa{
-    width: 98%;
+    width: 100%;
 
 }
 #divPainel{
@@ -42,7 +42,6 @@
 .caixa select{
     margin:2px;
     font-size:15px;
-
 }
 
 .caixa label{
@@ -54,9 +53,8 @@
     width:90px;
 }
 #bt_vendas2{
-    width: 138px;
+    width: 142px;
     position:absolute;
-    right:20px;
-
+    right:8px;
 }
 }
