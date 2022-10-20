@@ -1,5 +1,5 @@
 from django.shortcuts import render , redirect
-from .models import Produto, Categoria, EntradaMercadoria , Fornecedor, Promocao
+from .models import Produto, Categoria, EntradaMercadoria , Fornecedor, Promocao, SaidaMercadoria
 #from fluxo_de_caixa.models import ItemDoPedido
 #from django.contrib.auth.models import Permission, User
 #from django.contrib.contenttypes.models import ContentType
@@ -643,6 +643,64 @@ def entradaMercadoria_delete(request, id):
             return render(request, 'produto/entradaMercadoria-delete-confirme.html',data)
     else:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+class SaidaDeMercadoria(LoginRequiredMixin, View):
+    def get(self, request):
+        data={}
+        user = request.user.has_perm('produto.add_entradamercadoria')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
+
+        today = date.today()
+        mes_atual = today.month
+        fornecedor= Fornecedor.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
+        data["saida_mercadoria"] = SaidaMercadoria.objects.filter(
+            usuarios__usuario_cliente= usuario, data_hora__month = mes_atual).order_by('-id')
+        data['produto'] = Produto.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
+        return render(
+            request, 'produto/saida_mercadoria.html', data)
+     
+    def post(self, request):
+        today = date.today()
+        mes_atual = today.month
+        data = {}
+        data['produto'] = request.POST['produto']
+        data['quantidade'] = request.POST['quantidade']
+        data['validade_produto'] = request.POST['estoque_fisico_atual']
+
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuarioId = usuario.id # Obitendo o id  do usuário administrador
+            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+    
+        saida_mercadoria = SaidaMercadoria.objects.create(
+            produto_id = request.POST['produto'],
+            quantidade = request.POST['quantidade'].replace(',', '.'),
+            estoque_fisico_atual= request.POST['estoque_fisico_atual'].replace(',', '.'),
+            user = user_logado, usuarios_id = usuarioId
+            )
+        #data['entrada_Mercadoria']=saida_mercadoria
+        data['saida_mercadoria']=SaidaMercadoria.objects.filter(
+            usuarios__usuario_cliente= usuarioCliente, data_hora__month = mes_atual).order_by('-id')
+        data['produto']  = Produto.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
+        data['fornecedor']  = Fornecedor.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
+        return render(
+            request, 'produto/saida_mercadoria.html', data)
 
 class FiltrarEntadaPorCategoria(LoginRequiredMixin, View):
     def get(self, request):

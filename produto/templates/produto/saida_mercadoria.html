@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <br>
+    <h2 class="sub_menu" >&nbsp; ENTRADA DE MERCADORIA
+        <a 
+            href="#" onclick="document.getElementById('form_up').style.display='block';">
+                Adicionar 
+        </a>
+    </h2>
+    <form id="form_up" class='formulario' style="display: none;" method="POST" action="{% url 'saida_mercadoria' %}" >
+        {% csrf_token %}
+
+        <a id="termo_buttao" href="#" onclick="document.getElementById
+        ('form_up').style.display='none';"> X</a>
+        <p> NOVA ENTRADA</p>
+
+        <hr> 
+        <div> 
+            <label> Produto</label> <br>
+            <select style=" width:200px;" type="search" id="produto" name="produto" required/>
+                <tr>
+                    <option value=''> __Selecionar__</option>
+                    {% for produto in produto %}
+                        <option value='{{produto.id}}'> {{produto}}</option>
+                    {% endfor %}
+                </tr>
+            </select>
+                <a  href="{% url 'produto' %}">+</a>
+        </div>
+
+        <div>
+            <label> Quantidade</label> <br>
+            <input style=" width:200px;"  placeholder=" Quantidade..." value="0"
+                type="text" id="quantidade" name="quantidade"  />
+        </div>
+        <div>
+            <label>Estoque físico</label> <br>
+            <input style=" width:150px; padding:3px;" value="0"
+                type="text" id="estoque_fisico_atual" name="estoque_fisico_atual" >
+        </div>
+            <hr>
+            <button type="submit"> Salvar</button>
+    </form>
+    <br>
+<!-- formulário de filtro -->
+    <form id="form_mobil" class='campo_de_busca' method="GET" action="{% url 'filtro-categoria-entrada-mercadoria' %}">
+        <a id="br_X_mobil" href="#" onclick="document.getElementById
+    ('form_mobil').style.display='none';"> X</a>
+        
+        <div>
+            <label>Buscar produto</label> <br>
+            <input  type="search" id="produt" name="produt" placeholder="Digite o código do produto...">
+            <button  type="submit">Buscar</button>
+        </div>
+        <div>
+            <label>Selecionar o mês e o ano</label> <br>
+            <select  type="search" id="mes" name="mes" />
+                <tr>
+                    <option value='{{today.month}}'>Selecionar</option>
+                    <option value='1'> -Janeiro</option>
+                    <option value='2'> -Fevereiro</option>
+                    <option value='3'> -Março</option>
+                    <option value='4'> -Abril</option>
+                    <option value='5'> -Maio</option>
+                    <option value='6'> -Junho</option>
+                    <option value='7'> -Julho</option>
+                    <option value='8'> -Agosto</option>
+                    <option value='9'> -Setembro</option>
+                    <option value='10'> -Outubro</option>
+                    <option value='11'> -Novembro</option>
+                    <option value='12'> -Dezembor</option>
+                </tr>
+            </select>
+
+            <select  type="search" id="ano" name="ano" />
+                    <tr>
+                        <option value='{{today.year}}'>Selecionar</option>
+                        <option value='2021'> -2021</option>
+                        <option value='2022'> -2022</option>
+                        <option value='2023'> -2023</option>
+                        <option value='2024'> -2024</option>
+                        <option value='2025'> -2025</option>
+                        <option value='2026'> -2026</option>
+                        <option value='2027'> -2027</option>
+                        <option value='2028'> -2028</option>
+                        <option value='2029'> -2029</option>
+                        <option value='2030'> -2030</option>
+                        <option value='2031'> -2031</option>
+                        <option value='2032'> -2032</option>
+                    </tr>
+                
+            </select>
+                <button  type="submit">Filtrar</button>
+        </div>
+    </form>
+    
+    <a id="mostrar_filtros"
+    href="#" onclick="document.getElementById('form_mobil').style.display='block';">
+    Mostrar filtros 
+    </a>
+
+<!--tabela de entrada de mercadoria  -->
+    <table class="table">
+     <thead>
+        <tr>
+            <th >Nome</th>
+            <th >Código</th>
+            <th class="col_table"> Estoque fisico </th>
+            <th >Quantidade</th>
+            <th class="col_table">Data</th>
+            <th class="col_table"> Validade</th>
+            <th>Ação</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for saida in saida_mercadoria %}
+        <tr>
+            <td>{{ saida.produto.nome}}</td>
+            <td>{{ saida.produto.id}}</td>
+            <td class="col_table">{{ saida.estoque_fisico_atual}}</td>
+            <td>{{ saida.quantidade}}</td>
+            <td class="col_table">{{ saida.data_hora.date | date:'d/m/y'}}</td>
+            <td class="col_table">{{ saida.validade_produto | date:'d/m/y'}}</td>
+
+       
+
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+
+{% endblock %}
