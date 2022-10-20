@@ -5,7 +5,7 @@
 <div id="div_caixa">
 <div>
     <h2 class="sub_menu" style="width:100%; margin-left: 0px;">&nbsp; CLIENTE: {{venda.id}} </h2>
-    <form id="caixa_id" class='caixa' method="POST" action="{% url 'atualizar-pedido' %}">
+    <form id="caixa_id" class='caixa' style="height:200px ;" method="POST" action="{% url 'atualizar-pedido' %}">
         {% csrf_token %}
         {% if venda %}
             <button id="bt_vendas1" accesskey="a" click='2' > Atualizar  </button>
@@ -304,6 +304,7 @@
             {% endfor %}
             </tbody>
         </table>
+        <br>
     </div>
 </div>
 
@@ -325,12 +326,12 @@
     </div>
 
     {% endif %}
-
-
-
-
         <br>
 <!-- cupom fiscal-->
+    <div>
+        <input id='bt_visualizar_cupom' accesskey="i" 
+            type="button" value="Imprimir Cupom" onclick="imprimir_cupom_fiscal()">
+    </div>
     <div id="div_cupomFiscal" class="cupom_fiscal" style="display:none;" >
             <hr>
             <label style="text-align: center;" >ESTE CUPOM NÃO POSSUI VALOR FISCAL</label>
@@ -421,12 +422,6 @@
     </div>
     
 </div>
-<div>
-    <input id='bt_visualizar_cupom' accesskey="i" 
-        type="button" value="Imprimir Cupom" onclick="imprimir_cupom_fiscal()">
-</div>
-<br>
-<br>
 <script >
     function imprimir_cupom_fiscal(){
         var pegar_dados = document.getElementById('div_cupomFiscal').innerHTML;

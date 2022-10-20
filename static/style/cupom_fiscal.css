@@ -39,16 +39,15 @@
     margin-top:00px;
 }
 #bt_visualizar_cupom{
-    position: absolute;
-    margin-top:19px;
+    position: relative;
+    margin-top:450px;
     border: 1px solid #303131;
     border-radius: 2px;
     color:white;
     background-color: #4F4F4F;
-    margin-left:300px;
+    margin-left:-250px;
     width: 150px;
 }
-
 
 .cupom_fiscal table{
     font-size: 12px;
@@ -68,7 +67,7 @@
 
 @media (max-width: 768px) {
 #bt_visualizar_cupom{
-    margin-top: -10px;
+    margin-top: 0px;
    margin-left: 0px;
 }
 .cupom_fiscal{

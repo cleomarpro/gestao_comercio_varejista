@@ -3,15 +3,15 @@
 @import url('https://fonts.googleapis.com/css2? família=David+Libre&família=Montaga&família=Poppins:wght@300&família=Fonte+Sans+Pro&display=swap');
 
 #container div{
-    padding:2px;
+    padding:0px;
     margin-top: 50px;
-    width: 190px;
+    width: 170px;
     height: 150px;
     display: inline-block;
     border: 1px solid #0e0e0d;
     color: #FFF;
     border-radius: 7px;
-    text-align: left;
+    text-align: center;
     background-color: #c5bb5b;
     
 }
@@ -32,6 +32,7 @@
 #container {
     overflow-y:auto;
     overflow-x:auto;
+    padding: 10px;
 }
 
 #container label{
@@ -43,11 +44,13 @@
 }
 #container li{
     font-size: 12px;
-    text-align: left;
+    text-align: center;
     padding: 2px;
 
 }
 
 #container img{
-    width:30px;
+    margin-top: 10px;
+    width:100px;
+    text-align: center;
 }

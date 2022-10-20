@@ -6,23 +6,21 @@
 
 
 .relatorio{
-    background-color: #F0F8FF;
-    margin-left:185px;
-    width: 600px;
+    background-color: #c7bd76;
+    width: 98%;
     font-size:15px;
 }
 .sub_menu_relat{
-  background-color: #454549;
-  margin-left:185px;
-  width: 600px;
+  background-color: #969165;
+  width: 98%;
   font-size:18px;
   color: rgb(245, 241, 241);
   padding-block: 7px;
 }
 .relatorio h2{
-    background-color: #454549;
+    background-color: #9f985c;
     margin-left:5px;
-    width: 96%;
+    width: 95%;
     font-size:18px;
     color: rgb(245, 241, 241);
     padding-block: 7px;
@@ -39,15 +37,13 @@
 }
 
 .campo_de_busca_relat {
-    background-color: #F0F8FF;
-    margin-left:185px;
+    background-color: #c7bd76;
     font-size:18px;
-    width: 580px;
-    padding:10px;
+    width: 98%;
 }
 .campo_de_busca_relat form div{
-  background-color:blue;
-  width: 25%;
+  background-color:#c7bd76;
+  width: 98%;
   padding: 0px;
   display: inline-block;
 }

@@ -247,7 +247,34 @@ class Gastos_extras_categoria(LoginRequiredMixin, View):
                 user = user_logado, usuarios_id = usuarioId
             )
             return redirect('gastos-extras')
-       
+class GastosExtrasDashboard(LoginRequiredMixin, View):
+    def get(self, request):
+        data= {}
+        user = request.user.has_perm('financeiro.view_relatorios')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+        else:
+            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
+
+        periodo = request.POST['periodo']
+        periodo =  datetime.datetime.strptime(periodo, "%Y-%m")
+        
+        today = periodo.today()
+        ano = str(periodo.year)
+        mes = periodo.month
+        data['dashboard'] = Gastos_extras.objects.filter(
+                usuarios__usuario_cliente= usuario, data_hora__year= ano, data_hora__month= mes ).values(
+                'gastosExtrasCategoria__id','gastosExtrasCategoria__nome').annotate(valor =Sum('valor'))
+
+        return render(request, 'financeiro/dashboard.html', data)
+
 class Gastos_extras_categoriaUpdate(LoginRequiredMixin, View):
     def get(self, request, id):
         user = request.user.has_perm('financeiro.change_gastosextrascategoria')
