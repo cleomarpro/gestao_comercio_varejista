@@ -57,32 +57,29 @@ class Produto (models.Model):
     def __str__(self): # METODO CONSTRUTOR
         return str(self.nome)+ ' - ' +str(self.id)
 
-    def estoque_total(self):
-        total = self.entradamercadoria_set.all().aggregate(
+    def atualizar_estoque(self):
+        # entrada de mercadoria
+        entrada_de_mercadoria = self.entradamercadoria_set.all().aggregate(
            total_entrada = Sum(F('quantidade'), output_Field=DecimalField()))
-        entrada_atual = total['total_entrada'] or 0
-        self.entrada = entrada_atual
-        Produto.objects.filter(id=self.id).update(entrada = entrada_atual)
+        total_entrada = entrada_de_mercadoria['total_entrada'] or 0
+        self.entrada = total_entrada
+        Produto.objects.filter(id=self.id).update(entrada = total_entrada)
 
-        # baixa no ostoque pela classe ItemDoPedido em fluxo de caixa
-        total1 = self.itemdopedido_set.all().aggregate(
-            total_saida = Sum(F('quantidade_de_itens'), output_Field=DecimalField()))
-        saida_atual = total1['total_saida'] or 0
-        self.saida = saida_atual
-        Produto.objects.filter(id=self.id).update(saida = saida_atual)
-        total2 = self.entrada - self.saida
-        self.estoque= total2
-        Produto.objects.filter(id=self.id).update(estoque = total2)
+        # somando o total de item 
+        item_do_pedido = self.itemdopedido_set.all().aggregate(
+            total_item = Sum(F('quantidade_de_itens'), output_Field=DecimalField()))
+        total_item = item_do_pedido['total_item'] or 0
 
-        # baixa de mercadoria pela calsse SaidaMercadoria
-        quantidade_saida = self.saidamercadoria_set.all().aggregate(
+        # Somando total de saidas de mercadorias
+        saida_de_mercadoria = self.saidamercadoria_set.all().aggregate(
             total_saida = Sum(F('quantidade'), output_Field=DecimalField()))
-        total_saida = quantidade_saida['total_saida'] or 0
-        self.saida = total_saida
-        Produto.objects.filter(id=self.id).update(saida = total_saida)
-        estoque_atual = self.entrada - self.saida
-        self.estoque= estoque_atual
-        Produto.objects.filter(id=self.id).update(estoque = estoque_atual)
+        total_saida = saida_de_mercadoria['total_saida'] or 0
+       
+        self.saida = total_item + total_saida
+        Produto.objects.filter(id=self.id).update(saida = self.saida)
+
+        self.estoque= self.entrada - self.saida
+        Produto.objects.filter(id=self.id).update(estoque = self.estoque)
 
         percentagem_de_lucro= float(self.percentagem_de_lucro)
         if percentagem_de_lucro > 0:
@@ -122,7 +119,7 @@ class SaidaMercadoria(models.Model):
     def __str__(self):# METODO CONSTRUTOR
         return str(self.produto.nome)+ ' - ' + str(self.produto.estoque)
 
-    def estoque_atual(self):
+    def saida_mercadoria(self):
         if float(self.estoque_fisico_atual) > 0 :
             estoque = float(
                 float(self.produto.estoque) - float(self.estoque_fisico_atual))
@@ -130,19 +127,17 @@ class SaidaMercadoria(models.Model):
                 quantidade = estoque)
 
 @receiver(post_save, sender=SaidaMercadoria)
-def update_quantidade_vendida(sender, instance, **kwargs):
-    instance.estoque_atual()
-
-@receiver(post_save, sender=Produto)
-def update_total_estoque(sender, instance, **kwargs):
-    instance.estoque_total()
+def update_estoque_fisico(sender, instance, **kwargs):
+    instance.saida_mercadoria()
 
 @receiver(post_save, sender=EntradaMercadoria)
-def update_total_entrada(sender, instance, **kwargs):
-    instance.produto.estoque_total()
+def update_entrada_mercadoria(sender, instance, **kwargs):
+    instance.produto.atualizar_estoque()
 
 @receiver(post_save, sender=SaidaMercadoria)
-def update_total_saida(sender, instance, **kwargs):
-    instance.produto.estoque_total()
+def update_total_saida_de_mercadoria(sender, instance, **kwargs):
+    instance.produto.atualizar_estoque()
 
- 
+@receiver(post_save, sender=Produto)
+def update_estoque_atualizado(sender, instance, **kwargs):
+    instance.atualizar_estoque()

@@ -169,7 +169,7 @@ class ItemDoPedido(models.Model):
 
 @receiver(post_save, sender=ItemDoPedido)
 def update_total_saida(sender, instance, **kwargs):
-    instance.produto.etoque_total()
+    instance.produto.atualizar_estoque()
 
 @receiver(post_save, sender=ItemDoPedido)
 def update_vendas_total(sender, instance, **kwargs):

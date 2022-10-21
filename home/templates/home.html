@@ -5,7 +5,12 @@
         <div id="container">
            <div>
             <img id="img" style="" src="{% static 'img/estoque.png' %}" ><br>
-            <label> <a href="{% url 'entrada-mercadoria' %}"><b>ESTOQUE </b></a></label>
+            <label> <a href="{% url 'entrada-mercadoria' %}"><b>ENTRADA DE MERCADORIA </b></a></label>
+           </div>
+
+           <div>
+            <img id="img" style="" src="{% static 'img/estoque.png' %}" ><br>
+            <label> <a href="{% url 'saida_mercadoria' %}"><b>SAIDA DE MERCADORIAS </b></a></label>
            </div>
 
            <div>
@@ -37,7 +42,17 @@
             <img id="img" src="{% static 'img/cliente.png' %}" width="500px" all=" "><br>
             <label><a href="{% url 'entrada-mercadoria' %}"><b>CLIENTES </b></a></label>
            </div>
-        
+
+           <div>
+            <img id="img" src="{% static 'img/funcionario.png' %}" width="500px" all=" "><br>
+            <label><a href="{% url 'novo-funcionario' %}"><b>FUNCIONÁRIOS</b></a></label>
+           </div>
+           <div>
+
+            <img id="img" src="{% static 'img/relatorio.png' %}" width="500px" all=" "><br>
+            <label><a href="{% url 'relatorio_mensal' %}"><b>RELATÓRIO MENSAL </b></a></label>
+           </div>
+
         </div>
 
         
