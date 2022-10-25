@@ -5,7 +5,7 @@
         <div id="container">
            <div>
             <img id="img" style="" src="{% static 'img/estoque.png' %}" ><br>
-            <label> <a href="{% url 'entrada-mercadoria' %}"><b>ENTRADA DE MERCADORIA </b></a></label>
+            <label> <a href="{% url 'entrada-mercadoria' %}"><b>ENTRADA DE MERCADO </b></a></label>
            </div>
 
            <div>
@@ -47,11 +47,16 @@
             <img id="img" src="{% static 'img/funcionario.png' %}" width="500px" all=" "><br>
             <label><a href="{% url 'novo-funcionario' %}"><b>FUNCIONÁRIOS</b></a></label>
            </div>
-           <div>
 
+           <div>
             <img id="img" src="{% static 'img/relatorio.png' %}" width="500px" all=" "><br>
             <label><a href="{% url 'relatorio_mensal' %}"><b>RELATÓRIO MENSAL </b></a></label>
            </div>
+
+           <div>
+           <img id="img" src="{% static 'img/relatorio.png' %}" width="500px" all=" "><br>
+           <label><a href="{% url 'relatorio-produtos' %}"><b>RELAT POR PRODUTO </b></a></label>
+          </div>
 
         </div>
 
