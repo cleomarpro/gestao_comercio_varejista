@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <br>
+    <h2 class="sub_menu" >&nbsp; SAIDA DE MERCADORIA
+        <a 
+            href="#" onclick="document.getElementById('form_up').style.display='block';">
+                Adicionar 
+        </a>
+    </h2>
+    <form id="form_up" class='formulario' method="POST" action="{% url 'saida_mercadoria' %}" >
+        {% csrf_token %}
+
+            {% csrf_token %}
+            <br>
+           <label> Código:</label>
+               <input style=" width:60%;" type="text" name="produto_codigo"
+               id="produto_codigo" autofocus="autofocus" accesskey="z"
+               placeholder="Pressione ( Alt + Z )" required/>
+           <br>
+           <br>
+           <label> Estoque físico:</label>
+               <input style=" width:17%;" accesskey="q"
+               type="number" step=".01" lang="nb" name="estoque_fisico_atual"
+                   id="estoque_fisico_atual" >
+               <br>
+               <br>
+           <button id="bt_vendas1">Incluir</button>
+           <br>
+       </form>
+
+       {% if mensagen_de_erro %}
+       <div id="div_alerta" class="divAlerta">
+           <a href="#" onclick="document.getElementById('div_alerta').style.display='none';">
+           <input class="butao_X" type="button" value="X" autofocus="autofocus", accesskey="x"> </a>
+           <div class='formAlerta'>
+               <label> ALERTA!</label>
+                   <br>
+                   <label style=" color: #EE3B3B; ";> {{mensagen_de_erro}} </label>
+                   <br>
+                   <label> {{mensagen_de_erro_dica}}</label>
+                   <br>
+                   <label id='atalho'> {{mensagen_de_erro_acao}}</label>    
+                   <br>
+           </div>
+       </div>
+       {%endif%}
+       {% if mensagen_de_erro_2%}
+       <div id="div_alerta" class="divAlerta">
+           <a href="#" onclick="document.getElementById('div_alerta').style.display='none';">
+           <input class="butao_X" type="button" value="X" autofocus="autofocus", accesskey="x"> </a>
+           <div class='formAlerta'>
+               <label> ALERTA!</label>
+                   <br>
+                   <label style=" color: #EE3B3B; ";> {{mensagen_de_erro_2}} </label>
+                   <br>
+                   <label> {{mensagen_de_erro_dica}}</label>
+                   <br>
+                   <label id='atalho'> {{mensagen_de_erro_acao}}</label>    
+                   <br>
+           </div>
+       </div>
+       {%endif%}
+       
+        {% if saida%}
+        <div style="background-color: rgb(244, 245, 183); height: 20px; padding: 20px;">
+            <label style="font-size: 15px; text-align: center;">
+                <b >Foi dado baixa com sucesso!</b> 
+                
+                <b>Produto:</b>{{ saida.produto.nome }}, 
+                <b>Quantidade vendido:</b>{{ saida.quantidade_de_itens }} </label>
+        </div>
+        {%endif%}
+      
+
+      </tbody>
+    </table>
+
+
+{% endblock %}

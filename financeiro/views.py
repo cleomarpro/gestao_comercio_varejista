@@ -979,8 +979,7 @@ class Relarorio_produtos(LoginRequiredMixin, View):
         MES = today.month
         item_de_pedido = ItemDoPedido.objects.filter(
                 usuarios__usuario_cliente= usuario, venda__data_hora__year= ano_atual, venda__data_hora__month= MES ).values(
-                'produto__id', 'produto__nome').annotate(
-                    quantidade =Sum('quantidade_de_itens')).annotate(lucro_obtido=Sum(F(
+                'produto__id', 'produto__nome', 'produto__saida').annotate(lucro_obtido=Sum(F(
                         'produto__valor_venal') * F('quantidade_de_itens') - F('produto__valor_compra') * F('quantidade_de_itens'))).annotate(
                             total_investimento=Sum(F('produto__valor_compra') * F('quantidade_de_itens'))).annotate(total_venda=Sum(
                             F('produto__valor_venal') * F('quantidade_de_itens')))
@@ -992,8 +991,7 @@ class Relarorio_produtos(LoginRequiredMixin, View):
 
             item_de_pedido = ItemDoPedido.objects.filter(
                 usuarios__usuario_cliente= usuario, venda__data_hora__year= Ano, venda__data_hora__month= Mes ).values(
-                'produto__id', 'produto__nome').annotate(
-                    quantidade =Sum('quantidade_de_itens')).annotate(lucro_obtido=Sum(F(
+                'produto__id', 'produto__nome', 'produto__saida').annotate(lucro_obtido=Sum(F(
                         'produto__valor_venal') * F('quantidade_de_itens') - F('produto__valor_compra') * F('quantidade_de_itens'))).annotate(
                             total_investimento=Sum('produto__valor_compra') * F('quantidade_de_itens')).annotate(total_venda=Sum(
                             'produto__valor_venal') * F('quantidade_de_itens')).order_by(Filtro)

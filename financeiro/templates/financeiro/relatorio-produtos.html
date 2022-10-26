@@ -60,7 +60,7 @@
           <th >Nome do produto</th>
           <th >Qtd vendido</th>
           <th >Valor investido</th>
-          <th >Total das vendas</th>
+          <th >Total Bruto</th>
           <th >Lucro Obitido</th>
 
         </tr>
@@ -71,7 +71,7 @@
             <tr>
                 <td class="col_table">{{ item_de_pedido.produto__id }}</td>
                 <td>{{ item_de_pedido.produto__nome }}</td>
-                <td>{{ item_de_pedido.quantidade | floatformat:2}}-item</td>
+                <td>{{ item_de_pedido.produto__saida | floatformat:2}}-item</td>
                 <td>R$ {{ item_de_pedido.total_investimento | floatformat:2 }}</td>
                 <td>R$ {{ item_de_pedido.total_venda | floatformat:2 }}</td>
                 <td>R$ {{ item_de_pedido.lucro_obtido | floatformat:2 }}</td>

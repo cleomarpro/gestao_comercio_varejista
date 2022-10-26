@@ -4,14 +4,12 @@ from .views import (
     NovoProduto, ListaProdutos, Categoria_de_produto, FiltroPorCategoria,
     Entrada_Mercadoria , ProdutoUpdate, CategoriaUpdate, EntradaMercadoriaUpdate,
     FiltrarEntadaPorCategoria, NovaPromocao, PromocaoUpdate, ValidadeProdutos,
-    SaidaDeMercadoria,
 )
 urlpatterns = [
     #path('', ListaVendas.as_view(), name='lista-vendas'),
     path('listar-produto/', ListaProdutos.as_view(), name='listar-produto'),
     path('categoria/', Categoria_de_produto.as_view(), name='categoria'),
     path('entrada-mercadoria/', Entrada_Mercadoria.as_view(), name='entrada-mercadoria'),
-    path('saida_mercadoria/', SaidaDeMercadoria.as_view(), name='saida_mercadoria'),
     path('validade-produtos/', ValidadeProdutos.as_view(), name='validade-produtos'),
     path('produto/', NovoProduto.as_view(), name="produto"),
     path('promocao/', NovaPromocao.as_view(), name="promocao"),

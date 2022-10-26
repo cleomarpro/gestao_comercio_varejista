@@ -6,7 +6,7 @@ from .views import (
     NovoPedido, NovoItemPedido, ListaVendas, AtualizarPedido, 
     EditPedido, DeletePedido, DeleteItemPedido, ListaVendaPagas,
     CaixaDepositar, CaixaSacar, Caixas, CaixasUpdate,
-    ListaVendaPorUsuario, AbrirFeixarCaixa
+    ListaVendaPorUsuario, AbrirFeixarCaixa, SaidaDeMercadoria
 )
 
 
@@ -26,6 +26,7 @@ urlpatterns = [
     path('caixa/', Caixas.as_view(), name="caixa"),
     path('caixa-update/<int:id>/', CaixasUpdate.as_view(), name='caixa-update'),
     path('delete-caixa/(?P<id>\d+)/', views.caixa_delete, name='delete-caixa'),
+    path('saida_mercadoria/', SaidaDeMercadoria.as_view(), name='saida_mercadoria'),
 ]
 
 '''

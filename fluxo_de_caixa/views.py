@@ -137,10 +137,6 @@ class NovoItemPedido(LoginRequiredMixin, View):
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
         data = {}
 
-        data['desconto'] = request.POST['desconto'].replace(',', '.')
-        data['quantidade'] = request.POST['quantidade'].replace(',', '.')
-        data['produto_codigo'] = request.POST['produto_codigo']
-
         user_logado = request.user # Obitendo o usuário logado
         user_logado = user_logado.id # obitendo o ID do usuário logado
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
@@ -168,6 +164,7 @@ class NovoItemPedido(LoginRequiredMixin, View):
             item = ItemDoPedido.objects.create(
                 produto_id = produto_id,
                 quantidade_de_itens=request.POST['quantidade'].replace(',', '.') or 1,
+                estoque_fisico_atual=request.POST['estoque_fisico_atual'] or 0,
                 desconto=request.POST['desconto'].replace(',', '.') or 0,
                 venda_id=venda, user = user_logado, usuarios_id = usuarioId)
 
@@ -176,6 +173,63 @@ class NovoItemPedido(LoginRequiredMixin, View):
             data['usuarios'] = usuarios
             return render(
                 request, 'novo-pedido.html', data)
+
+class SaidaDeMercadoria(LoginRequiredMixin, View):
+    def get(self, request):
+        user = request.user.has_perm('fluxo_de_caixa.add_venda')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        else:
+            return render(
+                request, 'saida_mercadoria.html')
+
+    def post(self, request):
+        user = request.user.has_perm('fluxo_de_caixa.add_venda')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        data = {}
+
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+            usuarios = Usuarios.objects.get(id = usuarioId) # Buscando usuário administrador com base no usuário logado
+        else:
+            usuarios = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuarioId = usuarios.id # Obitendo o id  do usuário administrador
+            usuarioCliente= usuarios.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+            
+        produto= Produto.objects.filter(
+            usuarios__usuario_cliente= usuarioCliente, codigo= request.POST['produto_codigo'] ) or 0
+        if produto != 0:
+            produto_id= produto.latest('pk').pk
+        if produto == 0:
+            data['mensagen_de_erro'] = 'Produto não cadastrado!'
+            data['mensagen_de_erro_dica'] = 'Verifica o cdigo e tente novamente!' 
+            data['mensagen_de_erro_acao'] = 'Para feichar, pressione ( Alt + X ) !'
+            return render(
+                request, 'saida_mercadoria.html', data)
+        else:
+            produtoestoque= Produto.objects.get(codigo = request.POST['produto_codigo'])
+            produto_estoque =  produtoestoque.estoque
+            if float(produto_estoque) < float(request.POST['estoque_fisico_atual']):
+                data['mensagen_de_erro_2'] = 'Estoque menor que a quantidade inserida!'
+                data['mensagen_de_erro_dica'] = 'Seu estoque deve está desatualizado, atualize-o e tente novamente!' 
+                data['mensagen_de_erro_acao'] = 'Para feichar, pressione ( Alt + X ) !'
+                return render(
+                request, 'saida_mercadoria.html', data)
+            else:
+                venda = Venda.objects.create(user = user_logado, usuarios_id = usuarioId)
+                item = ItemDoPedido.objects.create(
+                    produto_id = produto_id,
+                    estoque_fisico_atual=request.POST['estoque_fisico_atual'],
+                    venda_id=venda.id, user = user_logado, usuarios_id = usuarioId)
+                    
+                data['saida'] = ItemDoPedido.objects.get(id=item.id)
+                return render(
+                    request, 'saida_mercadoria.html', data)
 
 class ListaVendas(LoginRequiredMixin, View):
     def get(self, request):

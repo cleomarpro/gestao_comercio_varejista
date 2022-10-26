@@ -163,12 +163,25 @@ class ItemDoPedido(models.Model):
     desconto = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True,default=0)
     user = models.CharField(max_length=100, blank=True, null=True)
     usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
+    estoque_fisico_atual = models.DecimalField(
+        max_digits=9, decimal_places=2, blank=True, default=0)
    
     def __str__(self):
         return str(self.venda.id) + ' - ' + str(self.produto.nome) + ' - ' + str(self.desconto) + ' - ' + str(self.quantidade_de_itens)  + ' - ' + str(self.produto.valor_venal)
 
+    def saida_mercadoria(self):
+        if float(self.estoque_fisico_atual) > 0 :
+            estoque = float(
+                float(self.produto.estoque) - float(self.estoque_fisico_atual))
+            ItemDoPedido.objects.filter(id=self.id).update(
+                quantidade_de_itens = estoque)
+
 @receiver(post_save, sender=ItemDoPedido)
-def update_total_saida(sender, instance, **kwargs):
+def update_quantidade_de_itens(sender, instance, **kwargs):
+    instance.saida_mercadoria()
+
+@receiver(post_save, sender=ItemDoPedido)
+def update_total_saida_de_mercadoria(sender, instance, **kwargs):
     instance.produto.atualizar_estoque()
 
 @receiver(post_save, sender=ItemDoPedido)

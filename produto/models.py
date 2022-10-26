@@ -69,14 +69,8 @@ class Produto (models.Model):
         item_do_pedido = self.itemdopedido_set.all().aggregate(
             total_item = Sum(F('quantidade_de_itens'), output_Field=DecimalField()))
         total_item = item_do_pedido['total_item'] or 0
-
-        # Somando total de saidas de mercadorias
-        saida_de_mercadoria = self.saidamercadoria_set.all().aggregate(
-            total_saida = Sum(F('quantidade'), output_Field=DecimalField()))
-        total_saida = saida_de_mercadoria['total_saida'] or 0
-       
-        self.saida = total_item + total_saida
-        Produto.objects.filter(id=self.id).update(saida = self.saida)
+        self.saida = total_item
+        Produto.objects.filter(id=self.id).update(saida = total_item)
 
         self.estoque= self.entrada - self.saida
         Produto.objects.filter(id=self.id).update(estoque = self.estoque)
@@ -106,38 +100,10 @@ class EntradaMercadoria(models.Model):
     def __str__(self):# METODO CONSTRUTOR
         return str(self.produto.nome)+ ' - ' + str(self.produto.estoque)
 
-class SaidaMercadoria(models.Model):
-    produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
-    quantidade = models.DecimalField(
-        max_digits=9, decimal_places=2, blank=False, default=1)
-    data_hora = models.DateTimeField(default=timezone.now)
-    estoque_fisico_atual = models.DecimalField(
-        max_digits=9, decimal_places=2, blank=True, default=0)
-    user = models.CharField(max_length=100, blank=True, null=True)
-    usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
-
-    def __str__(self):# METODO CONSTRUTOR
-        return str(self.produto.nome)+ ' - ' + str(self.produto.estoque)
-
-    def saida_mercadoria(self):
-        if float(self.estoque_fisico_atual) > 0 :
-            estoque = float(
-                float(self.produto.estoque) - float(self.estoque_fisico_atual))
-            SaidaMercadoria.objects.filter(id=self.id).update(
-                quantidade = estoque)
-
-@receiver(post_save, sender=SaidaMercadoria)
-def update_estoque_fisico(sender, instance, **kwargs):
-    instance.saida_mercadoria()
+@receiver(post_save, sender=Produto)
+def update_atualizar_estoque(sender, instance, **kwargs):
+    instance.atualizar_estoque()
 
 @receiver(post_save, sender=EntradaMercadoria)
 def update_entrada_mercadoria(sender, instance, **kwargs):
     instance.produto.atualizar_estoque()
-
-@receiver(post_save, sender=SaidaMercadoria)
-def update_total_saida_de_mercadoria(sender, instance, **kwargs):
-    instance.produto.atualizar_estoque()
-
-@receiver(post_save, sender=Produto)
-def update_estoque_atualizado(sender, instance, **kwargs):
-    instance.atualizar_estoque()
