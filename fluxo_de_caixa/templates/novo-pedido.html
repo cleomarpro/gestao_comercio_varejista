@@ -17,10 +17,14 @@
     </button>
     <hr>
                 <input type="hidden" value="{{venda.id}}" name="venda_id">
-            <label> Descrição:</label>
-                <input style=" width:63%;"  placeholder=" Descrição da venda..."
-                    type="text" id="descricao" name="descricao" value="{{venda.descricao}}" >
-                        <br>
+            <label>Cliente:</label>
+            <select style=" width:40%;" type="search" id="cliente" name="cliente">
+                <option value='{{venda.cliente.id}}'>{{venda.cliente.nome}}</option>
+                {% for c in cliente %}
+                    <option value='{{c.id}}'> {{c.nome}} - {{c.cpf}}</option>
+                {% endfor %}
+            </select><br>
+
             <!-- Esse Inpute serve apenas para garantir um valor no input Desconto -->
             <input style=" display: none;"; type="number" step=".01" lang="nb"
                   name="desconto" id="desconto" value="{{ venda.desconto}}">
@@ -149,12 +153,26 @@
 {% if venda %}
     {% if perms.fluxo_de_caixa.add_venda %}
         <form class='caixa' action="{% url 'novo-item-pedido' venda.id %}" method="POST">
-             {% csrf_token %}
+                {% csrf_token %}
 
-            <label> Código:</label>
-                <input style=" width:60%;" type="text" name="produto_codigo"
+                {%if mensagen_de_erro_campo_obrigatorio%}
+                <p style="color: red;">{{mensagen_de_erro_campo_obrigatorio}}</p>
+            {%endif%}
+            <br>
+            <label>Selecione o produto ou digite o código a baixa:</label>
+            <br>
+            <div>
+                <select style=" width:40%;" type="search" id="produto_select" name="produto_select">
+                    <option value=''> Selecionar o produto</option>
+                    {% for p in produto %}
+                        <option value='{{p.id}}'> {{p.codigo}} - {{p.nome}}</option>
+                    {% endfor %}
+                </select>
+                <label> ou </label>
+                <input style=" width:40%;" type="text" name="produto_codigo"
                 id="produto_codigo" autofocus="autofocus" accesskey="z"
-                placeholder="Pressione ( Alt + Z )" required/>
+                placeholder="Código do produto">
+            </div>
             <br>
             <label> Desconto: </label>
                 <input style=" width:17%;" accesskey="d"
@@ -164,11 +182,6 @@
                 <input style=" width:17%;" accesskey="q"
                 type="number" step=".01" lang="nb" name="quantidade"
                 min="0" max="999" id="quantidade" value="1">
-                <br>
-            <label> Estoque físico:</label>
-                <input style=" width:17%;" accesskey="q"
-                type="number" step=".01" lang="nb" name="estoque_fisico_atual"
-                    id="estoque_fisico_atual" value="">
                 <br>
             <button id="bt_vendas1">Incluir</button>
         </form>

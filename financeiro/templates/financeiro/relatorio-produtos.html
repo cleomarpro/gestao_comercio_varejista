@@ -17,40 +17,25 @@
 <hr>
 <form class='campo_de_busca' method="GET" action="{% url 'relatorio-produtos' %}">
     
-            <select style="width:70px" type="select"  name="ano" id="ano" >
-                <option value=" {{ano_atual}}" >Ano </option>
-                <option value="2021" >-2021 </option>
-                <option value="2022" >-2022</option>
-                <option value="2023" >-2023</option>
-                <option value="2024" >-2024</option>
-                <option value="2025" >-2025</option>
-                <option value="2026" >-2026</option>
-            </select >
+    <input style="width:150px" type="month"  name="mes" id="mes" >
 
-                <select style="width:70px" type="select"  name="mes" id="mes"  >
-                <option value="{{MES}}" >Mês</option>
-                <option value="1" >-Janeiro </option>
-                <option value="2" >-Fevereiro</option>
-                <option value="3" >-Março</option>
-                <option value="4" >-Abril </option>
-                <option value="5" >-Maio</option>
-                <option value="6" >-Junio</option>
-                <option value="7" >-Julho </option>
-                <option value="8" >-Agosto</option>
-                <option value="9" >-Setembro</option>
-                <option value="10" >-Outubro </option>
-                <option value="11" >-Novembroo</option>
-                <option value="12" >-Dezembro</option>
-            </select >
+    <select style="width:70px" type="select"  name="filtrar_produto" id="filtrar_produto" >
+      <option value="-lucro_obtido" >Filtro</option>
+      <option value="-produto__saida" >-Mais vendido </option>
+      <option value="produto__saida" >-Menus vendido </option>
+      <option value="-lucro_obtido" >-Maior lucrou</option>
+      <option value="lucro_obtido" >-Menor lucrou</option>
+    </select >
+    <button style="width:50px" style='margin:10px;' type="submit">Filtrar</button>
 
-            <select style="width:70px" type="select"  name="filtrar_produto" id="filtrar_produto" >
-                <option value="-lucro_obtido" >Filtro</option>
-                <option value="-quantidade" >-Mais vendido </option>
-                <option value="quantidade" >-Menus vendido </option>
-                <option value="-lucro_obtido" >-Maior lucrou</option>
-                <option value="lucro_obtido" >-Menor lucrou</option>
-           </select >
-           <button style="width:50px" style='margin:10px;' type="submit">Filtrar</button>
+    <label style=" padding: 3px;"> 
+      <a style="color: rgb(16, 23, 223); text-decoration:rgb(149, 21, 21);"  
+      href="{% url 'relatorio_anual'%}">Dashboard anual</a>
+    </label>
+    <label style=" padding: 3px;"> 
+      <a style="color: rgb(16, 23, 223); text-decoration:rgb(255, 255, 255);"  
+      href="{% url 'relatorio_mensal'%}"> Por mes</a>
+    </label>
 </form>
 
     <table class="table">

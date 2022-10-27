@@ -22,7 +22,7 @@ from django.db.models import Q
 #from django.contrib.auth.decorators import login_required
 #from financeiro.models import Contas
 #from financeiro.models import Gastos_extras
-#from pessoa.models import pessoaFisica
+from pessoa.models import Cliente
 from .models import ItemDoPedido
 #from .forms import ItemPedidoForm #produtoForm
 
@@ -50,30 +50,21 @@ class AtualizarPedido(LoginRequiredMixin, View):
             usuarios = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuario = usuarios.id # Obitendo o id  do usuário administrador
 
-        data['pagamento']= request.POST['pagamento']  or 1
-        data['descricao']= request.POST['descricao']
-        data['valor_recebido']= request.POST['valor_recebido']
-        data['valor_credito']= request.POST['valor_credito']
-        data['valor_debito']= request.POST['valor_debito']
-        data['finalizada']= request.POST.get('finalizada', False)
-        data['desconto'] = request.POST['desconto']
-        data['venda_id'] = request.POST['venda_id']
-        
-        if data['venda_id']:
+        if request.POST['venda_id']:
             vendas= Venda.objects.get(id= request.POST['venda_id'])
             usuario_adm = vendas.usuarios.id
 
             if usuario_adm == usuario:
-                venda = Venda.objects.get(id=data['venda_id'])
-                venda.desconto = data['desconto'].replace(',', '.').replace('%', '') or 0
-                venda.tipo_de_pagamento_id = data['pagamento'] or 1
-                venda.finalizada = data['finalizada']
-                venda.descricao = data['descricao']
-                venda.valor_recebido = data['valor_recebido'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
-                venda.valor_credito = data['valor_credito'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
-                venda.valor_debito = data['valor_debito'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
+                venda = Venda.objects.get(id = request.POST['venda_id'])
+                venda.desconto = request.POST['desconto'].replace(',', '.').replace('%', '') or 0
+                venda.tipo_de_pagamento_id = request.POST['pagamento']  or 1
+                venda.finalizada = request.POST.get('finalizada', False)
+                venda.cliente_id = request.POST['cliente']
+                venda.valor_recebido = request.POST['valor_recebido'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
+                venda.valor_credito = request.POST['valor_credito'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
+                venda.valor_debito = request.POST['valor_debito'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
                 venda.user_2 = user_logado
-                venda.venda_id = data['venda_id']
+                venda.venda_id = request.POST['venda_id']
 
                 venda.save()
             
@@ -90,6 +81,10 @@ class AtualizarPedido(LoginRequiredMixin, View):
         data['venda'] = venda
         data['itens'] = itens
         data['usuarios'] = usuarios
+        data['produto'] = Produto.objects.filter(
+            user = user_logado, usuarios_id = usuario)
+        data['cliente'] = Cliente.objects.filter(
+            user = user_logado, usuarios_id = usuario)
         return render(
             request, 'novo-pedido.html', data)
 
@@ -119,6 +114,10 @@ class NovoPedido(LoginRequiredMixin, View):
         data['venda'] = venda
         data['itens'] = itens
         data['usuarios'] = usuarios
+        data['produto'] = Produto.objects.filter(
+            user = user_logado, usuarios_id = usuario)
+        data['cliente'] = Cliente.objects.filter(
+            user = user_logado, usuarios_id = usuario)
         return render(
             request, 'novo-pedido.html', data)
 
@@ -149,28 +148,65 @@ class NovoItemPedido(LoginRequiredMixin, View):
             usuarioId = usuarios.id # Obitendo o id  do usuário administrador
             usuarioCliente= usuarios.usuario_cliente # Obitendo o id  do usuário_cliente administrador
 
-        produto= Produto.objects.filter(usuarios__usuario_cliente= usuarioCliente, codigo= request.POST['produto_codigo'] ) or 0
-        if produto != 0:
-            produto_id= produto.latest('pk').pk
-        if produto == 0:
-            data['mensagen_de_erro'] = 'Produto não cadastrado!'
+        produto= Produto.objects.filter(
+            usuarios__usuario_cliente= usuarioCliente, codigo= request.POST['produto_codigo'] ) or 0
+        if request.POST['produto_select']  and request.POST['produto_codigo'] :
+            data={}
+            data['mensagen_de_erro_campo_obrigatorio'] = 'Preencha apenas um dos campos a baixa'
             venda = Venda.objects.get(id=venda)
             data['venda'] = venda
             data['itens'] = venda.itemdopedido_set.all()
+            data['produto'] = Produto.objects.filter(
+                user = user_logado, usuarios_id = usuarioId)
+            data['cliente'] = Cliente.objects.filter(
+                user = user_logado, usuarios_id = usuarioId)
             return render(
                 request, 'novo-pedido.html', data)
-
+        
+        if produto != 0:
+            produto= produto.latest('pk').pk
+        if request.POST['produto_codigo'] == '':
+            produto = request.POST['produto_select']
+            
+        if request.POST['produto_select'] == '' and request.POST['produto_codigo'] == '':
+            data={}
+            data['mensagen_de_erro_campo_obrigatorio'] = 'Preencha um do campos a baixa'
+            venda = Venda.objects.get(id=venda)
+            data['venda'] = venda
+            data['itens'] = venda.itemdopedido_set.all()
+            data['produto'] = Produto.objects.filter(
+                user = user_logado, usuarios_id = usuarioId)
+            data['cliente'] = Cliente.objects.filter(
+                user = user_logado, usuarios_id = usuarioId)
+            return render(
+                request, 'novo-pedido.html', data)
+        elif produto == 0 :
+            data['mensagen_de_erro'] = 'Produto não cadastrado!'
+            data['mensagen_de_erro_dica'] = 'Verifica o cdigo e tente novamente!' 
+            data['mensagen_de_erro_acao'] = 'Para feichar, pressione ( Alt + X ) !'
+            venda = Venda.objects.get(id=venda)
+            data['venda'] = venda
+            data['itens'] = venda.itemdopedido_set.all()
+            data['produto'] = Produto.objects.filter(
+                user = user_logado, usuarios_id = usuarioId)
+            data['cliente'] = Cliente.objects.filter(
+                user = user_logado, usuarios_id = usuarioId)
+            return render(
+                request, 'novo-pedido.html', data)
         else:
             item = ItemDoPedido.objects.create(
-                produto_id = produto_id,
+                produto_id = produto,
                 quantidade_de_itens=request.POST['quantidade'].replace(',', '.') or 1,
-                estoque_fisico_atual=request.POST['estoque_fisico_atual'] or 0,
                 desconto=request.POST['desconto'].replace(',', '.') or 0,
                 venda_id=venda, user = user_logado, usuarios_id = usuarioId)
 
             data['venda'] = item.venda
             data['itens'] = item.venda.itemdopedido_set.all().order_by('-id')
             data['usuarios'] = usuarios
+            data['produto'] = Produto.objects.filter(
+                    user = user_logado, usuarios_id = usuarioId)
+            data['cliente'] = Cliente.objects.filter(
+                user = user_logado, usuarios_id = usuarioId)
             return render(
                 request, 'novo-pedido.html', data)
 
@@ -180,8 +216,23 @@ class SaidaDeMercadoria(LoginRequiredMixin, View):
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
         else:
+            user_logado = request.user # Obitendo o usuário logado
+            user_logado = user_logado.id # obitendo o ID do usuário logado
+        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
+            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
+            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
+            usuarios = Usuarios.objects.get(id = usuarioId) # Buscando usuário administrador com base no usuário logado
+        else:
+            usuarios = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
+            usuarioId = usuarios.id # Obitendo o id  do usuário administrador
+            usuarioCliente= usuarios.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+            
+            data= {}
+            data['produto'] = Produto.objects.filter(
+                user = user_logado, usuarios_id = usuarioId)
             return render(
-                request, 'saida_mercadoria.html')
+                request, 'saida_mercadoria.html', data)
 
     def post(self, request):
         user = request.user.has_perm('fluxo_de_caixa.add_venda')
@@ -203,31 +254,56 @@ class SaidaDeMercadoria(LoginRequiredMixin, View):
             
         produto= Produto.objects.filter(
             usuarios__usuario_cliente= usuarioCliente, codigo= request.POST['produto_codigo'] ) or 0
+        
+        if request.POST['produto_select']  and request.POST['produto_codigo'] :
+            data={}
+            data['mensagen_de_erro_campo_obrigatorio'] = 'Preencha apenas um dos campos a baixa'
+            data['produto'] = Produto.objects.filter(
+                    user = user_logado, usuarios_id = usuarioId)
+            return render(
+                request, 'saida_mercadoria.html', data)
+        
         if produto != 0:
-            produto_id= produto.latest('pk').pk
-        if produto == 0:
+            produto= produto.latest('pk').pk
+        if request.POST['produto_codigo'] == '':
+            produto = request.POST['produto_select']
+            
+        if request.POST['produto_select'] == '' and request.POST['produto_codigo'] == '':
+            data={}
+            data['mensagen_de_erro_campo_obrigatorio'] = 'Preencha um do campos a baixa'
+            data['produto'] = Produto.objects.filter(
+                    user = user_logado, usuarios_id = usuarioId)
+            return render(
+                request, 'saida_mercadoria.html', data)
+        elif produto == 0 :
             data['mensagen_de_erro'] = 'Produto não cadastrado!'
             data['mensagen_de_erro_dica'] = 'Verifica o cdigo e tente novamente!' 
             data['mensagen_de_erro_acao'] = 'Para feichar, pressione ( Alt + X ) !'
+            data['produto'] = Produto.objects.filter(
+                    user = user_logado, usuarios_id = usuarioId)
             return render(
                 request, 'saida_mercadoria.html', data)
         else:
-            produtoestoque= Produto.objects.get(codigo = request.POST['produto_codigo'])
+            produtoestoque= Produto.objects.get(id = produto)
             produto_estoque =  produtoestoque.estoque
             if float(produto_estoque) < float(request.POST['estoque_fisico_atual']):
                 data['mensagen_de_erro_2'] = 'Estoque menor que a quantidade inserida!'
                 data['mensagen_de_erro_dica'] = 'Seu estoque deve está desatualizado, atualize-o e tente novamente!' 
                 data['mensagen_de_erro_acao'] = 'Para feichar, pressione ( Alt + X ) !'
+                data['produto'] = Produto.objects.filter(
+                    user = user_logado, usuarios_id = usuarioId)
                 return render(
                 request, 'saida_mercadoria.html', data)
             else:
                 venda = Venda.objects.create(user = user_logado, usuarios_id = usuarioId)
                 item = ItemDoPedido.objects.create(
-                    produto_id = produto_id,
+                    produto_id = produto,
                     estoque_fisico_atual=request.POST['estoque_fisico_atual'],
                     venda_id=venda.id, user = user_logado, usuarios_id = usuarioId)
                     
                 data['saida'] = ItemDoPedido.objects.get(id=item.id)
+                data['produto'] = Produto.objects.filter(
+                    user = user_logado, usuarios_id = usuarioId)
                 return render(
                     request, 'saida_mercadoria.html', data)
 
@@ -248,21 +324,25 @@ class ListaVendas(LoginRequiredMixin, View):
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
         today = date.today()
-
-        Mes= request.GET.get('mes',None)
-        busca= request.GET.get('venda',None)
-        Dia= request.GET.get('dia',None)
+        cliente=request.GET.get('cliente', None)
+        mes= request.GET.get('mes',None)
+        id_venda= request.GET.get('id_venda',None)
+        dia= request.GET.get('dia',None)
 
         vendas = Venda.objects.filter(
             data_hora__gte=today, usuarios__usuario_cliente= usuario).order_by('-id') #__startswith, __contains
-        if Dia:
-            vendas = Venda.objects.filter(data_hora__contains=Dia, usuarios__usuario_cliente= usuario).order_by('-id')#data_hora__day= Dia
-        if Mes:
+        if dia:
             vendas = Venda.objects.filter(
-                data_hora__year__contains=today.year, data_hora__month__contains=Mes, usuarios__usuario_cliente= usuario ).order_by('-id')
-        if busca:
-            vendas = Venda.objects.filter( usuarios__usuario_cliente= usuario, id__icontains=busca)
+                data_hora__contains=dia, usuarios__usuario_cliente= usuario).order_by('-id')#data_hora__day= Dia
+        if mes:
+            vendas = Venda.objects.filter(
+                data_hora__contains=mes, usuarios__usuario_cliente= usuario).order_by('-id')
+        if id_venda:
+            vendas = Venda.objects.filter( usuarios__usuario_cliente= usuario, id__icontains=id_venda)
+        if cliente:
+            vendas = Venda.objects.filter( usuarios__usuario_cliente= usuario, cliente_id=cliente)
         data['vendas'] = vendas
+        data['cliente'] = Cliente.objects.filter(usuarios__usuario_cliente= usuario)
         return render(request, 'lista-vendas.html', data)
 
 

@@ -2,11 +2,11 @@
 {% block main%}
 <br>
 <br>
-<h2 class="sub_menu_relat" >&nbsp; RELATÓRIO MENSAL </h2>
+<h2 class="sub_menu_relat" >&nbsp; DESHBORD MENSAL </h2>
 <form class='campo_de_busca_relat' method="GET" action="{% url 'relatorio_mensal' %}">
     <div>
 
-        <select style=" width:180px;" type="select"  name="mes" id="mes"  >
+        <select style=" width:120px;" type="select"  name="mes" id="mes"  >
         <option value="{{MES}}" >Escolha um mês </option>
         <option value="01" >Janeiro </option>
         <option value="02" >Fevereiro</option>
@@ -21,8 +21,16 @@
         <option value="11" >Novembroo</option>
         <option value="12" >Dezembro</option>
     </select >
-
    <button  type="submit">Filtrar</button>
+   <label style=" padding: 3px; width: 100px;"> 
+    <a style="color: rgb(16, 23, 223); text-decoration:rgb(149, 21, 21);"  
+    href="{% url 'relatorio_anual'%}">Dashboard anual</a>
+    </label>
+    <label style=" padding: 3px;"> 
+    <a style="color: rgb(16, 23, 223); text-decoration:rgb(255, 255, 255);"  
+    href="{% url 'relatorio-produtos'%}"> Por produto</a>
+    </label>
+
  </div>
 </form >
 

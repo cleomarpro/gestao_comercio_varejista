@@ -976,27 +976,25 @@ class Relarorio_produtos(LoginRequiredMixin, View):
 
         today = date.today()
         ano_atual = str(today.year)
-        MES = today.month
+        mes_atual = today.month
         item_de_pedido = ItemDoPedido.objects.filter(
-                usuarios__usuario_cliente= usuario, venda__data_hora__year= ano_atual, venda__data_hora__month= MES ).values(
+                usuarios__usuario_cliente= usuario, venda__data_hora__year= ano_atual, venda__data_hora__month= mes_atual ).values(
                 'produto__id', 'produto__nome', 'produto__saida').annotate(lucro_obtido=Sum(F(
                         'produto__valor_venal') * F('quantidade_de_itens') - F('produto__valor_compra') * F('quantidade_de_itens'))).annotate(
                             total_investimento=Sum(F('produto__valor_compra') * F('quantidade_de_itens'))).annotate(total_venda=Sum(
                             F('produto__valor_venal') * F('quantidade_de_itens')))
 
-        Ano= request.GET.get('ano',None)
-        Mes= request.GET.get('mes',None)
-        Filtro= request.GET.get('filtrar_produto',None)
-        if Ano or Mes:
-
+        mes= request.GET.get('mes',None)
+        filtro= request.GET.get('filtrar_produto',None)
+        if mes:
             item_de_pedido = ItemDoPedido.objects.filter(
-                usuarios__usuario_cliente= usuario, venda__data_hora__year= Ano, venda__data_hora__month= Mes ).values(
+                usuarios__usuario_cliente= usuario, venda__data_hora__contains= mes ).values(
                 'produto__id', 'produto__nome', 'produto__saida').annotate(lucro_obtido=Sum(F(
                         'produto__valor_venal') * F('quantidade_de_itens') - F('produto__valor_compra') * F('quantidade_de_itens'))).annotate(
-                            total_investimento=Sum('produto__valor_compra') * F('quantidade_de_itens')).annotate(total_venda=Sum(
-                            'produto__valor_venal') * F('quantidade_de_itens')).order_by(Filtro)
+                            total_investimento=Sum(F('produto__valor_compra') * F('quantidade_de_itens'))).annotate(total_venda=Sum(
+                            F('produto__valor_venal') * F('quantidade_de_itens'))).order_by(filtro)
         return render(
-            request, 'financeiro/relatorio-produtos.html', {'item_de_pedido': item_de_pedido, 'ano_atual':ano_atual, 'MES': MES})
+            request, 'financeiro/relatorio-produtos.html', {'item_de_pedido': item_de_pedido, 'ano_atual':ano_atual, 'mes_atual': mes_atual})
 
 # relatório diário
 class Relatorio_diario(LoginRequiredMixin, View):

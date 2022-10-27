@@ -6,7 +6,7 @@ from django.dispatch import receiver
 from produto.models import Produto
 from django.contrib.auth.models import User
 from usuarios.models import Cobranca, Usuarios
-from pessoa.models import Funcionario
+from pessoa.models import Funcionario, Cliente
 from datetime import date
 #import datetime
 
@@ -59,6 +59,7 @@ class Tipo_de_pagamento(models.Model):
         return str(self.nome)
 
 class Venda(models.Model):
+    cliente = models.ForeignKey(Cliente, null=True, on_delete=models.CASCADE)
     valor = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, default=0)
     valor_com_desconto = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, default=0)
     desconto = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, default=0)
@@ -69,7 +70,6 @@ class Venda(models.Model):
     valor_debito = models.FloatField( null=True, blank=True, default=0)
     troco = models.DecimalField(max_digits=9, null=True, blank=True,decimal_places=2, default=0)
     tipo_de_pagamento = models.ForeignKey(Tipo_de_pagamento, null=True, on_delete=models.CASCADE)
-    descricao = models.CharField(max_length=100, blank=True)
     finalizada = models.CharField(max_length=20, blank=True, null=True)
     nfe_emitida = models.BooleanField(default=False)
     data_hora = models.DateTimeField(default=timezone.now)
@@ -78,7 +78,7 @@ class Venda(models.Model):
     usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.descricao) + ' - Cliente: ' + str(self.id) + ' - Valor: ' + str(self.valor)
+        return str(self.cliente) + ' - Cliente: ' + str(self.id) + ' - Valor: ' + str(self.valor)
 
 # calculo do valor total da venda
     def calcular_total(self):
