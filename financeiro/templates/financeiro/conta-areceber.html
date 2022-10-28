@@ -59,7 +59,7 @@
         </div>
         <div>  
             <label> Juros</label> <br>
-               <input style=" width:120px;" placeholder=" 0,00}%"
+               <input style=" width:120px;" placeholder=" 0,00 %"
                type="number" step=".01" lang="nb" id="juros" name="juros" >
         </div> 
        
@@ -81,25 +81,33 @@
     <form id="form_mobil" class='campo_de_busca' method="GET" action="{% url 'conta_areceber' %}">
         <a id="br_X_mobil" href="#" onclick="document.getElementById
         ('form_mobil').style.display='none';"> X</a>
-        
+    
+    <div id="div_busca_filtro";>
+        <label> Buscar cliente:</label><br>
+        <select style="width:110px"; type="text" id="nome_cliente" name="nome_cliente" >
+            <option value=''> Selecionar</option>
+            {%for c in cliente%}
+            <option value='{{c.cliente.id}}'> {{c.cliente.nome}} - {{c.cliente.cpf_cnpj}}</option>
+            {%endfor%}
+        </select>
+        <button style="width:60px"; type="submit">Buscar</button>
+    </div> 
     <div id="div_busca_filtro";>
         <label> Cpf ou Cnpj / Situação do débito</label><br>
-        <input style="width:40%"; type="search" id="client" name="client" 
+        <input style="width:150px"; type="search" id="client" name="client" 
             data-js="cpf" placeholder="000.00.000-00" >
         
         <select style="width:110px"; type="text" id="estado_da_conta" name="estado_da_conta" >
-           <tr >
-                <option value='1'> Selecionar</option>
-                <option value=''> -Contas ativas </option>
-                <option value='0'> -Contas pagas </option>
-            </tr>
+                <option value=''> Selecionar</option>
+                <option value='1'> -Contas ativas </option>
+                <option value='2'> -Contas pagas </option>
         </select>
         <button style="width:50px"; type="submit">Filtrar</button>
     </div> 
     <div id="div_busca_filtro";> 
         <label>Filtra por periodo  </label> <br>
-        <input  style="width:30%; padding: 3px;" type="date" id="dia" name="dia" > até
-        <input  style="width:30%; padding: 3px;" type="date" id="dia2" name="dia2" >
+        <input  style="width:120px; padding: 3px;" type="date" id="dia" name="dia" > até
+        <input  style="width:120px; padding: 3px;" type="date" id="dia2" name="dia2" >
         <button style="width:50px;" type="submit">Filtrar</button>
     </div> 
     </form>

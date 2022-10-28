@@ -662,15 +662,14 @@ class FiltrarEntadaPorCategoria(LoginRequiredMixin, View):
         fornecedor= Fornecedor.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
         entrada_Mercadoria = EntradaMercadoria.objects.filter(
             usuarios__usuario_cliente= usuario, data_hora__month = mes_atual ).order_by('-id')
-        Mes= request.GET.get('mes',None)
-        Ano= request.GET.get('ano',None)
+        mes= request.GET.get('mes',None)
         busca= request.GET.get('produt',None)
         if busca:
             entrada_Mercadoria = EntradaMercadoria.objects.filter(
                 usuarios__usuario_cliente= usuario, produto__id= busca).order_by('-id')
-        if Mes and Ano:
+        if mes:
             entrada_Mercadoria = EntradaMercadoria.objects.filter(
-                usuarios__usuario_cliente= usuario, data_hora__year= Ano, data_hora__month= Mes).order_by('-id')
+                usuarios__usuario_cliente= usuario, data_hora__contains= mes).order_by('-id')
         return render(
             request, 'produto/entrada-mercadoria.html', {
                 'entrada_Mercadoria': entrada_Mercadoria,

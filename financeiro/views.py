@@ -375,30 +375,37 @@ class ContasAreceber(LoginRequiredMixin, View):
 
         today = date.today()
         mes_atual = today.month
-        DIA = request.GET.get('dia',None)
-        DIA2 = request.GET.get('dia2',None)
+        dia = request.GET.get('dia')
+        dia2 = request.GET.get('dia2')
 
-        conta = Contas.objects.filter(usuarios__usuario_cliente= usuario, data_de_vencimento__month = mes_atual, tipo_de_conta_id=1).order_by('-id')
+        conta = Contas.objects.filter(
+            ~Q(parcelas_restantes = 0 ), usuarios__usuario_cliente= usuario, tipo_de_conta_id=1).order_by('-id')[:20]
         #tipo_de_conta = Tipo_de_conta.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
         venda= Venda.objects.filter(usuarios__usuario_cliente= usuario, data_hora__gte = today).order_by('-id')
         cliente = Cliente.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
 
         client = request.GET.get('client',None)
+        nome_cliente = request.GET.get('nome_cliente')
         estado_da_conta = request.GET.get('estado_da_conta',None)
 
-        if client != None and  estado_da_conta == '':
+        if estado_da_conta == '1':
             conta = Contas.objects.filter(
-                ~Q(parcelas_restantes = 0 ) & Q(cliente__cpf_cnpj = client ), usuarios__usuario_cliente= usuario).order_by('-id') # filtrando contas maior que 0
-        elif client != None and estado_da_conta == '0':
+                ~Q(parcelas_restantes = 0 ), cliente__cpf_cnpj = client, usuarios__usuario_cliente= usuario).order_by('-id') # filtrando contas maior que 0
+        
+        elif estado_da_conta == '2':
             conta = Contas.objects.filter(
                 usuarios__usuario_cliente= usuario, parcelas_restantes = 0, cliente__cpf_cnpj = client ).order_by('-id') #filtrando contas igual a 0
-        elif client != None and estado_da_conta == '1':
-            conta = Contas.objects.filter(usuarios__usuario_cliente= usuario, cliente__cpf_cnpj = client ).order_by('-id')
-
-        if DIA and DIA2:
+        elif estado_da_conta == '':
             conta = Contas.objects.filter(
-                usuarios__usuario_cliente= usuario, data_de_vencimento__range = (DIA, DIA2 ), tipo_de_conta_id=1).order_by('-id')
+                usuarios__usuario_cliente= usuario, cliente__cpf_cnpj = client ).order_by('-id')
 
+        if dia != '' and dia2 !='': 
+            conta = Contas.objects.filter(
+                usuarios__usuario_cliente= usuario, data_de_vencimento__range = (dia, dia2 ), tipo_de_conta_id=1).order_by('-id')
+        
+        elif nome_cliente:
+            conta = Contas.objects.filter(
+                usuarios__usuario_cliente= usuario, cliente__id = nome_cliente ).order_by('-id')
         return render(
             request, 'financeiro/conta-areceber.html', {
                 'conta': conta, #'tipo_de_conta': tipo_de_conta,

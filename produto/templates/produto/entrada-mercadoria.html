@@ -61,47 +61,12 @@
         
         <div>
             <label>Buscar produto</label> <br>
-            <input  type="search" id="produt" name="produt" placeholder="Digite o código do produto...">
+            <input  type="search" id="produt" name="produt" placeholder="Digite o código">
             <button  type="submit">Buscar</button>
         </div>
         <div>
             <label>Selecionar o mês e o ano</label> <br>
-            <select  type="search" id="mes" name="mes" />
-                <tr>
-                    <option value='{{today.month}}'>Selecionar</option>
-                    <option value='1'> -Janeiro</option>
-                    <option value='2'> -Fevereiro</option>
-                    <option value='3'> -Março</option>
-                    <option value='4'> -Abril</option>
-                    <option value='5'> -Maio</option>
-                    <option value='6'> -Junho</option>
-                    <option value='7'> -Julho</option>
-                    <option value='8'> -Agosto</option>
-                    <option value='9'> -Setembro</option>
-                    <option value='10'> -Outubro</option>
-                    <option value='11'> -Novembro</option>
-                    <option value='12'> -Dezembor</option>
-                </tr>
-            </select>
-
-            <select  type="search" id="ano" name="ano" />
-                    <tr>
-                        <option value='{{today.year}}'>Selecionar</option>
-                        <option value='2021'> -2021</option>
-                        <option value='2022'> -2022</option>
-                        <option value='2023'> -2023</option>
-                        <option value='2024'> -2024</option>
-                        <option value='2025'> -2025</option>
-                        <option value='2026'> -2026</option>
-                        <option value='2027'> -2027</option>
-                        <option value='2028'> -2028</option>
-                        <option value='2029'> -2029</option>
-                        <option value='2030'> -2030</option>
-                        <option value='2031'> -2031</option>
-                        <option value='2032'> -2032</option>
-                    </tr>
-                
-            </select>
+            <input  type="month" id="mes" name="mes" />
                 <button  type="submit">Filtrar</button>
         </div>
     </form>

@@ -59,7 +59,8 @@ class AtualizarPedido(LoginRequiredMixin, View):
                 venda.desconto = request.POST['desconto'].replace(',', '.').replace('%', '') or 0
                 venda.tipo_de_pagamento_id = request.POST['pagamento']  or 1
                 venda.finalizada = request.POST.get('finalizada', False)
-                venda.cliente_id = request.POST['cliente']
+                if request.POST['cliente']:
+                    venda.cliente_id = request.POST['cliente']
                 venda.valor_recebido = request.POST['valor_recebido'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
                 venda.valor_credito = request.POST['valor_credito'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
                 venda.valor_debito = request.POST['valor_debito'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')

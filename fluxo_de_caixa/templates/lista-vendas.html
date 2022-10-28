@@ -45,9 +45,9 @@
     <table class='table'>
       <thead>
         <tr>
-            <th>Cliente</th>
+            <th>Número do Cliente</th>
             <th class="col_table"> Data</th>
-            <th>Descrição</th>
+            <th>Cliente/CPF</th>
             <th class="col_table">Desconto</th>
             <th>Valor</th>
             {% if perms.fluxo_de_caixa.add_venda and perms.fluxo_de_caixa.delete_venda%}
@@ -61,7 +61,7 @@
             <tr>
                 <td>{{ venda.id }}</td>
                 <td class="col_table">{{ venda.data_hora | date:'d/m/y  H:i'}}</td>
-                <td >{{ venda.descricao}}</td>
+                <td >{{ venda.cliente.nome}}- {{ venda.cliente.cpf_cnpj}}</td>
                 <td class="col_table">R$ {{ venda.total_desconto }}</td>
                 <td>R$ {{ venda.valor }}</td>
                 

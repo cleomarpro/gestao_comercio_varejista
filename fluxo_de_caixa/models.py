@@ -59,7 +59,7 @@ class Tipo_de_pagamento(models.Model):
         return str(self.nome)
 
 class Venda(models.Model):
-    cliente = models.ForeignKey(Cliente, null=True, on_delete=models.CASCADE)
+    cliente = models.ForeignKey(Cliente, null=True, blank=True, on_delete=models.CASCADE)
     valor = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, default=0)
     valor_com_desconto = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, default=0)
     desconto = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, default=0)
