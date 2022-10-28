@@ -20,6 +20,7 @@
         <label>Buscar por cliente:</label> <br>
         <select style="width:160px" type="search" 
             id="cliente" name="cliente" placeholder="Nome do cliente...">
+            <option value="">Selecionar</option>
             {%for c in cliente%}
                 <option value="{{c.id}}">{{c.nome}}</option>
             {%endfor%}
