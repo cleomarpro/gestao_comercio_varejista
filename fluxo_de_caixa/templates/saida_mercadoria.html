@@ -1,12 +1,28 @@
 {% extends 'base.html' %}
 
 {% block main %}
+{% load static%}
     <br>
-    <h2 class="sub_menu" >&nbsp; SAIDA DE MERCADORIA
+    <h2 class="sub_tito" >&nbsp; SAIDA DE MERCADORIA
         <a 
             href="#" onclick="document.getElementById('form_up').style.display='block';">
                 Adicionar 
         </a>
+        <div > 
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/frente_de_caixa.png' %}" width="500px" all=" ">
+                <a href="{% url 'atualizar-pedido' %}">FRENTE DE CAIXA </a>
+            </label> 
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/estoque.png' %}" >
+                <a href="{% url 'entrada-mercadoria' %}">ENTRADA</a>
+            </label>
+
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/estoque.png' %}" >
+                <a href="{% url 'produto' %}">PRODUTOS</a>
+            </label>
+        </div>
     </h2>
     <form id="form_up" class='formulario' method="POST" action="{% url 'saida_mercadoria' %}" >
         {% csrf_token %}
@@ -18,7 +34,7 @@
             {%if mensagen_de_erro_campo_obrigatorio%}
                 <p style="color: red;">{{mensagen_de_erro_campo_obrigatorio}}</p>
             {%endif%}
-            <select style=" width:40%;" type="search" id="produto_select" name="produto_select">
+            <select style=" width:120px;" type="search" id="produto_select" name="produto_select">
                 <option value=''> __Selecionar o produto__</option>
                 {% for p in produto %}
                     <option value='{{p.id}}'> {{p.codigo}} - {{p.nome}}, Est:{{p.estoque}}</option>
@@ -27,7 +43,7 @@
 
            <label>ou</label>
 
-               <input style=" width:30%;" type="text" name="produto_codigo"
+               <input style=" width:120px;" type="text" name="produto_codigo"
                id="produto_codigo" autofocus="autofocus" accesskey="z"
                placeholder="Código do produto">
            <br>
@@ -35,14 +51,20 @@
            <label>Digite a quantidade de itens que está no seu estoque ou partileira</label>
            <br>
            <label> Estoque físico:</label>
-               <input style=" width:17%;" accesskey="q"
+               <input style=" width:130px;" accesskey="q"
                type="number" step=".01" lang="nb" name="estoque_fisico_atual"
                    id="estoque_fisico_atual" required/>
                <br>
                <br>
            <button id="bt_vendas1">Incluir</button>
+           <label id="bt_vendas1" >
+            <a style="color: white; font-size: 15px;" 
+            href="{% url 'lista-vendas'%}">Histórico</a>
+           </label>
            <br>
-       </form>
+       </form><br>
+       
+       
 
        {% if mensagen_de_erro %}
        <div id="div_alerta" class="divAlerta">

@@ -1,14 +1,29 @@
 {% extends 'base.html' %}
 
 {% block main %} 
-
+{% load static%}
 <br>
 
-    <h2 class="sub_menu" >&nbsp; PRODUTO
+    <h2 class="sub_tito" >&nbsp; PRODUTO
         <a 
             href="#" onclick="document.getElementById('form_up').style.display='block';">
                 Adicionar 
         </a>
+        <div > 
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/frente_de_caixa.png' %}" width="500px" all=" ">
+                <a href="{% url 'atualizar-pedido' %}">FRENTE DE CAIXA </a>
+            </label> 
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/estoque.png' %}" >
+                <a href="{% url 'entrada-mercadoria' %}">ENTRADA</a>
+            </label>
+
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/estoque.png' %}" >
+                <a href="{% url 'saida_mercadoria' %}">SAIDA</a>
+            </label>
+        </div>
     </h2>
     {% if mensagen_de_erro %}
         <form  id="form_up" class='formulario' style="display: block;" action="{% url 'produto' %}" method="POST" >

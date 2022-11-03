@@ -5,7 +5,7 @@
 @import url('https://fonts.googleapis.com/css?family=Courier+Prime&display=swap');
 @import url('https://fonts.googleapis.com/css2? família=David+Libre&família=Montaga&família=Poppins:wght@300&família=Fonte+Sans+Pro&display=swap');
 
-.sub_menu{
+.sub_tito{
   background-color: #969165;
   color:rgb(10, 9, 9);
   position: static;
@@ -13,14 +13,18 @@
   margin-top: 30px;
   font-size: 15px;
   line-height: 30px;
+  height: 60px;
 }
-.sub_menu h2{
+.sub_tito h2{
   margin-left: 10px;
+}
+#img_menu{
+  width: 20px;
 }
 .dashboard{
   background-color:rgb(185, 233, 254);
 }
-.sub_menu a{
+.sub_tito a{
   position:absolute;
   right:1px;
   text-decoration: none;
@@ -30,7 +34,7 @@
   margin-right: 10px;
 }
 
-.sub_menu input{
+.sub_tito input{
   position:absolute; 
   right:1px;
   text-decoration: none;
@@ -43,12 +47,27 @@
   margin-right: 10px;
 }
 
+.sub_tito div{
+  text-align: center;
+}
+.sub_menu{
+  padding: px;
+  text-align: center;
+}
+
+.sub_menu a{
+  padding: 5px;
+  position: inherit;
+  font-size: 12px;
+  padding-top: 5px;
+  color: #e5e7ed;
+}
+
 .formulario{
   background-color: #d1c570;
   font-size:18px;
 }
 .formulario a{
-  position:absolute;
   right:10px;
   color: #b81616;
   font-size: 22px;
@@ -164,16 +183,19 @@
     width: 100%;
   }
 
-  .sub_menu{
+  .sub_tito{
    margin-left: 0px;
    font-size: 14px;
-  
   }
+  .sub_menu a{
+    font-size: 10px;
+  }
+
   .dashboard{
     background-color:rgb(185, 233, 254);
     margin-left: 0px;
   }
-  .sub_menu a{
+  .sub_tito a{
     margin-right: 10px;
     font: 14px;
     padding:1px;

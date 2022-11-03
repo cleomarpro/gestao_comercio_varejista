@@ -1,10 +1,30 @@
 {% extends 'base.html'%}
 {% block main%}
+{% load static%}
 <br>
 <!-- Caixa-->
 <div id="div_caixa">
 <div>
-    <h2 class="sub_menu" style="width:100%; margin-left: 0px;">&nbsp; CLIENTE: {{venda.id}} </h2>
+    <h2 
+        class="sub_tito" style="width:100%; margin-left: 0px;">&nbsp; CLIENTE: {{venda.id}} <br>
+
+        <div > 
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/frente_de_caixa.png' %}" width="500px" all=" ">
+                <a href="{% url 'saida_mercadoria' %}">SAIDA</a>
+            </label> 
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/estoque.png' %}" >
+                <a href="{% url 'entrada-mercadoria' %}">ENTRADA</a>
+            </label>
+
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/estoque.png' %}" >
+                <a href="{% url 'produto' %}">PRODUTOS</a>
+            </label>
+        </div>
+    
+    </h2>
     <form id="caixa_id" class='caixa' style="height:200px ;" method="POST" action="{% url 'atualizar-pedido' %}">
         {% csrf_token %}
         {% if venda %}
