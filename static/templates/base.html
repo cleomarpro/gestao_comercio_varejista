@@ -42,7 +42,6 @@
             <ul >
                 
                 {%if user.is_authenticated%}
-                    <li > <a style=" color: #CD0000;" href="{% url 'logout'%}">Sair</a> </li>
                     <label>
                         <img id="img" src="{% static 'img/perfil.png' %}">
                         Olá <a style=" color: #1459ee; font-size: 20px;" href="{% url 'usuario'%}"> 
