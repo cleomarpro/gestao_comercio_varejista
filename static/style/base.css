@@ -12,16 +12,20 @@ body {
 .div_cabesalho2{
     color:white;
     position: fixed;
-    width:100%;
+    width:95%;
     margin-top: -10px;
-    margin-left: -8px;
+    margin-left: 30px;
     background-color: rgb(102, 99, 37);
     font-size: 20px;
     padding: 5px;
     height: 35px;
     line-height: 10px;
-
 }
+@media (max-width: 768px) {
+    .div_cabesalho2{
+        width:90%;
+    }
+ }
 
 .div_cabesalho2 a{
     text-decoration: none;
@@ -48,10 +52,9 @@ body {
     padding: 8px;
 }
 
-#img{
+#logo{
     width:100px;
     text-align: center;
-
 }
       
 footer {

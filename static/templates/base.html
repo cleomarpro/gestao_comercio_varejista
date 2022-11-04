@@ -34,11 +34,93 @@
 
 <body>
 <div> 
+    {% block menu%}
+    <div class= "div_menu">
+        <label class="menu_label" for="chec"> <img src="{% static 'img/menu2.png' %}" width="30" all=" "> </label >
+        <input class="menu_input" type="checkbox" id="chec" >
+        <nav class="menu">
+            <ul >
+                
+                {%if user.is_authenticated%}
+                    <li > <a style=" color: #CD0000;" href="{% url 'logout'%}">Sair</a> </li>
+                    <label>
+                        <img id="img" src="{% static 'img/perfil.png' %}">
+                        Olá <a style=" color: #1459ee; font-size: 20px;" href="{% url 'usuario'%}"> 
+                          {%if user.first_name %} {{user.first_name}}  {%else %} {{user}} {%endif%}</a> </label>
+                {%else%}
+                    <li > <a style=" color: blue;" href="{% url 'login' %}">Entra</a> </li>
+                 {%endif%}
+                 <br>
+                    <li>
+                        <img id="img" src="{% static 'img/home.png' %}">
+                        <a href="{% url 'inicio' %}">HOME</a> </li>
+                    --------------------------- <br>
+                {% if perms.fluxo_de_caixa.add_venda %}
+                    <li> 
+                        <img id="img" src="{% static 'img/frente_de_caixa.png' %}">
+                        <a href="{% url 'atualizar-pedido' %}">FRENTE DE CAIXA </a>  
+                    </li>
+                {%endif%}
     
+                {% if perms.fluxo_de_caixa.view_caixa %}
+                    <li>
+                        <img id="img" src="{% static 'img/caixa.png' %}">
+                        <a href="{% url 'caixa' %}">CAIXA</a> </li>
+                    <li> 
+                        <img id="img" src="{% static 'img/caixa.png' %}">
+                        <a href="{% url 'lista-vendas'%}"> HISTÓRICO DE VENDAS</a> </li>
+                {%endif%}
+    
+                    --------------------------- <br>
+                <li>
+                    <img id="img" src="{% static 'img/gastos.png' %}">
+                    <a href="{% url 'gastos-extras' %}">CONTROLE DE GASTOS</a></li>
+    
+                {% if perms.financeiro.view_contas %}
+                    <li>
+                        <img id="img" src="{% static 'img/contas.png' %}">
+                        <a href="{% url 'conta_areceber' %}">CONTAS</a></li>
+                {%endif%}
+                    --------------------------- <br>
+                {% if perms.produto.add_produto %}
+                    <li> 
+                        <img id="img" src="{% static 'img/funcionario.png' %}">
+                        <a href="{% url 'novo-funcionario' %}">FUNCIONÁRIOS</a></li>
+                {%endif%}
+    
+                {% if perms.pessoa.add_cliente %}
+                    <li> 
+                        <img id="img" src="{% static 'img/cliente.png' %}">
+                        <a href="{% url 'novo-cliente' %}">CLIENTE</a></li>
+                {%endif%}
+                    --------------------------- <br>
+    
+                {% if perms.produto.add_produto %}
+                    <li>
+                        <img id="img" src="{% static 'img/produto.png' %}">
+                        <a href="{% url 'produto' %}">PRODUTOS</a> </li>
+                {%endif%}
+    
+                {% if perms.produto.add_produto %}
+                    <li> 
+                        <img id="img" src="{% static 'img/relatorio.png' %}">
+                        <a href="{% url 'relatorio_mensal' %}">DESHBORD</a></li>
+                {%endif%}
+    
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+            </ul>
+        </nav>
+    </div>
+    {% endblock menu %}
     <div class="div_cabesalho2">
         {% block cabesalho%}
         <a href="{% url 'inicio' %}">
-            <img id="img" src="{% static 'img/logo_marca.png' %}" width="500px" all=" "> 
+            <img id="logo" src="{% static 'img/logo_marca.png' %}" width="500px" all=" "> 
         </a>
                 {%if user.is_authenticated%}
                     <label id='login_logout'> <a href="{% url 'logout' %}"> Sair </a> </label>
