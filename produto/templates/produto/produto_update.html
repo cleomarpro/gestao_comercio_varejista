@@ -3,7 +3,7 @@
 {% block main %}
 
 <br>
-    <h2 class="sub_menu" >&nbsp; PRODUTO <a href="{% url 'produto' %}"> Cancelar</a></h2>
+    <h2 class="sub_tito" >&nbsp; PRODUTO <a href="{% url 'produto' %}"> Cancelar</a></h2>
     <form  style="display:block;" id='formulario' class='formulario'  method="POST" >
         {% csrf_token %}
         <p> EDITAR PRODUTO</p>

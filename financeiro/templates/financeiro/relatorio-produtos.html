@@ -1,10 +1,21 @@
 {% extends 'base.html'%}
 {% block main%}
+{% load static%}
 <br>
-  <h2 class="sub_menu" >&nbsp; RELATÓRIO POR PRODUTO 
+  <h2 class="sub_tito" >&nbsp; RELATÓRIO POR PRODUTO 
   <a style="color:brown;"
   href="#" onclick="document.getElementById('form_up').style.display='block';"> Importante saber 
 </a>
+  <div > 
+    <label class="sub_menu"> 
+        <img id="img_menu" src="{% static 'img/frente_de_caixa.png' %}" width="500px" all=" ">
+        <a href="{% url 'relatorio_anual' %}">ANUAL</a>
+    </label> 
+    <label class="sub_menu"> 
+        <img id="img_menu" src="{% static 'img/estoque.png' %}" >
+        <a href="{% url 'relatorio_mensal' %}">MENSAL</a>
+    </label>
+  </div>
 </h2>
 <form id="form_up" class='formulario' style="display: none;"> 
   <a id="termo_buttao" href="#" onclick="document.getElementById
@@ -27,15 +38,6 @@
       <option value="lucro_obtido" >-Menor lucrou</option>
     </select >
     <button style="width:50px" style='margin:10px;' type="submit">Filtrar</button>
-
-    <label style=" padding: 3px;"> 
-      <a style="color: rgb(16, 23, 223); text-decoration:rgb(149, 21, 21);"  
-      href="{% url 'relatorio_anual'%}">Dashboard anual</a>
-    </label>
-    <label style=" padding: 3px;"> 
-      <a style="color: rgb(16, 23, 223); text-decoration:rgb(255, 255, 255);"  
-      href="{% url 'relatorio_mensal'%}"> Por mes</a>
-    </label>
 </form>
 
     <table class="table">

@@ -1,8 +1,20 @@
 {% extends 'base.html'%}
 {% block main%}
+{% load static%}
 <br>
 <br>
-<h2 class="sub_menu_relat">&nbsp; RELATÓRIO ANUAL</h2>
+<h2 class="sub_tito">&nbsp; RELATÓRIO ANUAL
+    <div > 
+        <label class="sub_menu"> 
+            <img id="img_menu" src="{% static 'img/frente_de_caixa.png' %}" width="500px" all=" ">
+            <a href="{% url 'relatorio_mensal' %}">MENSAL</a>
+        </label> 
+        <label class="sub_menu"> 
+            <img id="img_menu" src="{% static 'img/estoque.png' %}" >
+            <a href="{% url 'relatorio-produtos' %}">POR PRODUTO</a>
+        </label>
+    </div>
+</h2>
 <form class='campo_de_busca_relat' method="GET" action="{% url 'relatorio_anual' %}">
     <div>
         <select style=" width:180px;" type="select"  name="ano" id="ano" >
@@ -20,14 +32,6 @@
             <option value="2031" >2031</option>
        </select >
         <button  type="submit">Filtrar</button>
-    <label style=" padding: 3px;"> 
-    <a style="color: rgb(16, 23, 223); text-decoration:rgb(149, 21, 21);"  
-    href="{% url 'relatorio_mensal'%}">Dashboard mensal</a>
-    </label>
-    <label style=" padding: 3px;"> 
-    <a style="color: rgb(16, 23, 223); text-decoration:rgb(255, 255, 255);"  
-    href="{% url 'relatorio-produtos'%}"> Por produto</a>
-    </label>
     </div>
 
 </form>

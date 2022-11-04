@@ -2,7 +2,7 @@
 
 {% block main %}
 <br>
-    <h2 class="sub_menu" >&nbsp; CONTA A PAGAR <a href="{% url 'conta_apagar' %}">Cancelar</a></h2>
+    <h2 class="sub_tito" >&nbsp; CONTA A PAGAR <a href="{% url 'conta_apagar' %}">Cancelar</a></h2>
     <form class='formulario' method="POST" >
         {% csrf_token %}
         <p> EDITAR CONTA</p>
