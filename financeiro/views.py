@@ -183,24 +183,18 @@ class FiltroGastosExtras( LoginRequiredMixin, View):
         today = date.today()
         mes_atual = today.month
         gastos_extras = Gastos_extras.objects.filter(usuarios__usuario_cliente= usuario, data_hora__month = mes_atual ).order_by('-id')
-        Mes= request.GET.get('mes',None)
-        Ano= request.GET.get('ano',None)
-        Dia= request.GET.get('dia',None)
-        Categoria= request.GET.get('categoria',None)
-        if Dia:
+        mes= request.GET.get('mes',None)
+        categoria= request.GET.get('categoria',None)
+     
+        if mes:
             gastos_extras = Gastos_extras.objects.filter(
-                usuarios__usuario_cliente= usuario, data_hora__contains = Dia ).order_by('-id')
-       
-        if Mes and Ano:
-            gastos_extras = Gastos_extras.objects.filter(
-                usuarios__usuario_cliente= usuario, data_hora__year= Ano, data_hora__month= Mes).order_by('-id')
+                usuarios__usuario_cliente= usuario, data_hora__contains= mes).order_by('-id')
             data['gastos_extr']= gastos_extras.aggregate(total=Sum('valor'))
 
-        if Mes and Ano and Categoria:
+        if mes and categoria:
             gastos_extras = Gastos_extras.objects.filter(
-                usuarios__usuario_cliente= usuario, data_hora__year= Ano, 
-                data_hora__month= Mes, gastosExtrasCategoria_id= Categoria).order_by('-id')
-            data['gastos_extr']= gastos_extras.aggregate(total=Sum('valor'))
+                usuarios__usuario_cliente= usuario, data_hora__contains= mes, gastosExtrasCategoria_id= categoria).order_by('-id')
+            data['gastos_extr']= gastos_extras
         
         data['hoje']= today
         data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
@@ -263,17 +257,23 @@ class GastosExtrasDashboard(LoginRequiredMixin, View):
             usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
 
-        periodo = request.POST['periodo']
-        periodo =  datetime.datetime.strptime(periodo, "%Y-%m")
-        
-        today = periodo.today()
-        ano = str(periodo.year)
-        mes = periodo.month
-        data['dashboard'] = Gastos_extras.objects.filter(
-                usuarios__usuario_cliente= usuario, data_hora__year= ano, data_hora__month= mes ).values(
-                'gastosExtrasCategoria__id','gastosExtrasCategoria__nome').annotate(valor =Sum('valor'))
+        periodo= request.GET.get('periodo',None)
 
-        return render(request, 'financeiro/dashboard.html', data)
+        today = date.today()
+        ano = str(today.year)
+        mes = today.month
+
+        data['dashboard'] = Gastos_extras.objects.filter(
+                usuarios__usuario_cliente= usuario, data_hora__year= ano, data_hora__month= mes).values(
+                'gastosExtrasCategoria__nome').annotate(valor =Sum('valor')).order_by('-valor')
+            
+        
+        if periodo:
+            data['dashboard'] = Gastos_extras.objects.filter(
+                usuarios__usuario_cliente= usuario, data_hora__contains= periodo).values(
+                'gastosExtrasCategoria__nome').annotate(valor =Sum('valor')).order_by('-valor')
+
+        return render(request, 'financeiro/dashboard.html', data) 
 
 class Gastos_extras_categoriaUpdate(LoginRequiredMixin, View):
     def get(self, request, id):
@@ -399,13 +399,14 @@ class ContasAreceber(LoginRequiredMixin, View):
             conta = Contas.objects.filter(
                 usuarios__usuario_cliente= usuario, cliente__cpf_cnpj = client ).order_by('-id')
 
-        if dia != '' and dia2 !='': 
+        if dia and dia2: 
             conta = Contas.objects.filter(
                 usuarios__usuario_cliente= usuario, data_de_vencimento__range = (dia, dia2 ), tipo_de_conta_id=1).order_by('-id')
         
         elif nome_cliente:
             conta = Contas.objects.filter(
                 usuarios__usuario_cliente= usuario, cliente__id = nome_cliente ).order_by('-id')
+        
         return render(
             request, 'financeiro/conta-areceber.html', {
                 'conta': conta, #'tipo_de_conta': tipo_de_conta,

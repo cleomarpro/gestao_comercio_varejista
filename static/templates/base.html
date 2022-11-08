@@ -62,12 +62,20 @@
                 {%endif%}
     
                 {% if perms.fluxo_de_caixa.view_caixa %}
-                    <li>
-                        <img id="img" src="{% static 'img/caixa.png' %}">
-                        <a href="{% url 'caixa' %}">CAIXA</a> </li>
                     <li> 
                         <img id="img" src="{% static 'img/caixa.png' %}">
-                        <a href="{% url 'lista-vendas'%}"> HISTÓRICO DE VENDAS</a> </li>
+                        <a href="{% url 'lista-vendas'%}"> HISTÓRICO DE VENDAS</a> 
+                    </li>
+                    <li>
+                        <img id="img" src="{% static 'img/caixa.png' %}">
+                        <a href="{% url 'caixa' %}">CAIXA</a> 
+                    </li>
+                {%endif%}
+
+                {% if perms.produto.add_produto %}
+                    <li>
+                        <img id="img" src="{% static 'img/produto.png' %}">
+                        <a href="{% url 'produto' %}">PRODUTOS</a> </li>
                 {%endif%}
     
                     --------------------------- <br>
@@ -78,14 +86,20 @@
                 {% if perms.financeiro.view_contas %}
                     <li>
                         <img id="img" src="{% static 'img/contas.png' %}">
-                        <a href="{% url 'conta_areceber' %}">CONTAS</a></li>
+                        <a href="{% url 'conta_areceber' %}">CONTAS A RECEBER </a></li>
                 {%endif%}
                     --------------------------- <br>
                 {% if perms.produto.add_produto %}
                     <li> 
                         <img id="img" src="{% static 'img/funcionario.png' %}">
-                        <a href="{% url 'novo-funcionario' %}">FUNCIONÁRIOS</a></li>
-                {%endif%}
+                        <a href="{% url 'novo-funcionario' %}">FUNCIONÁRIOS</a>
+                    </li>
+                    <li>
+                        <img id="img" src="{% static 'img/fornecedor.png' %}">
+                        <a href="{% url 'novo-fornecedor' %}">FORNECEDOR</a>
+                    </li>
+                        
+                    {%endif%}
     
                 {% if perms.pessoa.add_cliente %}
                     <li> 

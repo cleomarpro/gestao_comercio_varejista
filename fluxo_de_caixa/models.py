@@ -159,7 +159,7 @@ class Venda(models.Model):
 class ItemDoPedido(models.Model):
     venda = models.ForeignKey(Venda, on_delete=models.CASCADE)
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
-    quantidade_de_itens = models.DecimalField(max_digits=9, decimal_places=2, blank=True,default=1)
+    quantidade_de_itens = models.DecimalField(max_digits=9, decimal_places=2, blank=True,default=0)
     desconto = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True,default=0)
     user = models.CharField(max_length=100, blank=True, null=True)
     usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
@@ -170,7 +170,7 @@ class ItemDoPedido(models.Model):
         return str(self.venda.id) + ' - ' + str(self.produto.nome) + ' - ' + str(self.desconto) + ' - ' + str(self.quantidade_de_itens)  + ' - ' + str(self.produto.valor_venal)
 
     def saida_mercadoria(self):
-        if float(self.estoque_fisico_atual) > 0 :
+        if float(self.quantidade_de_itens) == 0:
             estoque = float(
                 float(self.produto.estoque) - float(self.estoque_fisico_atual))
             ItemDoPedido.objects.filter(id=self.id).update(

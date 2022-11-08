@@ -1,12 +1,18 @@
 {% extends 'base.html' %}
-
-{% block main %}
+{% block main %} 
+{% load static%}
     <br>
     <h2 class="sub_tito" >&nbsp; CONTROLE DE GASTOS
         <a 
             href="#" onclick="document.getElementById('form_up').style.display='block';">
                 Adicionar 
         </a>
+        <div > 
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/relatorio.png' %}" >
+                <a href="{% url 'dashboard' %}">DASHBOARD</a>
+            </label>
+        </div>
     </h2>
     <form id="form_up" class='formulario' style="display: none;" action="{% url 'gastos-extras' %}" method="POST" >
          {% csrf_token %}
@@ -41,58 +47,18 @@
         ('form_mobil').style.display='none';"> X</a>
 
     <div>
-        <label> Filtrar por periodo </label> <br>
-        <select style="width:60px;" type="search" id="mes" name="mes"/>
-                <tr>
-                    <option value='{{hoje | date:"m"}}'> {{hoje | date:'m'}}</option>
-                    <option value='1'> -Janeiro</option>
-                    <option value='2'> -Fevereiro</option>
-                    <option value='3'> -Março</option>
-                    <option value='4'> -Abril</option>
-                    <option value='5'> -Maio</option>
-                    <option value='6'> -Junho</option>
-                    <option value='7'> -Julho</option>
-                    <option value='8'> -Agosto</option>
-                    <option value='9'> -Setembro</option>
-                    <option value='10'> -Outubro</option>
-                    <option value='11'> -Novembro</option>
-                    <option value='12'> -Dezembor</option>
-                </tr>
-                 <br>
-        </select>
-        
-        <select style="width:65px;" type="search" id="ano" name="ano" >
-                <tr>
-                    <option value='{{hoje | date:"Y"}}'> {{hoje | date:'Y'}}</option>
-                    <option value='2021'> -2021</option>
-                    <option value='2022'> -2022</option>
-                    <option value='2023'> -2023</option>
-                    <option value='2024'> -2024</option>
-                    <option value='2025'> -2025</option>
-                    <option value='2026'> -2026</option>
-                    <option value='2027'> -2027</option>
-                    <option value='2028'> -2028</option>
-                    <option value='2029'> -2029</option>
-                    <option value='2030'> -2030</option>
-                    <option value='2031'> -2031</option>
-                    <option value='2032'> -2032</option>
-                </tr>
-                 <br>
-        </select>
-                <select style="width:100px;" type="search" id="categoria" name="categoria">
-                    <option value="">categora</option>
-                    {%for categoria in categoria_de_gastos %}
-                    <option value="{{categoria.id}}">{{categoria}}</option>
-                    {%endfor%}
-                </select> 
-        
-            <button style="width:50px;" type="submit">Filtrar</button>
+        <label> Filtrar por periodo/categoria</label> <br>
+        <input style="width:150px;" type="month" id="mes" name="mes"/>
+        <tr>
+        <select style="width:80px;" type="search" id="categoria" name="categoria">
+            <option value="">categora</option>
+            {%for categoria in categoria_de_gastos %}
+            <option value="{{categoria.id}}">{{categoria}}</option>
+            {%endfor%}
+        </select> 
+
+        <button style="width:50px;" type="submit">Filtrar</button>
     </div>
-    <div>
-        <label>Por data específica </label> <br>
-        <input style=" padding: 3px;" type="date" id="dia" name="dia" >
-        <button type="submit">Filtrar</button>
-    </div>  
     
     </form>
         <a id="mostrar_filtros"

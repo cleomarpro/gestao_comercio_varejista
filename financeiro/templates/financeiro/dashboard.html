@@ -1,14 +1,41 @@
-<h1>dashboard</h1>
+{% extends 'base.html'%}
+{% block main%}
+{% load static%}
+<br>
+<h2 
+    class="sub_tito" >&nbsp; DASHBOARD
+    <a href="{% url 'gastos-extras' %}">Voltar</a>
+</h2>
+
 <form id="form_mobil" class='campo_de_busca' method="GET" action="{% url 'dashboard' %}">
     
 <div>
-    <label>Por data específica </label> <br>
     <input style=" padding: 3px;" type="month" id="periodo" name="periodo" >
     <button type="submit">Filtrar</button>
 </div>  
 
 </form>
+<br>
+<table class="table">
+    <thead>
+      <tr>
+        <th >Categoria</th>
+        <th >Valor</th>
 
-{%for d in dashboard%}
-<li>categoria: {{d.gastosExtrasCategoria__nome}}, valor:{{d.valor}}</li>
-{%endfor%}
+      </tr>
+    </thead>
+    <tbody>
+
+        {%for d in dashboard%}
+          <tr>
+            <td>{{ d.gastosExtrasCategoria__nome}}</td>
+            <td>R$ {{ d.valor | floatformat:2 }}</td>
+              
+          </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <br>
+<br>
+
+{% endblock %}

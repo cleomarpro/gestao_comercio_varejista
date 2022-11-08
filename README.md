@@ -51,7 +51,10 @@
 
 1. Voltar a versção original do pip (python -m ensurepip)
 2. Atualizar o pip ( python -m pip install --upgrade pip )
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1e52283e84f8b73e03b941dca93d72bd8ddb4969
 # COMANDOS MAIS UTILIZADOS
 
 1. python manage.py makemigrations ( prepara os dados para a migração )

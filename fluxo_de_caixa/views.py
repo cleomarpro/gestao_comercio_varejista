@@ -197,7 +197,7 @@ class NovoItemPedido(LoginRequiredMixin, View):
         else:
             item = ItemDoPedido.objects.create(
                 produto_id = produto,
-                quantidade_de_itens=request.POST['quantidade'].replace(',', '.') or 1,
+                quantidade_de_itens=request.POST['quantidade'].replace(',', '.') or 0,
                 desconto=request.POST['desconto'].replace(',', '.') or 0,
                 venda_id=venda, user = user_logado, usuarios_id = usuarioId)
 
