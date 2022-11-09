@@ -1,12 +1,18 @@
 {% extends 'base.html' %}
-
 {% block main %}
+{% load static%}
 <br>
     <h2 class="sub_tito" >&nbsp; CONTA A RECEBER 
         <a 
             href="#" onclick="document.getElementById('form_up').style.display='block';">
                 Adicionar 
         </a>
+        <div>
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/cliente.png' %}" width="500px" all=" ">
+                <a href="{% url 'novo-cliente' %}">CLIENTES</a>
+            </label>
+        </div>
     </h2>
     <form id="form_up" class='formulario' style="display: none;" action="{% url 'conta_areceber' %}" method="POST" >
         {% csrf_token %}

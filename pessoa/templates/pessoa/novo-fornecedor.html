@@ -1,11 +1,19 @@
 {% extends 'base.html' %}
 {% block main %}
+{% load static%}
 <br>
     <h2 class="sub_tito" >&nbsp; FORNECEDOR
         <a 
             href="#" onclick="document.getElementById('form_up').style.display='block';">
                 Adicionar 
         </a>
+        
+        <div > 
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/estoque.png' %}" width="500px" all=" ">
+                <a href="{% url 'entrada-mercadoria' %}">ENTRADA DE MERCADO </a>
+            </label> 
+        </div>
     </h2>
     <form id="form_up" class='formulario' style="display: none;" action="{% url 'novo-fornecedor' %}" method="POST" >
          {% csrf_token %}
