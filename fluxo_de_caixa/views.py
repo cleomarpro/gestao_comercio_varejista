@@ -82,10 +82,8 @@ class AtualizarPedido(LoginRequiredMixin, View):
         data['venda'] = venda
         data['itens'] = itens
         data['usuarios'] = usuarios
-        data['produto'] = Produto.objects.filter(
-            user = user_logado, usuarios_id = usuario)
-        data['cliente'] = Cliente.objects.filter(
-            user = user_logado, usuarios_id = usuario)
+        data['produto'] = Produto.objects.filter(usuarios_id = usuario)
+        data['cliente'] = Cliente.objects.filter(usuarios_id = usuario)
         return render(
             request, 'novo-pedido.html', data)
 
@@ -115,10 +113,8 @@ class NovoPedido(LoginRequiredMixin, View):
         data['venda'] = venda
         data['itens'] = itens
         data['usuarios'] = usuarios
-        data['produto'] = Produto.objects.filter(
-            user = user_logado, usuarios_id = usuario)
-        data['cliente'] = Cliente.objects.filter(
-            user = user_logado, usuarios_id = usuario)
+        data['produto'] = Produto.objects.filter(usuarios_id = usuario)
+        data['cliente'] = Cliente.objects.filter (usuarios_id = usuario)
         return render(
             request, 'novo-pedido.html', data)
 
@@ -128,8 +124,6 @@ class NovoItemPedido(LoginRequiredMixin, View):
         user = request.user.has_perm('fluxo_de_caixa.add_venda')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-        pass
 
     def post(self, request, venda):
         user = request.user.has_perm('fluxo_de_caixa.add_venda')
@@ -175,10 +169,8 @@ class NovoItemPedido(LoginRequiredMixin, View):
             venda = Venda.objects.get(id=venda)
             data['venda'] = venda
             data['itens'] = venda.itemdopedido_set.all()
-            data['produto'] = Produto.objects.filter(
-                user = user_logado, usuarios_id = usuarioId)
-            data['cliente'] = Cliente.objects.filter(
-                user = user_logado, usuarios_id = usuarioId)
+            data['produto'] = Produto.objects.filter(usuarios_id = usuarioId)
+            data['cliente'] = Cliente.objects.filter(usuarios_id = usuarioId)
             return render(
                 request, 'novo-pedido.html', data)
         elif produto == 0 :
@@ -188,10 +180,8 @@ class NovoItemPedido(LoginRequiredMixin, View):
             venda = Venda.objects.get(id=venda)
             data['venda'] = venda
             data['itens'] = venda.itemdopedido_set.all()
-            data['produto'] = Produto.objects.filter(
-                user = user_logado, usuarios_id = usuarioId)
-            data['cliente'] = Cliente.objects.filter(
-                user = user_logado, usuarios_id = usuarioId)
+            data['produto'] = Produto.objects.filter( usuarios_id = usuarioId)
+            data['cliente'] = Cliente.objects.filter(usuarios_id = usuarioId)
             return render(
                 request, 'novo-pedido.html', data)
         else:
@@ -204,10 +194,8 @@ class NovoItemPedido(LoginRequiredMixin, View):
             data['venda'] = item.venda
             data['itens'] = item.venda.itemdopedido_set.all().order_by('-id')
             data['usuarios'] = usuarios
-            data['produto'] = Produto.objects.filter(
-                    user = user_logado, usuarios_id = usuarioId)
-            data['cliente'] = Cliente.objects.filter(
-                user = user_logado, usuarios_id = usuarioId)
+            data['produto'] = Produto.objects.filter(usuarios_id = usuarioId)
+            data['cliente'] = Cliente.objects.filter(usuarios_id = usuarioId)
             return render(
                 request, 'novo-pedido.html', data)
 
@@ -216,9 +204,11 @@ class SaidaDeMercadoria(LoginRequiredMixin, View):
         user = request.user.has_perm('fluxo_de_caixa.add_venda')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-        else:
-            user_logado = request.user # Obitendo o usuário logado
-            user_logado = user_logado.id # obitendo o ID do usuário logado
+        
+        data = {}
+
+        user_logado = request.user # Obitendo o usuário logado
+        user_logado = user_logado.id # obitendo o ID do usuário logado
         if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
             funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
             usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
@@ -228,12 +218,10 @@ class SaidaDeMercadoria(LoginRequiredMixin, View):
             usuarios = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
             usuarioId = usuarios.id # Obitendo o id  do usuário administrador
             usuarioCliente= usuarios.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-            
-            data= {}
-            data['produto'] = Produto.objects.filter(
-                user = user_logado, usuarios_id = usuarioId)
-            return render(
-                request, 'saida_mercadoria.html', data)
+    
+        data['produto'] = Produto.objects.filter(usuarios_id = usuarioId)
+        return render(
+            request, 'saida_mercadoria.html', data)
 
     def post(self, request):
         user = request.user.has_perm('fluxo_de_caixa.add_venda')
@@ -303,8 +291,7 @@ class SaidaDeMercadoria(LoginRequiredMixin, View):
                     venda_id=venda.id, user = user_logado, usuarios_id = usuarioId)
                     
                 data['saida'] = ItemDoPedido.objects.get(id=item.id)
-                data['produto'] = Produto.objects.filter(
-                    user = user_logado, usuarios_id = usuarioId)
+                data['produto'] = Produto.objects.filter(usuarios_id = usuarioId)
                 return render(
                     request, 'saida_mercadoria.html', data)
 
@@ -462,6 +449,8 @@ class EditPedido(LoginRequiredMixin, View):
             data['venda'] = venda
             data['itens'] = venda.itemdopedido_set.all()
             data['usuarios'] = usuarios
+            data['produto'] = Produto.objects.filter(usuarios_id = usuario)
+            data['cliente'] = Cliente.objects.filter(usuarios_id = usuario)
             return render(
                 request, 'novo-pedido.html', data)
         else:
