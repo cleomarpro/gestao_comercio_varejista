@@ -13,45 +13,42 @@ from pessoa.models import Funcionario
 from django.conf import settings
 #from django.urls import reverse_lazy
 #from .forms import ProdutoForm
+from home.decorators import perm_aut
+from usuarios.permitir_autorizar import autenticarAutorizar, autorizarcao_de_reistro
 
-class NovoFornecedor(LoginRequiredMixin, View):
+class NovoFornecedor(View):
     def get(self, request):
-        user = request.user.has_perm('pessoa.add_fornecedor')
-        if user == False:
+        user_logado = request.user.id
+        if user_logado == None:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
-
-        fornecedor = Fornecedor.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
+        usuario_adm = autenticarAutorizar(user_logado)
+        user = request.user.has_perm('pessoa.add_fornecedor')
+        if user == False and usuario_adm == '':
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_adm)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
+       
+        fornecedor = Fornecedor.objects.filter(usuarios__usuario_cliente= usuario_adm).order_by('-id')
         busca= request.GET.get('fornecedor',None)
         if busca:
-            fornecedor=Fornecedor.objects.filter(usuarios__usuario_cliente= usuario, cnpj__iexact=busca)
+            fornecedor=Fornecedor.objects.filter(usuarios__usuario_cliente= usuario_adm, cnpj__iexact=busca)
         return render(
-            request, 'pessoa/novo-fornecedor.html', {'fornecedor': fornecedor})
+            request, 'pessoa/novo-fornecedor.html', {
+                'fornecedor': fornecedor, 'usuario': usuario_adm})
 
     def post(self, request):
-        user = request.user.has_perm('pessoa.add_fornecedor')
-        if user == False:
+        user_logado = request.user.id
+        if user_logado == None:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        usuario_cliente = autenticarAutorizar(user_logado) 
+        user = request.user.has_perm('pessoa.add_fornecedor')
+        if user == False and usuario_cliente == '':
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
         data = {}
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
 
         fornecedor = Fornecedor.objects.create(
             nome_fantazia = request.POST['nome_fantazia'],
@@ -71,10 +68,11 @@ class NovoFornecedor(LoginRequiredMixin, View):
             Celular2  = request.POST['Celular2'],
             Telefone  = request.POST['Telefone'],
             email = request.POST['email'],
-            user = user_logado, usuarios_id = usuarioId
+            user = user_logado, usuarios_id = usuario_cliente
             )
+
         data['fornecedor'] = fornecedor
-        data['fornecedor']  = Fornecedor.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id') # listar produtos
+        data['fornecedor']  = Fornecedor.objects.filter(usuarios__id= usuario_cliente).order_by('-id') # listar produtos
         return render(
              request, 'pessoa/novo-fornecedor.html',data)
 

@@ -3,7 +3,8 @@
 from django.urls import path
 from usuarios import views
 from .views import (
-    NovoUsuario, NovoFuncionario, UpdateFuncionario, UpdateUsuario, Cobrancas, Usuario, CobrancaUpdate
+    NovoUsuario, NovoFuncionario, UpdateFuncionario, 
+    UpdateUsuario, Cobrancas, Usuario, CobrancaUpdate
 )
 
 urlpatterns = [
