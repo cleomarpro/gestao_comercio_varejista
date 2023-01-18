@@ -744,7 +744,7 @@ class AbrirFeixarCaixa(LoginRequiredMixin, View):
         data['estadoDoCaixa'] = request.POST['estadoDoCaixa']
         historico_do_caixa = Caixa.objects.get(id=id)
         usuario_adm = historico_do_caixa.usuarios.id
-        if usuario_adm == usuario: # Verificar autenticidade do usuário
+        if usuario_adm == usuario_cliente: 
 
             venda_sedula= Venda.objects.filter(
                 data_hora__contains= today, user_2 = user_logado, usuarios_id = usuario_cliente).aggregate(total_venda_cedula=Sum('valor_cedula'))
