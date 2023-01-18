@@ -14,9 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
-#from django.contrib.auth.models import Permission
-#from django.contrib.contenttypes.models import ContentType
-# Create your views here.
+from usuarios.permitir_autorizar import autenticar_usuario, autorizarcao_de_reistro
 
 class NovoUsuario(View):
     def get(self, request):
@@ -35,47 +33,36 @@ class NovoUsuario(View):
             data['mensagen_de_erro_usuario'] = 'Usuário já existe!'
             return render(
                 request, 'novo-usuario.html', data)
-
         email = User.objects.filter(email= request.POST['email'])or 0
         if email != 0:
             data['mensagen_de_erro_email'] = 'E-mail já existe!'
             return render(
                 request, 'novo-usuario.html', data)
-
         else:
             usuario = User.objects.create_user(
                 password= request.POST['password'],
                 username= request.POST['username'],
                 email= request.POST['email']
                 )
-            permissao= Group.objects.get(name='Administrador') # Buscando permissão
-            permissao_add= usuario.groups.add(permissao)# Inserindo permissão de administrador no novo usuário
-            cliente = usuario.id # Buscando o ID do usuário criado
-            
-            plano= Plano.objects.first()
-            plano= plano.id
+            permissao= Group.objects.get(name='Administrador') 
+            permissao_add= usuario.groups.add(permissao)
+            cliente = usuario.id 
             novo_usuario = Usuarios.objects.create(
-                usuario_cliente= cliente, user_id= cliente, plano_id= plano,
+                usuario_cliente= cliente, user_id= cliente, plano_id= 1,
                 cpf_cnpj= request.POST['cpf_cnpj'],
-                nome_fantazia= request.POST['nome_fantazia'])# Criando novo usuário_cliente administrador
-
+                nome_fantazia= request.POST['nome_fantazia'])
             data['usuario'] = usuario
             data['novo_usuario'] = novo_usuario
-    
             return redirect('login')
 
 class UpdateUsuario(LoginRequiredMixin, View):
     def get(self, request):
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
+        user_logado = request.user.id
         usuario = Usuarios.objects.get(user_id = user_logado)
-
         return render(request,'update-usuario.html', {'usuario': usuario})
     
     def post(self, request):
-       
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
+        user_logado = request.user.id
         usuario = Usuarios.objects.get(user_id = user_logado)
         
         usuario.id= usuario.id
@@ -110,7 +97,6 @@ class UpdateUsuario(LoginRequiredMixin, View):
         userLogado = request.user
         userLogado.email= request.POST['email'] # alterando o email do usuário logado
         userLogado.save()
-
         return redirect('usuario')
 
 class NovoFuncionario(LoginRequiredMixin, View):
@@ -118,19 +104,13 @@ class NovoFuncionario(LoginRequiredMixin, View):
         user = request.user.has_perm('pessoa.add_funcionario')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            #usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            #usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-
-        usuarios= Funcionario.objects.filter(usuarios__usuario_cliente= usuarioCliente)
+        usuarios= Funcionario.objects.filter(usuarios_id= usuario_cliente)
         return render(
             request, 'novo-funcionario.html',{'usuarios': usuarios })
 
@@ -138,25 +118,18 @@ class NovoFuncionario(LoginRequiredMixin, View):
         user = request.user.has_perm('pessoa.add_funcionario')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
         data = {}
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-
         username = User.objects.filter(username= request.POST['username'])or 0
         if username != 0:
             data['mensagen_de_erro_usuario'] = 'Usuário já existe!'
             return render(
                 request, 'novo-funcionario.html', data)
-
         else:
             usuario = User.objects.create_user(
                 password= request.POST['password'],
@@ -166,20 +139,18 @@ class NovoFuncionario(LoginRequiredMixin, View):
                 last_name= request.POST['segundo_nome'],
                 is_active= request.POST['ativo']
                 )
-
-            permissaos= Group.objects.get(name= request.POST['permissao']) # Buscando permissão
-            permissao_add= usuario.groups.add(permissaos)# Inserindo permissão ao novo usuário
-            
-            usuario= usuario.id # Id do novo usuario local criado
+            permissaos= Group.objects.get(name= request.POST['permissao']) 
+            permissao_add= usuario.groups.add(permissaos)
+    
+            usuario= usuario.id 
             funcionario = Funcionario.objects.create(
                 usuarios_id = usuarioId, user_id= usuario,
                 nome= request.POST['primeiro_nome'],
                 segundo_nome= request.POST['segundo_nome'],
                 )
-            
             data['usuario'] = usuario
             data['funcionario'] = funcionario
-            data['usuarios']= Funcionario.objects.filter(usuarios__usuario_cliente= usuarioCliente)
+            data['usuarios']= Funcionario.objects.filter(usuarios_id= usuario_cliente)
             return render(
                 request, 'novo-funcionario.html', data)
 
@@ -188,26 +159,20 @@ class UpdateFuncionario(LoginRequiredMixin, View):
         user = request.user.has_perm('pessoa.change_funcionario')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
         funcionarios = Funcionario.objects.get(user__id = id)
         usuario_adm = funcionarios.usuarios.usuario_cliente
-        if  usuario_adm == usuarioCliente:
+        if  usuario_adm == usuario_cliente:
             data = {}
             usuario= User.objects.get(id= id)
             data['usuario'] = usuario
             data['permissoes'] = usuario.groups.all()
-            data['usuarioCliente'] = usuarioCliente
+            data['usuarioCliente'] = usuario_cliente
             return render(
                     request, 'update-funcionario.html', data)
         else:
@@ -217,19 +182,13 @@ class UpdateFuncionario(LoginRequiredMixin, View):
         user = request.user.has_perm('pessoa.change_funcionario')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
         data = {}
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-        
         usuario= User.objects.get(id= id)
         user_atualizado= request.POST['username']
         user_antigo= usuario.username
@@ -237,8 +196,7 @@ class UpdateFuncionario(LoginRequiredMixin, View):
         usuario_exit = User.objects.filter(username= user_atualizado)or 0
         funcionarios = Funcionario.objects.get(user__id = id)
         usuario_adm = funcionarios.usuarios.usuario_cliente
-        if  usuario_adm == usuarioCliente:
-            
+        if  usuario_adm == usuario_cliente:
             if request.POST['password'] != '123':
                 usuario.set_password(senha)
             if user_atualizado != user_antigo:
@@ -248,27 +206,21 @@ class UpdateFuncionario(LoginRequiredMixin, View):
                     data['mensagen_de_erro_usuario'] = 'Usuário já existe!'
                     return render(
                         request, 'update-funcionario.html', data)
-
                 usuario.username= user_atualizado
             usuario.id = id
             usuario.first_name= request.POST['primeiro_nome']
             usuario.last_name= request.POST['segundo_nome']
             usuario.is_active= request.POST['ativo']
             usuario.save()
-            
-            
             if request.POST['permissao']:
-                permissao= Group.objects.get(name= request.POST['permissao']) # Buscando permissão
-                permissao_add= usuario.groups.add(permissao)# Inserindo permissão ao novo usuário
-                
+                permissao= Group.objects.get(name= request.POST['permissao']) 
+                permissao_add= usuario.groups.add(permissao)
             if request.POST['permissao_delete']:   
-                permissao= Group.objects.get(name= request.POST['permissao_delete']) # Buscando permissão
-                permissao_delete= usuario.groups.remove(permissao)# Excluindo permissão
-            
+                permissao= Group.objects.get(name= request.POST['permissao_delete']) 
+                permissao_delete= usuario.groups.remove(permissao)
             data['usuario'] = usuario
             data['permissoes'] = usuario.groups.all()
             return redirect('novo-funcionario')
- 
         else:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
@@ -277,21 +229,15 @@ def funcionarioDelete(request, id):
     user = request.user.has_perm('pessoa.delete_funcionario')
     if user == False:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-    user_logado = request.user # Obitendo o usuário logado
-    user_logado = user_logado.id # obitendo o ID do usuário logado
-    if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-        funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-        usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-        usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-    else:
-        usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-        usuarioId = usuario.id # Obitendo o id  do usuário administrador
-        usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+    user_logado = request.user.id
+    usuario_cliente = autenticar_usuario(user_logado)
+    autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+    if autorizarcao_de_reistros:
+        return autorizarcao_de_reistros
         
     funcionarios = Funcionario.objects.get(user__id = id)
     usuario_adm = funcionarios.usuarios.usuario_cliente
-    if  usuario_adm == usuarioCliente:
+    if  usuario_adm == usuario_cliente:
         
         data  = {}
         usuario= User.objects.get(id= id)
@@ -473,3 +419,6 @@ class Usuario(LoginRequiredMixin, View):
         return render(
             request, 'usuarios.html', data)
 
+class Plano(View):
+    def get(self, request):
+        return render(request, 'plano.html')
