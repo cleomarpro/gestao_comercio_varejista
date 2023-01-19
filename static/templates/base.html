@@ -55,11 +55,11 @@
                         <a href="{% url 'inicio' %}">HOME</a> 
                     </li>
                     <li> 
-                        <img id="img" src="{% static 'img/.png' %}">
+                        <img id="img" src="{% static 'img/plano.png' %}">
                         <a href="{% url 'plano' %}">MEU PLANO </a>  
                     </li>
                     <li> 
-                        <img id="img" src="{% static 'img/caixa.png' %}">
+                        <img id="img" src="{% static 'img/fatura.png' %}">
                         <a href="{% url 'fatura' %}">FATURA </a>  
                     </li>
                     --------------------------- <br>
@@ -72,7 +72,7 @@
     
                 {% if perms.fluxo_de_caixa.view_caixa %}
                     <li> 
-                        <img id="img" src="{% static 'img/caixa.png' %}">
+                        <img id="img" src="{% static 'img/historico.png' %}">
                         <a href="{% url 'lista-vendas'%}"> HISTÓRICO DE VENDAS</a> 
                     </li>
                     <li>

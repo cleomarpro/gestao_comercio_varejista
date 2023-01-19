@@ -1136,7 +1136,7 @@ class Fatura(LoginRequiredMixin, View):
                 fatura= total_a_pagar
                 
             data['debito_em_aberto'] = Cobranca.objects.filter(
-                uusuarios_id= usuario_cliente, estado_do_debito = 'Pedente')
+                usuarios_id= usuario_cliente, estado_do_debito = 'Pedente')
             data['debito_em_atraso'] = Cobranca.objects.filter(
                 usuarios_id= usuario_cliente, estado_do_debito = 'Não pago')
             data['vendas']= vendas
