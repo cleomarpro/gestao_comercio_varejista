@@ -10,11 +10,8 @@
               ('form_up').style.display='none';"> X</a>
         <p> AVISOS E INFORMAÇÕES!</p>
         <hr>
-        <p style='font-size: 16px; text-align: center; color: rgb(27, 23, 23);'> Como o sistema é cobrado</p>
-        <p style='font-size: 14px; color: rgb(32, 28, 28);'>  O sistema só será cobrado quando a fatura exceder a R$5,00 (Cinco reais ), 
-            depois será cobrado R$0,4(quatro centavos) por registro no banco de dados 
-            até atingir 750 registro, o equivalente a R$30,00 (Trinta reais),
-            depois diminuirá o valor para R$0,2 (dois centavos) por registro </p>
+        <p style='font-size: 16px; text-align: center; color: rgb(27, 23, 23);'> 
+            O sistema é cobrado quando você escolhe um plano pago
         <p style='font-size: 14px; color: rgb(27, 23, 23);'> </p>
     </form>
 
@@ -28,148 +25,140 @@
      <table class='table'>
         <thead >
            <tr>
-               <th  style=" padding: 8px; important">Descricão</th>
-               <th style=" padding: 8px; important">Registros</th>
-               <th style=" padding: 8px; important">&nbsp;</th>
-                <th style=" padding: 8px; important">&nbsp;</th>
-                <th style=" padding: 8px; important">&nbsp;</th>
-                <th class="col_table" style=" padding: 8px; important">&nbsp;</th>
+                <th style=" padding: 8px;">Descricão</th>
+                <th style=" padding: 8px;">Registros</th>
+                <th style=" padding: 8px;">&nbsp;</th>
+                <th style=" padding: 8px;">&nbsp;</th>
+                <th style=" padding: 8px;">&nbsp;</th>
+                <th class="col_table" style=" padding: 8px; ">&nbsp;</th>
            </tr> 
        </thead>
       
            <tbody >
-                <td style="text-align: left;background-color: #C6E2FF; important" > Vendas </td>
-                <td style=" background-color: #C6E2FF; important">{{ vendas}}</td>
+                <td style="text-align: left;background-color: #C6E2FF;" > Vendas </td>
+                <td style=" background-color: #C6E2FF;">{{ vendas}}</td>
                 <!-- Somente para preecher a tabela -->
-                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
-                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
-                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
-                    <td class="col_table" style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
+                    <td style="  background-color: #C6E2FF; padding: 8px;">&nbsp;</td>
+                    <td style="  background-color: #C6E2FF; padding: 8px;">&nbsp;</td>
+                    <td style="  background-color: #C6E2FF; padding: 8px;">&nbsp;</td>
+                    <td class="col_table" style="  background-color: #C6E2FF; padding: 8px;">&nbsp;</td>
         
            </tbody>
             
             <tbody>
-                <td style="text-align: left; important"> Item do pedito </td>
+                <td style="text-align: left;"> Item do pedito </td>
                 <td> {{item_do_pedito}} </td>
                 <!-- Somente para preecher a tabela -->
-                    <td style=" padding: 8px; important">&nbsp;</td>
-                    <td style=" padding: 8px; important">&nbsp;</td>
-                    <td style=" padding: 8px; important">&nbsp;</td>
-                    <td class="col_table" style="   padding: 8px; important">&nbsp;</td>
+                    <td style=" padding: 8px;">&nbsp;</td>
+                    <td style=" padding: 8px;">&nbsp;</td>
+                    <td style=" padding: 8px; ">&nbsp;</td>
+                    <td class="col_table" style="   padding: 8px;">&nbsp;</td>
             </tbody>
             <tbody>
-                <td style="text-align: left;background-color: #C6E2FF; important"> Contas a receber </td>
-                <td style=" background-color: #C6E2FF; important"> {{Contas_a_receber}} </td>
+                <td style="text-align: left;background-color: #C6E2FF;"> Contas a receber </td>
+                <td style=" background-color: #C6E2FF;"> {{Contas_a_receber}} </td>
                 <!-- Somente para preecher a tabela -->
-                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
-                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
-                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
-                    <td class="col_table" style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
+                    <td style="  background-color: #C6E2FF; padding: 8px;">&nbsp;</td>
+                    <td style="  background-color: #C6E2FF; padding: 8px;">&nbsp;</td>
+                    <td style="  background-color: #C6E2FF; padding: 8px;">&nbsp;</td>
+                    <td class="col_table" style="  background-color: #C6E2FF; padding: 8px;">&nbsp;</td>
 
             </tbody>
             <tbody>
-                <td style="text-align: left; important"> Contas a pagar </td>
+                <td style="text-align: left;"> Contas a pagar </td>
                 <td> {{Contas_a_pagar}} </td>
                 <!-- Somente para preecher a tabela -->
-                    <td style="   padding: 8px; important">&nbsp;</td>
-                    <td style="  padding: 8px; important">&nbsp;</td>
-                    <td style="   padding: 8px; important">&nbsp;</td>
-                    <td class="col_table" style="   padding: 8px; important">&nbsp;</td>
+                    <td style="   padding: 8px;">&nbsp;</td>
+                    <td style="  padding: 8px;">&nbsp;</td>
+                    <td style="   padding: 8px;">&nbsp;</td>
+                    <td class="col_table" style="   padding: 8px;">&nbsp;</td>
             </tbody>
             <tbody>
-                <td style="text-align: left; background-color: #C6E2FF; important"> Gastos extras </td>
-                <td style=" background-color: #C6E2FF; important" > {{gastos_extras}} </td>
+                <td style="text-align: left; background-color: #C6E2FF;"> Gastos extras </td>
+                <td style=" background-color: #C6E2FF;" > {{gastos_extras}} </td>
                 <!-- Somente para preecher a tabela -->
-                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
-                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
-                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
-                    <td class="col_table" style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
+                    <td style="  background-color: #C6E2FF; padding: 8px;">&nbsp;</td>
+                    <td style="  background-color: #C6E2FF; padding: 8px;">&nbsp;</td>
+                    <td style="  background-color: #C6E2FF; padding: 8px;">&nbsp;</td>
+                    <td class="col_table" style="  background-color: #C6E2FF; padding: 8px;">&nbsp;</td>
             </tbody>
             <tbody>
-                <td style="text-align: left; important"> Entrada de mercadorias </td>
+                <td style="text-align: left;"> Entrada de mercadorias </td>
                 <td> {{entrada_de_mercadoria}} </td>
                 <!-- Somente para preecher a tabela -->
-                    <td style=" padding: 8px; important">&nbsp;</td>
-                    <td style=" padding: 8px; important">&nbsp;</td>
-                    <td style=" padding: 8px; important">&nbsp;</td>
-                    <td class="col_table" style="   padding: 8px; important">&nbsp;</td>
+                    <td style=" padding: 8px;">&nbsp;</td>
+                    <td style=" padding: 8px;">&nbsp;</td>
+                    <td style=" padding: 8px;">&nbsp;</td>
+                    <td class="col_table" style="   padding: 8px;">&nbsp;</td>
 
             </tbody>
             <tbody>
-                <td style="text-align: left; background-color: #C6E2FF; important"> Caixa </td>
-                <td style=" background-color: #C6E2FF; important" > {{caixa}} </td>
+                <td style="text-align: left; background-color: #C6E2FF;"> Caixa </td>
+                <td style=" background-color: #C6E2FF;" > {{caixa}} </td>
                 <!-- Somente para preecher a tabela -->
-                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
-                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
-                    <td style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
-                    <td class="col_table" style="  background-color: #C6E2FF; padding: 8px; important">&nbsp;</td>
+                    <td style="  background-color: #C6E2FF; padding: 8px;">&nbsp;</td>
+                    <td style="  background-color: #C6E2FF; padding: 8px;">&nbsp;</td>
+                    <td style="  background-color: #C6E2FF; padding: 8px;">&nbsp;</td>
+                    <td class="col_table" style="  background-color: #C6E2FF; padding: 8px;">&nbsp;</td>
             </tbody>
             <tbody>
                  <!-- Somente para Separar as tabelas -->
-                <td style=" background-color: #ffffff; important">&nbsp; </td> 
-                <td style=" background-color: #ffffff; important"> &nbsp;</td>
-                <td style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>
-                <td style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>
-                <td style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>
-                <td class="col_table" style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>
+                <td style=" background-color: #ffffff;">&nbsp; </td> 
+                <td style=" background-color: #ffffff;"> &nbsp;</td>
+                <td style="  background-color: #ffffff; padding: 8px;">&nbsp;</td>
+                <td style="  background-color: #ffffff; padding: 8px;">&nbsp;</td>
+                <td style="  background-color: #ffffff; padding: 8px;">&nbsp;</td>
+                <td class="col_table" style="  background-color: #ffffff; padding: 8px;">&nbsp;</td>
             </tbody>
 
         <thead  >
             <tr>
-                <th  style=" padding: 8px; important">Resumo</th>
+                <th  style=" padding: 8px;">Resumo</th>
                  <!-- Somente para preecher a tabela -->
-                    <th style=" padding: 8px; important">&nbsp;</th>
-                    <th style=" padding: 8px; important">&nbsp;</th>
-                    <th style=" padding: 8px; important">&nbsp;</th>
-                    <th style=" padding: 8px; important">&nbsp;</th>
-                    <th class="col_table" style=" padding: 8px; important">&nbsp;</th>
+                    <th style=" padding: 8px;">&nbsp;</th>
+                    <th style=" padding: 8px;">&nbsp;</th>
+                    <th style=" padding: 8px;">&nbsp;</th>
+                    <th style=" padding: 8px;">&nbsp;</th>
+                    <th class="col_table" style=" padding: 8px;">&nbsp;</th>
                     
             </tr> 
         </thead>
         <br>
             <tbody>
-                <td style="text-align: left; important"> TOTAL DE REGISTRO</td>
+                <td style="text-align: left;"> TOTAL DE REGISTRO</td>
                 <td> {{total_de_registros}} </td>
                 <!-- Somente para preecher a tabela -->
-                    <td style="  padding: 8px; important">&nbsp;</td>
-                    <td style="  padding: 8px; important">&nbsp;</td>
-                    <td style="  padding: 8px; important">&nbsp;</td>
-                    <td class="col_table" style="  padding: 8px; important">&nbsp;</td>
+                    <td style="  padding: 8px;">&nbsp;</td>
+                    <td style="  padding: 8px;">&nbsp;</td>
+                    <td style="  padding: 8px;">&nbsp;</td>
+                    <td class="col_table" style="  padding: 8px;">&nbsp;</td>
             </tbody>
+           
             <tbody>
-                <td style="text-align: left; important"> TOTAL DO DÉBITO</td>
-                <td> R$ {{total_a_pagar | floatformat:2}}</td>
+                <td style="text-align: left;">FECHAMENTO DA FATURA</td>
+                <td> {{today | date:'20/m/Y'}}</td>
                 <!-- Somente para preecher a tabela -->
-                    <td style="  padding: 8px; important">&nbsp;</td>
-                    <td style=" padding: 8px; important">&nbsp;</td>
-                    <td style=" padding: 8px; important">&nbsp;</td>
-                    <td class="col_table" style=" padding: 8px; important">&nbsp;</td>
-            </tbody>
-            <tbody>
-                <td style="text-align: left; important">FECHAMENTO DA FATURA</td>
-                <td> {{data_atual | date:'01/m/Y'}}</td>
-                <!-- Somente para preecher a tabela -->
-                    <td style="  padding: 8px; important">&nbsp;</td>
-                    <td style="  padding: 8px; important">&nbsp;</td>
-                    <td style=" padding: 8px; important">&nbsp;</td>
-                    <td class="col_table" style="  padding: 8px; important">&nbsp;</td>
+                    <td style="  padding: 8px;">&nbsp;</td>
+                    <td style="  padding: 8px;">&nbsp;</td>
+                    <td style=" padding: 8px;">&nbsp;</td>
+                    <td class="col_table" style="  padding: 8px;">&nbsp;</td>
             </tbody>
 
                 <tbody>
                     <!-- Somente para Separar as tabelas -->
-                        <td style=" background-color: #ffffff; important">&nbsp; </td> 
-                        <td style=" background-color: #ffffff; important"> &nbsp;</td>
-                        <td style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>
-                        <td style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>
-                        <td style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>
-                        <td class="col_table" style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>>
+                        <td style=" background-color: #ffffff;">&nbsp; </td> 
+                        <td style=" background-color: #ffffff;"> &nbsp;</td>
+                        <td style="  background-color: #ffffff; padding: 8px;">&nbsp;</td>
+                        <td style="  background-color: #ffffff; padding: 8px;">&nbsp;</td>
+                        <td style="  background-color: #ffffff; padding: 8px;">&nbsp;</td>
+                        <td class="col_table" style="  background-color: #ffffff; padding: 8px;">&nbsp;</td>
                 </tbody>
         <thead>
             <tr> 
-                <th style=" background-color: rgb(245, 222, 52); important">Débito em aberto </th>
+                <th style=" background-color: rgb(245, 222, 52);">Fatura em aberto </th>
             </tr>
         </thead>
-        <thead  >
+        <thead >
             <tr>
                 <th >Registros</th>
                 <th >Valor</th>
@@ -196,16 +185,16 @@
 
             <tbody>
                 <!-- Somente para Separar as tabelas -->
-                    <td style=" background-color: #ffffff; important">&nbsp; </td> 
-                    <td style=" background-color: #ffffff; important"> &nbsp;</td>
-                    <td style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>
-                    <td style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>
-                    <td style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>
-                    <td class="col_table" style="  background-color: #ffffff; padding: 8px; important">&nbsp;</td>>
+                    <td style=" background-color: #ffffff;">&nbsp; </td> 
+                    <td style=" background-color: #ffffff;"> &nbsp;</td>
+                    <td style="  background-color: #ffffff; padding: 8px;">&nbsp;</td>
+                    <td style="  background-color: #ffffff; padding: 8px;">&nbsp;</td>
+                    <td style="  background-color: #ffffff; padding: 8px;">&nbsp;</td>
+                    <td class="col_table" style="  background-color: #ffffff; padding: 8px;">&nbsp;</td>
             </tbody>
         <thead>
             <tr> 
-                <th style=" background-color: rgb(238, 54, 54); important">Débito em atraso </th>
+                <th style=" background-color: rgb(238, 54, 54);">Fatuar em atraso </th>
             </tr>
         </thead>
         <thead  >

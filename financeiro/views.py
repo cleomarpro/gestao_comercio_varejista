@@ -1075,82 +1075,64 @@ class Fatura(LoginRequiredMixin, View):
         if autorizarcao_de_reistros:
             return autorizarcao_de_reistros
 
-        data = {}
+        data={}
         today = date.today()
-        ano_atual = today.year
-        mes_atual = today.month
-        if mes_atual <= 11:
-            mes = mes_atual + 1
+        mes = today.month
+        ano = today.year
+        if mes > 1 and mes <= 12:
+            um_mes_atras = mes - 1
         else:
-            mes = 1
-        dia = today.day
-        data_atual= date(day=dia, month=mes, year=ano_atual)
-        data_de_vencimento = request.GET.get('data_de_vencimento') or str(ano_atual)+'-'+ str(mes_atual)
+            um_mes_atras = 12
+
+        data_de_vencimento = request.GET.get('data_de_vencimento') or None
         if data_de_vencimento !=None:
-            data_de_vencimento =  datetime.datetime.strptime(data_de_vencimento, "%Y-%m")
-            mess = data_de_vencimento.month
-            ano_atual = data_de_vencimento.year
-        if data_de_vencimento != None:
-            mess= mess
-    
-            vendas = Venda.objects.filter(
-               usuarios_id= usuario_cliente, data_hora__month= mess, data_hora__year= ano_atual ).aggregate(count= Count('id'))
-            vendas = vendas['count'] or 0
+            data_de_vencimento = datetime.datetime.strptime(data_de_vencimento, "%Y-%m")
+            mes = data_de_vencimento.month
+       
+        vendas = Venda.objects.filter(
+            usuarios_id= usuario_cliente, data_hora__month= mes, data_hora__year= ano).aggregate(count= Count('id'))
+        vendas = vendas['count'] or 0
 
-            item_do_pedito = ItemDoPedido.objects.filter(
-                usuarios_id= usuario_cliente, venda__data_hora__month= mess, venda__data_hora__year= ano_atual ).aggregate(count= Count('id'))
-            item_do_pedito = item_do_pedito['count'] or 0
-            
-            Contas_a_receber = Contas.objects.filter(
-                usuarios_id= usuario_cliente, data_hora__month= mess, tipo_de_conta__id=1, data_hora__year= ano_atual).aggregate(count= Sum('parcelas'))
-            Contas_a_receber = Contas_a_receber['count'] or 0
+        item_do_pedito = ItemDoPedido.objects.filter(
+            usuarios_id= usuario_cliente, venda__data_hora__month= mes, venda__data_hora__year= ano ).aggregate(count= Count('id'))
+        item_do_pedito = item_do_pedito['count'] or 0
+        
+        Contas_a_receber = Contas.objects.filter(
+            usuarios_id= usuario_cliente, data_hora__month= mes, tipo_de_conta__id=1, data_hora__year= ano).aggregate(count= Sum('parcelas'))
+        Contas_a_receber = Contas_a_receber['count'] or 0
 
-            Contas_a_pagar = Contas.objects.filter(
-                usuarios_id= usuario_cliente, data_hora__month= mess, tipo_de_conta__id=2, data_hora__year= ano_atual).aggregate(count= Sum('parcelas'))
-            Contas_a_pagar = Contas_a_pagar['count'] or 0
+        Contas_a_pagar = Contas.objects.filter(
+            usuarios_id= usuario_cliente, data_hora__month= mes, tipo_de_conta__id=2, data_hora__year= ano).aggregate(count= Sum('parcelas'))
+        Contas_a_pagar = Contas_a_pagar['count'] or 0
 
-            gastos_extras = Gastos_extras.objects.filter(
-                usuarios_id= usuario_cliente, data_hora__month= mess, data_hora__year= ano_atual).aggregate(count= Count('id'))
-            gastos_extras = gastos_extras['count'] or 0
+        gastos_extras = Gastos_extras.objects.filter(
+            usuarios_id= usuario_cliente, data_hora__month= mes, data_hora__year= ano).aggregate(count= Count('id'))
+        gastos_extras = gastos_extras['count'] or 0
 
-            entrada_de_mercadoria = EntradaMercadoria.objects.filter(
-                usuarios_id= usuario_cliente, data_hora__month= mess, data_hora__year= ano_atual).aggregate(count= Count('id'))
-            entrada_de_mercadoria = entrada_de_mercadoria['count'] or 0
+        entrada_de_mercadoria = EntradaMercadoria.objects.filter(
+            usuarios_id= usuario_cliente, data_hora__month= mes, data_hora__year= ano).aggregate(count= Count('id'))
+        entrada_de_mercadoria = entrada_de_mercadoria['count'] or 0
 
-            caixa= Depositar_sacar.objects.filter(
-                usuarios_id= usuario_cliente, data_hora__month= mess, data_hora__year= ano_atual).aggregate(count= Count('id'))
-            caixa = caixa['count'] or 0
+        caixa= Depositar_sacar.objects.filter(
+            usuarios_id= usuario_cliente, data_hora__month= mes, data_hora__year= ano).aggregate(count= Count('id'))
+        caixa = caixa['count'] or 0
 
-            total_de_registros= vendas + item_do_pedito + Contas_a_receber + Contas_a_pagar + entrada_de_mercadoria + gastos_extras + caixa
-            
-            if total_de_registros <= 750:
-                total_a_pagar = total_de_registros * 4 / 100
-                
-            else:
-                total_a_pagar = total_de_registros * 2 / 100
-                total_a_pagar = total_a_pagar + 15
-                
-            if total_de_registros <= 125:
-                fatura= 'R$ 0,00' 
-            else:
-                fatura= total_a_pagar
-                
-            data['debito_em_aberto'] = Cobranca.objects.filter(
-                usuarios_id= usuario_cliente, estado_do_debito = 'Pedente')
-            data['debito_em_atraso'] = Cobranca.objects.filter(
-                usuarios_id= usuario_cliente, estado_do_debito = 'Não pago')
-            data['vendas']= vendas
-            data['item_do_pedito']= item_do_pedito
-            data['Contas_a_receber']= Contas_a_receber
-            data['Contas_a_pagar']= Contas_a_pagar
-            data['entrada_de_mercadoria']= entrada_de_mercadoria
-            data['total_de_registros']= total_de_registros
-            data['gastos_extras']= gastos_extras
-            data['total_a_pagar']= total_a_pagar
-            data['caixa']= caixa
-            data['today']= today
-            data['fatura']= fatura
-            data['data_atual'] = data_atual
+        total_de_registros= vendas + item_do_pedito + Contas_a_receber + Contas_a_pagar + entrada_de_mercadoria + gastos_extras + caixa
+        
+        data['debito_em_aberto'] = Cobranca.objects.filter(
+            usuarios_id= usuario_cliente, estado_do_debito = 'Pedente')
+        data['debito_em_atraso'] = Cobranca.objects.filter(
+            usuarios_id= usuario_cliente, estado_do_debito = 'Não pago')
+        data['vendas']= vendas
+        data['item_do_pedito']= item_do_pedito
+        data['Contas_a_receber']= Contas_a_receber
+        data['Contas_a_pagar']= Contas_a_pagar
+        data['entrada_de_mercadoria']= entrada_de_mercadoria
+        data['total_de_registros']= total_de_registros
+        data['gastos_extras']= gastos_extras
+        data['caixa']= caixa
+        data['today']= today
+        data['data_atual'] = today.year
 
         return render( request, 'financeiro/fatura.html', data)
 

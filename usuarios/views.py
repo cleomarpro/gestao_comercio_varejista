@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
-from usuarios.permitir_autorizar import autenticar_usuario, autorizarcao_de_reistro
+from usuarios.permitir_autorizar import autenticar_usuario, autorizarcao_de_reistro, registro_de_dados
 
 class NovoUsuario(View):
     def get(self, request):
@@ -98,6 +98,31 @@ class UpdateUsuario(LoginRequiredMixin, View):
         userLogado.email= request.POST['email'] # alterando o email do usuário logado
         userLogado.save()
         return redirect('usuario')
+        
+class MeuPlano(View):
+    def get(self, request):
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+
+        usuario = Usuarios.objects.get(id = usuario_cliente)
+        data = {}
+        usuario_cliente = autenticar_usuario(user_logado)
+        data['registro_de_dados'] = registro_de_dados(usuario_cliente)
+        data['meu_plano'] = usuario.plano.id
+        return render(request, 'plano.html', data)
+    def post(self, request):
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+
+        usuario = Usuarios.objects.get(id = usuario_cliente)
+        #usuario.id = user_logado
+        usuario.plano_id= request.POST['plano']
+        usuario.save()
+        data = {}
+        usuario_cliente = autenticar_usuario(user_logado)
+        data['registro_de_dados'] = registro_de_dados(usuario_cliente)
+        data['meu_plano'] = usuario.plano.id
+        return render(request, 'plano.html', data)
 
 class NovoFuncionario(LoginRequiredMixin, View):
     def get(self, request):
@@ -144,7 +169,7 @@ class NovoFuncionario(LoginRequiredMixin, View):
     
             usuario= usuario.id 
             funcionario = Funcionario.objects.create(
-                usuarios_id = usuarioId, user_id= usuario,
+                usuarios_id = usuario_cliente, user_id= usuario,
                 nome= request.POST['primeiro_nome'],
                 segundo_nome= request.POST['segundo_nome'],
                 )
@@ -419,6 +444,3 @@ class Usuario(LoginRequiredMixin, View):
         return render(
             request, 'usuarios.html', data)
 
-class Plano(View):
-    def get(self, request):
-        return render(request, 'plano.html')

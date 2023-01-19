@@ -2,58 +2,74 @@
 @import url('https://fonts.googleapis.com/css2?family=Montaga&display=swap');
 @import url('https://fonts.googleapis.com/css2? família=David+Libre&família=Montaga&família=Poppins:wght@300&família=Fonte+Sans+Pro&display=swap');
 
-#container {
+#container_plano {
     overflow-y:auto;
     overflow-x:auto;
     padding: 10px;
     position: -ms-page;
     text-align: center;
+
 }
 
-#container div{
-    padding:0px;
+#container_plano form{
+    padding:10px;
     margin-top: 50px;
-    width: 170px;
-    height: 150px;
+    width: 200px;
+    height: 250px;
     display: inline-block;
     border: 1px solid #0e0e0d;
     color: #FFF;
     border-radius: 7px;
     text-align: center;
     background-color: #c5bb5b;
+   
     
 }
 @media (max-width: 500px) {
-    #container div{
+    #container_plano div{
         width: 45%;
         padding-left:5px;
         padding-right: 5px;
     }
 }
 @media (max-width: 310px) {
-    #container div{
+    #container_plano div{
         width: 94%;
         padding-left:5px;
         padding-right: 5px;
     }
 }
-
-#container label{
-    font-size: 12px;
+#container_plano label{
+    font-size: 15px;
     padding: 0px;
 }
-#container a{
+#container_plano a{
     text-decoration: none;
 }
-#container li{
-    font-size: 12px;
+#container_plano li{
+    font-size: 15px;
     text-align: center;
     padding: 2px;
-
+    list-style: none;
+    color: #0e0e0d;
 }
 
-#container img{
+#container_plano img{
     margin-top: 10px;
     width:100px;
     text-align: center;
+}
+#br_contratar{
+    width:150px;
+    text-align: center;
+    border: 1px solid #0e0e0d;
+    color: rgb(2, 2, 2);
+    border-radius: 7px;
+    background-color: #cfccb4;
+}
+
+#lb_plano_atual{
+    text-align: center;
+    color: rgb(2, 2, 2);
+    background-color: #7bee51;
 }
