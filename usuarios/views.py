@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.db.models.aggregates import Count, Sum
 from financeiro.models import Contas, Gastos_extras
 from fluxo_de_caixa.models import Depositar_sacar, ItemDoPedido, Venda
-from pessoa.models import Funcionario, Sexo
+from pessoa.models import Funcionario
 from produto.models import EntradaMercadoria
 from usuarios.models import Cobranca, Usuarios, Plano
 from django.views import View
@@ -109,6 +109,7 @@ class MeuPlano(View):
         usuario_cliente = autenticar_usuario(user_logado)
         data['registro_de_dados'] = registro_de_dados(usuario_cliente)
         data['meu_plano'] = usuario.plano.id
+        data['plano'] = Plano.objects.all()
         return render(request, 'plano.html', data)
     def post(self, request):
         user_logado = request.user.id
@@ -122,6 +123,7 @@ class MeuPlano(View):
         usuario_cliente = autenticar_usuario(user_logado)
         data['registro_de_dados'] = registro_de_dados(usuario_cliente)
         data['meu_plano'] = usuario.plano.id
+        data['plano'] = Plano.objects.all()
         return render(request, 'plano.html', data)
 
 class NovoFuncionario(LoginRequiredMixin, View):

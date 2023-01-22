@@ -1,16 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Lobster|Philosopher:400i&display=swap');
 @import url('https://fonts.googleapis.com/css2? família=David+Libre&família=Montaga&família=Poppins:wght@300&família=Fonte+Sans+Pro&display=swap');
 
-.div_menu{
-   width: 100%;
-   font-family: 'Source Sans Pro', sans-serif;
-}
 .menu {
    width:200px;
-   left:-200px;
    height:100%;
    transition:all .5s;
    position: fixed;
+   right: -200px;
    top: 43px;
    background-color: #b0aa70;
    overflow-y:auto;
@@ -48,7 +44,6 @@
 }
 
 .menu_label:hover{
-
    color: #b62929;
 }
 
@@ -59,35 +54,41 @@
    font-size: 14px;
 }
  .menu_label{
-   background-color: white;
-   left:208px;
+   left:215px;
    top: -1px;
    position: fixed;
    display: block;
    margin:0px -200px;
-
+   right: 8px;
  }
-
 
  .menu_label img{
    margin-left: -11px;
-   border: 5px solid #000000;
-   border-radius: 2px;
-   width: 34px;
+   margin-top: 8px;
+   width: 30px;
+   position: fixed;
+   right: 8px;
  }
-
-
-.menu_input[type="checkbox"]{
-   display: none
+ 
+ #bt_menu_mobil{
+   right: 2px;
+   position: absolute;
+   margin-top: 7px;
+   width: 30px;
+   display: none;
 }
+.menu_input[type="checkbox"]{
+   display: none}
 .menu_input[type ="checkbox"]:checked ~ nav{
-   transform: translateX(200px);
+   transform: translateX(-200px);
 }
 
 @media (max-width: 768px) {
-   .menu {
-      width:200px;
-      left:-200px;
+   .menu_label{
+      display: none;
+   }
+   #bt_menu_mobil{
+      display: block;
    }
 }
 

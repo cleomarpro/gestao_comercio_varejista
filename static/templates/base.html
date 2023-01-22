@@ -35,13 +35,31 @@
 
 <body>
 <div> 
-    {% block menu%}
-    <div class= "div_menu">
-        <label class="menu_label" for="chec"> <img src="{% static 'img/menu2.png' %}" width="30" all=" "> </label >
-        <input class="menu_input" type="checkbox" id="chec" >
-        <nav class="menu">
-            <ul >
+    <div class="div_cabesalho2">
+        {% block cabesalho%}
+        <a href="{% url 'inicio' %}">
+            <img id="logo" src="{% static 'img/logo_marca.png' %}" width="500px" all=" "> 
+        </a>
+                {%if user.is_authenticated%}
+                    <label id='login_logout'> <a href="{% url 'logout' %}"> Sair </a> </label>
+                    <label> <a id='usuario' href="{% url 'usuario' %}"> Olá
+                        {%if user.first_name %} {{user.first_name}}  {%else %} {{user}} {%endif%}</a> </label>
+                        
+                {%else%}
+                    <label id='login_logout'> <a href="{% url 'login' %}">Entra</a> </label>
+
+                    <label id="link_cadastrar"><a href="{% url 'novo-usuario' %}">Cadastrar-se</a></label>
+                    <label id='usuario'> </label>
                 
+                {%endif%}
+        {% endblock%}
+    </div>
+
+    {% block menu%}
+    <label class="menu_label" for="chec"> <img src="{% static 'img/menus.png' %}" width="30" all=" "> </label >
+    <input  class="menu_input" type="checkbox" id="chec" >
+    <nav class="menu">
+            <ul >   
                 {%if user.is_authenticated%}
                     <label>
                         <img id="img" src="{% static 'img/perfil.png' %}">
@@ -137,29 +155,9 @@
                 <br>
                 <br>
             </ul>
-        </nav>
-    </div>
+    </nav>
     {% endblock menu %}
-    <div class="div_cabesalho2">
-        {% block cabesalho%}
-        <a href="{% url 'inicio' %}">
-            <img id="logo" src="{% static 'img/logo_marca.png' %}" width="500px" all=" "> 
-        </a>
-                {%if user.is_authenticated%}
-                    <label id='login_logout'> <a href="{% url 'logout' %}"> Sair </a> </label>
-                    <label> <a id='usuario' href="{% url 'usuario' %}"> Olá
-                        {%if user.first_name %} {{user.first_name}}  {%else %} {{user}} {%endif%}</a> </label>
-                        
-                {%else%}
-                    <label id='login_logout'> <a href="{% url 'login' %}">Entra</a> </label>
-
-                    <label id="link_cadastrar"><a href="{% url 'novo-usuario' %}">Cadastrar-se</a></label>
-                    <label id='usuario'> </label>
-                
-                {%endif%}
-        {% endblock%}
-    </div>
-        
+    
     <div id="div_main">
         {% block main%}
             deu certo
@@ -169,9 +167,14 @@
     <br>
     <footer>    
         {% block footer %}
-        <a href="https://www.instagram.com/vieworld.com.br/?next=%2F"> <img id="im" src="{% static 'img/insta1.png' %}"width="140px"></a>
-            
-             <a href="https://www.facebook.com/vieworld.com.br/"> <img src="{% static 'img/face1.png' %}" width="140"> </a>
+        <label id="bt_menu_mobil" for="chec"> <img src="{% static 'img/menus.png' %}" width="30" all=" "> </label >
+        <nav class=""></nav> <!-- está referenciando a nave principal -->
+        <a href="{% url 'inicio' %}"><img id="img_footer" src="{% static 'img/home.png' %}"></a>
+        <a href="{% url 'atualizar-pedido' %}"><img id="img_footer" src="{% static 'img/frente_de_caixa.png' %}"> </a>    
+        <a href="{% url 'produto' %}"><img id="img_footer" src="{% static 'img/produto.png' %}"></a> 
+        <a href="{% url 'conta_areceber' %}"><img id="img_footer" src="{% static 'img/contas.png' %}"></a>
+        <a href="{% url 'caixa' %}"><img id="img_footer" src="{% static 'img/caixa.png' %}"></a> 
+        
         {% endblock footer%}
     </footer>
 </div>

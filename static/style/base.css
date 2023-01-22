@@ -12,9 +12,9 @@ body {
 .div_cabesalho2{
     color:white;
     position: fixed;
-    width:95%;
+    width:100%;
     margin-top: -10px;
-    margin-left: 30px;
+    margin-left: -8px;
     background-color: rgb(102, 99, 37);
     font-size: 20px;
     padding: 5px;
@@ -23,7 +23,7 @@ body {
 }
 @media (max-width: 768px) {
     .div_cabesalho2{
-        width:90%;
+        width:100%;
     }
  }
 
@@ -34,17 +34,24 @@ body {
 }
 #login_logout{
     position: absolute;
-    right: 15px;
+    right: 60px;
     padding: 8px;
-
 }
 
 #link_cadastrar{
     position: absolute;
-    right: 80px;
+    right: 110px;
     padding: 8px;
-
 }
+
+@media (max-width: 768px) {
+    #link_cadastrar{
+        right: 80px;
+    }
+    #login_logout{
+        right: 15px;
+    }
+ }
 #usuario{
     position: absolute;
     margin-left: 10px;
@@ -63,8 +70,14 @@ footer {
     background-color: rgb(102, 99, 37);
     color: #FFF;
     width: 100%;
-    height: 30px;    
+    height: 40px;    
     text-align: center;
     line-height: 40px;
     margin-left: -8px;
+}
+
+#img_footer{
+    margin-top: 5px;
+    width: 30px;
+    padding-right: 8px;
 }

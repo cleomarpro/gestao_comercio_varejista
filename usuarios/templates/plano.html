@@ -4,83 +4,38 @@
 <br>
     <h2 class="sub_tito" >&nbsp; MEU PLANO
         <div>
-            <label class="sub_menu"> 
-               Registros utilizados: {{registro_de_dados}}
-            </label>
+            
         </div>
     </h2>
 
     <div id="container_plano">
+        {% for p in plano%}
         <form method="POST">
             {% csrf_token %}
-            <label> <a href="{% url 'plano' %}"><b>GRATIS</b></a></label>
+            <label> <a href="{% url 'plano' %}"><b>{{p.nome}}</b></a></label>
             <br>
             <br>
-            <li>Tem acesso ao sistem completo com o 
-                limite de 500 registro no banco de dados por mês
-            </li>
-            <input type="hidden"  name="plano" value="1">
+            <li>{{p.descricao}}</li>
+            <input type="hidden"  name="plano" value="{{p.id}}">
             <br>
             <br>
-            {% if meu_plano == 1%}
+            <span style="color: black; font-size: 18px;">R$ {{p.valor}}</span>
+            <br>
+            <br>
+            {% if meu_plano == p.id%}
             <label id="lb_plano_atual"> PLANO ATUAL</label>
+            <br>
+            <label class="sub_menu"> 
+                <progress value="{{registro_de_dados}}" max="2000">fasfsdfasfsdfas</progress> 
+                Usado:{{registro_de_dados }} / {{p.registro}} registros
+            </label>
+            <br>
             {% else %}
             <button id = 'br_contratar'> CONTRATAR</button>
-            
+            <br>
+            <br>
+            <br>
             {% endif %}
         </form>
-
-        <form method="POST">
-            {% csrf_token %}
-            <label> <a href="{% url 'plano' %}"><b>2.000 REGISTRO </b></a></label>
-            <br>
-            <br>
-            <li>Tem acesso ao sistem completo com o 
-                limite de 2.000 registro no banco de dados por mês
-            </li>
-            <input type="hidden"  name="plano" value="2">
-            <br>
-            <br>
-            {% if meu_plano == 2%}
-                <label id="lb_plano_atual"> PLANO ATUAL</label>
-            {% else %}
-                <button id = 'br_contratar'> CONTRATAR</button>
-            {% endif %}
-        </form>
-
-        <form method="POST">
-            {% csrf_token %}
-            <label> <a href="{% url 'plano' %}"><b>5.000 REGISTRO </b></a></label>
-            <br>
-            <br>
-            <li>Tem acesso ao sistem completo com o 
-                limite de 5.000 registro no banco de dados por mês
-            </li>
-            <input type="hidden"  name="plano" value="3">
-            <br>
-            <br>
-            {% if meu_plano == 3%}
-                <label id="lb_plano_atual"> PLANO ATUAL</label>
-            {% else %}
-                <button id = 'br_contratar'> CONTRATAR</button>
-            {% endif %}
-        </form>
-
-        <form method="POST">
-            {% csrf_token %}
-            <label> <a href="{% url 'plano' %}"><b>10.00 REGISTRO </b></a></label>
-            <br>
-            <br>
-            <li>Tem acesso ao sistem completo com o 
-                limite de 10.000 registro no banco de dados por mês
-            </li>
-            <input type="hidden"  name="plano" value="4">
-            <br>
-            <br>
-            {% if meu_plano == 4%}
-                <label id="lb_plano_atual"> PLANO ATUAL</label>
-            {% else %}
-                <button id = 'br_contratar'> CONTRATAR</button>
-            {% endif %}
-        </form>
+        {%endfor%}
     {% endblock %}

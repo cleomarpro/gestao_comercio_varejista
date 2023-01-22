@@ -33,7 +33,7 @@ class Gastos_extras(models.Model):
     usuarios = models.ForeignKey(Usuarios, on_delete=models.CASCADE)
 
     def __str__(self): # METODO CONSTRUTOR
-        return self.descricao + ' - ' + self.valor
+        return self.descricao
 
 class Tipo_de_conta(models.Model):
     nome=models.CharField(max_length=50, blank=True)

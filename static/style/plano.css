@@ -59,6 +59,10 @@
     width:100px;
     text-align: center;
 }
+#container_plano progress{
+    font-size: 15px;
+    background-color: #10e610;
+}
 #br_contratar{
     width:150px;
     text-align: center;
