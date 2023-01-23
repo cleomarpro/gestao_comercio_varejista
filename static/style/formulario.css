@@ -26,12 +26,12 @@
 }
 .sub_tito a{
   position:absolute;
-  right:1px;
   text-decoration: none;
   color:rgb(61, 78, 235); 
   padding: px;
   font-size: 16px;
-  margin-right: 10px;
+  margin-top: 25px;
+  left:15px;
 }
 
 .sub_tito input{

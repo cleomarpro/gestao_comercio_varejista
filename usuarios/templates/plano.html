@@ -4,7 +4,10 @@
 <br>
     <h2 class="sub_tito" >&nbsp; MEU PLANO
         <div>
-            
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/fatura.png' %}" >
+                <a href="{% url 'fatura' %}">FATURA</a>
+            </label>
         </div>
     </h2>
 
@@ -26,8 +29,8 @@
             <label id="lb_plano_atual"> PLANO ATUAL</label>
             <br>
             <label class="sub_menu"> 
-                <progress value="{{registro_de_dados}}" max="2000">fasfsdfasfsdfas</progress> 
-                Usado:{{registro_de_dados }} / {{p.registro}} registros
+                <progress value="{{registro_de_dados}}" max="2000">fasfsdfasfsdfas</progress> <br>
+                Usando {{registro_de_dados }} / {{p.registro}} registros
             </label>
             <br>
             {% else %}

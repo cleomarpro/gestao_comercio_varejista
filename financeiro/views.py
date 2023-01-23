@@ -202,7 +202,7 @@ class Gastos_extras_categoria(LoginRequiredMixin, View):
         categoria = GastosExtrasCategoria.objects.create(
         nome = request.POST['nome'],
         user = user_logado, usuarios_id = usuario_cliente)
-        return redirect('gastos-extras')
+        return redirect('categoria_de_gastos')
 
 class GastosExtrasDashboard(LoginRequiredMixin, View):
     def get(self, request):

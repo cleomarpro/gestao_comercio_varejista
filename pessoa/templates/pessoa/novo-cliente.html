@@ -152,7 +152,7 @@
         <tr>
            <th >Nome</th>
            <th >CPF/CNPJ</th>
-           <th >Data de Nascimento</th>
+           <th style="display: none;">Data de Nascimento</th>
            {% if perms.pessoa.change_cliente %}
                 <th >Editar</th>
             {%endif%}
@@ -167,7 +167,7 @@
                 <tr>
                     <td>{{ cliente.nome }}</td>
                     <td>{{ cliente.cpf_cnpj }}</td>
-                    <td>{{ cliente.data_de_nascimento | date:'d-m-y'}}</td>
+                    <td style="display: none;">{{ cliente.data_de_nascimento | date:'d-m-y'}}</td>
 
                     {% if perms.pessoa.change_cliente %}
                     <td>   <a href="{% url 'cliente_update' cliente.id %}">Editar</a> </td>

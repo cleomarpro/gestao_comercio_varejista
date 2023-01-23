@@ -169,7 +169,7 @@
         {% block footer %}
         <label id="bt_menu_mobil" for="chec"> <img src="{% static 'img/menus.png' %}" width="30" all=" "> </label >
         <nav class=""></nav> <!-- está referenciando a nave principal -->
-        <a href="{% url 'inicio' %}"><img id="img_footer" src="{% static 'img/home.png' %}"></a>
+        <a style="left: 10px;" href="{% url 'inicio' %}"><img id="img_footer" src="{% static 'img/home.png' %}"></a>
         <a href="{% url 'atualizar-pedido' %}"><img id="img_footer" src="{% static 'img/frente_de_caixa.png' %}"> </a>    
         <a href="{% url 'produto' %}"><img id="img_footer" src="{% static 'img/produto.png' %}"></a> 
         <a href="{% url 'conta_areceber' %}"><img id="img_footer" src="{% static 'img/contas.png' %}"></a>

@@ -155,7 +155,7 @@
         <tr>
             <th >Nome</th>
             <th >CNPJ</th>
-            <th >Data de criação</th>
+            <th style="display: none;">Data de criação</th>
         {% if perms.pessoa.change_fornecedor %}
             <th >Editar</th>
         {%endif%}
@@ -170,7 +170,7 @@
                 <tr>
                     <td>{{ fornecedor.nome_fantazia }}</td>
                     <td>{{ fornecedor.cnpj }}</td>
-                    <td>{{ fornecedor.data_de_criacao | date:'d-m-y' }}</td>
+                    <td style="display: none;">{{ fornecedor.data_de_criacao | date:'d-m-y' }}</td>
 
                     {% if perms.pessoa.change_fornecedor %}
                         <td> <a href="{% url 'fornecedor_update' fornecedor.id %}">Editar</a> </td>

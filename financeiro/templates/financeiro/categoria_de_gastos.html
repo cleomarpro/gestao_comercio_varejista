@@ -5,10 +5,11 @@
 <br>>
 
     <h2 class="sub_tito" >&nbsp; CATEGORIA DE GASTOS
-        <a 
+        <a style="left: 60px;"
             href="#" onclick="document.getElementById('form_up').style.display='block';">
                 Adicionar 
         </a>
+        <a href="{% url 'gastos-extras' %}">Voltar</a>
     </h2>
 
     <form id="form_up" class='formulario' style="display: none;" action="{% url 'categoria_de_gastos' %}" method="POST" >

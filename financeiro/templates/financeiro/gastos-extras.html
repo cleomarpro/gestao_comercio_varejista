@@ -77,12 +77,7 @@
           <th >Valor</th>
           <th >Categoria</th>
           <th>Data</th>
-          {% if perms.financeiro.change_gastos_extras %}
-          <th >Editar</th>
-          {% endif%}
-          {% if perms.financeiro.delete_gastos_extras %}
-          <th >Excluir</th>
-          {% endif%}
+          <th >Ação</th>
         </tr>
     </thead>
         <tbody>
@@ -96,11 +91,8 @@
                     {% if perms.financeiro.change_gastos_extras %}
                     <td>
                         <a href="{% url 'gastos_extras_update' gastos_extras.id %}">Editar</a>
-                    </td>
                     {% endif%}
-
                     {% if perms.financeiro.delete_gastos_extras %}
-                    <td>
                         <a href="{% url 'gastos_extras_delete' gastos_extras.id %}">Excluir</a>
                     </td>
                     {% endif%}

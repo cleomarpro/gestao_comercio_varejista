@@ -1,9 +1,16 @@
 {% extends 'base.html'%}
 {% block main%}
+{% load static%}
 <br>
     <h2 class="sub_tito">&nbsp; FATURA
         <a style='color:red;' href="#" onclick="document.getElementById('form_up').style.display='block';"> Informações
         </a>
+        <div>
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/plano.png' %}" >
+                <a href="{% url 'plano' %}">MEU PLANO</a>
+            </label>
+        </div>
     </h2> 
     <form id="form_up" class='formulario' style="display: none;"> 
         <a id="termo_buttao" href="#" onclick="document.getElementById
