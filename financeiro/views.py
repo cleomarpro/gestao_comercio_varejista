@@ -1118,12 +1118,11 @@ class Fatura(LoginRequiredMixin, View):
         caixa = caixa['count'] or 0
 
         total_de_registros= vendas + item_do_pedito + Contas_a_receber + Contas_a_pagar + entrada_de_mercadoria + gastos_extras + caixa
-        """
+       
         data['debito_em_aberto'] = Cobranca.objects.filter(
             usuarios_id= usuario_cliente, estado_do_debito = 'Pedente')
         data['debito_em_atraso'] = Cobranca.objects.filter(
             usuarios_id= usuario_cliente, estado_do_debito = 'Não pago')
-        """
         
         data['vendas']= vendas
         data['item_do_pedito']= item_do_pedito
@@ -1137,8 +1136,4 @@ class Fatura(LoginRequiredMixin, View):
         data['data_atual'] = today.year
 
         return render( request, 'financeiro/fatura.html', data)
-
-
-
-
 

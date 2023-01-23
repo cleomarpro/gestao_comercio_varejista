@@ -9,9 +9,9 @@
     <form id="form_up" class='formulario' method="post">
         {% csrf_token %}
 <div>
-    <label>iD do usuario*</label> <br>
-        <input style='width:200px;' Type='text' value= "{{cobranca.usuarios.id}}"
-        maxlength="30"  name='' id='usuario' placeholder="id do usuário" required/>
+    <label> Usuario*</label> <br>
+        <input style='width:200px;' disabled=" true" Type='text' 
+            value= "{{cobranca.usuarios.nome_fantazia}}" />
 </div>
 <div>
     <label> Valor do débito*</label> <br>

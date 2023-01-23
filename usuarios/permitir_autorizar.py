@@ -8,14 +8,9 @@ from produto.models import EntradaMercadoria
 from usuarios.models import Usuarios
 from django.shortcuts import redirect
 
-
-def registro_de_dados(user):
-    #usuario_admi = Usuarios.objects.get(id = user)
+today = date.today()
+def registro_de_dados(user, mes = today.month, ano_atual = today.year):
     usuario_celecionado = user
-    today = date.today()
-    ano_atual = today.year
-    mes = today.month
-   
 
     vendas = Venda.objects.filter(
         usuarios_id= usuario_celecionado, data_hora__month= mes, data_hora__year= ano_atual ).aggregate(count= Count('id'))

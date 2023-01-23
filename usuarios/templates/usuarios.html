@@ -5,20 +5,14 @@
 
 <form class='campo_de_busca' method="GET" action="{% url 'usuarios' %}" >
 {% csrf_token %}
-    <select style=" width:100px;" type="text" id="estado" name="estado" >
+    <select style=" width:100px;" type="text" id="estado" name="plano" >
         <tr>
-            <option value=''> __Estado__</option>
-            <option value="Pago">Pago </option>
-            <option value="Pedente">Pedente  </option>
-            <option value="Cancelado">Cancelado  </option>
-            <option value="Não pago">Não pago  </option>
-            <option value="sem_cobranca">sem cobrança  </option>
-            <option value="Ativos">Ativos </option>
+            <option value=''> selecionar</option>
+            {% for p in todos_os_plano%}
+            <option value="{{p.nome}}">{{p.nome}}</option>
+            {%endfor%}
         </tr>
     </select>
-
-    <input style=" width:105px; font-size:10px" type="month"  name="data_de_vencimento" id="data_de_vencimento" >
-        
         <button  type="submit">Filtrar</button>
 </form >
 
@@ -33,43 +27,25 @@
                 <th >Cpf/Cnpj</th>
                 <th > E-mail</th>
                 <th > Telefone </th>
-            {% if cobranca%}
-                <th > Registros</th>
-                <th > Valor </th>
+                <th > Plano/Valor </th>
                 <th > Estado </th>
-            {% endif %}
                 <th>Ação</th>
             </tr>
         </thead>
-        {% if cobranca %}
-            <tbody>
-                {%for cobranca in cobranca%}
-                    <tr>
-                    <td> {{cobranca.usuarios.id}} / {{cobranca.usuarios.user.username}}</td>
-                    <td> {{cobranca.usuarios.nome_fantazia}} </td>
-                    <td> {{cobranca.usuarios.cpf_cnpj}} </td>
-                    <td> {{cobranca.usuarios.email}} </td>
-                    <td> {{cobranca.usuarios.Telefone}} </td>
-                    <td> {{cobranca.registros}} </td>
-                    <td> {{cobranca.valor}} </td>
-                    <td> <a href="{% url 'cobranca' cobranca.usuarios.id %}"> Visualizar </a></td>
-                    <td> {{cobranca.estado_do_debito}} </td>
-                    </tr>
-                {%endfor%}
-            </tbody>
-        {% else %}
+    
             <tbody>
             {%for usuario in usuario%}
                 <tr>
                     <td> {{usuario.id}} / {{usuario.user.username}}</td>
                     <td> {{usuario.nome_fantazia}} </td>
                     <td> {{usuario.cpf_cnpj}} </td>
-                    <td> {{usuario.email}} </td>
+                    <td> {{usuario.user.email}} </td>
                     <td> {{usuario.Telefone}} </td>
-                    <td> <a href="{% url 'cobranca' usuario.id %}"> Visualizar fatura </a></td>
+                    <td> {{usuario.plano.registro}} / {{usuario.plano.valor}} </td>
+                    <td> estado </td>
+                    <td> <a href="{% url 'cobranca' usuario.id %}"> fatura </a></td>
                 </tr>
             {%endfor%}
         </tbody>
-    {% endif%}
 </table>   
 {% endblock %}
