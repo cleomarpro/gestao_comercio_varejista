@@ -43,7 +43,9 @@
                     <td> {{usuario.Telefone}} </td>
                     <td> {{usuario.plano.registro}} / {{usuario.plano.valor}} </td>
                     <td> estado </td>
-                    <td> <a href="{% url 'cobranca' usuario.id %}"> fatura </a></td>
+                    {%if usuario.plano.valor %}
+                        <td> <a href="{% url 'cobranca' usuario.id %}"> fatura </a></td>
+                    {%endif%}
                 </tr>
             {%endfor%}
         </tbody>

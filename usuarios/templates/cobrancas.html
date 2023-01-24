@@ -4,14 +4,32 @@
     <h2 class="sub_tito" >&nbsp; Cobrança     
         <a href="{% url 'usuarios'%}"> voltar</a>
     </h2>
-    
+
+    <form class='campo_de_busca' method="GET" >
+        {% csrf_token %}
+            <select style=" width:100px;" type="text" id="estado" name="estado" >
+                <tr>
+                    <option value=''> __Estado__</option>
+                    <option value="Pago">Pago </option>
+                    <option value="Pedente">Pedente  </option>
+                    <option value="Cancelado">Cancelado  </option>
+                    <option value="Não pago">Não pago  </option>
+                    <option value="sem_cobranca">sem cobrança  </option>
+                    <option value="Ativos">Ativos </option>
+                </tr>
+            </select>
+              
+                <input style="padding: 3px; width: 150px;" type="month" id="mes" name="mes">
+                <button  type="submit">Filtrar</button>
+        </form >
+
     <table class="table">
      <thead>
         <tr>
             <th >Id / usuário</th>
             <th >Registros</th>
             <th >Valor</th>
-            <th > Mês referente</th>
+            <th > Mês referente</th> 
             <th > data de vencimento </th>
             <th > Estado</th>
             <th > Ação </th>

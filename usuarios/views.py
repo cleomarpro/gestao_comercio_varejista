@@ -1,12 +1,8 @@
 
 from datetime import date
-import datetime
 from django.contrib.auth.models import User
-from django.db.models.aggregates import Count, Sum
-from financeiro.models import Contas, Gastos_extras
-from fluxo_de_caixa.models import Depositar_sacar, ItemDoPedido, Venda
 from pessoa.models import Funcionario
-from produto.models import EntradaMercadoria
+from django.db.models import Q
 from usuarios.models import Cobranca, Usuarios, Plano
 from django.views import View
 from django.contrib.auth.models import Group
@@ -107,7 +103,7 @@ class MeuPlano(View):
         usuario = Usuarios.objects.get(id = usuario_cliente)
         data = {}
         usuario_cliente = autenticar_usuario(user_logado)
-        data['registro_de_dados'] = registro_de_dados(usuario_cliente)
+        data['registro_de_dados'] = registro_de_dados(usuario_cliente)['total_de_registros']
         data['meu_plano'] = usuario.plano.id
         data['plano'] = Plano.objects.all()
         return render(request, 'plano.html', data)
@@ -121,7 +117,7 @@ class MeuPlano(View):
         usuario.save()
         data = {}
         usuario_cliente = autenticar_usuario(user_logado)
-        data['registro_de_dados'] = registro_de_dados(usuario_cliente)
+        data['registro_de_dados'] = registro_de_dados(usuario_cliente)['total_de_registros']
         data['meu_plano'] = usuario.plano.id
         data['plano'] = Plano.objects.all()
         return render(request, 'plano.html', data)
@@ -252,7 +248,7 @@ class UpdateFuncionario(LoginRequiredMixin, View):
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
 @login_required()
-def funcionarioDelete(request, id):
+def funcionario_elete(request, id):
     user = request.user.has_perm('pessoa.delete_funcionario')
     if user == False:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
@@ -278,12 +274,24 @@ def funcionarioDelete(request, id):
 class Cobrancas(LoginRequiredMixin, View):
     def get(self, request):
         data={}
-        data['cobranca'] = Cobranca.objects.all().order_by('-id')
+
+        estado = request.GET.get('estado')
+        mes = request.GET.get('mes')
+        data['todos_os_plano'] = Plano.objects.all()
+        if estado and mes:
+            data['cobranca']= Cobranca.objects.filter(
+                estado_do_debito= estado, data_de_vencimento__icontains = mes)
+        elif estado:
+            data['cobranca']= Cobranca.objects.filter(estado_do_debito= estado)
+        elif mes:
+            data['cobranca']= Cobranca.objects.filter(data_de_vencimento__icontains = mes)
+        else:
+            data['cobranca'] = Cobranca.objects.all().order_by('-id')
         return render(
             request, 'cobrancas.html', data)
         
 @login_required()
-def funcionarioDelete(request,id):
+def cobranca_elete(request,id):
     user = request.user.has_perm('cobranca.view_cobranca')
     if user == False:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
@@ -341,7 +349,7 @@ class NovaCobrancas(LoginRequiredMixin, View):
         usuario = Usuarios.objects.get(id= id)
         registro_de_dado = registro_de_dados( id, um_mes_atras, um_ano_atras)
         Cobranca.objects.create(
-            registros= registro_de_dado,
+            registros= registro_de_dado['total_de_registros'],
             valor = usuario.plano.valor,
             mes_referente = date(day=10, month=um_mes_atras, year=ano),
             data_de_vencimento = date(day=10, month=mes, year=ano),
@@ -390,7 +398,7 @@ class Usuario(LoginRequiredMixin, View):
         if plano:
             data['usuario']= Usuarios.objects.filter(plano__nome= plano)
         else:
-            data['usuario']= Usuarios.objects.all()
+            data['usuario']= Usuarios.objects.filter(~Q(plano__valor = 0))
         return render(
             request, 'usuarios.html', data)
 

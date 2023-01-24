@@ -41,8 +41,19 @@ def registro_de_dados(user, mes = today.month, ano_atual = today.year):
     caixa = caixa['count'] or 0
 
     total_de_registros= vendas + item_do_pedito + Contas_a_receber + Contas_a_pagar + entrada_de_mercadoria + gastos_extras + caixa
-    
-    return total_de_registros
+    data={}
+    data['vendas']= vendas
+    data['item_do_pedito']= item_do_pedito
+    data['Contas_a_receber']= Contas_a_receber
+    data['Contas_a_pagar']= Contas_a_pagar
+    data['entrada_de_mercadoria']= entrada_de_mercadoria
+    data['total_de_registros']= total_de_registros
+    data['gastos_extras']= gastos_extras
+    data['caixa']= caixa
+    data['today']= today
+    data['data_atual'] = today.year
+    data['total_de_registros'] = float(total_de_registros)
+    return data
 
     
 def autenticar_usuario(user_logado):
@@ -61,7 +72,7 @@ def autorizarcao_de_reistro(usuario_cliente):
     usuario_cliente_admin = Usuarios.objects.get(id = usuario_cliente)
     usuario_plano = usuario_cliente_admin.plano.registro
     total_de_registros = registro_de_dados(usuario_cliente)
-    if float(usuario_plano) < total_de_registros:
+    if float(usuario_plano) < total_de_registros['total_de_registros']:
         return redirect('plano')
 
 def fatura():
