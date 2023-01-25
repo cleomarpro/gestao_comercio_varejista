@@ -4,8 +4,7 @@ from django.db.models import Sum, F, FloatField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from produto.models import Produto
-from django.contrib.auth.models import User
-from usuarios.models import Cobranca, Usuarios
+from usuarios.models import Usuarios
 from pessoa.models import Funcionario, Cliente
 from datetime import date
 #import datetime
@@ -166,7 +165,7 @@ class ItemDoPedido(models.Model):
     usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
     estoque_fisico_atual = models.DecimalField(
         max_digits=9, decimal_places=2, blank=True, default=0)
-   
+
     def __str__(self):
         return str(self.venda.id) + ' - ' + str(self.produto.nome) + ' - ' + str(self.desconto) + ' - ' + str(self.quantidade_de_itens)  + ' - ' + str(self.produto.valor_venal)
 
