@@ -463,16 +463,12 @@ class Caixas(LoginRequiredMixin, View):
         autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
         if autorizarcao_de_reistros:
             return autorizarcao_de_reistros
-
-        caixa = Caixa.objects.filter(usuarios_id= usuario_cliente)
-        caixa_user_logado = Caixa.objects.filter(usuarios_id= usuario_cliente, funcionario__user = user_logado)
-        funcionarios= Funcionario.objects.filter(usuarios_id= usuario_cliente)
-
+        data = {}
+        data['caixa'] = Caixa.objects.filter(usuarios_id= usuario_cliente)
+        data['caixa_user_logado'] = Caixa.objects.filter(usuarios_id= usuario_cliente, funcionario__user = user_logado)
+        data['funcionarios']= Funcionario.objects.filter(usuarios_id= usuario_cliente)
         return render(
-            request, 'caixa.html',{'caixa':caixa,
-                'funcionarios': funcionarios,
-                'caixa_user_logado': caixa_user_logado
-                })
+            request, 'caixa.html',data)
 
     def post(self, request):
         user = request.user.has_perm('fluxo_de_caixa.view_caixa')
@@ -485,13 +481,10 @@ class Caixas(LoginRequiredMixin, View):
             return autorizarcao_de_reistros
 
         data = {}
-        data['nome_do_caixa'] = request.POST['nome_do_caixa']
-        data['funcionario'] = request.POST['funcionario']
         novo_caixa = Caixa.objects.create(
             nome_do_caixa=request.POST['nome_do_caixa'],
             funcionario_id= request.POST['funcionario'],
             user = user_logado, usuarios_id = usuario_cliente,
-
             )
         data['novo_caixa'] = novo_caixa
         data['caixa'] = Caixa.objects.filter(usuarios_id= usuario_cliente)
@@ -514,10 +507,10 @@ class CaixasUpdate(LoginRequiredMixin, View):
             return autorizarcao_de_reistros
         
         caixa = Caixa.objects.get(id=id)
-        usuario_adm = caixa.usuarios.usuario_cliente
+        usuario_adm = caixa.usuarios.id
         if usuario_adm == usuario_cliente:
         
-            data['caixa'] = Caixa.objects.get(id=id)
+            data['caixa'] = Caixa
             data['funcionarios']= Funcionario.objects.filter(usuarios_id = usuario_cliente)
             return render( request, 'caixa-update.html', data)
         else:
@@ -583,20 +576,15 @@ class CaixaDepositar(LoginRequiredMixin, View):
         caixa = Caixa.objects.get(id=id)
         usuario_adm = caixa.usuarios.id
         if usuario_adm == usuario_cliente:
-
             today = date.today()
-
             depositos = Depositar_sacar.objects.filter(
                 caixa__id = id, data_hora__contains= today).order_by('-id').order_by('-data_hora')
-
             caixa = Caixa.objects.get(id=id)
-
-            DIA = request.GET.get('dia',None)
-            DIA2 = request.GET.get('dia2',None)
-
-            if DIA and DIA2 :
+            dia = request.GET.get('dia',None)
+            dia2 = request.GET.get('dia2',None)
+            if dia and dia2 :
                 depositos = Depositar_sacar.objects.filter(
-                    data_hora__range= (DIA, DIA2), caixa__id = id).order_by('-data_hora')
+                    data_hora__range= (dia, dia2), caixa__id = id).order_by('-data_hora')
             return render(
                 request,'caixa-deposito.html',{'depositos':depositos,'caixa':caixa })
         else:
@@ -616,12 +604,14 @@ class CaixaDepositar(LoginRequiredMixin, View):
         data = {} 
         caixa = Caixa.objects.get(id=id)
         usuario_adm = caixa.usuarios.id
+        caixa = Depositar_sacar.objects.filter(caixa__id = id).last()
         if usuario_adm == usuario_cliente:
 
             deposito = Depositar_sacar.objects.create(
                 descricao=request.POST['descricao'],
                 depositar=request.POST['depositar'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$',''),
                 caixa_id = id, user = user_logado, usuarios_id = usuario_cliente,
+                estado_do_caixa = caixa.estado_do_caixa
                 )
             data['deposito'] = deposito
             data['depositos'] = Depositar_sacar.objects.filter(
@@ -651,13 +641,11 @@ class CaixaSacar(LoginRequiredMixin, View):
             today = date.today()
             sacar = Depositar_sacar.objects.filter(
                 caixa__id = id, data_hora__contains= today).order_by('-id').order_by('-data_hora')
-
-            DIA = request.GET.get('dia',None)
-            DIA2 = request.GET.get('dia2',None)
-
-            if DIA and DIA2 :
+            dia = request.GET.get('dia',None)
+            dia2 = request.GET.get('dia2',None)
+            if dia and dia2 :
                 sacar = Depositar_sacar.objects.filter(
-                    data_hora__range= (DIA, DIA2), caixa__id = id).order_by('-data_hora')
+                    data_hora__range= (dia, dia2), caixa__id = id).order_by('-data_hora')
             return render(
                 request, 'caixa-sacar.html',{'sacar':sacar, 'caixa':caixa})
         else:
@@ -677,11 +665,13 @@ class CaixaSacar(LoginRequiredMixin, View):
         data = {}
         caixa = Caixa.objects.get(id=id)
         usuario_adm = caixa.usuarios.id
+        caixa = Depositar_sacar.objects.filter(caixa__id = id).last()
         if usuario_adm == usuario_cliente: 
             deposito = Depositar_sacar.objects.create(
                 descricao= request.POST['descricao'],
                 sacar= request.POST['sacar'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$',''),
                 caixa_id= id, user = user_logado, usuarios_id = usuario_cliente,
+                estado_do_caixa = caixa.estado_do_caixa
                 )
             data['deposito'] = deposito
             data['sacar'] = Depositar_sacar.objects.filter(
@@ -705,21 +695,19 @@ class AbrirFeixarCaixa(LoginRequiredMixin, View):
             return autorizarcao_de_reistros
 
         today = date.today()
-        historico_do_caixa = Caixa.objects.get(id=id)
-        usuario_adm = historico_do_caixa.usuarios.id
+        caixa = Caixa.objects.get(id=id)
+        usuario_adm = caixa.usuarios.id
         if usuario_adm == usuario_cliente: 
 
             historico_do_caixa = Depositar_sacar.objects.filter(
-                Q(estadoDoCaixa='Feixado') | Q(estadoDoCaixa='Aberto'), caixa__id = id, user = user_logado,data_hora__contains= today).order_by('-id')
-
+                Q(estado_do_caixa='Feixado') | Q(estado_do_caixa='Aberto'), caixa__id = id, user = user_logado,data_hora__contains= today).order_by('-id')
             estado_do_caixa= Depositar_sacar.objects.filter(caixa__id = id).last()
+            dia = request.GET.get('dia',None)
+            dia2 = request.GET.get('dia2',None)
 
-            DIA = request.GET.get('dia',None)
-            DIA2 = request.GET.get('dia2',None)
-
-            if DIA and DIA2 :
+            if dia and dia2 :
                 historico_do_caixa = Depositar_sacar.objects.filter(
-                Q(estadoDoCaixa='Feixado') | Q(estadoDoCaixa='Aberto'), data_hora__range= (DIA, DIA2), caixa__id = id, user = user_logado, data_hora__contains= today).order_by('-id')
+                Q(estado_do_caixa='Feixado') | Q(estado_do_caixa='Aberto'), data_hora__range= (dia, dia2), caixa__id = id, user = user_logado, data_hora__contains= today).order_by('-id')
             return render(
                 request, 'abrir-feixar-caixa.html',{
                     'historico_do_caixa':historico_do_caixa,
@@ -741,7 +729,7 @@ class AbrirFeixarCaixa(LoginRequiredMixin, View):
         today = date.today()
         data = {}
         data['descricao'] = request.POST['descricao']
-        data['estadoDoCaixa'] = request.POST['estadoDoCaixa']
+        data['estado_do_caixa'] = request.POST['estado_do_caixa']
         historico_do_caixa = Caixa.objects.get(id=id)
         usuario_adm = historico_do_caixa.usuarios.id
         if usuario_adm == usuario_cliente: 
@@ -762,18 +750,17 @@ class AbrirFeixarCaixa(LoginRequiredMixin, View):
             saldoEmCaixa= Caixa.objects.get(id = id) # buscando o saldo atual do caiza
             saldoEmCaixa= saldoEmCaixa.valor_atualizado
             saldoEmCaixa= float(saldoEmCaixa) + float(ultimas_vendas)
-
             deposito = Depositar_sacar.objects.create(
                 descricao= request.POST['descricao'],
-                estadoDoCaixa= request.POST['estadoDoCaixa'],
+                estado_do_caixa= request.POST['estado_do_caixa'],
                 caixa_id= id, user = user_logado, usuarios_id = usuario_cliente,
                 venda_realizadas= ultimas_vendas, depositar= ultimas_vendas,
-                saldo_em_caixa= saldoEmCaixa
+                saldo_em_caixa= saldoEmCaixa,
                 )
             data['deposito'] = deposito
             data['historico_do_caixa'] = Depositar_sacar.objects.filter(
-                Q(estadoDoCaixa='Feixado') | Q(estadoDoCaixa='Aberto'), caixa__id = id, user = user_logado,data_hora__contains= today).order_by('-id')
-            data['estado_do_caixa']= Depositar_sacar.objects.filter(caixa__id = id).last()
+                Q(estado_do_caixa='Feixado') | Q(estado_do_caixa='Aberto'), caixa__id = id, user = user_logado,data_hora__contains= today).order_by('-id')
+            data['estado_do_caixa']= estado_do_caixa = Depositar_sacar.objects.filter(caixa__id = id).last()
 
             return render(
                 request, 'abrir-feixar-caixa.html', data)

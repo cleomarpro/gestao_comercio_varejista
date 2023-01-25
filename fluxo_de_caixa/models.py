@@ -16,6 +16,7 @@ class Caixa(models.Model):
     valor_atualizado = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, default=0)
     user = models.CharField(max_length=100, blank=True, null=True)
     usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
+    data_hora = models.DateTimeField(default=timezone.now)
 
     def caixa(self):
 
@@ -38,7 +39,7 @@ class Caixa(models.Model):
 
 class Depositar_sacar(models.Model):
     descricao = models.CharField(max_length=100, null=True, blank=True, verbose_name="Descrição")
-    estadoDoCaixa = models.CharField(max_length=10, null=True, blank=True, verbose_name="Descrição")
+    estado_do_caixa = models.CharField(max_length=10, null=True, blank=True, verbose_name="estado do caixa")
     depositar = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, default=0)
     venda_realizadas= models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, default=0)
     saldo_em_caixa = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, default=0)
