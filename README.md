@@ -34,8 +34,6 @@ Tipo_de_pagamento.objects.create(nome='Cédula e Crédito', id='5')
 
 Tipo_de_pagamento.objects.create(nome='Crédito e Débito', id='6')
 
-Plano.objects.create(nome='Sem plano', id='1')
-
 Sexo.objects.create(id= '1', nome='Não espesificado')
 
 Sexo.objects.create(id= '2', nome='Masculino')

@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 .vscode
 .ipynb_checkpoints
-=======
-
->>>>>>> 1e52283e84f8b73e03b941dca93d72bd8ddb4969
 db.sqlite3
 venv/
 *.sqlite3
