@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block main %} 
+<br>
+    <h2 class="sub_tito" >&nbsp; Cobrança  
+        <a style="left: 60px;"
+            href="#" onclick="document.getElementById('form_up').style.display='block';">
+            Adicionar 
+        </a>    
+        <a href="{% url 'usuarios'%}"> voltar</a>
+    </h2>
+
+<form id="form_up" class='formulario' style="display: none;" method="post">
+    {% csrf_token %}
+    <a id="termo_buttao" href="#" onclick="document.getElementById
+    ('form_up').style.display='none';"> X</a>
+    <p> NOVA COBRANÇA</p>
+    <p style="color:brown">{{messagem_de_error}}</p>
+   <hr> 
+
+        <div>
+            <label> Usuario*</label> <br>
+                <input style='width:200px;' disabled="true" Type='text' value= "{{usuario.nome_fantazia}}"
+                maxlength="30"  name='valor' id='valor'  />
+        </div>
+        <div>
+            <label> Valor do débito*</label> <br>
+                <input style='width:200px;' disabled="true" Type='text' value= "{{usuario.plano.valor}}"
+                maxlength="30"  name='valor' id='valor'  />
+        </div>
+        <div>
+            <label>Total de registro*</label> <br>
+                <input style='width:200px;'disabled="true" Type='text' value= "{{registro_de_dados}}"
+                maxlength="30"  name='registros' id='registros' />
+        </div>
+        <div>
+            <label>Link*</label><br>
+                <input style='width:200px;' Type='text' name= 'link' 
+                id='link' placeholder="Link de pagamento" required/>
+            </div>
+            <div>
+            <label> Estado*</label><br>
+            <select style=" width:200px;" type="text" id="estado" name="estado" required>
+                <tr>
+                    <option value=''> __Estado__</option>
+                    <option value="Pago">Pago </option>
+                    <option value="Pedente">Pedente  </option>
+                    <option value="Cancelado">Cancelado  </option>
+                    <option value="Não pago">Não pago  </option>
+                </tr>
+            </select>
+        </div>
+            <hr>
+            <button type="submit" > Criar cobrança </button>
+                <br>
+            <br>
+</form>
+
+
+
+
+
+    <table class="table">
+     <thead>
+        <tr>
+            <th >Id / usuário</th>
+            <th >Registros</th>
+            <th >Valor</th>
+            <th > Mês referente</th>
+            <th > data de vencimento </th>
+            <th > Estado</th>
+            <th > Ação </th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+        <tbody>
+            {%for cobranca in cobranca%}
+                <tr>
+                    <td style="text-align: left;"> {{cobranca.usuarios.id}} {{cobranca.usuarios.nome_fantazia}}</td>
+                    <td style="text-align: left;">{{cobranca.registros}}</td>
+                    <td style="text-align: left;">{{cobranca.valor}}</td>
+                    <td style="text-align: left;"> {{cobranca.mes_referente}}</td>
+                    <td style="text-align: left;"> {{cobranca.data_de_vencimento}}</td>
+                    <td style="text-align: left;"> {{cobranca.estado_do_debito}}</td>
+                    <td>
+                        <a href="{% url 'cobranca-update' cobranca.id %}"> Alterar</a>
+                    </td>
+                    
+                </tr>
+            {%endfor%}
+        </tbody>
+    </table> 
+{% endblock %}

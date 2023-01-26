@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<br>
+    <h2 class="sub_tito" >&nbsp; ENTRADA DE MERCADORIA <a href="{% url 'entrada-mercadoria' %}">Cancelar</a></h2>
+    <form class='formulario' method="POST" >
+        {% csrf_token %}
+        <p> EDITAR MERCADORIA</p>
+        <hr>
+        <div>
+            <label> Produto</label> <br>
+            <select style=" width:150px;" type="search" id="produto" name="produto" required/>
+                <tr>
+                    <option value='{{entrada_Mercadoria.produto.id}}'> {{entrada_Mercadoria.produto}}</option>
+                    {% for produto in produto %}
+                        <option value='{{produto.id}}'> {{produto}}</option>
+                    {% endfor %}
+                </tr>
+            </select>
+                <a  href="{% url 'produto' %}">+</a>
+        </div>
+        <div>
+            <label> Fornecedor</label> <br>
+            <select style=" width:150px;" type="search" id="fornecedor" name="fornecedor" >
+                <tr>
+                    <option value='{{entrada_Mercadoria.fornecedor.id}}'> {{entrada_Mercadoria.fornecedor}}</option>
+                    {% for fornecedor in fornecedor %}
+                        <option value='{{fornecedor.id}}'> {{fornecedor}}</option>
+                    {% endfor %}
+                </tr>
+            </select>
+                <a  href="{% url 'novo-fornecedor' %}">+</a>
+        </div>
+        <div>
+            <label> Quantidade</label> <br>
+            <input style=" width:150px;"  placeholder=" Quantidade..." value="{{entrada_Mercadoria.quantidade}}"
+                type="text" id="quantidade" name="quantidade"  required/>
+        </div>
+        <div>
+            <label> Validade do produto</label> <br>
+            <input style=" width:150px; padding: 3px;" 
+                value="{{entrada_Mercadoria.validade_produto | date:'Y-m-d'}}"
+                type="date" id="validade_produto" name="validade_produto" >
+        </div>
+            <hr>
+            <button type="submit"> Editar</button>
+    </form>
+    
+{% endblock %}

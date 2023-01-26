@@ -1,0 +1,59 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lobster|Philosopher:400i&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Inria+Serif&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Courier+Prime&display=swap');
+@import url('https://fonts.googleapis.com/css2? família=David+Libre&família=Montaga&família=Poppins:wght@300&família=Fonte+Sans+Pro&display=swap');
+
+.table{
+    background-color: #F0F8FF;
+    font-size:15px;
+    margin-left:0px;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.table th{
+    background-color: #7b7338;
+    font-size: 16px;
+    padding:5px;
+    width: 15%;
+   
+}
+
+.table a{
+    text-decoration: none;
+}
+.table td{
+    text-align: center;
+    font-size: 16px;
+    background-color: #cdc586;
+}
+
+@media (max-width: 768px) {
+.table{
+    margin-left:0px;
+    width:100%;
+    font-size:10px;
+}
+
+.table th{
+    font-size: 14px;
+   
+}
+
+.table td{
+    font-size: 14px;
+
+}
+.col_table{
+    display: none;
+}
+}
+
+
+
+
+
+
+
+

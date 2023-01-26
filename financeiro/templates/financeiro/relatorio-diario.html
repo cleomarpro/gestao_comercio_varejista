@@ -1,0 +1,52 @@
+{% extends 'base.html'%}
+{% block main%}
+<br>
+<br>
+<h2 class='sub_tito'>&nbsp; RELATÓRIO DIÁRIO</h2>
+<form class='campo_de_busca_relat' method="GET" action="{% url 'relatorio_diario' %}">
+    <div>
+        <label>Escolhe uma data</label><br>
+        <input style=" width:150px;" type="date"  name="dia" id="dia"  required/>
+        <button  type="submit">Filtrar</button>
+    </div>
+</form>
+
+<br>
+
+<form class='relatorio'>
+    <label>Total invertido: R$ {{invertimento_do_dia | floatformat:2}}</label>
+     <br>
+<label>
+    <label>Total bruto das vendas: R$ {{vendas_do_dia| floatformat:2}}</label><br>
+    <a style='text-align: center;'>Por tipo de pagamento</a>
+     <br>
+    <label style='border: 1px solid #303131; border-radius:
+        5px; font-size:15px; padding: 5px; width: 180px;'>
+        Cédula: R$ {{ cedula.total_venda_cedula | floatformat:2}} </label>
+    <label style='border: 1px solid #303131; border-radius:
+        5px; font-size:15px; padding: 5px; width: 180px;'>
+        Crédito: R$ {{ credito.total_venda_credito | floatformat:2}}</label>
+    <label style='border: 1px solid #303131; border-radius:
+        5px; font-size:15px; padding: 5px; width: 180px;'>
+        Débito: R$ {{ debito.total_venda_debito | floatformat:2}}</label>
+</label>
+    <label>Desconto: R$ {{desconto_po_dia.total_desconto | floatformat:2}}</label>
+      <br>
+    <label>Lucro: R$ {{lucro_diario | floatformat:2}}</label>
+
+    <h2>&nbsp; Outras observações</h2>
+
+    <label>Gastos extras: R$ {{gastos_extras_diario.gastos | floatformat:2}}</label>
+    <br>
+    <label>Contas a receber: R$ {{Contas_diario_a_receber.total_conta | floatformat:2}} </label>
+    <br>
+    <label>Contas a pagar: R$ {{Contas_diario_a_pagar.total_conta | floatformat:2}} </label>
+    <br>
+</form>
+<br>
+{% endblock %}
+
+
+
+
+

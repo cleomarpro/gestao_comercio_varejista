@@ -1,0 +1,67 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lobster|Philosopher:400i&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Inria+Serif&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Courier+Prime&display=swap');
+
+
+.usuario{
+    background-color: #c7bd76;
+    width: 98%;
+    font-size:15px;
+}
+.usuario a{
+    text-decoration:none;
+}
+.usuario h2{
+    margin-left:195px;
+    background-color: #454549;
+    font-size:18px;
+    color: rgb(245, 241, 241);
+    padding-block: 7px;
+
+}
+.usuario label{
+    font-size:18px;
+   margin-left: 15px;
+    width: 94%;
+    display: inline-block;
+
+}
+
+.titulo_usuario{
+    
+    color:rgb(10, 9, 9);
+    margin-left:185px;
+    
+    border-radius: 5px;
+    font-size:25px;
+    width: 600px;
+
+    
+}
+.campo_de_filtro {
+    background-color: #F0F8FF;
+    margin-left:185px;
+    font-size:18px;
+    width: 580px;
+    padding-left:10px;
+
+}
+
+@media (max-width: 768px) {
+.usuario{
+    margin-left:0px;
+    width: 100%;
+    padding:10px;
+}
+
+.usuario label{
+    font-size:18px;
+}
+.titulo_usuario{
+    margin-left:0px;
+    padding: 10px;
+    width: 100%;
+}
+}

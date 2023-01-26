@@ -1,30 +1,17 @@
-#from django.shortcuts import render
 from datetime import date
 from django.contrib.auth.decorators import login_required
-#import datetime
-#from django.db.models import Sum, Count, F #Avg ,DecimalField, F # Max ExpressionWrapper FloatField DecimalField Sum
-#from django.core.exceptions import ValidationError
-#from django import forms
-#from django.contrib.auth import authenticate
-#from django.http import HttpResponse
 from django.shortcuts import render, redirect
-#from django.contrib.auth.decorators import login_required
 from django.views import View
 from .models import Venda, Depositar_sacar, Caixa
 from .models import Produto
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.conf import settings
-from usuarios.models import Usuarios
-from pessoa.models import Fornecedor, Funcionario
+from pessoa.models import Funcionario
 from django.db.models import Sum 
 from django.db.models import Q
-#from django.contrib.auth.models import User
-#from django.contrib.auth.decorators import login_required
-#from financeiro.models import Contas
-#from financeiro.models import Gastos_extras
-#from pessoa.models import pessoaFisica
+from pessoa.models import Cliente
 from .models import ItemDoPedido
-#from .forms import ItemPedidoForm #produtoForm
+from usuarios.permitir_autorizar import autenticar_usuario, autorizarcao_de_reistro
 
 class AtualizarPedido(LoginRequiredMixin, View):
     def get(self, request):
@@ -38,42 +25,29 @@ class AtualizarPedido(LoginRequiredMixin, View):
         user = request.user.has_perm('fluxo_de_caixa.change_venda')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-        
-        data = {}
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarios = Usuarios.objects.get(id = usuario) # Buscando usuário administrador com base no usuário logado
-        else:
-            usuarios = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuarios.id # Obitendo o id  do usuário administrador
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
-        data['pagamento']= request.POST['pagamento']  or 1
-        data['descricao']= request.POST['descricao']
-        data['valor_recebido']= request.POST['valor_recebido']
-        data['valor_credito']= request.POST['valor_credito']
-        data['valor_debito']= request.POST['valor_debito']
-        data['finalizada']= request.POST.get('finalizada', False)
-        data['desconto'] = request.POST['desconto']
-        data['venda_id'] = request.POST['venda_id']
-        
-        if data['venda_id']:
+        data = {}
+        if request.POST['venda_id']:
             vendas= Venda.objects.get(id= request.POST['venda_id'])
             usuario_adm = vendas.usuarios.id
 
-            if usuario_adm == usuario:
-                venda = Venda.objects.get(id=data['venda_id'])
-                venda.desconto = data['desconto'].replace(',', '.').replace('%', '') or 0
-                venda.tipo_de_pagamento_id = data['pagamento'] or 1
-                venda.finalizada = data['finalizada']
-                venda.descricao = data['descricao']
-                venda.valor_recebido = data['valor_recebido'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
-                venda.valor_credito = data['valor_credito'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
-                venda.valor_debito = data['valor_debito'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
+            if usuario_adm == usuario_cliente:
+                venda = Venda.objects.get(id = request.POST['venda_id'])
+                venda.desconto = request.POST['desconto'].replace(',', '.').replace('%', '') or 0
+                venda.tipo_de_pagamento_id = request.POST['pagamento']  or 1
+                venda.finalizada = request.POST.get('finalizada', False)
+                if request.POST['cliente']:
+                    venda.cliente_id = request.POST['cliente']
+                venda.valor_recebido = request.POST['valor_recebido'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
+                venda.valor_credito = request.POST['valor_credito'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
+                venda.valor_debito = request.POST['valor_debito'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$','')
                 venda.user_2 = user_logado
-                venda.venda_id = data['venda_id']
+                venda.venda_id = request.POST['venda_id']
 
                 venda.save()
             
@@ -84,12 +58,14 @@ class AtualizarPedido(LoginRequiredMixin, View):
             if user == False:
                 return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
-            venda = Venda.objects.create(user = user_logado, usuarios_id = usuario)
+            venda = Venda.objects.create(user = user_logado, usuarios_id = usuario_cliente)
 
         itens = venda.itemdopedido_set.all().order_by('-id')
         data['venda'] = venda
         data['itens'] = itens
-        data['usuarios'] = usuarios
+        data['usuarios'] = usuario_cliente
+        data['produto'] = Produto.objects.filter(usuarios_id = usuario_cliente)
+        data['cliente'] = Cliente.objects.filter(usuarios_id = usuario_cliente)
         return render(
             request, 'novo-pedido.html', data)
 
@@ -100,25 +76,22 @@ class NovoPedido(LoginRequiredMixin, View):
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarios = Usuarios.objects.get(id = usuario) # Buscando usuário administrador com base no usuário logado
-        else:
-            usuarios = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuarios.id # Obitendo o id  do usuário administrador
-
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
         data = {}
         data['venda_id'] = request.POST['venda_id']
 
-        venda = Venda.objects.create(user = user_logado, usuarios_id = usuario)
+        venda = Venda.objects.create(user = user_logado, usuarios_id = usuario_cliente)
 
         itens = venda.itemdopedido_set.all().order_by('-id')
         data['venda'] = venda
         data['itens'] = itens
-        data['usuarios'] = usuarios
+        data['usuarios'] = usuario_cliente
+        data['produto'] = Produto.objects.filter(usuarios_id = usuario_cliente)
+        data['cliente'] = Cliente.objects.filter (usuarios_id = usuario_cliente)
         return render(
             request, 'novo-pedido.html', data)
 
@@ -129,53 +102,153 @@ class NovoItemPedido(LoginRequiredMixin, View):
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
-        pass
-
     def post(self, request, venda):
         user = request.user.has_perm('fluxo_de_caixa.add_venda')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
+
         data = {}
-
-        data['desconto'] = request.POST['desconto'].replace(',', '.')
-        data['quantidade'] = request.POST['quantidade'].replace(',', '.')
-        data['produto_codigo'] = request.POST['produto_codigo']
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-            usuarios = Usuarios.objects.get(id = usuarioId) # Buscando usuário administrador com base no usuário logado
-        else:
-            usuarios = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioId = usuarios.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuarios.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-
-        produto= Produto.objects.filter(usuarios__usuario_cliente= usuarioCliente, codigo= request.POST['produto_codigo'] ) or 0
-        if produto != 0:
-            produto_id= produto.latest('pk').pk
-        if produto == 0:
-            data['mensagen_de_erro'] = 'Produto não cadastrado!'
+        produto= Produto.objects.filter(
+            usuarios_id= usuario_cliente, codigo= request.POST['produto_codigo'] ) or 0
+        if request.POST['produto_select']  and request.POST['produto_codigo'] :
+            data={}
+            data['mensagen_de_erro_campo_obrigatorio'] = 'Preencha apenas um dos campos a baixa'
             venda = Venda.objects.get(id=venda)
             data['venda'] = venda
             data['itens'] = venda.itemdopedido_set.all()
+            data['produto'] = Produto.objects.filter(
+                user = user_logado, usuarios_id = usuario_cliente)
+            data['cliente'] = Cliente.objects.filter(
+                user = user_logado, usuarios_id = usuario_cliente)
             return render(
                 request, 'novo-pedido.html', data)
-
+        
+        if produto != 0:
+            produto= produto.latest('pk').pk
+        if request.POST['produto_codigo'] == '':
+            produto = request.POST['produto_select']
+            
+        if request.POST['produto_select'] == '' and request.POST['produto_codigo'] == '':
+            data={}
+            data['mensagen_de_erro_campo_obrigatorio'] = 'Preencha um do campos a baixa'
+            venda = Venda.objects.get(id=venda)
+            data['venda'] = venda
+            data['itens'] = venda.itemdopedido_set.all()
+            data['produto'] = Produto.objects.filter(usuarios_id = usuario_cliente)
+            data['cliente'] = Cliente.objects.filter(usuarios_id = usuario_cliente)
+            return render(
+                request, 'novo-pedido.html', data)
+        elif produto == 0 :
+            data['mensagen_de_erro'] = 'Produto não cadastrado!'
+            data['mensagen_de_erro_dica'] = 'Verifica o cdigo e tente novamente!' 
+            data['mensagen_de_erro_acao'] = 'Para feichar, pressione ( Alt + X ) !'
+            venda = Venda.objects.get(id=venda)
+            data['venda'] = venda
+            data['itens'] = venda.itemdopedido_set.all()
+            data['produto'] = Produto.objects.filter( usuarios_id = usuario_cliente)
+            data['cliente'] = Cliente.objects.filter(usuarios_id = usuario_cliente)
+            return render(
+                request, 'novo-pedido.html', data)
         else:
             item = ItemDoPedido.objects.create(
-                produto_id = produto_id,
-                quantidade_de_itens=request.POST['quantidade'].replace(',', '.') or 1,
+                produto_id = produto,
+                quantidade_de_itens=request.POST['quantidade'].replace(',', '.') or 0,
                 desconto=request.POST['desconto'].replace(',', '.') or 0,
-                venda_id=venda, user = user_logado, usuarios_id = usuarioId)
+                venda_id=venda, user = user_logado, usuarios_id = usuario_cliente)
 
             data['venda'] = item.venda
             data['itens'] = item.venda.itemdopedido_set.all().order_by('-id')
-            data['usuarios'] = usuarios
+            data['usuarios'] = usuario_cliente
+            data['produto'] = Produto.objects.filter(usuarios_id = usuario_cliente)
+            data['cliente'] = Cliente.objects.filter(usuarios_id = usuario_cliente)
             return render(
                 request, 'novo-pedido.html', data)
+
+class SaidaDeMercadoria(LoginRequiredMixin, View):
+    def get(self, request):
+        user = request.user.has_perm('fluxo_de_caixa.add_venda')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
+
+        data = {}
+        data['produto'] = Produto.objects.filter(usuarios_id = usuario_cliente)
+        return render(
+            request, 'saida_mercadoria.html', data)
+
+    def post(self, request):
+        user = request.user.has_perm('fluxo_de_caixa.add_venda')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
+
+        data = {}
+        produto= Produto.objects.filter(
+            usuarios_id= usuario_cliente, codigo= request.POST['produto_codigo'] ) or 0
+        
+        if request.POST['produto_select']  and request.POST['produto_codigo'] :
+            data={}
+            data['mensagen_de_erro_campo_obrigatorio'] = 'Preencha apenas um dos campos a baixa'
+            data['produto'] = Produto.objects.filter(
+                    user = user_logado, usuarios_id = usuario_cliente)
+            return render(
+                request, 'saida_mercadoria.html', data)
+        
+        if produto != 0:
+            produto= produto.latest('pk').pk
+        if request.POST['produto_codigo'] == '':
+            produto = request.POST['produto_select']
+            
+        if request.POST['produto_select'] == '' and request.POST['produto_codigo'] == '':
+            data={}
+            data['mensagen_de_erro_campo_obrigatorio'] = 'Preencha um do campos a baixa'
+            data['produto'] = Produto.objects.filter(
+                    user = user_logado, usuarios_id = usuario_cliente)
+            return render(
+                request, 'saida_mercadoria.html', data)
+        elif produto == 0 :
+            data['mensagen_de_erro'] = 'Produto não cadastrado!'
+            data['mensagen_de_erro_dica'] = 'Verifica o cdigo e tente novamente!' 
+            data['mensagen_de_erro_acao'] = 'Para feichar, pressione ( Alt + X ) !'
+            data['produto'] = Produto.objects.filter(
+                    user = user_logado, usuarios_id = usuario_cliente)
+            return render(
+                request, 'saida_mercadoria.html', data)
+        else:
+            produtoestoque= Produto.objects.get(id = produto)
+            produto_estoque =  produtoestoque.estoque
+            if float(produto_estoque) < float(request.POST['estoque_fisico_atual']):
+                data['mensagen_de_erro_2'] = 'Estoque menor que a quantidade inserida!'
+                data['mensagen_de_erro_dica'] = 'Seu estoque deve está desatualizado, atualize-o e tente novamente!' 
+                data['mensagen_de_erro_acao'] = 'Para feichar, pressione ( Alt + X ) !'
+                data['produto'] = Produto.objects.filter(
+                    user = user_logado, usuarios_id = usuario_cliente)
+                return render(
+                request, 'saida_mercadoria.html', data)
+            else:
+                venda = Venda.objects.create(user = user_logado, usuarios_id = usuario_cliente)
+                item = ItemDoPedido.objects.create(
+                    produto_id = produto,
+                    estoque_fisico_atual=request.POST['estoque_fisico_atual'],
+                    venda_id=venda.id, user = user_logado, usuarios_id = usuario_cliente)
+                    
+                data['saida'] = ItemDoPedido.objects.get(id=item.id)
+                data['produto'] = Produto.objects.filter(usuarios_id = usuario_cliente)
+                return render(
+                    request, 'saida_mercadoria.html', data)
 
 class ListaVendas(LoginRequiredMixin, View):
     def get(self, request):
@@ -184,31 +257,32 @@ class ListaVendas(LoginRequiredMixin, View):
         user = request.user.has_perm('fluxo_de_caixa.view_venda')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
         today = date.today()
-
-        Mes= request.GET.get('mes',None)
-        busca= request.GET.get('venda',None)
-        Dia= request.GET.get('dia',None)
+        cliente=request.GET.get('cliente', None)
+        mes= request.GET.get('mes',None)
+        id_venda= request.GET.get('id_venda',None)
+        dia= request.GET.get('dia',None)
 
         vendas = Venda.objects.filter(
-            data_hora__gte=today, usuarios__usuario_cliente= usuario).order_by('-id') #__startswith, __contains
-        if Dia:
-            vendas = Venda.objects.filter(data_hora__contains=Dia, usuarios__usuario_cliente= usuario).order_by('-id')#data_hora__day= Dia
-        if Mes:
+            data_hora__gte=today, usuarios_id= usuario_cliente).order_by('-id') 
+        if dia:
             vendas = Venda.objects.filter(
-                data_hora__year__contains=today.year, data_hora__month__contains=Mes, usuarios__usuario_cliente= usuario ).order_by('-id')
-        if busca:
-            vendas = Venda.objects.filter( usuarios__usuario_cliente= usuario, id__icontains=busca)
+                data_hora__contains=dia, usuarios_id= usuario_cliente).order_by('-id')
+        if mes:
+            vendas = Venda.objects.filter(
+                data_hora__contains=mes, usuarios_id= usuario_cliente).order_by('-id')
+        if id_venda:
+            vendas = Venda.objects.filter( usuarios_id= usuario_cliente, id__icontains=id_venda)
+        if cliente:
+            vendas = Venda.objects.filter( usuarios_id= usuario_cliente, cliente_id=cliente)
         data['vendas'] = vendas
+        data['cliente'] = Cliente.objects.filter(usuarios_id= usuario_cliente)
         return render(request, 'lista-vendas.html', data)
 
 
@@ -219,39 +293,35 @@ class ListaVendaPorUsuario(LoginRequiredMixin, View):
         user = request.user.has_perm('fluxo_de_caixa.view_venda')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
         today = date.today()
-
         Mes= request.GET.get('mes',None)
         busca= request.GET.get('venda',None)
         Dia= request.GET.get('dia',None)
 
         vendas = Venda.objects.filter(
-            data_hora__gte=today, user = user_logado, usuarios__usuario_cliente= usuario).order_by('-id') #__startswith, __contains
+            data_hora__gte=today, user = user_logado, usuarios_id= usuario_cliente).order_by('-id') #__startswith, __contains
         total_vendas= vendas.aggregate(total=Sum("valor_com_desconto"))
         total_desconto= vendas.aggregate(total=Sum("total_desconto"))
         if Dia:
             vendas = Venda.objects.filter(
-                data_hora__contains=Dia, user = user_logado, usuarios__usuario_cliente= usuario).order_by('-id')#data_hora__day= Dia
+                data_hora__contains=Dia, user = user_logado, usuarios_id= usuario_cliente).order_by('-id')#data_hora__day= Dia
             total_vendas= vendas.aggregate(total=Sum("valor_com_desconto"))
             total_desconto= vendas.aggregate(total=Sum("total_desconto"))
         if Mes:
             vendas = Venda.objects.filter(
-                data_hora__year__contains=today.year, data_hora__month__contains=Mes, user = user_logado, usuarios__usuario_cliente= usuario ).order_by('-id')
+                data_hora__year__contains=today.year, data_hora__month__contains=Mes, user = user_logado, usuarios_id= usuario_cliente ).order_by('-id')
             total_vendas= vendas.aggregate(total=Sum("valor_com_desconto"))
             total_desconto= vendas.aggregate(total=Sum("total_desconto"))
 
         if busca:
             vendas = Venda.objects.filter(
-                user = user_logado, usuarios__usuario_cliente= usuario, id__icontains=busca)
+                user = user_logado, usuarios_id= usuario_cliente, id__icontains=busca)
             total_vendas= vendas.aggregate(total=Sum("valor_com_desconto"))
             total_desconto= vendas.aggregate(total=Sum("total_desconto"))
         data['vendas'] = vendas
@@ -266,38 +336,34 @@ class ListaVendaPagas(LoginRequiredMixin, View):
         user = request.user.has_perm('fluxo_de_caixa.view_venda')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
         today = date.today()
-
         Mes= request.GET.get('mes',None)
         busca= request.GET.get('venda',None)
         Dia= request.GET.get('dia',None)
 
         vendas = Venda.objects.filter(
-            data_hora__gte=today, user_2 = user_logado, usuarios__usuario_cliente= usuario).order_by('-id') #__startswith, __contains
+            data_hora__gte=today, user_2 = user_logado, usuarios_id= usuario_cliente).order_by('-id') #__startswith, __contains
         total_vendas= vendas.aggregate(total=Sum("valor_com_desconto"))
 
         if Dia:
             vendas = Venda.objects.filter(
-                data_hora__contains=Dia, user_2 = user_logado, usuarios__usuario_cliente= usuario).order_by('-id')#data_hora__day= Dia
+                data_hora__contains=Dia, user_2 = user_logado, usuarios_id= usuario_cliente).order_by('-id')#data_hora__day= Dia
             total_vendas= vendas.aggregate(total=Sum("valor_com_desconto"))
 
         if Mes:
             vendas = Venda.objects.filter(
-                data_hora__year__contains=today.year, data_hora__month__contains=Mes, user_2 = user_logado, usuarios__usuario_cliente= usuario ).order_by('-id')
+                data_hora__year__contains=today.year, data_hora__month__contains=Mes, user_2 = user_logado, usuarios_id= usuario_cliente ).order_by('-id')
             total_vendas= vendas.aggregate(total=Sum("valor_com_desconto"))
 
         if busca:
             vendas = Venda.objects.filter(
-                user_2 = user_logado, usuarios__usuario_cliente= usuario, id__icontains=busca)
+                user_2 = user_logado, usuarios_id= usuario_cliente, id__icontains=busca)
             total_vendas= vendas.aggregate(total=Sum("valor_com_desconto"))
             
         data['vendas'] = vendas
@@ -309,24 +375,21 @@ class EditPedido(LoginRequiredMixin, View):
         user = request.user.has_perm('fluxo_de_caixa.view_venda')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-        
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarios = Usuarios.objects.get(id = usuario)
-        else:
-            usuarios = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuarios.id # Obitendo o id  do usuário administrador
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
         data = {}
         venda = Venda.objects.get(id=venda)
         usuario_adm = venda.usuarios.id
-        if usuario_adm == usuario:
+        if usuario_adm == usuario_cliente:
             data['venda'] = venda
             data['itens'] = venda.itemdopedido_set.all()
-            data['usuarios'] = usuarios
+            data['usuarios'] = usuario_cliente
+            data['produto'] = Produto.objects.filter(usuarios_id = usuario_cliente)
+            data['cliente'] = Cliente.objects.filter(usuarios_id = usuario_cliente)
             return render(
                 request, 'novo-pedido.html', data)
         else:
@@ -337,18 +400,15 @@ class DeletePedido(LoginRequiredMixin, View):
         user = request.user.has_perm('fluxo_de_caixa.delete_venda')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.id # Obitendo o id  do usuário administrador
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
         venda = Venda.objects.get(id=venda)
         usuario_adm = venda.usuarios.id
-        if usuario_adm == usuario: # Verificar autenticidade do usuário
+        if usuario_adm == usuario_cliente: 
             return render(
                 request, 'delete-pedido-confirm.html', {'venda': venda})
         else:
@@ -358,19 +418,15 @@ class DeletePedido(LoginRequiredMixin, View):
         user = request.user.has_perm('fluxo_de_caixa.delete_venda')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.id # Obitendo o id  do usuário administrador
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
         venda = Venda.objects.get(id=venda)
         usuario_adm = venda.usuarios.id
-        if usuario_adm == usuario:
+        if usuario_adm == usuario_cliente:
             venda.delete()
             return redirect('lista-vendas')
         else:
@@ -402,56 +458,38 @@ class Caixas(LoginRequiredMixin, View):
         user = request.user.has_perm('fluxo_de_caixa.view_caixa')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
-
-        caixa = Caixa.objects.filter(usuarios__usuario_cliente= usuario)
-        caixa_user_logado = Caixa.objects.filter(usuarios__usuario_cliente= usuario, funcionario__user = user_logado)
-        funcionarios= Funcionario.objects.filter(usuarios__usuario_cliente= usuario)
-
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
+        data = {}
+        data['caixa'] = Caixa.objects.filter(usuarios_id= usuario_cliente)
+        data['caixa_user_logado'] = Caixa.objects.filter(usuarios_id= usuario_cliente, funcionario__user = user_logado)
+        data['funcionarios']= Funcionario.objects.filter(usuarios_id= usuario_cliente)
         return render(
-            request, 'caixa.html',{'caixa':caixa,
-                'funcionarios': funcionarios,
-                'caixa_user_logado': caixa_user_logado
-                })
+            request, 'caixa.html',data)
 
     def post(self, request):
         user = request.user.has_perm('fluxo_de_caixa.view_caixa')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
         data = {}
-        data['nome_do_caixa'] = request.POST['nome_do_caixa']
-        data['funcionario'] = request.POST['funcionario']
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-
         novo_caixa = Caixa.objects.create(
             nome_do_caixa=request.POST['nome_do_caixa'],
             funcionario_id= request.POST['funcionario'],
-            user = user_logado, usuarios_id = usuarioId,
-
+            user = user_logado, usuarios_id = usuario_cliente,
             )
         data['novo_caixa'] = novo_caixa
-        data['caixa'] = Caixa.objects.filter(usuarios__usuario_cliente= usuarioCliente)
-        data['caixa_user_logado']= Caixa.objects.filter(usuarios__usuario_cliente= usuario, funcionario__user__id = user_logado)
-        data['funcionarios']= Funcionario.objects.filter(usuarios__usuario_cliente= usuario)
+        data['caixa'] = Caixa.objects.filter(usuarios_id= usuario_cliente)
+        data['caixa_user_logado']= Caixa.objects.filter(usuarios_id= usuario_cliente, funcionario__user__id = user_logado)
+        data['funcionarios']= Funcionario.objects.filter(usuarios_id= usuario_cliente)
         return render(
             request, 'caixa.html',data)
 
@@ -462,22 +500,18 @@ class CaixasUpdate(LoginRequiredMixin, View):
         user = request.user.has_perm('fluxo_de_caixa.view_caixa')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
         
         caixa = Caixa.objects.get(id=id)
-        usuario_adm = caixa.usuarios.usuario_cliente
-        if usuario_adm == usuario: # Verificar autenticidade do usuário
+        usuario_adm = caixa.usuarios.id
+        if usuario_adm == usuario_cliente:
         
-            data['caixa'] = Caixa.objects.get(id=id)
-            data['funcionarios']= Funcionario.objects.filter(usuarios__usuario_cliente= usuario)
+            data['caixa'] = Caixa
+            data['funcionarios']= Funcionario.objects.filter(usuarios_id = usuario_cliente)
             return render( request, 'caixa-update.html', data)
         else:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
@@ -486,24 +520,19 @@ class CaixasUpdate(LoginRequiredMixin, View):
         user = request.user.has_perm('fluxo_de_caixa.view_caixa')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioId = usuario.id # Obitendo o id  do usuário administrador
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
            
         caixa = Caixa.objects.get(id=id)
         usuario_adm = caixa.usuarios.id
-        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+        if usuario_adm == usuario_cliente:
             caixa.nome_do_caixa=request.POST['nome_do_caixa']
             caixa.funcionario_id= request.POST['funcionario']
             caixa.user = user_logado
-            caixa.usuarios_id = usuarioId
+            caixa.usuarios_id = usuario_cliente
             caixa.save()
             return redirect( 'caixa')
         else:
@@ -513,20 +542,15 @@ def caixa_delete(request, id):
     user = request.user.has_perm('pessoa.delete_fornecedor')
     if user == False:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-    user_logado = request.user # Obitendo o usuário logado
-    user_logado = user_logado.id # obitendo o ID do usuário logado
-    if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-        funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-        usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-        
-    else:
-        usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-        usuarioId = usuario.id # Obitendo o id  do usuário administrador
+    user_logado = request.user.id
+    usuario_cliente = autenticar_usuario(user_logado)
+    autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+    if autorizarcao_de_reistros:
+        return autorizarcao_de_reistros
        
     caixa = Caixa.objects.get(id=id)
     usuario_adm = caixa.usuarios.id
-    if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+    if usuario_adm == usuario_cliente: 
         data  = {}
         if request.method == 'POST':
             caixa.delete()
@@ -543,33 +567,24 @@ class CaixaDepositar(LoginRequiredMixin, View):
         user = request.user.has_perm('fluxo_de_caixa.add_depositar_sacar')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-        
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.id # Obitendo o id  do usuário administrador
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
         
         caixa = Caixa.objects.get(id=id)
         usuario_adm = caixa.usuarios.id
-        if usuario_adm == usuario: # Verificar autenticidade do usuário
-
+        if usuario_adm == usuario_cliente:
             today = date.today()
-
             depositos = Depositar_sacar.objects.filter(
                 caixa__id = id, data_hora__contains= today).order_by('-id').order_by('-data_hora')
-
             caixa = Caixa.objects.get(id=id)
-
-            DIA = request.GET.get('dia',None)
-            DIA2 = request.GET.get('dia2',None)
-
-            if DIA and DIA2 :
+            dia = request.GET.get('dia',None)
+            dia2 = request.GET.get('dia2',None)
+            if dia and dia2 :
                 depositos = Depositar_sacar.objects.filter(
-                    data_hora__range= (DIA, DIA2), caixa__id = id).order_by('-data_hora')
+                    data_hora__range= (dia, dia2), caixa__id = id).order_by('-data_hora')
             return render(
                 request,'caixa-deposito.html',{'depositos':depositos,'caixa':caixa })
         else:
@@ -579,31 +594,28 @@ class CaixaDepositar(LoginRequiredMixin, View):
         user = request.user.has_perm('fluxo_de_caixa.add_depositar_sacar')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
         today = date.today()
-        #today = date.today()
-        data = {}
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.id # Obitendo o id  do usuário administrador
-        
+        data = {} 
         caixa = Caixa.objects.get(id=id)
         usuario_adm = caixa.usuarios.id
-        if usuario_adm == usuario: # Verificar autenticidade do usuário
+        caixa = Depositar_sacar.objects.filter(caixa__id = id).last()
+        if usuario_adm == usuario_cliente:
 
             deposito = Depositar_sacar.objects.create(
                 descricao=request.POST['descricao'],
                 depositar=request.POST['depositar'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$',''),
-                caixa_id = id, user = user_logado, usuarios_id = usuario,
+                caixa_id = id, user = user_logado, usuarios_id = usuario_cliente,
+                estado_do_caixa = caixa.estado_do_caixa
                 )
             data['deposito'] = deposito
-            data['depositos'] = Depositar_sacar.objects.filter(caixa__id = id, data_hora__contains= today).order_by('-id')
+            data['depositos'] = Depositar_sacar.objects.filter(
+                caixa__id = id, data_hora__contains= today).order_by('-id')
             data['caixa'] = Caixa.objects.get(id=id)
             return render(
                 request, 'caixa-deposito.html', data)
@@ -617,29 +629,23 @@ class CaixaSacar(LoginRequiredMixin, View):
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.id # Obitendo o id  do usuário administrador
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
         caixa = Caixa.objects.get(id=id)
         usuario_adm = caixa.usuarios.id
-        if usuario_adm == usuario: # Verificar autenticidade do usuário
-            
+        if usuario_adm == usuario_cliente:
             today = date.today()
             sacar = Depositar_sacar.objects.filter(
                 caixa__id = id, data_hora__contains= today).order_by('-id').order_by('-data_hora')
-
-            DIA = request.GET.get('dia',None)
-            DIA2 = request.GET.get('dia2',None)
-
-            if DIA and DIA2 :
+            dia = request.GET.get('dia',None)
+            dia2 = request.GET.get('dia2',None)
+            if dia and dia2 :
                 sacar = Depositar_sacar.objects.filter(
-                    data_hora__range= (DIA, DIA2), caixa__id = id).order_by('-data_hora')
+                    data_hora__range= (dia, dia2), caixa__id = id).order_by('-data_hora')
             return render(
                 request, 'caixa-sacar.html',{'sacar':sacar, 'caixa':caixa})
         else:
@@ -649,28 +655,23 @@ class CaixaSacar(LoginRequiredMixin, View):
         user = request.user.has_perm('fluxo_de_caixa.add_depositar_sacar')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
         today = date.today()
-
         data = {}
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.id # Obitendo o id  do usuário administrador
-
         caixa = Caixa.objects.get(id=id)
         usuario_adm = caixa.usuarios.id
-        if usuario_adm == usuario: # Verificar autenticidade do usuário
-
+        caixa = Depositar_sacar.objects.filter(caixa__id = id).last()
+        if usuario_adm == usuario_cliente: 
             deposito = Depositar_sacar.objects.create(
                 descricao= request.POST['descricao'],
                 sacar= request.POST['sacar'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$',''),
-                caixa_id= id, user = user_logado, usuarios_id = usuario,
+                caixa_id= id, user = user_logado, usuarios_id = usuario_cliente,
+                estado_do_caixa = caixa.estado_do_caixa
                 )
             data['deposito'] = deposito
             data['sacar'] = Depositar_sacar.objects.filter(
@@ -687,32 +688,26 @@ class AbrirFeixarCaixa(LoginRequiredMixin, View):
         user = request.user.has_perm('fluxo_de_caixa.add_depositar_sacar')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
         today = date.today()
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.id # Obitendo o id  do usuário administrador
-
-        historico_do_caixa = Caixa.objects.get(id=id)
-        usuario_adm = historico_do_caixa.usuarios.id
-        if usuario_adm == usuario: # Verificar autenticidade do usuário
+        caixa = Caixa.objects.get(id=id)
+        usuario_adm = caixa.usuarios.id
+        if usuario_adm == usuario_cliente: 
 
             historico_do_caixa = Depositar_sacar.objects.filter(
-                Q(estadoDoCaixa='Feixado') | Q(estadoDoCaixa='Aberto'), caixa__id = id, user = user_logado,data_hora__contains= today).order_by('-id')
-
+                Q(estado_do_caixa='Feixado') | Q(estado_do_caixa='Aberto'), caixa__id = id, user = user_logado,data_hora__contains= today).order_by('-id')
             estado_do_caixa= Depositar_sacar.objects.filter(caixa__id = id).last()
+            dia = request.GET.get('dia',None)
+            dia2 = request.GET.get('dia2',None)
 
-            DIA = request.GET.get('dia',None)
-            DIA2 = request.GET.get('dia2',None)
-
-            if DIA and DIA2 :
+            if dia and dia2 :
                 historico_do_caixa = Depositar_sacar.objects.filter(
-                Q(estadoDoCaixa='Feixado') | Q(estadoDoCaixa='Aberto'), data_hora__range= (DIA, DIA2), caixa__id = id, user = user_logado, data_hora__contains= today).order_by('-id')
+                Q(estado_do_caixa='Feixado') | Q(estado_do_caixa='Aberto'), data_hora__range= (dia, dia2), caixa__id = id, user = user_logado, data_hora__contains= today).order_by('-id')
             return render(
                 request, 'abrir-feixar-caixa.html',{
                     'historico_do_caixa':historico_do_caixa,
@@ -725,29 +720,22 @@ class AbrirFeixarCaixa(LoginRequiredMixin, View):
         user = request.user.has_perm('fluxo_de_caixa.add_depositar_sacar')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
         today = date.today()
-
         data = {}
-
         data['descricao'] = request.POST['descricao']
-        data['estadoDoCaixa'] = request.POST['estadoDoCaixa']
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.id # Obitendo o id  do usuário administrador
-
+        data['estado_do_caixa'] = request.POST['estado_do_caixa']
         historico_do_caixa = Caixa.objects.get(id=id)
         usuario_adm = historico_do_caixa.usuarios.id
-        if usuario_adm == usuario: # Verificar autenticidade do usuário
+        if usuario_adm == usuario_cliente: 
 
             venda_sedula= Venda.objects.filter(
-                data_hora__contains= today, user_2 = user_logado, usuarios_id = usuario).aggregate(total_venda_cedula=Sum('valor_cedula'))
+                data_hora__contains= today, user_2 = user_logado, usuarios_id = usuario_cliente).aggregate(total_venda_cedula=Sum('valor_cedula'))
             venda_sedula = venda_sedula['total_venda_cedula']or 0
 
             estado_do_caixa= Depositar_sacar.objects.filter(caixa__id = id).aggregate(vendas=Sum('venda_realizadas'))
@@ -762,18 +750,17 @@ class AbrirFeixarCaixa(LoginRequiredMixin, View):
             saldoEmCaixa= Caixa.objects.get(id = id) # buscando o saldo atual do caiza
             saldoEmCaixa= saldoEmCaixa.valor_atualizado
             saldoEmCaixa= float(saldoEmCaixa) + float(ultimas_vendas)
-
             deposito = Depositar_sacar.objects.create(
                 descricao= request.POST['descricao'],
-                estadoDoCaixa= request.POST['estadoDoCaixa'],
-                caixa_id= id, user = user_logado, usuarios_id = usuario,
+                estado_do_caixa= request.POST['estado_do_caixa'],
+                caixa_id= id, user = user_logado, usuarios_id = usuario_cliente,
                 venda_realizadas= ultimas_vendas, depositar= ultimas_vendas,
-                saldo_em_caixa= saldoEmCaixa
+                saldo_em_caixa= saldoEmCaixa,
                 )
             data['deposito'] = deposito
             data['historico_do_caixa'] = Depositar_sacar.objects.filter(
-                Q(estadoDoCaixa='Feixado') | Q(estadoDoCaixa='Aberto'), caixa__id = id, user = user_logado,data_hora__contains= today).order_by('-id')
-            data['estado_do_caixa']= Depositar_sacar.objects.filter(caixa__id = id).last()
+                Q(estado_do_caixa='Feixado') | Q(estado_do_caixa='Aberto'), caixa__id = id, user = user_logado,data_hora__contains= today).order_by('-id')
+            data['estado_do_caixa']= estado_do_caixa = Depositar_sacar.objects.filter(caixa__id = id).last()
 
             return render(
                 request, 'abrir-feixar-caixa.html', data)

@@ -1,0 +1,182 @@
+{% load static%}
+<!DOCTYPE html>
+
+<html lang= "pt-br" >
+
+<head>
+    <meta charcet="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>  VieWorld  </title>
+    <link rel = "icon" type = "image/png" href = "{% static 'img/v.png' %}"/>
+    <script type="module" src="{% static 'js/mascaras.js' %}"></script>
+    <link rel="stylesheet" href= "{% static 'style/caixa.css'%}">
+    <link rel="stylesheet" href= "{% static 'style/formulario.css'%}">
+    <link rel="stylesheet" href= "{% static 'style/meunuResponsivo.css'%}">
+    <link rel="stylesheet" href= "{% static 'style/tabela.css'%}">
+    <link rel="stylesheet" href= "{% static 'style/formAlerta.css'%}">
+    <link rel="stylesheet" href= "{% static 'style/tabela_caixa.css'%}">
+    <link rel="stylesheet" href= "{% static 'style/cupom_fiscal.css'%}">
+    <link rel="stylesheet" href= "{% static 'style/caixa_movel.css'%}">
+    <link rel="stylesheet" href= "{% static 'style/alerta_delete.css'%}">
+    <link rel="stylesheet" href= "{% static 'style/campo_busca.css'%}">
+    <link rel="stylesheet" href= "{% static 'style/relatorio.css'%}">
+    <link rel="stylesheet" href= "{% static 'style/home.css'%}">
+    <link rel="stylesheet" href= "{% static 'style/plano.css'%}">
+    <link rel="stylesheet" href= "{% static 'style/base.css'%}">
+    <link rel="stylesheet" href= "{% static 'style/perfilUsuario.css'%}">
+
+    <meta charcet="UTF-8">
+    <meta name="cor" content="width=device-width,initial=scale=1">
+    <meta name="description" content="Rede SociL cor">
+    <meta name="keyWords" content="controle de estoque, vieworld, Gastos, Gastos extras,controle de gastos, contas a pagar, contas, fluxo de caixa, contas a receber, frente de caixa, controle de estoque, caixa, jestão, varejo, sistema para comércio varejista">
+    <meta name="author" content="cor">
+
+</head>
+
+<body>
+<div> 
+    <div class="div_cabesalho2">
+        {% block cabesalho%}
+        <a href="{% url 'inicio' %}">
+            <img id="logo" src="{% static 'img/logo_marca.png' %}" width="500px" all=" "> 
+        </a>
+                {%if user.is_authenticated%}
+                    <label id='login_logout'> <a href="{% url 'logout' %}"> Sair </a> </label>
+                    <label> <a id='usuario' href="{% url 'usuario' %}"> Olá
+                        {%if user.first_name %} {{user.first_name}}  {%else %} {{user}} {%endif%}</a> </label>
+                        
+                {%else%}
+                    <label id='login_logout'> <a href="{% url 'login' %}">Entra</a> </label>
+
+                    <label id="link_cadastrar"><a href="{% url 'novo-usuario' %}">Cadastrar-se</a></label>
+                    <label id='usuario'> </label>
+                
+                {%endif%}
+        {% endblock%}
+    </div>
+
+    {% block menu%}
+    <label class="menu_label" for="chec"> <img src="{% static 'img/menus.png' %}" width="30" all=" "> </label >
+    <input  class="menu_input" type="checkbox" id="chec" >
+    <nav class="menu">
+            <ul >   
+                {%if user.is_authenticated%}
+                    <label>
+                        <img id="img" src="{% static 'img/perfil.png' %}">
+                        Olá <a style=" color: #1459ee; font-size: 20px;" href="{% url 'usuario'%}"> 
+                          {%if user.first_name %} {{user.first_name}}  {%else %} {{user}} {%endif%}</a> </label>
+                {%else%}
+                    <li > <a style=" color: blue;" href="{% url 'login' %}">Entra</a> </li>
+                 {%endif%}
+                 <br>
+                    <li>
+                        <img id="img" src="{% static 'img/home.png' %}">
+                        <a href="{% url 'inicio' %}">HOME</a> 
+                    </li>
+                    <li> 
+                        <img id="img" src="{% static 'img/plano.png' %}">
+                        <a href="{% url 'plano' %}">MEU PLANO </a>  
+                    </li>
+                    <li> 
+                        <img id="img" src="{% static 'img/fatura.png' %}">
+                        <a href="{% url 'fatura' %}">FATURA </a>  
+                    </li>
+                    --------------------------- <br>
+                {% if perms.fluxo_de_caixa.add_venda %}
+                    <li> 
+                        <img id="img" src="{% static 'img/frente_de_caixa.png' %}">
+                        <a href="{% url 'atualizar-pedido' %}">FRENTE DE CAIXA </a>  
+                    </li>
+                {%endif%}
+    
+                {% if perms.fluxo_de_caixa.view_caixa %}
+                    <li> 
+                        <img id="img" src="{% static 'img/historico.png' %}">
+                        <a href="{% url 'lista-vendas'%}"> HISTÓRICO DE VENDAS</a> 
+                    </li>
+                    <li>
+                        <img id="img" src="{% static 'img/caixa.png' %}">
+                        <a href="{% url 'caixa' %}">CAIXA</a> 
+                    </li>
+                {%endif%}
+
+                {% if perms.produto.add_produto %}
+                    <li>
+                        <img id="img" src="{% static 'img/produto.png' %}">
+                        <a href="{% url 'produto' %}">PRODUTOS</a> </li>
+                {%endif%}
+    
+                    --------------------------- <br>
+                <li>
+                    <img id="img" src="{% static 'img/gastos.png' %}">
+                    <a href="{% url 'gastos-extras' %}">CONTROLE DE GASTOS</a></li>
+    
+                {% if perms.financeiro.view_contas %}
+                    <li>
+                        <img id="img" src="{% static 'img/contas.png' %}">
+                        <a href="{% url 'conta_areceber' %}">CONTAS A RECEBER </a></li>
+                {%endif%}
+                    --------------------------- <br>
+                {% if perms.produto.add_produto %}
+                    <li> 
+                        <img id="img" src="{% static 'img/funcionario.png' %}">
+                        <a href="{% url 'novo-funcionario' %}">FUNCIONÁRIOS</a>
+                    </li>
+                    <li>
+                        <img id="img" src="{% static 'img/fornecedor.png' %}">
+                        <a href="{% url 'novo-fornecedor' %}">FORNECEDOR</a>
+                    </li>
+                        
+                    {%endif%}
+    
+                {% if perms.pessoa.add_cliente %}
+                    <li> 
+                        <img id="img" src="{% static 'img/cliente.png' %}">
+                        <a href="{% url 'novo-cliente' %}">CLIENTE</a></li>
+                {%endif%}
+                    --------------------------- <br>
+    
+                {% if perms.produto.add_produto %}
+                    <li>
+                        <img id="img" src="{% static 'img/produto.png' %}">
+                        <a href="{% url 'produto' %}">PRODUTOS</a> </li>
+                {%endif%}
+    
+                {% if perms.produto.add_produto %}
+                    <li> 
+                        <img id="img" src="{% static 'img/relatorio.png' %}">
+                        <a href="{% url 'relatorio_mensal' %}">DESHBORD</a></li>
+                {%endif%}
+    
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+            </ul>
+    </nav>
+    {% endblock menu %}
+    
+    <div id="div_main">
+        {% block main%}
+            deu certo
+        {% endblock main %}
+    </div>
+    <br>
+    <br>
+    <footer>    
+        {% block footer %}
+        <label id="bt_menu_mobil" for="chec"> <img src="{% static 'img/menus.png' %}" width="30" all=" "> </label >
+        <nav class=""></nav> <!-- está referenciando a nave principal -->
+        <a style="left: 10px;" href="{% url 'inicio' %}"><img id="img_footer" src="{% static 'img/home.png' %}"></a>
+        <a href="{% url 'atualizar-pedido' %}"><img id="img_footer" src="{% static 'img/frente_de_caixa.png' %}"> </a>    
+        <a href="{% url 'produto' %}"><img id="img_footer" src="{% static 'img/produto.png' %}"></a> 
+        <a href="{% url 'conta_areceber' %}"><img id="img_footer" src="{% static 'img/contas.png' %}"></a>
+        <a href="{% url 'caixa' %}"><img id="img_footer" src="{% static 'img/caixa.png' %}"></a> 
+        
+        {% endblock footer%}
+    </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,83 @@
+{% extends 'base.html'%}
+{% block main%}
+{% load static%}
+<br>
+  <h2 class="sub_tito" >&nbsp; CAIXA
+    <a href="{% url 'caixa' %}">Voltar</a>
+    </a>
+    <div > 
+      <label class="sub_menu"> 
+          <img id="img_menu" src="{% static 'img/caixa.png' %}" width="500px" all=" ">
+          <a href="{% url 'caixa-sacar' estado_do_caixa.caixa.id %}">SACAR </a>
+      </label> 
+      <label class="sub_menu"> 
+          <img id="img_menu" src="{% static 'img/caixa.png' %}" >
+          <a href="{% url 'caixa-deposito' estado_do_caixa.caixa.id %}">DEPOSITAR</a>
+      </label>
+  </div>
+</h2>
+    <form class='formulario' method="POST">
+        {% csrf_token %}
+     
+      <div>
+        <label > <b>Caixa:  </b></label>
+        <label> {{ estado_do_caixa.caixa.nome_do_caixa }} </label>
+        <br>
+        <label >  <b> Estado do caixa:  </b> </label>
+        <label> {{ estado_do_caixa.estado_do_caixa }} </label>
+      </div>
+      <div>
+        <label for="busca"> Observação</label> <br>
+            <input style=" width:150px;" type="text" id="descricao" name="descricao"
+                placeholder="Obiservação..." >
+        </div>
+        <hr>
+      }
+        {% if estado_do_caixa.estado_do_caixa == 'Feixado'%}
+            <button    type="submit">Abrir o caixa</button>
+            <input style=" width:200px; display: none;" type="text" 
+            id="estado_do_caixa" name="estado_do_caixa" value='Aberto'>
+        {% else %}
+            <button  type="submit">Feixar o caixa</button>
+            <input style=" width:200px; display: none;" type="text"
+             id="estado_do_caixa" name="estado_do_caixa" value='Feixado'>
+        {% endif %}
+    </form>
+    <br>
+    <form class='campo_de_busca' method="GET" >
+      <div> 
+        <label> Consultar histórico </label> <br>
+        <input style="width:90px; padding: 3px;" type="date" id="dia" name="dia" > até
+        <input style="width:90px; padding: 3px;" type="date" id="dia2" name="dia2" >
+        <button  style="width:50px" type="submit">Filtrar</button>
+      </div>
+    </form>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th >Descrição</th>
+          <th >Saldo</th>
+          <th >Vendas em sedula</th>
+          <th >Valor depositado</th>
+          <th >Data</th>
+          <th >Usuário id</th>
+
+
+        </tr>
+      </thead>
+      <tbody>
+        {% for caixa in historico_do_caixa %}
+            <tr>
+                <td>{{ caixa.descricao }}</td>
+                <td>R$ {{ caixa.saldo_em_caixa }}</td>
+                <td>R$ {{ caixa.venda_realizadas }}</td>
+                <td>R$ {{ caixa.depositar }}</td>
+                <td>{{caixa.data_hora | date:'d/m/y  H:i'}}</td>
+                <td>{{caixa.user }}</td>
+
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+{% endblock %}

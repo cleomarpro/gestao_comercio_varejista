@@ -1,0 +1,67 @@
+{% extends 'base.html' %} 
+{% block main %}
+{% load static%}
+    <br>
+        <div id="container">
+           <div>
+            <img id="img" src="{% static 'img/estoque.png' %}" ><br>
+            <label> <a href="{% url 'entrada-mercadoria' %}"><b>ENTRADA DE MERCADO </b></a></label>
+           </div>
+
+           <div>
+            <img id="img" src="{% static 'img/saida.png' %}"><br>
+            <label> <a href="{% url 'saida_mercadoria' %}"><b>SAIDA DE MERCADORIAS </b></a></label>
+           </div>
+
+           <div>
+            <img id="img" src="{% static 'img/caixa.png' %}"><br>
+            <label><a href="{% url 'caixa' %}"><b>CAIXA </b></a> </label>
+           </div>
+
+           <div>
+            <img id="img" src="{% static 'img/frente_de_caixa.png' %}"><br>
+            <label ><a href="{% url 'atualizar-pedido' %}"><b>FRENTE DE CAIXA </b></a></label>
+           </div>
+
+           <div>
+            <img id="img" src="{% static 'img/produto.png' %}"><br>
+            <label><a href="{% url 'produto' %}"><b>PRODUTOS </b></a></label>
+           </div>
+
+           <div>
+            <img id="img" src="{% static 'img/contas.png' %}"><br>
+            <label><a href="{% url 'conta_areceber' %}"><b>CONTAS A RECEBER</b></a></label>
+           </div>
+
+           <div >
+            <img id="img" src="{% static 'img/gastos.png' %}" ><br>
+            <label><a href="{% url 'gastos-extras' %}"><b>CONTROLE DE GASTOS </b></a></label>
+           </div>
+
+           <div>
+            <img id="img" src="{% static 'img/cliente.png' %}"><br>
+            <label><a href="{% url 'novo-cliente' %}"><b>CLIENTES </b></a></label>
+           </div>
+
+           <div>
+            <img id="img" src="{% static 'img/funcionario.png' %}"><br>
+            <label><a href="{% url 'novo-funcionario' %}"><b>FUNCIONÁRIOS</b></a></label>
+           </div>
+
+           <div>
+            <img id="img" src="{% static 'img/fornecedor.png' %}"><br>
+            <label><a href="{% url 'novo-fornecedor' %}"><b>FORNECEDOR</b></a></label>
+           </div>
+
+           <div>
+            <img id="img" src="{% static 'img/relatorio.png' %}"><br>
+            <label><a href="{% url 'relatorio_mensal' %}"><b>DESHBORD</b></a></label>
+           </div>
+
+        </div>
+
+        
+        <footer>
+            <label> footer</label>
+        </footer>
+{%endblock%}

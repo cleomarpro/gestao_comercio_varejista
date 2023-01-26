@@ -4,9 +4,8 @@ from django.db.models import Sum, F, FloatField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from produto.models import Produto
-from django.contrib.auth.models import User
-from usuarios.models import Cobranca, Usuarios
-from pessoa.models import Funcionario
+from usuarios.models import Usuarios
+from pessoa.models import Funcionario, Cliente
 from datetime import date
 #import datetime
 
@@ -16,6 +15,7 @@ class Caixa(models.Model):
     valor_atualizado = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, default=0)
     user = models.CharField(max_length=100, blank=True, null=True)
     usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
+    data_hora = models.DateTimeField(default=timezone.now)
 
     def caixa(self):
 
@@ -38,7 +38,7 @@ class Caixa(models.Model):
 
 class Depositar_sacar(models.Model):
     descricao = models.CharField(max_length=100, null=True, blank=True, verbose_name="Descrição")
-    estadoDoCaixa = models.CharField(max_length=10, null=True, blank=True, verbose_name="Descrição")
+    estado_do_caixa = models.CharField(max_length=10, null=True, blank=True, verbose_name="estado do caixa")
     depositar = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, default=0)
     venda_realizadas= models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, default=0)
     saldo_em_caixa = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, default=0)
@@ -59,6 +59,7 @@ class Tipo_de_pagamento(models.Model):
         return str(self.nome)
 
 class Venda(models.Model):
+    cliente = models.ForeignKey(Cliente, null=True, blank=True, on_delete=models.CASCADE)
     valor = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, default=0)
     valor_com_desconto = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, default=0)
     desconto = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True, default=0)
@@ -69,7 +70,6 @@ class Venda(models.Model):
     valor_debito = models.FloatField( null=True, blank=True, default=0)
     troco = models.DecimalField(max_digits=9, null=True, blank=True,decimal_places=2, default=0)
     tipo_de_pagamento = models.ForeignKey(Tipo_de_pagamento, null=True, on_delete=models.CASCADE)
-    descricao = models.CharField(max_length=100, blank=True)
     finalizada = models.CharField(max_length=20, blank=True, null=True)
     nfe_emitida = models.BooleanField(default=False)
     data_hora = models.DateTimeField(default=timezone.now)
@@ -78,7 +78,7 @@ class Venda(models.Model):
     usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.descricao) + ' - Cliente: ' + str(self.id) + ' - Valor: ' + str(self.valor)
+        return str(self.cliente) + ' - Cliente: ' + str(self.id) + ' - Valor: ' + str(self.valor)
 
 # calculo do valor total da venda
     def calcular_total(self):
@@ -159,17 +159,30 @@ class Venda(models.Model):
 class ItemDoPedido(models.Model):
     venda = models.ForeignKey(Venda, on_delete=models.CASCADE)
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
-    quantidade_de_itens = models.DecimalField(max_digits=9, decimal_places=2, blank=True,default=1)
+    quantidade_de_itens = models.DecimalField(max_digits=9, decimal_places=2, blank=True,default=0)
     desconto = models.DecimalField(max_digits=9, decimal_places=2, null=True, blank=True,default=0)
     user = models.CharField(max_length=100, blank=True, null=True)
     usuarios = models.ForeignKey(Usuarios, null=True, on_delete=models.CASCADE)
-   
+    estoque_fisico_atual = models.DecimalField(
+        max_digits=9, decimal_places=2, blank=True, default=0)
+
     def __str__(self):
         return str(self.venda.id) + ' - ' + str(self.produto.nome) + ' - ' + str(self.desconto) + ' - ' + str(self.quantidade_de_itens)  + ' - ' + str(self.produto.valor_venal)
 
+    def saida_mercadoria(self):
+        if float(self.quantidade_de_itens) == 0:
+            estoque = float(
+                float(self.produto.estoque) - float(self.estoque_fisico_atual))
+            ItemDoPedido.objects.filter(id=self.id).update(
+                quantidade_de_itens = estoque)
+
 @receiver(post_save, sender=ItemDoPedido)
-def update_total_saida(sender, instance, **kwargs):
-    instance.produto.etoque_total()
+def update_quantidade_de_itens(sender, instance, **kwargs):
+    instance.saida_mercadoria()
+
+@receiver(post_save, sender=ItemDoPedido)
+def update_total_saida_de_mercadoria(sender, instance, **kwargs):
+    instance.produto.atualizar_estoque()
 
 @receiver(post_save, sender=ItemDoPedido)
 def update_vendas_total(sender, instance, **kwargs):

@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% block main %}
+{% load static%}
+<br>
+    <h2 class="sub_tito" >&nbsp; FORNECEDOR {{usuario}}
+        <a 
+            href="#" onclick="document.getElementById('form_up').style.display='block';">
+                Adicionar 
+        </a>
+        
+        <div > 
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/estoque.png' %}" width="500px" all=" ">
+                <a href="{% url 'entrada-mercadoria' %}">ENTRADA DE MERCADO </a>
+            </label> 
+        </div>
+    </h2>
+    <form id="form_up" class='formulario' style="display: none;" action="{% url 'novo-fornecedor' %}" method="POST" >
+         {% csrf_token %}
+         <a id="termo_buttao" href="#" onclick="document.getElementById
+         ('form_up').style.display='none';"> X</a>
+         <p> NOVO FORNECEDOR</p>
+
+            <hr> 
+        <div>
+            <label> Nome fantazia*</label> <br>
+                <input style=" width:200px;"  placeholder="Nome da empresa..."
+                 type="text" maxlength="30" id="nome_fantazia" name="nome_fantazia" required/>
+        </div>
+        <div>
+            <label> Cnpj*</label> <br>
+                <input style=" width:150;"  id="cnpj" name="cnpj" placeholder="00.000.000/0000-00" 
+                type="text data-js="cnpj"  maxlength="18" minlength="17" required/>
+            </div>
+            <div>
+            <label> Data de criação</label> <br>
+                <input style=" width:140px;"  placeholder=" Data de criação:" value="25-05-1996"
+                 type="date" id="data_de_criacao" name="data_de_criacao">
+            </div>
+            <div>
+             <label> Nascionalidade</label> <br>
+            <select style=" width:140px;" type="text" id="nascionalidade" name="nascionalidade" >
+                <tr>
+                    <option value=''> __Selecionar__</option>
+                    <option >Nacional </option>
+                    <option >Multinacional  </option>
+                </tr>
+            </select>
+        </div>
+        <div>
+             <label>Cep</label> <br>
+                <input style=" width:140px;" placeholder="00000-000" type="text" 
+                data-js="cep" id="cep" name="cep" />
+        </div>
+        <div>
+            <label> Rua</label> <br>
+                <input style=" width:200px;"  placeholder=" Rua..." type="text" maxlength="30"
+                id="rua" name="rua" />
+        </div>
+        <div>
+            <label> Quadra</label> <br>
+                <input style=" width:80px;"  placeholder=" Quadra..." 
+                type="number" max="999999" id="quadra" name="quadra" />
+        </div>
+        <div>
+            <label> Número</label> <br>
+                <input style=" width:80px;"  placeholder=" Número..." 
+                type="number" max="999999" id="numero" name="numero" />
+        </div>
+        <div>
+            <label> Setor</label> <br>
+                <input style=" width:150px;"  placeholder=" Setor..." type="text" maxlength="30"
+                id="setor" name="setor" />
+        </div>
+        <div>
+            <label> Estado</label> <br>
+                <select style=" width:200px;"  placeholder=" Estado..." type="text" maxlength="30" 
+                id="estado" name="estado" />
+                    <option value="">Selecionar</option>
+                    <option value="AC">Acre</option>
+                    <option value="AL">Alagoas</option>
+                    <option value="AP">Amapá</option>
+                    <option value="AM">Amazonas</option>
+                    <option value="BA">Bahia</option>
+                    <option value="CE">Ceará</option>
+                    <option value="DF">Distrito Federal</option>
+                    <option value="ES">Espírito Santo</option>
+                    <option value="GO">Goiás</option>
+                    <option value="MA">Maranhão</option>
+                    <option value="MT">Mato Grosso</option>
+                    <option value="MS">Mato Grosso do Sul</option>
+                    <option value="MG">Minas Gerais</option>
+                    <option value="PA">Pará</option>
+                    <option value="PB">Paraíba</option>
+                    <option value="PR">Paraná</option>
+                    <option value="PE">Pernambuco</option>
+                    <option value="PI">Piauí</option>
+                    <option value="RJ">Rio de Janeiro</option>
+                    <option value="RN">Rio Grande do Norte</option>
+                    <option value="RS">Rio Grande do Sul</option>
+                    <option value="RO">Rondônia</option>
+                    <option value="RR">Roraima</option>
+                    <option value="SC">Santa Catarina</option>
+                    <option value="SP">São Paulo</option>
+                    <option value="SE">Sergipe</option>
+                    <option value="TO">Tocantins</option>
+                </select>
+        </div>
+        <div>
+            <label> Cidade</label> <br>
+                <input style=" width:200px;"  placeholder=" Cidade..." type="text" maxlength="30"
+                id="cidade" name="cidade" />
+        </div>
+        <div>
+            <label> Complemento</label> <br>
+                <input style=" width:180px;"  placeholder="Ex: casa, ap, bolco" maxlength="30"
+                type="text" id="complemento" name="complemento" />
+        </div>
+        <div>
+            <label> Pais</label> <br>
+                <input style=" width:100px;"  placeholder=" Pais..." type="text" maxlength="30"
+                id="pais" name="pais" />
+        </div>
+        <div>
+            <label> Celular</label> <br>
+                <input style=" width:150px;"  placeholder="(00) 00000-0000" type="text" 
+                id="Celular" data-js="phone" name="Celular" min="9999999999999"/>
+        </div>
+        <div>
+            <label> Celular 2</label> <br>
+                <input style=" width:150px;"  placeholder="(00) 00000-0000"
+                  data-js="phone" type="text" id="Celular2" name="Celular2" />
+        </div>
+        <div>
+            <label> Telefone</label> <br>
+                <input style=" width:150px;" placeholder="(00) 00000-0000" 
+                type="text" id="Telefone" name="Telefone" data-js="phone"/>
+        </div>
+        <div>
+            <label> E-mail</label> <br>
+                <input style=" width:200px;"  placeholder=" exemplo@dominio.com" type="text" id="email" name="email" />
+            </div>
+            <hr>
+            <button  type="submit"> Salvar</button>
+            <br>
+    </form>
+        <br>
+     <form class='campo_de_busca' method="GET" action="{% url 'novo-fornecedor' %}">
+        <label>Buscar fornecedor</label><br>
+        <input  type="search" data-js="cnpj" id="fornecedor" name="fornecedor" placeholder="00.000.000/0000-00">
+        <button type="submit">Pesquisar</button>
+    </form>
+    <table class="table">
+     <thead>
+        <tr>
+            <th >Nome</th>
+            <th >CNPJ</th>
+            <th style="display: none;">Data de criação</th>
+        {% if perms.pessoa.change_fornecedor %}
+            <th >Editar</th>
+        {%endif%}
+
+        {% if perms.pessoa.delete_fornecedor %}
+            <th >Excluir</th>
+        {%endif%}
+        </tr>
+    </thead>
+        <tbody>
+            {%for fornecedor in fornecedor %}
+                <tr>
+                    <td>{{ fornecedor.nome_fantazia }}</td>
+                    <td>{{ fornecedor.cnpj }}</td>
+                    <td style="display: none;">{{ fornecedor.data_de_criacao | date:'d-m-y' }}</td>
+
+                    {% if perms.pessoa.change_fornecedor %}
+                        <td> <a href="{% url 'fornecedor_update' fornecedor.id %}">Editar</a> </td>
+                    {%endif%}
+
+                    {% if perms.pessoa.delete_fornecedor %}
+                        <td> <a href="{% url 'fornecedor_delete' fornecedor.id %}">Excluir</a> </td>
+                    {%endif%}
+                </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+{% endblock %}

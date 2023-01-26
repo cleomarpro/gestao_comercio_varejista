@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block main %} 
+{% load static%}
+    <br>
+    <h2 class="sub_tito" >&nbsp; CONTROLE DE GASTOS
+        <a 
+            href="#" onclick="document.getElementById('form_up').style.display='block';">
+                Adicionar 
+        </a>
+        <div > 
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/relatorio.png' %}" >
+                <a href="{% url 'dashboard' %}">DASHBOARD</a>
+            </label>
+        </div>
+    </h2>
+    <form id="form_up" class='formulario' style="display: none;" action="{% url 'gastos-extras' %}" method="POST" >
+         {% csrf_token %}
+         <a id="termo_buttao" href="#" onclick="document.getElementById
+         ('form_up').style.display='none';"> X</a>
+        <hr> 
+    <div> 
+        <label>Descrição*</label><br>
+            <input placeholder=" Descrição..." type="text" id="descricao" name="descricao" required/>
+    </div>
+    <div> 
+        <label>Categoria de gastos</label><br>
+            <select style="width:180px;" type="search" id="categoria" name="categoria">
+                <option value="">Selecionar</option>
+                {%for categoria in categoria_de_gastos %}
+                <option value="{{categoria.id}}">{{categoria}}</option>
+                {%endfor%}
+            </select> 
+            <a class="link_add" href="{% url 'categoria_de_gastos' %}">+</a>
+    </div>
+    <div>
+        <label>Valor*</label><br>
+            <input placeholder="R$ 0,00" type="text" data-js="money" name="valor" required/>
+    </div>
+             <hr>
+            <button type="submit"> Salvar</button>
+    </form>
+
+<!-- formulário de filtro -->
+    <form id="form_mobil" class='campo_de_busca' method="GET" action="{% url 'filtro_gastos_extras' %}">
+        <a id="br_X_mobil" href="#" onclick="document.getElementById
+        ('form_mobil').style.display='none';"> X</a>
+
+    <div>
+        <label> Filtrar por periodo/categoria</label> <br>
+        <input style="width:150px;" type="month" id="mes" name="mes"/>
+        <tr>
+        <select style="width:80px;" type="search" id="categoria" name="categoria">
+            <option value="">categora</option>
+            {%for categoria in categoria_de_gastos %}
+            <option value="{{categoria.id}}">{{categoria}}</option>
+            {%endfor%}
+        </select> 
+
+        <button style="width:50px;" type="submit">Filtrar</button>
+    </div>
+    
+    </form>
+        <a id="mostrar_filtros"
+            href="#" onclick="document.getElementById('form_mobil').style.display='block';">
+            Mostrar filtros 
+        </a>
+    {% if gastos_extr.total > 0 %}
+        <div class="dashboard">
+            <label><b>&nbsp; Total:</b> R$ {{gastos_extr.total}}</label><br>
+        </div>
+    {%endif%}
+    <table class="table">
+     <thead>
+        <tr>
+          <th >Descrição</th>
+          <th >Valor</th>
+          <th >Categoria</th>
+          <th>Data</th>
+          <th >Ação</th>
+        </tr>
+    </thead>
+        <tbody>
+            {%for gastos_extras in gastos_extras %}
+                <tr>
+                    <td>{{ gastos_extras.descricao }}</td>
+                    <td>R$ {{ gastos_extras.valor  | floatformat:2}}</td>
+                    <td>{{ gastos_extras.gastosExtrasCategoria.nome }}</td>
+                    <td>{{ gastos_extras.data_hora | date:'d/m/y  H:i'}}</td>
+
+                    {% if perms.financeiro.change_gastos_extras %}
+                    <td>
+                        <a href="{% url 'gastos_extras_update' gastos_extras.id %}">Editar</a>
+                    {% endif%}
+                    {% if perms.financeiro.delete_gastos_extras %}
+                        <a href="{% url 'gastos_extras_delete' gastos_extras.id %}">Excluir</a>
+                    </td>
+                    {% endif%}
+                    
+                </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+
+
+
+{% endblock %}

@@ -1,0 +1,73 @@
+
+{% load static%}
+<!DOCTYPE html>
+
+<html lang= "pt-br" >
+<head >
+    <meta charcet="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title> VieWorld  </title>
+
+    <script type="module" src="{% static 'js/mascaras.js' %}"></script>
+    <link rel="stylesheet" href= "{% static 'style/login_cadastro.css'%}">
+
+    <meta charcet="UTF-8">
+    <meta name="cor" content="width=device-width,initial=scale=1">
+    <meta name="description" content="Rede SociL cor">
+   <!-- <meta name="keyWords" content="fluxo de caixa, gestão, controle de estoque"> -->
+    <meta name="author" content="cor">
+</head>
+<body>
+
+
+    <div class='container'>
+
+        <form class='cadastro' method="post" action="{% url 'novo-usuario' %}">
+            <p  style="color:black; font-size: 25px;">VieWorld</p>
+            {% csrf_token %}
+            <hr>
+            {% if mensagen_de_erro_usuario %}
+            <label style='color:red;'>{{mensagen_de_erro_usuario}}</label>
+            {% endif %} <br>
+                <input class="form_novo_usuário" Type='text' name= 'username' id="id_username"
+                    maxlength="20" placeholder="Usuário*..." data-js="usuario_e_senha" required/>
+                <br>
+            {% if mensagen_de_erro_email %}
+            <br>
+            <label style='color:red;'>{{mensagen_de_erro_email}}!</label>
+            {% endif %} <br>
+
+            <input class="form_novo_usuário" Type='password' name='password' id='id_password'
+                minlength="6" maxlength="20" placeholder="Senha*..." required/>
+            <br>
+            <br>
+            <input class="form_novo_usuário"   Type='email' name='email'
+                id='email' maxlength="50" placeholder="E-mail*..." required/>
+            <br>
+            <br>
+            <input class="form_novo_usuário" Type='text' name= 'cpf_cnpj'
+                id='cpf_cnpj' placeholder="Cnpj..." data-js="cnpj" >
+            <br>
+            <br>
+            <input class="form_novo_usuário" Type='text' name='nome_fantazia'
+            id='nome_fantazia'maxlength="30" placeholder="Nome fantasia..." >
+            <br>
+            <br>
+                <hr>
+                <!--
+                    <p style="color:black; font-size: 16px;">
+                        Ao clicar em Cadastre, você concorda com nossos
+                        <a style="color:rgb(226, 15, 15);" href="#" onclick="document.getElementById
+                            ('termo_e_condicao_de_uso').style.display='block';">
+                                Termos e condição de uso </a>
+                    </p>
+                -->
+            <input id='bt_cadastrar' type="submit" value="Cadastrar">
+            <br>
+            <br>
+
+    </div>
+
+<body>
+</html>
+

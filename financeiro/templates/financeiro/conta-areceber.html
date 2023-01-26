@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% block main %}
+{% load static%}
+<br>
+    <h2 class="sub_tito" >&nbsp; CONTA A RECEBER <br>
+        <a 
+            href="#" onclick="document.getElementById('form_up').style.display='block';">
+                ADICIONA 
+        </a>
+        <div>
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/cliente.png' %}" width="500px" all=" ">
+                <a href="{% url 'novo-cliente' %}">CLIENTES</a>
+            </label>
+        </div>
+    </h2>
+    <form id="form_up" class='formulario' style="display: none;" action="{% url 'conta_areceber' %}" method="POST" >
+        {% csrf_token %}
+        
+        <a id="termo_buttao" href="#" onclick="document.getElementById
+        ('form_up').style.display='none';"> X</a>
+        <p> NOVA CONTA</p>
+
+       <hr> 
+        <div>
+            <label> Observação</label><br>
+                <input  placeholder=" Observação ou descrição..."
+                    type="text" id="observacao" name="observacao" />
+        </div>
+        <div>  
+            <label> Cliente</label><br>
+                <select  type="search" id="cliente_id" name="cliente_id" required/>
+
+                        <tr>
+                                <option value=''> __Selecionar __</option>
+                            {% for cliente in cliente %}
+                                <option value='{{cliente.id}}'> {{cliente.nome}}</option>
+                            {% endfor %}
+                        </tr>
+                </select>
+                <a class="link_add" href="{% url 'novo-cliente' %}">+</a>
+        </div>   
+        <div>
+            <label> Venda</label><br>
+                <select  type="search" id="venda_id" name="venda_id" >
+                    <tr>
+                            <option value=''> __Selecionar__</option>
+                        {% for vendas in venda %}
+                            <option value='{{vendas.id}}'> {{vendas}}</option>
+                        {% endfor %}
+                    </tr>
+                </select>
+
+        </div>
+        <div>
+            <label> Valor</label><br>
+                <input  placeholder="R$ 0,00"  type="text" data-js="money" step=".01" lang="nb"
+                    id="valor" name="valor" required/>
+        </div>
+    
+        <div>
+             <label> Parcelas</label><br>
+                <input value='1'  data-js="numero"
+                    type="text" id="parcelas" name="parcelas" required/>
+        </div>
+        <div>  
+            <label> Juros</label> <br>
+               <input style=" width:120px;" placeholder=" 0,00 %"
+               type="number" step=".01" lang="nb" id="juros" name="juros" >
+        </div> 
+       
+                <input type="hidden" value='1' name="tipo_de_conta_id">
+       
+        <div> 
+            <label> Primeira parcela</label> <br>
+                <input style=" width:150px; padding: 3px;"  placeholder=" Data de vencimento:"
+                    type="date" id="data_de_vencimento" name="data_de_vencimento" required/>
+        
+        </div>
+        <hr>
+
+            <button type="submit"> salvar</button>
+    </form>
+        <br>
+
+<!-- Formulário de filtros -->
+    <form id="form_mobil" class='campo_de_busca' method="GET" action="{% url 'conta_areceber' %}">
+        <a id="br_X_mobil" href="#" onclick="document.getElementById
+        ('form_mobil').style.display='none';"> X</a>
+    
+    <div id="div_busca_filtro";>
+        <label> Buscar cliente:</label><br>
+        <select style="width:110px"; type="text" id="nome_cliente" name="nome_cliente" >
+            <option value=''> Selecionar</option>
+            {%for c in cliente%}
+            <option value='{{c.cliente.id}}'> {{c.cliente.nome}} - {{c.cliente.cpf_cnpj}}</option>
+            {%endfor%}
+        </select>
+        <button style="width:60px"; type="submit">Buscar</button>
+    </div> 
+    <div id="div_busca_filtro";>
+        <label> Cpf ou Cnpj / Situação do débito</label><br>
+        <input style="width:150px"; type="search" id="client" name="client" 
+            data-js="cpf" placeholder="000.00.000-00" >
+        
+        <select style="width:110px"; type="text" id="estado_da_conta" name="estado_da_conta" >
+                <option value=''> Selecionar</option>
+                <option value='1'> -Contas ativas </option>
+                <option value='2'> -Contas pagas </option>
+        </select>
+        <button style="width:50px"; type="submit">Filtrar</button>
+    </div> 
+    <div id="div_busca_filtro";> 
+        <label>Filtra por periodo  </label> <br>
+        <input  style="width:120px; padding: 3px;" type="date" id="dia" name="dia" > até
+        <input  style="width:120px; padding: 3px;" type="date" id="dia2" name="dia2" >
+        <button style="width:50px;" type="submit">Filtrar</button>
+    </div> 
+    </form>
+        <a id="mostrar_filtros"
+            href="#" onclick="document.getElementById('form_mobil').style.display='block';">
+            Mostrar filtros 
+        </a>
+    <table class="table">
+     <thead>
+        <tr>
+            <th >Cliente</th>
+            <th class="col_table">Observação</th>
+            <th >Valor</th>
+            <th class="col_table" >Juros</th>
+            <th class="col_table">Valor com juros</th>
+            <th class="col_table">ID da venda</th>
+            <th class="col_table">Saldo devedor</th>
+            <th class="col_table">Total de parcelas</th>
+            <th class="col_table" >Parcelas pagas</th>
+            <th class="col_table" >Parcelas restantes</th>
+            <th class="col_table" >Valor da parcela</th>
+            <th >Primeira parcela</th>
+            <th>Ação</th>
+            <th>Pagar</th>
+        </tr>
+    </thead>
+        <tbody>
+            {%for conta in conta %}
+                <tr>
+                    <td>{{ conta.cliente.nome}}</td>
+                    <td class="col_table">{{ conta.observacao}}</td>
+                    <td >R$ {{ conta.valor }}</td>
+                    <td class="col_table"> {{ conta.juros}} %</td>
+                    <td class="col_table">R$ {{ conta.valor_com_juros}}</td>
+                    <td class="col_table">{{ conta.venda.id}}</td>
+                    <td class="col_table">R$ {{ conta.saldo_devedor }}</td>
+                    <td class="col_table">{{ conta.parcelas }}</td>
+                    <td class="col_table">{{ conta.parcelas_pagas }}</td>
+                    <td class="col_table">{{ conta.parcelas_restantes }}</td>
+                    <td class="col_table">R$ {{ conta.valor_parcela }}</td>
+                    <td>{{ conta.data_de_vencimento | date:'d/m/y' }}</td>
+                    <td>
+                        {% if perms.financeiro.change_contas %}
+                            <a href="{% url 'conta_areceber_update' conta.id %}">Editar</a> 
+                        {%endif%}
+
+                        {% if perms.financeiro.delete_contas %}
+                            <a href="{% url 'conta_delete' conta.id %}">Excluir</a> 
+                        {%endif%}
+                    </td>
+                    <td>
+                    {%if conta.parcelas_restantes == 0%}
+                        {% if perms.financeiro.add_pagamento %}
+                        <a href="{% url 'pagamento' conta.id %}">Pago</a> 
+                        {%endif%}
+
+                    {%else%}
+
+                        {% if perms.financeiro.add_pagamento %}
+                        <a href="{% url 'parcelas' conta.id %}">Parcelas</a> 
+                        {%endif%}
+
+                    {%endif%}
+    
+                    </td>
+            {%endfor%}
+        </tbody>
+    </table>
+{% endblock %}

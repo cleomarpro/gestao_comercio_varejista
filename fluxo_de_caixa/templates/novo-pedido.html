@@ -1,0 +1,479 @@
+{% extends 'base.html'%}
+{% block main%}
+{% load static%}
+<br>
+<!-- Caixa-->
+<div id="div_caixa">
+<div>
+    <h2 
+        class="sub_tito" style="width:100%; margin-left: 0px;">&nbsp; CLIENTE: {{venda.id}} <br>
+
+        <div > 
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/frente_de_caixa.png' %}" width="500px" all=" ">
+                <a href="{% url 'saida_mercadoria' %}">BAIXA</a>
+            </label> 
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/estoque.png' %}" >
+                <a href="{% url 'entrada-mercadoria' %}">ENTRADA</a>
+            </label>
+
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/produto.png' %}" >
+                <a href="{% url 'produto' %}">PRODUTOS</a>
+            </label>
+        </div>
+    
+    </h2>
+    <form id="caixa_id" class='caixa' style="height:200px ;" method="POST" action="{% url 'atualizar-pedido' %}">
+        {% csrf_token %}
+        {% if venda %}
+            <button id="bt_vendas1" accesskey="a" click='2' > Atualizar  </button>
+        {% else %}
+            <button id="bt_vendas1" > Iniciar </button>
+        {% endif %} 
+    <button id="bt_vendas2" >
+        <a accesskey="v" click='1' href="{% url 'lista-vendas'%}">Visualizar vendas</a>
+    </button>
+    <hr>
+                <input type="hidden" value="{{venda.id}}" name="venda_id">
+            <label>Cliente:</label>
+            <select style=" width:40%;" type="search" id="cliente" name="cliente">
+                <option value='{{venda.cliente.id}}'>{{venda.cliente.nome}}</option>
+                {% for c in cliente %}
+                    <option value='{{c.id}}'> {{c.nome}} - {{c.cpf}}</option>
+                {% endfor %}
+            </select><br>
+
+            <!-- Esse Inpute serve apenas para garantir um valor no input Desconto -->
+            <input style=" display: none;"; type="number" step=".01" lang="nb"
+                  name="desconto" id="desconto" value="{{ venda.desconto}}">
+
+            <!-- Esse select serve apenas para garantir um valor no select pagamento -->
+            <select style=" display: none;"; type="select"  name="pagamento"
+                id="pagamento" list= "pagament" accesskey="t" required/>
+                {%if venda.tipo_de_pagamento_id == None %}
+                    <option value='1'> __Selecionar__ </option>
+                {%elif venda.tipo_de_pagamento_id != None %}
+                    <option  value="{{venda.tipo_de_pagamento_id}}">{{venda.tipo_de_pagamento}} </option>
+                {% endif%}
+           </select >
+
+            {% if perms.fluxo_de_caixa.add_venda %}
+            <label id='label_input_desconto'> Desconto:</label>
+                <input id='label_input_desconto' style=" width:120px"; type="number" step=".01" lang="nb"
+                    placeholder="0,0%"  name="desconto" id="desconto"value="{{ venda.desconto}}">
+            {% endif%}
+                <br>
+        
+            {% if perms.fluxo_de_caixa.change_venda %}
+            <label> Tipo de pagamento:</label>
+                <select style=" width:40%;" type="select"  name="pagamento" id="pagamento" list= "pagament" accesskey="t">
+                    {%if venda.tipo_de_pagamento_id == None %}
+                        <option value='1'> __Selecionar__ </option>
+                    {%elif venda.tipo_de_pagamento_id != None %}
+                        <option  value="{{venda.tipo_de_pagamento_id}}">{{venda.tipo_de_pagamento}} </option>
+                    {% endif%}
+                    <option value="1" >-Cédula </option>
+                    <option value="2" >-Crédito</option>
+                    <option value="3" >-Débito</option>
+                    <option value="4" >-Cédula e Débito </option>
+                    <option value="5" >-Cédula e Crédito</option>
+                    <option value="6" >-Crédito e Débito</option>
+               </select >
+                 <br>
+
+             {% else %}
+            <label id='label_input_desconto'> Desconto:</label>
+                <input id='label_input_desconto' style=" width:120px"; type="number" step=".01" lang="nb"
+                    placeholder="0,0%"  name="desconto" id="desconto"value="{{ venda.desconto}}" disabled=" true">
+                <br>
+            <label> Tipo de pagamento:</label>
+                <select style=" width:40%;" type="select"  name="pagamento"
+                    id="pagamento" list= "pagament" accesskey="t" disabled=" true" required/>
+                    {%if venda.tipo_de_pagamento_id == None %}
+                        <option value='1'> __Selecionar__ </option>
+                    {%elif venda.tipo_de_pagamento_id != None %}
+                        <option  value="{{venda.tipo_de_pagamento_id}}">{{venda.tipo_de_pagamento}} </option>
+                    {% endif%}
+
+               </select >
+                 <br>
+
+             {% endif %}
+
+
+                <!-- Esse Inpute serve apenas para garantir um valor no input valor_recebido -->
+                <input style=" display: none;"type="text" id="valor_recebido"
+                    name="valor_recebido" value="0" required/>
+
+                <!-- Esse Inpute serve apenas para garantir um valor no input valor_credito -->
+                <input style=" display: none;"type="namber" id="valor_credito"
+                    name="valor_credito"  value="0" required/>
+
+                <!-- Esse Inpute serve apenas para garantir um valor no input valor_debito -->
+                <input style=" display: none;" type="namber" id="valor_debito"
+                    name="valor_debito"value="0" required/>
+
+            {%if venda.tipo_de_pagamento_id == '1'%}
+                <label> Valor recebido:</label>
+                    <input style=" width:20%;" type="text" data-js="money"
+                        id="valor_recebido"name="valor_recebido" value="R$ {{venda.valor_recebido}}"  accesskey="c" required/>
+
+            {%elif venda.tipo_de_pagamento_id == '4'%}
+            <label> Cédula</label>
+                <input style=" width:20%;" type="text" data-js="money" id="valor_recebido"
+                    name="valor_recebido" value="R$ {{venda.valor_recebido}}" accesskey="c" required/>
+            <label for="busca">Débito:</label>
+                <input  style=" width:20%;" type="text" data-js="money" id="valor_debito" name="valor_debito"
+                value="R$ {{venda.valor_debito}}" accesskey="d" required/>
+        
+            {%elif venda.tipo_de_pagamento_id == '5'%}
+            <label> Cédula:</label>
+                <input style=" width:20%;" type="text" data-js="money" id="valor_recebido"
+                 name="valor_recebido" value="R$ {{venda.valor_recebido}}" accesskey="c" required/>
+
+            <label >Crédito:</label>
+                <input  style=" width:20%;"
+                type="text" data-js="money" id="valor_credito" accesskey="ç"
+                name="valor_credito"  value="R$ {{venda.valor_credito}}" required/>
+
+            {%elif venda.tipo_de_pagamento_id == '6'%}
+            <label for="busca">Crédito:</label>
+                <input style=" width:20%;"
+                type="text" data-js="money" id="valor_credito" accesskey="ç"
+                name="valor_credito"  value="R$ {{venda.valor_credito}}" required/>
+
+            <label for="busca">Débito:</label>
+                <input   style=" width:20%; " type="text" data-js="money" accesskey="d"
+                id="valor_debito" name="valor_debito" value="R$ {{venda.valor_debito}}" required/>
+            {% endif%}
+
+            <a href="http://gestao.vieworld.com.br/fluxo_de_caixa/novo-pedido" target="_blank">
+                <label style=" display: none;"; class='bt_finalizar' for="finalizada"> Finalizar</label>
+            </a>
+                <input style=" display: none;"; class='bt_checkbo' type="checkbox" id="finalizada" name="finalizada" value="True" >
+           
+        </form>
+    
+    {% if perms.fluxo_de_caixa.add_venda %}
+        <form class='caixa' method="POST" action="{% url 'novo-pedido' %}">
+            {% csrf_token %}
+            <input type="hidden" value="{{venda.id}}" name="venda_id">
+            <button id='bt_novo_pedido'  accesskey="n"> Nova venda </button>
+        </form>
+    {% else %}
+        <form class='caixa' >
+            {% csrf_token %}
+            <input type="hidden"  name="venda_id">
+            <button id='bt_novo_pedido' disabled=" true" > Nova venda </button>
+        </form>
+    {% endif %}
+    <br>
+{% if venda %}
+    {% if perms.fluxo_de_caixa.add_venda %}
+        <form class='caixa' action="{% url 'novo-item-pedido' venda.id %}" method="POST">
+                {% csrf_token %}
+
+                {%if mensagen_de_erro_campo_obrigatorio%}
+                <p style="color: red;">{{mensagen_de_erro_campo_obrigatorio}}</p>
+            {%endif%}
+            <br>
+            <label>Selecione o produto ou digite o código a baixa:</label>
+            <br>
+            <div>
+                <select style=" width:40%;" type="search" id="produto_select" name="produto_select">
+                    <option value=''> Selecionar o produto</option>
+                    {% for p in produto %}
+                        <option value='{{p.id}}'> {{p.codigo}} - {{p.nome}}</option>
+                    {% endfor %}
+                </select>
+                <label> ou </label>
+                <input style=" width:40%;" type="text" name="produto_codigo"
+                id="produto_codigo" autofocus="autofocus" accesskey="z"
+                placeholder="Código do produto">
+            </div>
+            <br>
+            <label> Desconto: </label>
+                <input style=" width:17%;" accesskey="d"
+                type="number" step=".01" lang="nb" name="desconto"
+                    min="0" max="1000" id="desconto" placeholder="0,0%" >
+            <label> Quantidade:</label>
+                <input style=" width:17%;" accesskey="q"
+                type="number" step=".01" lang="nb" name="quantidade"
+                min="0" max="999" id="quantidade" value="1">
+                <br>
+            <button id="bt_vendas1">Incluir</button>
+        </form>
+    {% else %}
+        <form class='caixa' >
+             {% csrf_token %}
+
+            <label> Código:</label>
+                <input style=" width:60%;" type="text" name="produto_codigo"
+                id="produto_codigo" autofocus="autofocus" accesskey="z"
+                placeholder="Pressione ( Alt + Z )" required disabled=" true">
+            <br>
+            <label> Desconto:</label>
+                <input style=" width:17%;" accesskey="d"
+                type="number" step=".01" lang="nb" name="desconto"
+                    id="desconto" placeholder="0,0%"  disabled=" true">
+            <label> Quantidade:</label>
+                <input style=" width:17%;" accesskey="q"
+                type="number" step=".01" lang="nb" name="quantidade"
+                    id="quantidade" value="1" required disabled=" true">
+                <br>
+                <button disabled=" true" id="bt_vendas1">Incluir</button>
+        </form>
+    {% endif %}
+</div>
+<!-- Painel de vendas-->
+<div id= "div_painel_tabela">
+    <div id="divPainel" > 
+        {%if venda.tipo_de_pagamento_id == None%}
+        <label style=" background-color: #363636;">
+            TOTAL: R$ {{ venda.valor | floatformat:2}} </label>
+            <br>
+            {%endif%}
+
+        {%if venda.tipo_de_pagamento_id != None %}
+        <label style=" background-color: #363636;">
+            TOTAL A PAGAR: R$ {{ venda.valor_com_desconto | floatformat:2}}</label>
+                <br>
+                {%endif%}        
+        <label style=" background-color: #2F4F4F;">
+            Desconto: R$ {{venda.total_desconto | floatformat:2}}</label>
+             <br>
+
+       
+        {%if venda.tipo_de_pagamento_id == '1' %}
+             {% if venda.troco > 0 %}
+        <label style=" background-color: #0000CD;">
+            Troco: R$ {{venda.troco | floatformat:2}}</label>
+
+            {%endif%}
+            {% if venda.troco < 0 %}
+        <label style=" background-color: #800000;">
+            Falta: R$ {{venda.troco | floatformat:2}}</label>
+
+            {%endif%}
+        {%elif venda.tipo_de_pagamento_id == '4'%}
+             {% if venda.troco > 0 %}
+        <label style=" background-color: #0000CD;">
+            Troco R$ {{venda.troco | floatformat:2}}</label>
+
+            {%endif%}
+            {% if venda.troco < 0 %}
+        <label style=" background-color: #800000;">
+            Falta R$ {{venda.troco | floatformat:2}}</label>
+
+            {%endif%}
+        {% elif venda.tipo_de_pagamento_id == '4'%}
+             {% if venda.troco > 0 %}
+        <label style=" background-color: #0000CD;">
+            Troco R$ {{venda.troco | floatformat:2}}</label>
+
+             {%endif%}
+            {% if venda.troco < 0 %}
+        <label style=" background-color: #800000;">
+            Falta R$ :{{venda.troco | floatformat:2}}</label>
+
+            {%endif%}
+        {% elif venda.tipo_de_pagamento_id == '5'%}
+            {%if venda.troco > 0 %}
+        <label style=" background-color: #0000CD;">
+            Troco R$ {{venda.troco | floatformat:2}}</label>
+
+             {%endif%}
+            {% if venda.troco < 0 %}
+        <label style=" background-color: #800000;">
+            Falta R$ {{venda.troco | floatformat:2}}</label>
+
+            {%endif%}
+
+        {%elif venda.tipo_de_pagamento_id == '5'%}
+             {% if venda.troco > 0 %}
+        <label style=" background-color: #0000CD;">
+            Troco R$ {{venda.troco | floatformat:2}}</label>
+
+             {%endif%}
+            {% if venda.troco < 0 %}
+        <label style=" background-color: #800000;">
+            Falta R$ {{venda.troco | floatformat:2}}</label>
+
+            {%endif%}
+
+        {%elif venda.tipo_de_pagamento_id == '6'%}
+            {% if venda.troco > 0 %}
+        <label style=" background-color: #0000CD;">
+            Troco R$ {{venda.troco | floatformat:2}}</label>
+
+             {%endif%}
+            {% if venda.troco < 0 %}
+        <label style=" background-color: #800000;">
+            Falta R$ {{venda.troco | floatformat:2}}</label>
+
+            {%endif%}
+        {%endif%}
+    </div>
+    
+    <div id="div_tabela" > 
+        <table >
+            <thead>
+                <tr>
+                    <th >Valor</th>
+                    <th >Nome </th>
+                    <th >Quantid</th>
+                    <th >Desconto</th>
+                    <th >Excluir</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in itens %}
+                <tr>
+                    <td>R$ {{ item.produto.valor_venal }}</td>
+                    <td>{{ item.produto.nome }}</td>
+                    <td>{{ item.quantidade_de_itens }}</td>
+                    <td>{{ item.desconto }}'%</td>
+                    <td scope="col">
+                    <a href="{% url 'delete-item-pedido' item.id%}">Excluir</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <br>
+    </div>
+</div>
+
+    {% if mensagen_de_erro %}
+    <div id="div_alerta" class="divAlerta">
+        <a href="#" onclick="document.getElementById('div_alerta').style.display='none';">
+        <input class="butao_X" type="button" value="X" autofocus="autofocus", accesskey="x"> </a>
+        <div class='formAlerta'>
+            <label> ALERTA!</label>
+                <br>
+                <label style=" color: #EE3B3B; ";> {{mensagen_de_erro}} </label>
+                <br>
+                <label> Verifica o cdigo e tente novamente!</label>
+                <br>
+                <label id='atalho'> Para feichar, pressione  ( Alt  + X ) !</label>
+                <label id='fechar'> Toque na tela para sair!</label>
+                <br>
+        </div>
+    </div>
+
+    {% endif %}
+        <br>
+<!-- cupom fiscal-->
+    <div>
+        <input id='bt_visualizar_cupom' accesskey="i" 
+            type="button" value="Imprimir Cupom" onclick="imprimir_cupom_fiscal()">
+    </div>
+    <div id="div_cupomFiscal" class="cupom_fiscal" style="display:none;" >
+            <hr>
+            <label style="text-align: center;" >ESTE CUPOM NÃO POSSUI VALOR FISCAL</label>
+            <hr>
+            <label >- Número do cliente: {{venda.id}} </label>
+                <br>
+            <label >-Empresa: {{usuarios.nome_fantazia}} </label>
+                <br>
+            <label >-Cnpj: {{usuarios.cpf_cnpj}} </label>
+                <br>
+            <label >-Atendente: {{user.first_name}} </label>
+            <hr>    
+            <label >-Total: R$ {{venda.valor}} </label>
+                <br>
+            <label >-Desconto: R$ {{venda.total_desconto}} </label>
+                <br>
+            <label>-Valor com desconto : R$ {{ venda.valor_com_desconto | floatformat:2}} </label>
+                <br>
+            {%if venda.tipo_de_pagamento != None %}
+            <label >-Tipo de pagamento: {{ venda.tipo_de_pagamento }}</label>
+            {%else%}
+            <label >-Tipo de pagamento: Não definido</label>
+            {%endif%}
+            <br>
+            {%if venda.valor_debito > '0' %}
+            <label>-Valor  recebido em débito :R$ {{ venda.valor_debito }}</label>
+             <br>
+            {%endif%}
+            {%if venda.valor_credito > '0' %}
+            <label>-Valor recebito em crédito : R$ {{ venda.valor_credito}}</label>
+            <br>
+            {%endif%}
+
+            {%if venda.tipo_de_pagamento_id == '1' %}
+                <label>-Valor recebito em cedula: R$ {{ venda.valor_recebido | floatformat:2}}</label>
+                {%elif venda.tipo_de_pagamento_id == '4' %}
+                    <label>-Valor recebito em cedula: R$ {{ venda.valor_recebido | floatformat:2}}</label>
+                {%elif venda.tipo_de_pagamento_id == '5' %}
+                    <label>-Valor recebito em cedula: R$ {{ venda.valor_recebido | floatformat:2}}</label>
+                <br>
+            {%endif%}
+            <br>
+            {%if venda.troco > 0 %}
+                {%if venda.tipo_de_pagamento_id == '1' %}
+                    <label >- Troco: R$ {{venda.troco | floatformat:2}}</lavel>
+                {%elif venda.tipo_de_pagamento_id == '4'%}
+                    <label>- Troco: R$ {{venda.troco | floatformat:2}}</label>
+                {%elif venda.tipo_de_pagamento_id == '5'%}
+                    <label>- Troco: R$ {{venda.troco | floatformat:2}}</label>
+                {%else%}
+                    <label>-Falta  $:{{venda.troco | floatformat:2}}</label>
+                {%endif%}
+          
+            {%endif%}
+            
+            {%if venda.desconto > '0' %}
+            <label>-Total de desconto $: {{venda.total_desconto | floatformat:2}}</label>
+                <br>
+            {%endif%}
+            <br>
+            <label>- Data da venda: {{ venda.data_hora | date:'d/m/y  H:i'}}</label>
+            <br>
+            <hr>
+            <table>
+                <thead>
+                    <tr>
+                        <th >Valor</th>
+                        <th >Produto</th>
+                        <th >Quant</th>
+                        <th >Desc</th>
+                    </tr>
+                </thead>
+                <tbody>
+            {% for item in itens %}
+                    <tr>
+                        <td> R$ {{ item.produto.valor_venal }}</td>
+                        <td>{{ item.produto.nome }}</td>
+                        <td>{{ item.quantidade_de_itens }}</td>
+                        <td>R$ {{ item.desconto }}</td>
+                    <tr>
+            {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            <hr>
+            <p style="text-align: center;"> Assinatura</p>
+            <br>
+    </div>
+    
+</div>
+<script >
+    function imprimir_cupom_fiscal(){
+        var pegar_dados = document.getElementById('div_cupomFiscal').innerHTML;
+
+        var janela = window.open('','','width=400,heigth=600');
+        janela.document.write("<html><head>");
+        janela.document.write("<title>PDF</title></head>");
+        janela.document.write("<body>");
+        janela.document.write(pegar_dados);
+        janela.document.write("</body><html>");
+        janela.print();
+        janela.close();
+    }
+</script>
+
+{% endif %}
+{% endblock %}

@@ -1,0 +1,83 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lobster|Philosopher:400i&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Inria+Serif&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Courier+Prime&display=swap');
+
+
+.titulo{
+   background-color: #8ae9a9ef;
+   color: rgb(11, 12, 12);
+   font-family: 'Philosopher', sans-serif;
+   font-size: 20px;
+   margin-top: 30p;
+   width: 100%;
+   height: auto;
+
+  }
+
+ .menu_input[type="checkbox"]
+  {
+    display: none
+ }
+ .menu_input[type ="checkbox"]:checked ~ nav
+ {
+   transform: translateX(200px);
+ }
+
+.menu_nav{
+
+  background-color: #eff3efef;
+  width:100%;
+  left:-202px;
+  height:100%;
+  transition:all .5s;
+  position: absolute;
+  top:45px;
+}
+.menu_ul{
+margin-top: -10px;
+}
+
+.menu_li{
+
+    width: 200px;
+    height: 30%;
+    display: block;
+    line-height: 50px;
+    border: 1px solid #aaadad;
+    border-radius: px;
+}
+.menu_a{ /* visual do link */
+    color: rgb(107, 103, 103);
+    text-decoration: none;
+    padding: 0px;
+    font-size: 20px;
+}
+
+  #menu_label{
+  margin-left:162px;
+  margin-top: -0px;
+  position: absolute;
+  padding: 1px;
+  border: 1px solid #353636;
+  border-radius: 5px;
+ }
+
+.menu_nav ul ul li{
+    margin-left: 125px;
+    margin-top:10px;
+}
+
+.menu_nav ul li:hover{
+	background-color: #2ccc89;
+}
+
+
+.menu_nav ul ul{
+	display: none;
+}
+
+.menu_nav ul li:hover > ul{
+	display:block;
+}

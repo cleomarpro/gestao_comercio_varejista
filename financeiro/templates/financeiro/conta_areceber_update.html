@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<br>
+    <h2 class="sub_tito" >&nbsp; CONTA A RECEBER <a href="{% url 'conta_areceber' %}">Cancelar</a> </h2>
+    <form class='formulario' method="POST" >
+        {% csrf_token %}
+    
+        <p> EDITAR CONTA</p>
+       <hr>
+      
+        <div>
+            <label> Observação</label> <br>
+                <input style=" width:220px;"  placeholder=" Observação ou descrição..."
+                    type="text" id="observacao" name="observacao" value="{{conta.observacao}}"/>
+        </div>
+        <div>
+            <label> Cliente</label> <br>
+                <select style=" width:200px;" type="search" id="cliente_id" name="cliente_id" required/>
+
+                        <tr>
+                                <option value='{{conta.cliente.id}}'> {{conta.cliente}}</option>
+                            {% for cliente in cliente %}
+                                <option value='{{cliente.id}}'> {{cliente.nome}}</option>
+                            {% endfor %}
+                        </tr>
+
+                </select>
+                <a href="{% url 'novo-cliente' %}">+</a>
+        </div>   
+        <div>
+                
+            <label> Venda</label> <br>
+                <select style=" width:220px;" type="search" id="venda_id" name="venda_id" >
+                        <tr>
+                                <option value='{{conta.venda.id}}'> {{conta.venda}}</option>
+                            {% for vendas in venda %}
+                                <option value='{{vendas.id}}'> {{vendas}}</option>
+                            {% endfor %}
+                        </tr>
+                </select>
+        </div>
+        <div>
+            <label> Valor</label> <br>
+                <input style=" width:200px;"  placeholder="R$ 0,00" type="text" data-js="money" 
+                   id="valor" name="valor"  value="R$ {{conta.valor | floatformat:2}}" />
+        </div> 
+         <!-- step=".01" lang="nb" -->   
+        <div>
+             <label> Parcelas</label> <br>
+                <input style=" width:200px;"  data-js="numero"
+                    type="text" id="parcelas" name="parcelas" required value="{{conta.parcelas}}" />
+        </div>  
+        <div>  
+            <label> Juros</label> <br>
+               <input style=" width:120px;" placeholder=" {{conta.juros}}%"
+               type="number" step=".01" lang="nb" id="juros" name="juros">
+       </div> 
+       
+                <input type="hidden" value='1' name="tipo_de_conta_id">
+        <div>
+            <label> Primeira parcela</label> <br>
+                <input style="width:150px; padding:3px"  placeholder=" Data de vencimento:" 
+                    value="{{conta.data_de_vencimento | date:'Y-m-d'}}"
+                    type="date" id="data_de_vencimento" name="data_de_vencimento" >
+        </div>   
+             <hr> 
+            <button type="submit"> Editar</button>
+    </form>
+    <br>
+{% endblock %}
+<!-- <td> <a href="{% url 'GastosExtras_update_cbv' gastos_extras.id %}">Editar</a> </td>
+                    <td> <a href="{% url 'gastos_extras_delete' gastos_extras.id %}">Excluir</a> </td>  -->
+

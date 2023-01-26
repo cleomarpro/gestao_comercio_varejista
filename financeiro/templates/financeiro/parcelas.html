@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<br>
+    <h2 class="sub_tito" >&nbsp; PARCELAS 
+        
+    <a id='imprimir_carne' accesskey="i" type="button"  
+        onclick="imprimir_carne()"> Imprimir
+    </a><BR>
+    <a href="{% url 'conta_areceber' %}">Voltar</a>
+    </h2>
+    <table class="table">
+     <thead>
+        <tr>
+            <th >Conta</th>
+            <th >Parcela</th>
+            <th >Vencimento</th>
+            <th >Valor</th>
+            
+            <th>Pagar</th>
+        </tr>
+    </thead>
+        <tbody>
+            {%for parcelas in parcelas%}
+                <tr>
+                    <td>{{ parcelas.contas.id}}</td>
+                    <td >{{ parcelas.numero_da_parcelas}}</td>
+                    <td>{{parcelas.data_de_vencimento | date:'d/m/y'}}</td>
+                    <td>R$ {{parcelas.contas.valor_parcela}}</td>
+                    <td>
+                        
+                        
+                                {% if perms.financeiro.add_pagamento %}
+                                <label>  <a Style= 'color: red;' href="{% url 'pagamento' parcelas.contas.id %}">Pagar</a> </label>
+                                {%endif%}
+                            
+                    </td>
+            {%endfor%}
+        </tbody>
+    </table>
+    <br>
+    <br>
+<div id="carne" style='margin-left:210px; width:350px; border:5px; display:none;'> 
+    01 via
+    <br>
+    <br>
+    <label><b> NOTA PROMISSÓRIA</b></label>
+    <br>
+    <br>
+    <label> <b>- Id da conta: </b> {{ conta.id}}</label><br>
+    <label> <b>- Data do contrato:</b> {{conta.data_hora | date:'d/m/y'}}</label> <br>
+    <label> <b>- Total do débito: R$ </b> {{ conta.valor}}</label><br>
+    <label> <b>- Total de parcelas: </b> {{ conta.parcelas}}</label><br>
+    <label> <b>- Valor da parcelas: </b> {{ conta.valor_parcela}}</label><br>
+    <label> <b>- Primeira parcela em: R$ </b> {{ conta.data_de_vencimento | date:'d/m/y'}}</label><br>
+    <br>
+    <label><b> - Beneficiário:</label></b> {{ empresa.nome_fantazia}}</b> </label><br>
+    <label><b>- Cpf/Cnpj: </b> {{ empresa.cpf_cnpj}}</label><br>
+    <br>
+    <label> <b>- Contratante: </b> {{conta.cliente.nome}} <br>
+    <b>- Cnpj/Cpf: </b> {{conta.cliente.cpf_cnpj}}
+    </label><br>
+    <br>
+    <br>
+    <hr>
+    <label>-Assinatura do Beneficiário</label>
+    <br>
+    <br>
+    <hr>
+    <label>Assinatura do Contratante</label>
+    <br>
+    <br>
+    ✂------ ✂ ------
+    <br>
+    <br>
+    02 via
+    <br>
+    <br>
+    <label><b> NOTA PROMISSÓRIA</b></label>
+    <br>
+    <br>
+    <label> <b>- Id da conta: </b> {{ conta.id}}</label><br>
+    <label> <b>- Data do contrato:</b> {{conta.data_hora | date:'d/m/y'}}</label> <br>
+    <label> <b>- Total do débito: R$ </b> {{ conta.valor}}</label><br>
+    <label> <b>- Total de parcelas: </b> {{ conta.parcelas}}</label><br>
+    <label> <b>- Valor da parcelas: </b> {{ conta.valor_parcela}}</label><br>
+    <label> <b>- Primeira parcela em: R$ </b> {{ conta.data_de_vencimento | date:'d/m/y'}}</label><br>
+    <br>
+    <label><b> - Beneficiário:</label>b> {{ empresa.nome_fantazia}}</b> </label><br>
+    <label><b>- Cpf/Cnpj: </b> {{ empresa.cpf_cnpj}}</label><br>
+    <br>
+    <label> <b>- Contratante: </b> {{conta.cliente.nome}} <br>
+    <b>- Cnpj/Cpf: </b> {{conta.cliente.cpf_cnpj}}
+    </label><br>
+    <br>
+    <br>
+    <hr>
+    <label>-Assinatura do Beneficiário</label>
+    <br>
+    <br>
+    <hr>
+    <label>Assinatura do Contratante</label>
+    <br>
+    <br>
+    {%for parcelas in parcelas%}
+        ✂------ ✂ ------
+        <br>
+        <br>
+        <label > <b>PARCELAS:</b> {{ parcelas.numero_da_parcelas}}</label><br>
+        <label> <b>- Id da conta: </b> {{ conta.id}}</label><br>
+        <label> <b>- Valor da parcela:</b> R$ {{parcelas.contas.valor_parcela}}</label><br>
+        <label> <b>- Vence em:</b> {{parcelas.data_de_vencimento | date:'d/m/y'}}</label>
+        <br>
+        <br>
+        <hr>
+        <label>Assinatura do Beneficiário</label>
+        <br>
+        <br>
+    {%endfor%}
+
+</div>
+
+<script >
+    function imprimir_carne(){
+        var pegar_dados = document.getElementById('carne').innerHTML;
+
+        var janela = window.open('25%');
+        janela.document.write("<html><head>");
+        janela.document.write("<title>PDF</title></head>");
+        janela.document.write("<body>");
+        janela.document.write(pegar_dados);
+        janela.document.write("</body><html>");
+        janela.print();
+        janela.close();
+    }
+</script>
+{% endblock %}
+
+

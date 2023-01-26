@@ -1,0 +1,82 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lobster|Philosopher:400i&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Inria+Serif&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Courier+Prime&display=swap');
+
+.divAlerta{
+    position:absolute;
+    width: 350px;
+    text-align: center;
+
+}
+.formAlerta{
+    background-color: #B5B5B5;
+    margin-left:250px;
+    margin-top: -200px;
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #303131;
+    border-radius: 2px
+}
+#fechar{
+    display:none;
+}
+.butao_X{
+    background-color:  rgb(236, 236, 242);
+    border-radius: 1px;
+    color:rgb(240, 10, 10);
+    margin-left: 372px;
+    margin-top: -200px;
+    position:absolute;
+}
+.formAlerta label{
+    font-size: 18px;
+    padding: 0px;
+    margin-right: 10px;
+
+}
+.mensagem_de_erro{
+    width:450px;
+    background-color:#60778a;
+    color: white;
+    border: 1px solid #f5f5f0;
+    border-radius: 7px;
+    margin:0% 25% 25% 25% ;
+    padding: 8px;
+}
+@media (max-width: 768px){
+    .mensagem_de_erro{
+        width: 100%;
+    }
+.divAlerta{
+    width: 100%;
+    text-align: center;
+}
+
+.formAlerta{
+    margin-top: -400px;
+    width: 95%;
+    margin-left:0px;
+    padding: 0px;
+}
+#div_caixa div{
+    display:block;
+}
+#atalho{
+    display:none;
+}
+}
+
+@media (max-width:768px) {
+    .butao_X{
+        position:absolute;
+        right:30px;
+        background-color:rgb(245, 245, 249);
+        color:rgb(216, 6, 6);
+        margin-left: 50px;
+        margin-top: -400px;
+        padding: 5px;
+        
+    }
+}

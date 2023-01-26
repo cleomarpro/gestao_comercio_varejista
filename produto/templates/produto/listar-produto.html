@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<br>
+  <h2 class="sub_tito" >&nbsp; PRODUTOS</h2> 
+    <form class='campo_de_busca' method="GET" action="{% url 'listar-produto' %}">
+      <label>Código do produto</label><br>
+      <input type="search" id="produt" name="produt" placeholder="Código do produto...">
+      <button >Buscar</button>
+    </form>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th >Nome</th>
+          <th class="col_table">Categoria </th>
+          <th >Código</th>
+          <th >Valor venal</th>
+          <th >Estoque</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for produto in produto %}
+            <tr>
+                <td>{{ produto.nome }}</td>
+                <td class="col_table">{{ produto.categoria.nome }}</td>
+                <td>{{ produto.codigo }}</td>
+                <td>R$ {{ produto.valor_venal }}</td>
+                <td>
+
+                {% if  produto.estoque > 0 %}
+                    <lavel> {{ produto.estoque }}</lavel>
+                {% else %}
+                    <lavel Style= 'color: red;'> {{ produto.estoque }}</lavel>
+                {% endif %}
+
+                </td>
+                {% empty %}
+                        <li>Sem itens na lista.</li>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+{% endblock %}

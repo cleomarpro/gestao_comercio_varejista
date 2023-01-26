@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block main %}
+<br>
+<h2 class="sub_tito" >&nbsp; USUÁRIOS  </h2>
+
+<form class='campo_de_busca' method="GET" action="{% url 'usuarios' %}" >
+{% csrf_token %}
+    <select style=" width:100px;" type="text" id="estado" name="plano" >
+        <tr>
+            <option value=''> selecionar</option>
+            {% for p in todos_os_plano%}
+            <option value="{{p.nome}}">{{p.nome}}</option>
+            {%endfor%}
+        </tr>
+    </select>
+        <button  type="submit">Filtrar</button>
+</form >
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th >Id / Usuario</th>
+                <th >Nome/Nome fantazia</th>
+                <th >Cpf/Cnpj</th>
+                <th > E-mail</th>
+                <th > Telefone </th>
+                <th > Plano/Valor </th>
+                <th > Estado </th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+    
+            <tbody>
+            {%for usuario in usuario%}
+                <tr>
+                    <td> {{usuario.id}} / {{usuario.user.username}}</td>
+                    <td> {{usuario.nome_fantazia}} </td>
+                    <td> {{usuario.cpf_cnpj}} </td>
+                    <td> {{usuario.user.email}} </td>
+                    <td> {{usuario.Telefone}} </td>
+                    <td> {{usuario.plano.registro}} / {{usuario.plano.valor}} </td>
+                    <td> estado </td>
+                    {%if usuario.plano.valor %}
+                        <td> <a href="{% url 'cobranca' usuario.id %}"> fatura </a></td>
+                    {%endif%}
+                </tr>
+            {%endfor%}
+        </tbody>
+</table>   
+{% endblock %}

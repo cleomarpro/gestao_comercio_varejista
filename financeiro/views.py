@@ -1,7 +1,6 @@
 import datetime
 from django.shortcuts import render, redirect
 from django.views import View
-#from django.views.generic.edit import UpdateView
 from fluxo_de_caixa.models import Depositar_sacar, Venda
 from fluxo_de_caixa.models import ItemDoPedido
 from django.db.models import Q
@@ -10,41 +9,35 @@ from .models import Gastos_extras
 from .models import Tipo_de_conta
 from .models import GastosExtrasCategoria
 from pessoa.models import Cliente
-from pessoa.models import Funcionario
 from produto.models import EntradaMercadoria
-from usuarios.models import Cobranca, Usuarios
-from django.db.models import Sum, Count, F, DecimalField #Avg ,DecimalField, F # Max ExpressionWrapper FloatField DecimalField Sum
+from usuarios.models import Cobranca
+from django.db.models import Sum, Count, F 
 from datetime import date
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-#from django.urls import reverse_lazy
-#from .forms import ProdutoForm
- 
+from usuarios.permitir_autorizar import autenticar_usuario, autorizarcao_de_reistro, registro_de_dados
+
 class GastosExtras(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user.has_perm('financeiro.add_gastos_extras')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-        data={}
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
-       
-        today = date.today()
-        mes_atual = today.month
-        ano = today.year
-        gastos_extras = Gastos_extras.objects.filter(
-            usuarios__usuario_cliente= usuario, data_hora__month = mes_atual, data_hora__year= ano ).order_by('-id')
-        
-        data['gastos_extras']=gastos_extras
-        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
-        data['hoje']= today
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
+
+        hoje = date.today()
+        mes_atual = hoje.month
+        ano = hoje.year
+        data={} 
+        data['gastos_extras'] = Gastos_extras.objects.filter(
+            usuarios_id= usuario_cliente, data_hora__month = mes_atual, data_hora__year= ano ).order_by('-id')
+        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(
+            usuarios_id= usuario_cliente).order_by('-id')
+        data['hoje']= hoje
         return render(
             request, 'financeiro/gastos-extras.html', data)
        
@@ -52,34 +45,28 @@ class GastosExtras(LoginRequiredMixin, View):
         user = request.user.has_perm('financeiro.add_gastos_extras')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros 
 
-        today = date.today()
-        mes_atual = today.month
-        ano = today.year
+        hoje = date.today()
+        mes_atual = hoje.month
+        ano = hoje.year
         data = {}
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-
         gastos_extras = Gastos_extras.objects.create(
             descricao = request.POST['descricao'],
             gastosExtrasCategoria_id = request.POST['categoria'],
             valor = request.POST['valor'].replace('.','').replace(',','.').replace('R$\xa0','').replace('R$',''),
-            user = user_logado, usuarios_id = usuarioId
+            user = user_logado, usuarios_id = usuario_cliente
             )
         data['gastos_extras'] = gastos_extras
         data['gastos_extras']  = Gastos_extras.objects.filter(
-            usuarios__usuario_cliente= usuarioCliente, data_hora__month = mes_atual, data_hora__year=ano ).order_by('-id')
-        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
-        data['hoje']= today
+            usuarios_id= usuario_cliente, data_hora__month = mes_atual, data_hora__year=ano ).order_by('-id')
+        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(
+            usuarios_id= usuario_cliente).order_by('-id')
+        data['hoje']= hoje
         return render(
              request, 'financeiro/gastos-extras.html',data)
 
@@ -88,22 +75,16 @@ def gastosExtras_delete(request, id):
     user = request.user.has_perm('financeiro.change_gastos_extras')
     if user == False:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+    user_logado = request.user.id
+    usuario_cliente = autenticar_usuario(user_logado)
+    autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+    if autorizarcao_de_reistros:
+        return autorizarcao_de_reistros
 
-    user_logado = request.user # Obitendo o usuário logado
-    user_logado = user_logado.id # obitendo o ID do usuário logado
-    if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-        funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-        usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-        
-    else:
-        usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-        usuarioId = usuario.id # Obitendo o id  do usuário administrador
-    
     data  = {}
     gastos_extras= Gastos_extras.objects.get(id= id)
     usuario_adm = gastos_extras.usuarios.id
-    if usuario_adm == usuarioId: # Verificar autenticidade do usuário
-       
+    if usuario_adm == usuario_cliente: 
         if request.method == 'POST':
             gastos_extras.delete()
             return redirect('gastos-extras')
@@ -118,24 +99,20 @@ class GastosExtrasUpdate(LoginRequiredMixin, View):
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
         data={}
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
-        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
-        data['gastos_extras']= Gastos_extras.objects.get(id= id)
-
-        usuario_adm = data['gastos_extras'].usuarios.id
-        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+        gastos_extras= Gastos_extras.objects.get(id= id)
+        usuario_adm = gastos_extras.usuarios.id
+        if usuario_adm == usuario_cliente: 
+            data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(
+                usuarios_id= usuario_cliente).order_by('-id')
+            data['gastos_extras']= Gastos_extras.objects.get(id= id)
             return render(
-                    request, 'financeiro/gastos_extras_update.html', data)
+                request, 'financeiro/gastos_extras_update.html', data)
         else:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
@@ -143,20 +120,15 @@ class GastosExtrasUpdate(LoginRequiredMixin, View):
         user = request.user.has_perm('financeiro.change_gastos_extras')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioId = usuario.id # Obitendo o id  do usuário administrador
-
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
+      
         gastos_extras= Gastos_extras.objects.get(id= id)
         usuario_adm = gastos_extras.usuarios.id
-        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+        if usuario_adm == usuario_cliente: 
             gastos_extras.id= id
             gastos_extras.descricao = request.POST['descricao']
             gastos_extras.gastosExtrasCategoria_id= request.POST['categoria']
@@ -167,43 +139,35 @@ class GastosExtrasUpdate(LoginRequiredMixin, View):
         else:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
-
 class FiltroGastosExtras( LoginRequiredMixin, View):
     def get(self, request):
-        data={}
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
+        data={}
         today = date.today()
         mes_atual = today.month
-        gastos_extras = Gastos_extras.objects.filter(usuarios__usuario_cliente= usuario, data_hora__month = mes_atual ).order_by('-id')
-        Mes= request.GET.get('mes',None)
-        Ano= request.GET.get('ano',None)
-        Dia= request.GET.get('dia',None)
-        Categoria= request.GET.get('categoria',None)
-        if Dia:
+        gastos_extras = Gastos_extras.objects.filter(
+            usuarios_id= usuario_cliente, data_hora__month = mes_atual ).order_by('-id')
+        mes= request.GET.get('mes',None)
+        categoria= request.GET.get('categoria',None)
+     
+        if mes:
             gastos_extras = Gastos_extras.objects.filter(
-                usuarios__usuario_cliente= usuario, data_hora__contains = Dia ).order_by('-id')
-       
-        if Mes and Ano:
-            gastos_extras = Gastos_extras.objects.filter(
-                usuarios__usuario_cliente= usuario, data_hora__year= Ano, data_hora__month= Mes).order_by('-id')
+                usuarios_id= usuario_cliente, data_hora__contains= mes).order_by('-id')
             data['gastos_extr']= gastos_extras.aggregate(total=Sum('valor'))
 
-        if Mes and Ano and Categoria:
+        if mes and categoria:
             gastos_extras = Gastos_extras.objects.filter(
-                usuarios__usuario_cliente= usuario, data_hora__year= Ano, 
-                data_hora__month= Mes, gastosExtrasCategoria_id= Categoria).order_by('-id')
-            data['gastos_extr']= gastos_extras.aggregate(total=Sum('valor'))
+                usuarios_id = usuario_cliente, data_hora__contains= mes, gastosExtrasCategoria_id= categoria).order_by('-id')
+            data['gastos_extr']= gastos_extras
         
         data['hoje']= today
-        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
+        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(
+            usuarios_id= usuario_cliente).order_by('-id')
         data['gastos_extras'] = gastos_extras
         
         return render(
@@ -213,18 +177,15 @@ class Gastos_extras_categoria(LoginRequiredMixin, View):
         user = request.user.has_perm('financeiro.add_gastosextrascategoria')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-        data = {}
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
         
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-            
-        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
+        data = {}
+        data['categoria_de_gastos']= GastosExtrasCategoria.objects.filter(
+            usuarios_id= usuario_cliente).order_by('-id')
         return render(
             request, 'financeiro/categoria_de_gastos.html', data)
 
@@ -232,42 +193,58 @@ class Gastos_extras_categoria(LoginRequiredMixin, View):
         user = request.user.has_perm('financeiro.add_gastosextrascategoria')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioId = usuario.id # Obitendo o id  do usuário administrador
-        
-            categoria = GastosExtrasCategoria.objects.create(
-                nome = request.POST['nome'],
-                user = user_logado, usuarios_id = usuarioId
-            )
-            return redirect('gastos-extras')
-       
+        categoria = GastosExtrasCategoria.objects.create(
+        nome = request.POST['nome'],
+        user = user_logado, usuarios_id = usuario_cliente)
+        return redirect('categoria_de_gastos')
+
+class GastosExtrasDashboard(LoginRequiredMixin, View):
+    def get(self, request):
+        user = request.user.has_perm('financeiro.view_relatorios')
+        if user == False:
+            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
+
+        data= {}
+        periodo= request.GET.get('periodo',None)
+        today = date.today()
+        ano = str(today.year)
+        mes = today.month
+        data['dashboard'] = Gastos_extras.objects.filter(
+                usuarios_id= usuario_cliente, data_hora__year= ano, data_hora__month= mes).values(
+                'gastosExtrasCategoria__nome').annotate(valor =Sum('valor')).order_by('-valor')
+        if periodo:
+            data['dashboard'] = Gastos_extras.objects.filter(
+                usuarios_id = usuario_cliente, data_hora__contains= periodo).values(
+                'gastosExtrasCategoria__nome').annotate(valor =Sum('valor')).order_by('-valor')
+
+        return render(request, 'financeiro/dashboard.html', data) 
+
 class Gastos_extras_categoriaUpdate(LoginRequiredMixin, View):
     def get(self, request, id):
         user = request.user.has_perm('financeiro.change_gastosextrascategoria')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-        data = {}
-        
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioId = usuario.id # Obitendo o id  do usuário administrador
-        
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
+
+        data = {}    
         categoria= GastosExtrasCategoria.objects.get(id= id)
         usuario_adm = categoria.usuarios.id
-        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
-
+        if usuario_adm == usuario_cliente: 
             data['categoria'] = GastosExtrasCategoria.objects.get(id=id)
             return render(
                 request, 'financeiro/categoria_de_gastosUpdate.html', data)
@@ -278,51 +255,33 @@ class Gastos_extras_categoriaUpdate(LoginRequiredMixin, View):
         user = request.user.has_perm('financeiro.add_gastosextrascategoria')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-       
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
   
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioId = usuario.id # Obitendo o id  do usuário administrador
-        
-        categoria= GastosExtrasCategoria.objects.get(id= id)
-        usuario_adm = categoria.usuarios.id
-        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
-
-            categoria = GastosExtrasCategoria.objects.get(id=id)
-            categoria.id=id
-            categoria.nome = request.POST['nome']
-            categoria.user = user_logado
-            categoria.save()
-            
-            return redirect('gastos-extras')
-        else:
-            return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-@login_required() 
+        categoria = GastosExtrasCategoria.objects.get(id=id)
+        categoria.id=id
+        categoria.nome = request.POST['nome']
+        categoria.user = user_logado
+        categoria.save()
+        return redirect('gastos-extras')
+    
 def categoria_de_gastos_delete(request, id):
     user = request.user.has_perm('financeiro.delete_gastosextrascategoria')
     if user == False:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+    user_logado = request.user.id
+    usuario_cliente = autenticar_usuario(user_logado)
+    autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+    if autorizarcao_de_reistros:
+        return autorizarcao_de_reistros
 
-    user_logado = request.user # Obitendo o usuário logado
-    user_logado = user_logado.id # obitendo o ID do usuário logado
-    if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-        funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-        usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-    else:
-        usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-        usuarioId = usuario.id # Obitendo o id  do usuário administrador
-    
     data  = {}
     categoria= GastosExtrasCategoria.objects.get(id= id)
     usuario_adm = categoria.usuarios.id
-    if usuario_adm == usuarioId: # Verificar autenticidade do usuário
-       
+    if usuario_adm == usuario_cliente:
         if request.method == 'POST':
             categoria.delete()
             return redirect('gastos-extras')
@@ -336,42 +295,45 @@ class ContasAreceber(LoginRequiredMixin, View):
         user = request.user.has_perm('financeiro.add_contas')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
         today = date.today()
         mes_atual = today.month
-        DIA = request.GET.get('dia',None)
-        DIA2 = request.GET.get('dia2',None)
+        dia = request.GET.get('dia')
+        dia2 = request.GET.get('dia2')
 
-        conta = Contas.objects.filter(usuarios__usuario_cliente= usuario, data_de_vencimento__month = mes_atual, tipo_de_conta_id=1).order_by('-id')
-        #tipo_de_conta = Tipo_de_conta.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
-        venda= Venda.objects.filter(usuarios__usuario_cliente= usuario, data_hora__gte = today).order_by('-id')
-        cliente = Cliente.objects.filter(usuarios__usuario_cliente= usuario).order_by('-id')
+        conta = Contas.objects.filter(
+            ~Q(parcelas_restantes = 0 ), usuarios_id= usuario_cliente, tipo_de_conta_id=1).order_by('-id')[:20]
+        venda= Venda.objects.filter(usuarios_id= usuario_cliente, data_hora__gte = today).order_by('-id')
+        cliente = Cliente.objects.filter(usuarios_id= usuario_cliente).order_by('-id')
 
         client = request.GET.get('client',None)
+        nome_cliente = request.GET.get('nome_cliente')
         estado_da_conta = request.GET.get('estado_da_conta',None)
 
-        if client != None and  estado_da_conta == '':
+        if estado_da_conta == '1':
             conta = Contas.objects.filter(
-                ~Q(parcelas_restantes = 0 ) & Q(cliente__cpf_cnpj = client ), usuarios__usuario_cliente= usuario).order_by('-id') # filtrando contas maior que 0
-        elif client != None and estado_da_conta == '0':
+                ~Q(parcelas_restantes = 0 ), cliente__cpf_cnpj = client, usuarios_id= usuario_cliente).order_by('-id') # filtrando contas maior que 0
+        
+        elif estado_da_conta == '2':
             conta = Contas.objects.filter(
-                usuarios__usuario_cliente= usuario, parcelas_restantes = 0, cliente__cpf_cnpj = client ).order_by('-id') #filtrando contas igual a 0
-        elif client != None and estado_da_conta == '1':
-            conta = Contas.objects.filter(usuarios__usuario_cliente= usuario, cliente__cpf_cnpj = client ).order_by('-id')
+                usuarios_id= usuario_cliente, parcelas_restantes = 0, cliente__cpf_cnpj = client ).order_by('-id') #filtrando contas igual a 0
+        elif estado_da_conta == '':
+            conta = Contas.objects.filter(
+                usuarios_id= usuario_cliente, cliente__cpf_cnpj = client ).order_by('-id')
 
-        if DIA and DIA2:
+        if dia and dia2: 
             conta = Contas.objects.filter(
-                usuarios__usuario_cliente= usuario, data_de_vencimento__range = (DIA, DIA2 ), tipo_de_conta_id=1).order_by('-id')
-
+                usuarios_id= usuario_cliente, data_de_vencimento__range = (dia, dia2 ), tipo_de_conta_id=1).order_by('-id')
+        
+        elif nome_cliente:
+            conta = Contas.objects.filter(
+                usuarios_id= usuario_cliente, cliente__id = nome_cliente ).order_by('-id')
+        
         return render(
             request, 'financeiro/conta-areceber.html', {
                 'conta': conta, #'tipo_de_conta': tipo_de_conta,
@@ -382,21 +344,14 @@ class ContasAreceber(LoginRequiredMixin, View):
         user = request.user.has_perm('financeiro.add_contas')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
         data = {}
         today = date.today()
         mes_atual = today.month
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-        
         parcelas = request.POST['parcelas']
         parcelas = int(parcelas)
         data_de_vencimento_parcelas = request.POST['data_de_vencimento']
@@ -415,7 +370,7 @@ class ContasAreceber(LoginRequiredMixin, View):
             data_de_vencimento = data_de_vencimento_parcelas,
             venda_id = request.POST['venda_id'],
             cliente_id = request.POST['cliente_id'],
-            user = user_logado, usuarios_id = usuarioId
+            user = user_logado, usuarios_id = usuario_cliente,
             )
         if conta:
             parcelas= conta.parcelas
@@ -441,13 +396,13 @@ class ContasAreceber(LoginRequiredMixin, View):
                     contas_id = id_da_conta,
                     numero_da_parcelas = parcela,
                     data_de_vencimento = data_de_vencimento_parcelas,
-                    user = user_logado, usuarios_id = usuarioId
+                    user = user_logado, usuarios_id= usuario_cliente,
                 )
 
         data['conta'] = conta
-        data['conta']  = Contas.objects.filter(usuarios__usuario_cliente= usuarioCliente, tipo_de_conta_id=1, data_de_vencimento__month = mes_atual).order_by('-id') # listar produtos
-        data['venda']  = Venda.objects.filter(usuarios__usuario_cliente= usuarioCliente, data_hora__gte = today).order_by('-id')
-        data['cliente'] = Cliente.objects.filter(usuarios__usuario_cliente= usuarioCliente).order_by('-id')
+        data['conta']  = Contas.objects.filter(usuarios_id= usuario_cliente, tipo_de_conta_id=1, data_de_vencimento__month = mes_atual).order_by('-id') # listar produtos
+        data['venda']  = Venda.objects.filter(usuarios_id= usuario_cliente, data_hora__gte = today).order_by('-id')
+        data['cliente'] = Cliente.objects.filter(usuarios_id= usuario_cliente,).order_by('-id')
         return render(
              request, 'financeiro/conta-areceber.html',data)
 
@@ -456,22 +411,16 @@ def conta_delete(request, id):
     user = request.user.has_perm('financeiro.delete_contas')
     if user == False:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+    user_logado = request.user.id
+    usuario_cliente = autenticar_usuario(user_logado)
+    autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+    if autorizarcao_de_reistros:
+        return autorizarcao_de_reistros
 
     data  = {}
-    user_logado = request.user # Obitendo o usuário logado
-    user_logado = user_logado.id # obitendo o ID do usuário logado
-    if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-        funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-        usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-       
-    else:
-        usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-        usuarioId = usuario.id # Obitendo o id  do usuário administrador
-       
-
     conta = Contas.objects.get(id= id)
     usuario_adm = conta.usuarios.id
-    if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+    if usuario_adm == usuario_cliente: 
         if request.method == 'POST':
             conta.delete()
             return redirect('conta_areceber')
@@ -485,21 +434,15 @@ class ContaAreceberUpdate(LoginRequiredMixin, View):
         user = request.user.has_perm('financeiro.change_contas')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-           
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioId = usuario.id # Obitendo o id  do usuário administrador
-
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
+        
         conta = Contas.objects.get(id= id)
         usuario_adm = conta.usuarios.id
-        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
-
+        if usuario_adm == usuario_cliente:
             return render(
                 request, 'financeiro/conta_areceber_update.html',{'conta': conta})
         else:
@@ -509,15 +452,11 @@ class ContaAreceberUpdate(LoginRequiredMixin, View):
         user = request.user.has_perm('financeiro.change_contas')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioId = usuario.id # Obitendo o id  do usuário administrador
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
        
         parcelas= int(request.POST['parcelas'])
         if parcelas < 1:
@@ -533,7 +472,7 @@ class ContaAreceberUpdate(LoginRequiredMixin, View):
        
         conta = Contas.objects.get(id= id)
         usuario_adm = conta.usuarios.id
-        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+        if usuario_adm == usuario_cliente: 
             conta.id= id
             conta.observacao = request.POST['observacao']
             if request.POST['valor']:
@@ -578,10 +517,9 @@ class ContaAreceberUpdate(LoginRequiredMixin, View):
                     contas_id = id_da_conta,
                     numero_da_parcelas = parcela,
                     data_de_vencimento = data_de_vencimento_parcelas,
-                    user = user_logado, usuarios_id = usuarioId
+                    user = user_logado, usuarios_id = usuario_cliente
                 )
             return redirect('conta_areceber')
-    
         else:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
@@ -591,14 +529,11 @@ class ContasApagar(LoginRequiredMixin, View):
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
         today = date.today()
         ano_atual = today.year
@@ -607,7 +542,8 @@ class ContasApagar(LoginRequiredMixin, View):
         hoje = today.day
         prox_5_dias = date(ano_atual, mes_atual, prox_5_dias)
 
-        conta = Contas.objects.filter(usuarios__usuario_cliente= usuario, tipo_de_conta_id=2).order_by('-id')
+        conta = Contas.objects.filter(
+            usuarios_id= usuario_cliente, tipo_de_conta_id=2).order_by('-id')
         tipo_de_conta = Tipo_de_conta.objects.all()
 
         Data_vencimento = request.GET.get('data_vencimento',None)
@@ -615,18 +551,21 @@ class ContasApagar(LoginRequiredMixin, View):
 
         if estado_da_conta == '':
             conta = Contas.objects.filter(
-                ~Q(parcelas_restantes = 0) & Q(tipo_de_conta_id=2 ), usuarios__usuario_cliente= usuario).order_by('-id')
+                ~Q(parcelas_restantes = 0) & Q(tipo_de_conta_id=2 ), usuarios_id= usuario_cliente).order_by('-id')
         elif estado_da_conta == '0':
-            conta = Contas.objects.filter(usuarios__usuario_cliente= usuario, parcelas_restantes = 0, tipo_de_conta_id=2).order_by('-id')
+            conta = Contas.objects.filter(
+                usuarios_id= usuario_cliente, parcelas_restantes = 0, tipo_de_conta_id=2).order_by('-id')
 
         if Data_vencimento == '1':
-            conta = Contas.objects.filter(usuarios__usuario_cliente= usuario, data_de_vencimento__month = mes_atual, tipo_de_conta_id=2).order_by('-id')
+            conta = Contas.objects.filter(
+                usuarios_id= usuario_cliente, data_de_vencimento__month = mes_atual, tipo_de_conta_id=2).order_by('-id')
         elif Data_vencimento == '2':
             conta = Contas.objects.filter(
-                usuarios__usuario_cliente= usuario, data_de_vencimento__range = ( today, prox_5_dias), tipo_de_conta_id=2).order_by('-id')
+                usuarios_id= usuario_cliente, data_de_vencimento__range = ( today, prox_5_dias), tipo_de_conta_id=2).order_by('-id')
 
         elif Data_vencimento == '3':
-            conta = Contas.objects.filter(usuarios__usuario_cliente= usuario, data_de_vencimento__day = hoje, tipo_de_conta_id=2 ).order_by('-id')
+            conta = Contas.objects.filter(
+                usuarios_id= usuario_cliente, data_de_vencimento__day = hoje, tipo_de_conta_id=2 ).order_by('-id')
         return render(
             request, 'financeiro/conta-apagar.html', {
                 'conta': conta, 'tipo_de_conta': tipo_de_conta})
@@ -636,17 +575,12 @@ class ContasApagar(LoginRequiredMixin, View):
         user = request.user.has_perm('financeiro.add_contas')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros 
 
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
         parcelas= int(request.POST['parcelas'])
         if parcelas < 1:
             parcelas = 1
@@ -667,7 +601,7 @@ class ContasApagar(LoginRequiredMixin, View):
             juros = request.POST['juros'].replace(' ','').replace(',','.') or 0,
             tipo_de_conta_id = request.POST['tipo_de_conta_id'],
             data_de_vencimento = data_de_vencimento_parcelas,
-            user = user_logado, usuarios_id = usuarioId
+            user = user_logado, usuarios_id = usuario_cliente
             )
         if conta:
             parcelas= conta.parcelas
@@ -693,12 +627,12 @@ class ContasApagar(LoginRequiredMixin, View):
                     contas_id = id_da_conta,
                     numero_da_parcelas = parcela,
                     data_de_vencimento = data_de_vencimento_parcelas,
-                    user = user_logado, usuarios_id = usuarioId
+                    user = user_logado, usuarios_id = usuario_cliente
                 )
 
         data['conta'] = conta
         data['conta']  = Contas.objects.filter(
-            usuarios__usuario_cliente= usuarioCliente, tipo_de_conta_id=2).order_by('-id') # listar produtos
+            usuarios_id = usuario_cliente, tipo_de_conta_id=2).order_by('-id') 
         return render(
              request, 'financeiro/conta-apagar.html',data)
 
@@ -708,19 +642,15 @@ class ContaApagarUpdate(LoginRequiredMixin, View):
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioId = usuario.id # Obitendo o id  do usuário administrador
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
         
         conta = Contas.objects.get(id= id)
         usuario_adm = conta.usuarios.id
-        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+        if usuario_adm == usuario_cliente: 
             return render(request, 'financeiro/conta_apagar_update.html', {'conta': conta})
         else:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
@@ -729,16 +659,11 @@ class ContaApagarUpdate(LoginRequiredMixin, View):
         user = request.user.has_perm('financeiro.change_contas')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioId = usuario.id # Obitendo o id  do usuário administrador
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
         
         parcelas= int(request.POST['parcelas'])
         if parcelas < 1:
@@ -754,7 +679,7 @@ class ContaApagarUpdate(LoginRequiredMixin, View):
 
         conta = Contas.objects.get(id= id)
         usuario_adm = conta.usuarios.id
-        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+        if usuario_adm == usuario_cliente: 
             conta.id= id
             conta.observacao = request.POST['observacao']
             if request.POST['valor']:
@@ -796,7 +721,7 @@ class ContaApagarUpdate(LoginRequiredMixin, View):
                     contas_id = id_da_conta,
                     numero_da_parcelas = parcela,
                     data_de_vencimento = data_de_vencimento_parcelas,
-                    user = user_logado, usuarios_id = usuarioId
+                    user = user_logado, usuarios_id = usuario_cliente
                 )
             return redirect('conta_apagar')
         
@@ -808,21 +733,16 @@ def conta_apagar_delete(request, id):
     user = request.user.has_perm('financeiro.delete_contas')
     if user == False:
         return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+    user_logado = request.user.id
+    usuario_cliente = autenticar_usuario(user_logado)
+    autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+    if autorizarcao_de_reistros:
+        return autorizarcao_de_reistros
 
-    data  = {}
-    user_logado = request.user # Obitendo o usuário logado
-    user_logado = user_logado.id # obitendo o ID do usuário logado
-    if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-        funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-        usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-        
-    else:
-        usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-        usuarioId = usuario.id # Obitendo o id  do usuário administrador
-        
+    data  = {} 
     conta = Contas.objects.get(id= id)
     usuario_adm = conta.usuarios.id
-    if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+    if usuario_adm == usuario_cliente:
         if request.method == 'POST':
             conta.delete()
             return redirect('conta_apagar')
@@ -836,25 +756,18 @@ class Pagamentos(LoginRequiredMixin, View):
         user = request.user.has_perm('financeiro.add_pagamento')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
-            
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
         conta = Contas.objects.get(id= id)
         usuario_adm = conta.usuarios.id
-        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+        if usuario_adm == usuario_cliente:
             data = {}
             parcelas = Contas.objects.get(id=id)
-            pagamentos = Pagamento.objects.filter(usuarios__usuario_cliente= usuario, contas_id = id).order_by('-id')
+            pagamentos = Pagamento.objects.filter(usuarios_id= usuario_cliente, contas_id = id).order_by('-id')
             parcela = int(parcelas.parcelas_restantes) + 1
             parcela = list(range(parcela))
 
@@ -871,27 +784,20 @@ class Pagamentos(LoginRequiredMixin, View):
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
         data = {}
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuarioId= funcionario.usuarios.id # Buscando o ID dousuário administrador com base no usuário logado
-            usuarioCliente= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuarioId = usuario.id # Obitendo o id  do usuário administrador
-            usuarioCliente= usuario.usuario_cliente # Obitendo o id  do usuário_cliente administrador
-       
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros 
         conta = Contas.objects.get(id= id)
         perc_restantes = int(conta.parcelas_restantes)
         usuario_adm = conta.usuarios.id
-        if usuario_adm == usuarioId: # Verificar autenticidade do usuário
+        if usuario_adm == usuario_cliente: 
             if perc_restantes >= 1 :
                 pagamento = Pagamento.objects.create(
                     observacao = request.POST['observacao'],
                     quantidade_de_parcelas = 1,
-                    contas_id = id, user = user_logado, usuarios_id = usuarioId
+                    contas_id = id, user = user_logado, usuarios_id = usuario_cliente
                     )
                 if pagamento:
                     parcela_delete = ParcelasConta.objects.filter(contas_id=id)
@@ -901,11 +807,13 @@ class Pagamentos(LoginRequiredMixin, View):
             else:
                 data['mensagem_de_erro'] = 'Você pode ter enviado o número  ( 0 ) ou um valor superior a quantidade de parcelas existente'
                 data['conta'] = Contas.objects.get(id=id)
-                data['pagamentos'] = Pagamento.objects.filter(usuarios__usuario_cliente= usuarioCliente, contas_id = id).order_by('-id')
+                data['pagamentos'] = Pagamento.objects.filter(
+                    usuarios_id= usuario_cliente, contas_id = id).order_by('-id')
     
                 return render(
                     request, 'financeiro/pagamento.html',data)
-            data['pagamentos'] = Pagamento.objects.filter(usuarios__usuario_cliente= usuarioCliente, contas_id = id).order_by('-id')
+            data['pagamentos'] = Pagamento.objects.filter(
+                usuarios_id= usuario_cliente, contas_id = id).order_by('-id')
             data['conta'] = Contas.objects.get(id=id)
             return render(
                 request, 'financeiro/pagamento.html',data)
@@ -915,115 +823,104 @@ class Pagamentos(LoginRequiredMixin, View):
 
 class Parcelas(LoginRequiredMixin, View):
     def get(self, request, id):
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
         data={}
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
-            empresa = Usuarios.objects.get(user_id = user_logado)
-            data['empresa'] = empresa
-        data['parcelas']= ParcelasConta.objects.filter(contas_id=id, contas__usuarios__usuario_cliente=usuario)
+        data['empresa'] = usuario_cliente
+        data['parcelas']= ParcelasConta.objects.filter(
+            contas_id=id, contas__usuarios_id=usuario_cliente)
         data['conta'] = Contas.objects.get(id=id)
         return render(
             request, 'financeiro/parcelas.html', data)
 
-# Relatoriop de produtos
+
 class Relarorio_produtos(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user.has_perm('financeiro.view_relatorios')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
         today = date.today()
         ano_atual = str(today.year)
-        MES = today.month
+        mes_atual = today.month
         item_de_pedido = ItemDoPedido.objects.filter(
-                usuarios__usuario_cliente= usuario, venda__data_hora__year= ano_atual, venda__data_hora__month= MES ).values(
-                'produto__id', 'produto__nome').annotate(
-                    quantidade =Sum('quantidade_de_itens')).annotate(lucro_obtido=Sum(F(
+                usuarios_id= usuario_cliente, venda__data_hora__year= ano_atual, venda__data_hora__month= mes_atual ).values(
+                'produto__id', 'produto__nome', 'produto__saida').annotate(lucro_obtido=Sum(F(
                         'produto__valor_venal') * F('quantidade_de_itens') - F('produto__valor_compra') * F('quantidade_de_itens'))).annotate(
                             total_investimento=Sum(F('produto__valor_compra') * F('quantidade_de_itens'))).annotate(total_venda=Sum(
                             F('produto__valor_venal') * F('quantidade_de_itens')))
 
-        Ano= request.GET.get('ano',None)
-        Mes= request.GET.get('mes',None)
-        Filtro= request.GET.get('filtrar_produto',None)
-        if Ano or Mes:
-
+        mes= request.GET.get('mes',None)
+        filtro= request.GET.get('filtrar_produto',None)
+        if mes:
             item_de_pedido = ItemDoPedido.objects.filter(
-                usuarios__usuario_cliente= usuario, venda__data_hora__year= Ano, venda__data_hora__month= Mes ).values(
-                'produto__id', 'produto__nome').annotate(
-                    quantidade =Sum('quantidade_de_itens')).annotate(lucro_obtido=Sum(F(
+                usuarios_id = usuario_cliente, venda__data_hora__contains= mes ).values(
+                'produto__id', 'produto__nome', 'produto__saida').annotate(lucro_obtido=Sum(F(
                         'produto__valor_venal') * F('quantidade_de_itens') - F('produto__valor_compra') * F('quantidade_de_itens'))).annotate(
-                            total_investimento=Sum('produto__valor_compra') * F('quantidade_de_itens')).annotate(total_venda=Sum(
-                            'produto__valor_venal') * F('quantidade_de_itens')).order_by(Filtro)
+                            total_investimento=Sum(F('produto__valor_compra') * F('quantidade_de_itens'))).annotate(total_venda=Sum(
+                            F('produto__valor_venal') * F('quantidade_de_itens'))).order_by(filtro)
         return render(
-            request, 'financeiro/relatorio-produtos.html', {'item_de_pedido': item_de_pedido, 'ano_atual':ano_atual, 'MES': MES})
+            request, 'financeiro/relatorio-produtos.html', {
+                'item_de_pedido': item_de_pedido, 
+                'ano_atual':ano_atual, 
+                'mes_atual': mes_atual
+                })
 
-# relatório diário
 class Relatorio_diario(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user.has_perm('financeiro.view_relatorios')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
         today = date.today()
-        Dia= request.GET.get('dia',None)
-        if Dia == None:
-            Dia= today
+        dia= request.GET.get('dia',None)
+        if dia == None:
+            dia= today
         invertimento_do_dia = ItemDoPedido.objects.filter(
-            usuarios__usuario_cliente= usuario, venda__data_hora__contains= Dia ).aggregate(
+            usuarios_id= usuario_cliente, venda__data_hora__contains= dia ).aggregate(
                 total_invertimento=Sum(F('produto__valor_compra') * F('quantidade_de_itens')))
         invertimento_do_dia = invertimento_do_dia['total_invertimento'] or 0
 
-        vendas_do_dia = Venda.objects.filter(usuarios__usuario_cliente= usuario, data_hora__contains= Dia ).aggregate(total_venda=Sum('valor'))
+        vendas_do_dia = Venda.objects.filter(
+            usuarios_id= usuario_cliente, data_hora__contains= dia ).aggregate(total_venda=Sum('valor'))
         vendas_do_dia = vendas_do_dia['total_venda']or 0
 
         cedula = Venda.objects.filter(
-            usuarios__usuario_cliente= usuario, data_hora__contains= Dia).aggregate(total_venda_cedula=Sum('valor_cedula'))
+            usuarios_id= usuario_cliente, data_hora__contains= dia ).aggregate(total_venda_cedula=Sum('valor_cedula'))
 
         credito = Venda.objects.filter(
-            usuarios__usuario_cliente= usuario, data_hora__contains= Dia).aggregate(total_venda_credito=Sum('valor_credito'))
+            usuarios_id= usuario_cliente, data_hora__contains= dia).aggregate(total_venda_credito=Sum('valor_credito'))
 
         debito = Venda.objects.filter(
-            usuarios__usuario_cliente= usuario, data_hora__contains= Dia).aggregate(total_venda_debito=Sum('valor_debito'))
+           usuarios_id= usuario_cliente, data_hora__contains= dia).aggregate(total_venda_debito=Sum('valor_debito'))
 
         lucro_diario = vendas_do_dia - invertimento_do_dia
 
         desconto_po_dia = Venda.objects.filter(
-            usuarios__usuario_cliente= usuario, data_hora__contains= Dia ).aggregate(total_desconto=Sum('total_desconto'))
+            usuarios_id= usuario_cliente, data_hora__contains= dia ).aggregate(total_desconto=Sum('total_desconto'))
 
 
         gastos_extras_diario = Gastos_extras.objects.filter(
-            usuarios__usuario_cliente= usuario, data_hora__contains=Dia ).aggregate(gastos = Sum('valor'))
+            usuarios_id= usuario_cliente, data_hora__contains=dia ).aggregate(gastos = Sum('valor'))
 
         Contas_diario_a_receber = ParcelasConta.objects.filter(
-            usuarios__usuario_cliente= usuario, data_de_vencimento__contains=Dia, contas__tipo_de_conta__id=1).aggregate(total_conta = Sum('contas__valor_parcela'))
+            usuarios_id= usuario_cliente, data_de_vencimento__contains=dia, contas__tipo_de_conta__id=1).aggregate(total_conta = Sum('contas__valor_parcela'))
 
         Contas_diario_a_pagar = ParcelasConta.objects.filter(
-            usuarios__usuario_cliente= usuario, data_de_vencimento__contains=Dia, contas__tipo_de_conta__id=2).aggregate(total_conta = Sum('contas__valor_parcela'))
+            usuarios_id= usuario_cliente, data_de_vencimento__contains=dia, contas__tipo_de_conta__id=2).aggregate(total_conta = Sum('contas__valor_parcela'))
 
         return render(
                 request, 'financeiro/relatorio-diario.html', {
@@ -1040,57 +937,54 @@ class Relatorio_diario(LoginRequiredMixin, View):
                     'Contas_diario_a_pagar':Contas_diario_a_pagar,
                     })
 
-# relatório mensal
+
 class Relatorio_mensal(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user.has_perm('financeiro.view_relatorios')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID do usuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.usuario_cliente # Obtendo o id  do usuário administrador
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
         today = date.today()
         ano_atual = today.year
-        MES = today.month
-        Mes= request.GET.get('mes',None)
+        mes = today.month
+        mess= request.GET.get('mes',None)
 
         invertimento = ItemDoPedido.objects.filter(
-            usuarios__usuario_cliente= usuario, venda__data_hora__month= Mes, venda__data_hora__year= ano_atual ).aggregate(
+            usuarios_id= usuario_cliente, venda__data_hora__month= mess, venda__data_hora__year= ano_atual ).aggregate(
                 total_invertimento=Sum(F('produto__valor_compra') * F('quantidade_de_itens')))
         valor_invertimento = invertimento['total_invertimento'] or 0
 
-        vendas = Venda.objects.filter(usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual ).aggregate(total_venda=Sum('valor'))
+        vendas = Venda.objects.filter(
+            usuarios_id= usuario_cliente, data_hora__month= mess, data_hora__year= ano_atual ).aggregate(total_venda=Sum('valor'))
         valor_venda = vendas['total_venda']or 0
 
         cedula = Venda.objects.filter(
-            usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual ).aggregate(total_venda_cedula=Sum('valor_cedula'))
+            usuarios_id= usuario_cliente, data_hora__month= mess, data_hora__year= ano_atual ).aggregate(total_venda_cedula=Sum('valor_cedula'))
 
         credito = Venda.objects.filter(
-            usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual).aggregate(total_venda_credito=Sum('valor_credito'))
+            usuarios_id= usuario_cliente, data_hora__month= mess, data_hora__year= ano_atual).aggregate(total_venda_credito=Sum('valor_credito'))
 
         debito = Venda.objects.filter(
-            usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual).aggregate(total_venda_debito=Sum('valor_debito'))
+            usuarios_id= usuario_cliente, data_hora__month= mess, data_hora__year= ano_atual).aggregate(total_venda_debito=Sum('valor_debito'))
 
         lucro_mensal = valor_venda - valor_invertimento
 
         gastos_extras = Gastos_extras.objects.filter(
-            usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual ).aggregate(gastos =Sum('valor'))
+            usuarios_id= usuario_cliente, data_hora__month= mess, data_hora__year= ano_atual ).aggregate(gastos =Sum('valor'))
 
         desconto_po_mes = Venda.objects.filter(
-            usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual ).aggregate(total_desconto=Sum('total_desconto'))
+            usuarios_id= usuario_cliente, data_hora__month= mess, data_hora__year= ano_atual ).aggregate(total_desconto=Sum('total_desconto'))
 
         Contas_mensal_a_receber = ParcelasConta.objects.filter(
-            usuarios__usuario_cliente= usuario, data_de_vencimento__month= Mes, contas__tipo_de_conta__id=1, data_de_vencimento__year= ano_atual).aggregate(total_conta = Sum('contas__valor_parcela'))
+            usuarios_id= usuario_cliente, data_de_vencimento__month= mess, contas__tipo_de_conta__id=1, data_de_vencimento__year= ano_atual).aggregate(total_conta = Sum('contas__valor_parcela'))
 
         Contas_mensal_a_pagar = ParcelasConta.objects.filter(
-            usuarios__usuario_cliente= usuario, data_de_vencimento__month= Mes, contas__tipo_de_conta__id=2, data_de_vencimento__year= ano_atual).aggregate(total_conta = Sum('contas__valor_parcela'))
+            usuarios_id= usuario_cliente, data_de_vencimento__month= mess, contas__tipo_de_conta__id=2, data_de_vencimento__year= ano_atual).aggregate(total_conta = Sum('contas__valor_parcela'))
 
         return render(request, 'financeiro/relatorio-mensal.html', {
             'vendas': vendas,
@@ -1100,64 +994,60 @@ class Relatorio_mensal(LoginRequiredMixin, View):
             'Contas_mensal_a_receber':Contas_mensal_a_receber,
             'Contas_mensal_a_pagar':Contas_mensal_a_pagar,
             'desconto_po_mes':desconto_po_mes,
-            'MES': MES,
+            'MES': mes,
             'cedula':cedula,
             'credito':credito,
             'debito':debito,
             })
 
-# relatório anualanual
+
 class Relatorio_anual(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user.has_perm('financeiro.view_relatorios')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID dousuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.usuario_cliente # Obitendo o id  do usuário administrador
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
 
         today = date.today()
         ano_atual = today.year
         ano_atual=str(ano_atual)
-        Ano= request.GET.get('ano',None)
+        ano= request.GET.get('ano',None)
 
         venda_desse_ano = Venda.objects.filter(
-            usuarios__usuario_cliente= usuario, data_hora__year=Ano ).aggregate(total_venda=Sum('valor'))
+            usuarios_id= usuario_cliente, data_hora__year=ano ).aggregate(total_venda=Sum('valor'))
         venda_desse_ano = venda_desse_ano['total_venda']or 0
 
         cedula = Venda.objects.filter(
-            usuarios__usuario_cliente= usuario, data_hora__year= Ano ).aggregate(total_venda_cedula=Sum('valor_cedula'))
+            usuarios_id= usuario_cliente, data_hora__year= ano ).aggregate(total_venda_cedula=Sum('valor_cedula'))
 
         credito = Venda.objects.filter(
-            usuarios__usuario_cliente= usuario, data_hora__year= Ano ).aggregate(total_venda_credito=Sum('valor_credito'))
+            usuarios_id= usuario_cliente, data_hora__year= ano ).aggregate(total_venda_credito=Sum('valor_credito'))
 
         debito = Venda.objects.filter(
-            usuarios__usuario_cliente= usuario, data_hora__year= Ano).aggregate(total_venda_debito=Sum('valor_debito'))
+            usuarios_id= usuario_cliente, data_hora__year= ano).aggregate(total_venda_debito=Sum('valor_debito'))
 
         invertimento_anual = ItemDoPedido.objects.filter(
-            usuarios__usuario_cliente= usuario, venda__data_hora__year=Ano ).aggregate(
+            usuarios_id= usuario_cliente, venda__data_hora__year=ano ).aggregate(
                 total_invertimento=Sum(F('produto__valor_compra') * F('quantidade_de_itens')))
         invertimento_anual = invertimento_anual['total_invertimento'] or 0
 
         lucro_anual= venda_desse_ano - invertimento_anual
 
         gastos_extras_anual = Gastos_extras.objects.filter(
-            usuarios__usuario_cliente= usuario, data_hora__year=Ano ).aggregate(gastos = Sum('valor'))
+            usuarios_id= usuario_cliente, data_hora__year=ano ).aggregate(gastos = Sum('valor'))
 
         desconto_po_anual = Venda.objects.filter(
-            usuarios__usuario_cliente= usuario, data_hora__year= Ano ).aggregate(total_desconto=Sum('total_desconto'))
+            usuarios_id= usuario_cliente, data_hora__year= ano ).aggregate(total_desconto=Sum('total_desconto'))
 
         Contas_anual_a_receber = ParcelasConta.objects.filter(
-            usuarios__usuario_cliente= usuario, data_de_vencimento__year= Ano, contas__tipo_de_conta__id=1).aggregate(total_conta = Sum('contas__valor_parcela'))
+            usuarios_id= usuario_cliente, data_de_vencimento__year= ano, contas__tipo_de_conta__id=1).aggregate(total_conta = Sum('contas__valor_parcela'))
 
         Contas_anual_a_pagar = ParcelasConta.objects.filter(
-            usuarios__usuario_cliente= usuario, data_de_vencimento__year= Ano, contas__tipo_de_conta__id=2).aggregate(total_conta = Sum('contas__valor_parcela'))
+            usuarios_id= usuario_cliente, data_de_vencimento__year= ano, contas__tipo_de_conta__id=2).aggregate(total_conta = Sum('contas__valor_parcela'))
 
         return render(
                 request, 'financeiro/relatorio-anual.html', {
@@ -1179,92 +1069,13 @@ class Fatura(LoginRequiredMixin, View):
         user = request.user.has_perm('financeiro.view_relatorios')
         if user == False:
             return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-
-        user_logado = request.user # Obitendo o usuário logado
-        user_logado = user_logado.id # obitendo o ID do usuário logado
-        if Funcionario.objects.filter(user_id = user_logado): # verificando se o usuário existe em funcionários
-            funcionario= Funcionario.objects.get(user__id = user_logado) # buscado funcionário baseado no usuário logado
-            usuario= funcionario.usuarios.usuario_cliente # Buscando o ID do usuário administrador com base no usuário logado
-        else:
-            usuario = Usuarios.objects.get(user_id = user_logado) # Buscando usuário administrador com base no usuário logado
-            usuario = usuario.usuario_cliente # Obtendo o id  do usuário administrador
-        data = {}
-        today = date.today()
-        ano_atual = today.year
-        MES = today.month
-        if MES <= 11:
-            mes = MES + 1
-        else:
-            mes = 1
-        dia = today.day
-        data_atual= date(day=dia, month=mes, year=ano_atual)
-        data_de_vencimento = request.GET.get('data_de_vencimento') or str(ano_atual)+'-'+ str(MES)
-        if data_de_vencimento !=None:
-            data_de_vencimento =  datetime.datetime.strptime(data_de_vencimento, "%Y-%m")
-            Mes = data_de_vencimento.month
-            ano_atual = data_de_vencimento.year
-        if data_de_vencimento != None:
-            Mes= Mes
-    
-            vendas = Venda.objects.filter(
-                usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual ).aggregate(count= Count('id'))
-            vendas = vendas['count'] or 0
-
-            item_do_pedito = ItemDoPedido.objects.filter(
-                usuarios__usuario_cliente= usuario, venda__data_hora__month= Mes, venda__data_hora__year= ano_atual ).aggregate(count= Count('id'))
-            item_do_pedito = item_do_pedito['count'] or 0
-            
-            Contas_a_receber = Contas.objects.filter(
-                usuarios__usuario_cliente= usuario, data_hora__month= Mes, tipo_de_conta__id=1, data_hora__year= ano_atual).aggregate(count= Sum('parcelas'))
-            Contas_a_receber = Contas_a_receber['count'] or 0
-
-            Contas_a_pagar = Contas.objects.filter(
-                usuarios__usuario_cliente= usuario, data_hora__month= Mes, tipo_de_conta__id=2, data_hora__year= ano_atual).aggregate(count= Sum('parcelas'))
-            Contas_a_pagar = Contas_a_pagar['count'] or 0
-
-            gastos_extras = Gastos_extras.objects.filter(
-                usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual).aggregate(count= Count('id'))
-            gastos_extras = gastos_extras['count'] or 0
-
-            entrada_de_mercadoria = EntradaMercadoria.objects.filter(
-                usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual).aggregate(count= Count('id'))
-            entrada_de_mercadoria = entrada_de_mercadoria['count'] or 0
-
-            caixa= Depositar_sacar.objects.filter(usuarios__usuario_cliente= usuario, data_hora__month= Mes, data_hora__year= ano_atual).aggregate(count= Count('id'))
-            caixa = caixa['count'] or 0
-
-            total_de_registros= vendas + item_do_pedito + Contas_a_receber + Contas_a_pagar + entrada_de_mercadoria + gastos_extras + caixa
-            
-            if total_de_registros <= 750:
-                total_a_pagar = total_de_registros * 4 / 100
-                
-            else:
-                total_a_pagar = total_de_registros * 2 / 100
-                total_a_pagar = total_a_pagar + 15
-                
-            if total_de_registros <= 125:
-                fatura= 'R$ 0,00' 
-            else:
-                fatura= total_a_pagar
-                
-            data['debito_em_aberto'] = Cobranca.objects.filter(usuarios__usuario_cliente= usuario, estado_do_debito = 'Pedente')
-            data['debito_em_atraso'] = Cobranca.objects.filter(usuarios__usuario_cliente= usuario, estado_do_debito = 'Não pago')
-            data['vendas']= vendas
-            data['item_do_pedito']= item_do_pedito
-            data['Contas_a_receber']= Contas_a_receber
-            data['Contas_a_pagar']= Contas_a_pagar
-            data['entrada_de_mercadoria']= entrada_de_mercadoria
-            data['total_de_registros']= total_de_registros
-            data['gastos_extras']= gastos_extras
-            data['total_a_pagar']= total_a_pagar
-            data['caixa']= caixa
-            data['today']= today
-            data['fatura']= fatura
-            data['data_atual'] = data_atual
-
-        return render( request, 'financeiro/fatura.html', data)
-
-
-
-
+        user_logado = request.user.id
+        usuario_cliente = autenticar_usuario(user_logado)
+        autorizarcao_de_reistros = autorizarcao_de_reistro(usuario_cliente)
+        if autorizarcao_de_reistros:
+            return autorizarcao_de_reistros
+        
+        registros = registro_de_dados(usuario_cliente, )
+        registros['cobranca'] = Cobranca.objects.filter(usuarios = usuario_cliente)
+        return render( request, 'financeiro/fatura.html', registros)
 

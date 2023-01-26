@@ -1,0 +1,44 @@
+{% extends 'base.html' %} 
+{% block main %}
+{% load static%}
+<br>
+    <h2 class="sub_tito" >&nbsp; MEU PLANO
+        <div>
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/fatura.png' %}" >
+                <a href="{% url 'fatura' %}">FATURA</a>
+            </label>
+        </div>
+    </h2>
+
+    <div id="container_plano">
+        {% for p in plano%}
+        <form method="POST">
+            {% csrf_token %}
+            <label> <a href="{% url 'plano' %}"><b>{{p.nome}}</b></a></label>
+            <br>
+            <br>
+            <li>{{p.descricao}}</li>
+            <input type="hidden"  name="plano" value="{{p.id}}">
+            <br>
+            <br>
+            <span style="color: black; font-size: 18px;">R$ {{p.valor}}</span>
+            <br>
+            <br>
+            {% if meu_plano == p.id%}
+            <label id="lb_plano_atual"> PLANO ATUAL</label>
+            <br>
+            <label class="sub_menu"> 
+                <progress value="{{registro_de_dados}}" max="2000">fasfsdfasfsdfas</progress> <br>
+                Usando {{registro_de_dados }} / {{p.registro}} registros
+            </label>
+            <br>
+            {% else %}
+            <button id = 'br_contratar'> CONTRATAR</button>
+            <br>
+            <br>
+            <br>
+            {% endif %}
+        </form>
+        {%endfor%}
+    {% endblock %}

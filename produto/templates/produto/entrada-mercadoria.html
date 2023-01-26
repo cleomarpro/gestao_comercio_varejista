@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% block main %}
+{% load static%}
+    <br>
+    <h2 class="sub_tito" >&nbsp; ENTRADA DE MERCADORIA
+        <a 
+            href="#" onclick="document.getElementById('form_up').style.display='block';">
+                Adicionar 
+        </a> 
+        <div > 
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/frente_de_caixa.png' %}" width="500px" all=" ">
+                <a href="{% url 'atualizar-pedido' %}">FRENTE DE CAIXA </a>
+            </label> 
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/produto.png' %}" >
+                <a href="{% url 'produto' %}">PRODUTOS</a>
+            </label>
+
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/saida.png' %}" >
+                <a href="{% url 'saida_mercadoria' %}">SAIDA</a>
+            </label>
+        </div>
+    </h2>
+    <form id="form_up" class='formulario' style="display: none;" method="POST" action="{% url 'entrada-mercadoria' %}" >
+        {% csrf_token %}
+
+        <a id="termo_buttao" href="#" onclick="document.getElementById
+        ('form_up').style.display='none';"> X</a>
+        <p> NOVA ENTRADA</p>
+
+        <hr> 
+        <div> 
+            <label> Produto</label> <br>
+            <select style=" width:200px;" type="search" id="produto" name="produto" required/>
+                <tr>
+                    <option value=''> __Selecionar__</option>
+                    {% for produto in produto %}
+                        <option value='{{produto.id}}'> {{produto}}</option>
+                    {% endfor %}
+                </tr>
+            </select>
+                <a  href="{% url 'produto' %}">+</a>
+        </div>
+        <div>
+            <label> Fornecedor</label> <br>
+            <select style=" width:200px;" type="search" id="fornecedor" name="fornecedor">
+                <tr>
+                    <option value=''> __Selecionar__</option>
+                    {% for fornecedor in fornecedor %}
+                        <option value='{{fornecedor.id}}'> {{fornecedor}}</option>
+                    {% endfor %}
+                </tr>
+            </select>
+                <a href="{% url 'novo-fornecedor' %}">+</a>
+        </div>
+        <div>
+            <label> Quantidade</label> <br>
+            <input style=" width:200px;"  placeholder=" Quantidade..."
+                type="text" id="quantidade" name="quantidade"  required/>
+        </div>
+        <div>
+            <label> Validade do produto</label> <br>
+            <input style=" width:150px; padding:3px;"
+                type="date" id="validade_produto" name="validade_produto" >
+        </div>
+            <hr>
+            <button type="submit"> Salvar</button>
+    </form>
+    <br>
+<!-- formulário de filtro -->
+    <form id="form_mobil" class='campo_de_busca' method="GET" action="{% url 'filtro-categoria-entrada-mercadoria' %}">
+        <a id="br_X_mobil" href="#" onclick="document.getElementById
+    ('form_mobil').style.display='none';"> X</a>
+        
+        <div>
+            <label>Buscar produto</label> <br>
+            <input  type="search" id="produt" name="produt" placeholder="Digite o código">
+            <button  type="submit">Buscar</button>
+        </div>
+        <div>
+            <label>Selecionar o mês e o ano</label> <br>
+            <input  type="month" id="mes" name="mes" />
+                <button  type="submit">Filtrar</button>
+        </div>
+    </form>
+    
+    <a id="mostrar_filtros"
+    href="#" onclick="document.getElementById('form_mobil').style.display='block';">
+    Mostrar filtros 
+    </a>
+
+<!--tabela de entrada de mercadoria  -->
+    <table class="table">
+     <thead>
+        <tr>
+            <th >Nome</th>
+            <th >Código</th>
+            <th class="col_table"> Fornecedor </th>
+            <th class="col_table">CNPJ do fornecedor</th>
+            <th >Quantidade</th>
+            <th class="col_table">Data</th>
+            <th class="col_table"> Validade</th>
+            <th>Ação</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entrada in entrada_Mercadoria %}
+        <tr>
+            <td>{{ entrada.produto.nome}}</td>
+            <td>{{ entrada.produto.id}}</td>
+            <td class="col_table">{{ entrada.fornecedor.nome_fantazia}}</td>
+            <td class="col_table">{{ entrada.fornecedor.cnpj}}</td>
+            <td>{{ entrada.quantidade}}</td>
+            <td class="col_table">{{ entrada.data_hora.date | date:'d/m/y'}}</td>
+            <td class="col_table">{{ entrada.validade_produto | date:'d/m/y'}}</td>
+
+            {% if perms.produto.change_entradamercadoria %}
+                <td> <a href="{% url 'entrada_mercadoria_update' entrada.id %}">Editar</a> 
+            {%endif%}
+
+            {% if perms.produto.delete_entradamercadoria %}
+                 <a href="{% url 'entradaMercadoria_delete' entrada.id %}">Excluir</a> </td>
+            {%endif%}
+
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+
+{% endblock %}

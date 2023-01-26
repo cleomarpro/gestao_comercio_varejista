@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<br>
+    <h2 class="sub_tito" >&nbsp; CATEGORIA <a href="{% url 'categoria' %}">Cancelar</a></h2>
+    <form class='formulario' method="POST" >
+         {% csrf_token %}
+         <p> EDITAR CATEGORIA</p>
+         <hr>
+    <div>
+            <label> Nome</label><br>
+            <input style=" width:310px;"  placeholder=" nome..." value="{{categoria.nome}}"
+                 type="text" id="nome" name="nome" required/>
+    </div>
+            <hr>
+            <button type="submit"> Editar</button>
+    </form>
+     <br>
+{% endblock %}
+
+
+
+

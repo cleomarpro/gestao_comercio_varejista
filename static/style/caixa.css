@@ -1,0 +1,124 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lobster|Philosopher:400i&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Inria+Serif&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Courier+Prime&display=swap');
+
+
+
+#div_caixa{ 
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#div_caixa div{
+    display:inline-block;
+    margin-left:10px;
+}
+#divPainel {
+    height: 130px;
+    width: 100%;
+}
+#divPainel label{
+    font-size: 25px;
+    color:white;
+    margin: 2px;
+    width: 100%;
+    border: 1px solid #303131;
+    border-radius: 2px;
+    display: inline-block;
+    
+}
+#div_painel_tabela{
+    width: 350px;
+    margin-top: 35px;
+}
+.caixa{
+    background-color: #bab184;
+    font-size: 16;
+}
+
+.caixa ul{
+    padding: 10px;
+    width: 450px;
+    height: 500px;
+}
+
+.caixaVenda ul{
+    display: none;
+    padding: 10px;
+    width: 450px;
+}
+
+.caixa input{
+    width: 80px;
+    border: 1px solid #303131;
+    border-radius: 2px;
+    width: 75%;
+    margin: 5px;
+    font-size: 18px;
+}
+
+.caixa select{
+    width: 80px;
+    border: 1px solid #303131;
+    border-radius: 2px;
+    width: 75%;
+    margin: 5px;
+    font-size: 18px;
+}
+
+  .caixa label{
+    font-size: 20px;
+    margin: 5px;
+  }
+
+  .caixa h2{
+    background-color: #4F4F4F;
+    font-size: 30px;
+    width: 100%;
+
+  }
+
+ #bt_vendas1{
+    font-size: 16px;
+    margin-top:0px;
+    border: 1px solid #303131;
+    border-radius: 2px;
+    color:white;
+    width: 150px;
+    background-color: #4F4F4F;
+  }
+#bt_vendas2{
+    position: flex;
+    margin-left: 160px;
+    margin-top:0px;
+    border: 1px solid #303131;
+    border-radius: 2px;
+    background-color: #4F4F4F;
+    padding-top: 0px;
+    font-size: 16px;
+  }
+#bt_vendas2 a{
+    text-decoration: none;
+    color:white;
+}
+
+#bt_novo_pedido{
+    text-align: center;
+    color:rgb(252, 250, 250);
+    padding-block: 5px;
+    width: 100%;
+    border: 1px solid #303131;
+    border-radius: 2px;
+    background-color: #4F4F4F;
+ }
+
+ .bt_deletar{
+   margin-left:220px;
+   width: 420px;
+   margin-top:-20px;
+   margin-bottom: 30px;
+  }

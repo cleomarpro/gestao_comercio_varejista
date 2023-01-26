@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% block main %}
+<br>
+    <h2 class="sub_tito" >&nbsp; CLIENTE <a href="{% url 'novo-cliente' %}">Cancelar</a></h2>
+    <form class='formulario' method="POST" >
+         {% csrf_token %}
+         <p> EDITAR CLIENTE</p>
+         <hr>
+         <div>
+            <label> Nome*</label> <br>
+                <input style=" width:200px;"  placeholder=" Nome..." value="{{cliente.nome}}" 
+                    type="text" id="nome" name="nome" required/>
+         </div>
+         <div>
+            <label> Segundo nome*</label> <br>
+                <input style=" width:200px;"  placeholder="Ex: da silva..." value="{{cliente.segundo_nome}}"
+                    type="text" id="segundo_nome" name="segundo_nome" required/>
+        </div>
+        <div>
+            <label> Cpf*</label> <br>
+                <input style=" width:200px;"   value="{{cliente.cpf_cnpj}}" placeholder="000.000.000-00" 
+                    type="text" data-js="cpf" id="cpf_cnpj" name="cpf_cnpj" required/>
+        </div>
+       
+        <div>
+            <label> Data de nascimento*</label> <br>
+                <input style=" width:180px;" type="date" id="data_de_nascimento" data-js="date"
+                    name="data_de_nascimento" value="{{cliente.data_de_nascimento | date:'Y-m-d'}}">
+            </div>
+            <div>
+            <label> Sexo*</label> <br>
+            <select style=" width:150px;" type="text" id="sexo_id" name="sexo_id" value="{{cliente.sexo}}" required/>
+                <tr>
+                    <option value='{{cliente.sexo.id}}'>{{cliente.sexo.nome}}</option>
+                    <option value="3">Feminino </option>
+                    <option value="2">Masculino  </option>
+                    <option value="1">Outro  </option>
+                </tr>
+            </select>
+        </div>
+        <div>
+             <label> Nascionalidade</label> <br>
+            <select style=" width:140px;" type="text" id="nascionalidade" name="nascionalidade" 
+                value="{{cliente.nascionalidade}}" >
+                <tr>
+                    <option value=''> __Selecionar__</option>
+                    <option >Nacional </option>
+                    <option >Estrangeiro  </option>
+                </tr>
+            </select>
+        </div>
+        <div>
+
+             <label>Cep</label> <br>
+                <input style=" width:140px;"  value="{{cliente.cep}}" placeholder="00000-000"
+                    type="text" data-js="cep" id="cep" name="cep" />
+        </div>
+        <div>
+
+            <label> Rua</label> <br>
+                <input style=" width:200px;"  value="{{cliente.}}" placeholder=" Rua..."
+                    type="text" id="rua" name="rua" />
+
+        </div>
+        <div>
+            <label> Quadra</label> <br>
+                <input style=" width:80px;"  placeholder=" Quadra..." value="{{cliente.quadra}}"
+                    type="number" max="999999" id="quadra" name="quadra" />
+        </div>
+        <div>
+            <label> Número</label> <br>
+                <input style=" width:80px;"  placeholder=" Número..." value="{{cliente.numero}}"
+                    type="number" max="999999" id="numero" name="numero" />
+        </div>
+        <div>
+            <label> Setor</label> <br>
+                <input style=" width:150px;"  placeholder=" Setor..." value="{{cliente.setor}}"
+                    type="text" id="setor" name="setor" />
+        </div>
+        <div>
+            <label> Estado</label> <br>
+                <input style=" width:200px;"  placeholder=" Estado..." value="{{cliente.estado}}"
+                    type="text" id="estado" name="estado" />
+        </div>
+        <div>
+            <label> Cidade</label> <br>
+                <input style=" width:200px;"  placeholder=" Cidade..." value="{{cliente.cidade}}"
+                    type="text" id="cidade" name="cidade" />
+        </div>
+        <div>
+            <label> Complemento</label> <br>
+                <input style=" width:180px;"  placeholder="Ex: Bloco, ap" value="{{cliente.complemento}}"
+                    type="text" id="complemento" name="complemento" />
+        </div>
+        <div>
+            <label> Pais</label> <br>
+                <input style=" width:100px;"  placeholder=" Pais..." value="{{cliente.pais}}"
+                    type="text" id="pais" name="pais" />
+        </div>
+        <div>
+            <label> Celular</label> <br>
+                <input style=" width:150px;" value="{{cliente.Celular}}" placeholder="(00) 00000-0000"
+                    type="text" data-js="phone" id="Celular" name="Celular" />
+        </div>
+        <div>
+            <label> Celular 2</label> <br>
+                <input style=" width:150px;" value="{{cliente.Celular2}}" placeholder="(00) 00000-0000"
+                    type="text" data-js="phone" id="Celular2" name="Celular2" />
+        </div>
+        <div>
+            <label> Telefone</label> <br>
+                <input style=" width:150px;" value="{{cliente.Telefone}}" placeholder="(00) 00000-0000"
+                    type="text" data-js="phone" id="Telefone" name="Telefone" />
+        </div>
+        <div>
+            <label> E-mail</label> <br>
+                <input style=" width:200px;"  placeholder=" exemplo@dominio.com" value="{{cliente.email}}"
+                    type="text" id="email" name="email" />
+        </div>
+                
+             <hr>
+            <button  type="submit"> Editar </button>
+
+{% endblock %}

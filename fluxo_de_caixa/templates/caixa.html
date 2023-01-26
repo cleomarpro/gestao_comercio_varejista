@@ -1,0 +1,75 @@
+{% extends 'base.html'%}
+{% block main%}
+<br>
+  <h2 class="sub_tito" >&nbsp; CAIXA
+    {% if perms.fluxo_de_caixa.add_caixa %}
+    <a 
+        href="#" onclick="document.getElementById('form_up').style.display='block';">
+            Adicionar 
+    </a>
+    {% endif %}
+  </h2>
+
+    {% if perms.fluxo_de_caixa.add_caixa %}
+    <form id="form_up" class='formulario' style="display: none;" method="POST" action="{% url 'caixa' %}">
+    
+    <a id="termo_buttao" href="#" onclick="document.getElementById
+    ('form_up').style.display='none';"> X</a>
+    <p> NOVA CAIXA</p>
+
+   <hr> 
+   {% csrf_token %}
+   <div> 
+      <label for="busca"> Nome</label> <br>
+        <input style=" width:200px;" type="text" id="nome_do_caixa" name="nome_do_caixa"
+            placeholder="Nome do novo caixa..." required/>
+    </div>
+    <div>
+      <label> Funcioário responsável</label> <br>
+          <select style=" width:230px;" type="select"  name="funcionario" id="funcionario" required/>
+              <option value=''> __Selecionar__ </option>
+          {% for funcionarios in funcionarios %}
+              <option value='{{funcionarios.id}}'> {{funcionarios.nome}} </option>
+          {% endfor %}
+          </select >
+     </div>
+          <hr>
+          <button  type="submit">Criar</button>
+
+    </form>
+    {% endif%}
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th >Caixa</th>
+          <th >Saldo</th>
+          <th >Acão</th>
+          {% if perms.fluxo_de_caixa.add_caixa %}
+          <th>Alterar</th>
+          {% endif %}
+          <th >Estado do caixa</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for caixa in caixa %}
+            <tr>
+                <td>{{ caixa.nome_do_caixa }}</td>
+                <td>R$ {{ caixa.valor_atualizado }}</td>
+
+                <td>  
+                  <a href="{% url 'caixa-sacar' caixa.id %}">Sacar</a> /
+                  <a href="{% url 'caixa-deposito' caixa.id %}">Depositar</a> 
+                </td>
+                {% if perms.fluxo_de_caixa.add_caixa %}
+                <td>  
+                  <a href="{% url 'caixa-update' caixa.id %}">Editar</a> 
+                  <a href="{% url 'delete-caixa' caixa.id %}">Excluir</a>
+                </td>
+                {% endif %}
+                <td>  <a href="{% url 'abrir-feixar-caixa' caixa.id %}">Visualizar</a> </td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+{% endblock %}

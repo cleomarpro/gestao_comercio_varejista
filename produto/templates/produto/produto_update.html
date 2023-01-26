@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<br>
+    <h2 class="sub_tito" >&nbsp; PRODUTO <a href="{% url 'produto' %}"> Cancelar</a></h2>
+    <form  style="display:block;" id='formulario' class='formulario'  method="POST" >
+        {% csrf_token %}
+        <p> EDITAR PRODUTO</p>
+        <hr>
+    <div>
+            <label> Nome</label> <br>
+                <input style=" width:200px;"  placeholder=" Nome..." type="text"
+                    id="nome" name="nome" value="{{produto.nome}}" required/>
+    </div>
+    <div>
+            <label> Categoria</label> <br>
+                <select style=" width:200px;" type="search" id="categoria_id"
+                    name="categoria_id" required>
+                    <tr>
+                        <option value='{{produto.categoria.id}}'> {{produto.categoria.nome}}</option>
+                    {% for categoria in categoria %}
+                            <option value='{{categoria.id}}'> {{categoria}}</option>
+                    {% endfor %}
+                    </tr>
+                </select>
+        </div>
+        <div>
+            <label> Promoção</label> <br>
+                <select style=" width:200px;" type="search" id="promocao"
+                    name="promocao" value="{{produto.promocao}}" >
+                    <tr>
+                        <option value='{{produto.promocao.id}}'> {{produto.promocao.descricao}}</option>
+                    {% for promocao in promocao %}
+                        <option value='{{promocao.id}}'> {{promocao.descricao}}</option>
+                    {% endfor %}
+                     </tr>
+                </select>
+        </div>
+        <div>
+            <label> Código do produto</label> <br>
+                <input style=" width:170px;"  placeholder=" Código do produto..." type="text"
+                    id="codigo" name="codigo" value="{{produto.codigo}}"  required/>
+        </div>
+        <div>
+            <label> Valor de compra</label> <br>
+                <input style=" width:150px;"  value="R$ {{produto.valor_compra}}"
+                    type="text" data-js="money" id="valor_compra" name="valor_compra" required/>
+        </div>
+        <div>
+            <label>Lucro estimado/ Valor venal</label> <br>
+                <input style=" width:70px;" type="number" step=".01" lang="nb" 
+                    placeholder="{{produto.percentagem_de_lucro}}" value="{{produto.percentagem_de_lucro}}"
+                        id="percentagem_de_lucro" name="percentagem_de_lucro"> ou 
+
+                <input style=" width:80px;"  placeholder="R$ 0,00 "
+                    type="text" data-js="money"id="valor_venal" name="valor_venal" value="{{produto.valor_venal}}">
+        </div>
+       
+                <hr>
+                <button type="submit"> Editar</button>
+    </form>
+
+
+<!-- Mensagem de erro -->
+        {% if mensagen_de_erro %}
+        <div id="div_alerta" class="divAlerta">
+            <a href="#" onclick="document.getElementById('div_alerta').style.display='none';">
+            <input class="butao_X" type="button" value="X" autofocus="autofocus", accesskey="x"> </a>
+            <form class='formAlerta'>
+                <label> ALERTA!</label>
+                    <br>
+                    <label style=" color: #EE3B3B; ";> {{mensagen_de_erro}} </label>
+                    <br>
+                    <label> Verifica o cdigo e tente novamente!</label>
+                    <br>
+                    <label> Para feichar, pressione  ( Alt  + X ) !</label>
+                    <br>
+            </form>
+         </div>
+    {%endif%}
+{% endblock %}
+
+
+
+
+

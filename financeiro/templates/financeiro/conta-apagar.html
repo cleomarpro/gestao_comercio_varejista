@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block main %}
+ <br>
+    <h2 class="sub_tito" >&nbsp; CONTA A PAGAR
+        <a 
+            href="#" onclick="document.getElementById('form_up').style.display='block';">
+                Adicionar 
+        </a>
+    </h2>
+    <form id="form_up" class='formulario' style="display: none;" action="{% url 'conta_apagar' %}" method="POST" >
+        {% csrf_token %}
+
+        <a id="termo_buttao" href="#" onclick="document.getElementById
+        ('form_up').style.display='none';"> X</a>
+        <p> NOVA CONTA</p>
+
+       <hr> 
+   
+        <div>
+            <label> Observação</label> <br>
+                <input style=" width:220px;"  placeholder=" Observação ou descrição..."
+                    type="text" id="observacao" name="observacao" required/>
+        </div>
+        <div>
+            <label> Valor</label> <br>
+                <input style=" width:120px;"  placeholder="R$ 0,00" type="text" data-js="money"
+                    id="valor" name="valor" required/>
+        </div>
+        <div>  
+             <label> Parcelas</label> <br>
+                <input style=" width:120px;" value='1' data-js="numero"
+                    type="text" id="parcelas" name="parcelas" required/>
+        </div>
+        <div>  
+            <label> Juros</label> <br>
+               <input style=" width:120px;" placeholder=" 0,00%"
+                   type="number" step=".01" lang="nb" id="juros" name="juros">
+       </div>
+        <div>
+                <input type="hidden" value='2' name="tipo_de_conta_id">
+
+            <label> Primeira parcela</label> <br>
+                <input style=" width:150px; padding:3px;"  placeholder=" Data de vencimento:"
+                    type="date" id="data_de_vencimento" name="data_de_vencimento" required/>
+        </div>
+               
+            <hr>
+            <button type="submit"> Salvar</button>
+    </form>
+        <br>
+
+<!-- Formulário de filtros -->
+
+    <form id="form_mobil" class='campo_de_busca' method="GET" action="{% url 'conta_apagar' %}">
+        <a id="br_X_mobil" href="#" onclick="document.getElementById
+        ('form_mobil').style.display='none';"> X</a>
+    
+    <div>
+        <label>Situação do débito</label><br>
+         <select  type="search" id="estado_da_conta" name="estado_da_conta" >
+           <tr >
+                <option value=''> __Selecionar__</option>
+                <option value=''> -Contas ativas</option>
+                <option value='0'> -Contas pagas</option>
+            </tr>
+        </select>
+            <button type="submit">Filtrar</button>
+    </div>
+    
+    <div>
+        <label>Filtrar por periodo</label> <br>
+        <select type="search" id="data_vencimento" name="data_vencimento" >
+            <tr >
+                <option value=''> __Selecionar__</option>
+                <option value='3'> -Hoje__</option>
+                <option value='2'> -Últimos 5 dias</option>
+                <option value='1'> -Esse mês</option>
+             </tr>
+        </select>
+            <button  type="submit">Filtrar</button>
+    </div>
+    </form>
+        <a id="mostrar_filtros"
+            href="#" onclick="document.getElementById('form_mobil').style.display='block';">
+            Mostrar filtros 
+        </a>    
+    <table class="table">
+     <thead>
+        <tr>
+            <th >Observação</th>
+            <th >Valor</th>
+            <th class="col_table" >Juros</th>
+            <th class="col_table" >Valor com juros</th>
+            <th  class="col_table">Saldo devedor</th>
+            <th class="col_table">Total de parcelas</th>
+            <th class="col_table" >Parcelas pagas</th>
+            <th class="col_table" >Parcelas restantes</th>
+            <th class="col_table">Valor da parcela</th>
+            <th >Primeira parcela</th>
+            <th >Açao</th>
+            <th >Pagar</th>
+            
+
+        </tr>
+    </thead>
+        <tbody>
+            {%for conta in conta %}
+                <tr>
+                    <td >{{ conta.observacao}}</td>
+                    <td>R$ {{ conta.valor }}</td>
+                    <td class="col_table">{{ conta.juros}} %</td>
+                    <td class="col_table">R$ {{ conta.valor_com_juros}}</td>
+                    <td class="col_table">R$ {{ conta.saldo_devedor }}</td>
+                    <td class="col_table"> {{ conta.parcelas }}</td>
+                    <td class="col_table">{{ conta.parcelas_pagas }}</td>
+                    <td class="col_table">{{ conta.parcelas_restantes }}</td>
+                    <td class="col_table">R$ {{ conta.valor_parcela }}</td>
+                    <td >{{ conta.data_de_vencimento | date:'d/m/y' }}</td>
+                    <td> 
+                        {% if perms.financeiro.change_contas %}
+                                <a href="{% url 'conta_apagar_update' conta.id %}">Editar</a> 
+                            {%endif%}
+
+                            {% if perms.financeiro.delete_contas %}
+                                <a href="{% url 'conta_apagar_delete' conta.id %}">Excluir</a> 
+                        {%endif%}
+                    </td>
+                    <td>
+                    {%if conta.parcelas_restantes == 0%}
+                        {% if perms.financeiro.add_pagamento %}
+                        <a href="{% url 'pagamento' conta.id %}">Pago</a> 
+                        {%endif%}
+
+                    {%else%}
+
+                        {% if perms.financeiro.add_pagamento %}
+                        <a href="{% url 'parcelas' conta.id %}">Parcelas</a> 
+                        {%endif%}
+
+                    {%endif%}
+                    </td>
+                    
+
+                </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+{% endblock %}
+<!-- <td> <a href="{% url 'GastosExtras_update_cbv' gastos_extras.id %}">Editar</a> </td>
+                    <td> <a href="{% url 'gastos_extras_delete' gastos_extras.id %}">Excluir</a> </td>  -->
+

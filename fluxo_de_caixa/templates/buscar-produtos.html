@@ -1,0 +1,31 @@
+{% extends 'base_caixa.html'%}
+
+{% block main%}
+<br>
+<form class='formulario' method="GET" action="{% url 'buscar-produtos' %}">
+          <label for="busca"> Buscar produto</label>
+
+          <input style=" width:200px;" type="text" id="produt" name="produt" >
+          <button style=" width:80px;" type="submit">OK</button>
+
+</form>
+
+<div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th >Código</th>
+          <th >Nome do Produto</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for produto in produtos %}
+            <tr>
+                <td>{{ produto.codigo }}</td>
+                <td>{{ produto.nome }}</td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+</div>
+{% endblock %}

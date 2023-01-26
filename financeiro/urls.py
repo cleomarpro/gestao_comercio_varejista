@@ -3,7 +3,8 @@ from financeiro import views
 from .views import ( GastosExtras, GastosExtrasUpdate, Gastos_extras_categoria,
     Gastos_extras_categoriaUpdate,ContasApagar, ContaAreceberUpdate,
     Relarorio_produtos, Relatorio_diario, Relatorio_mensal, Relatorio_anual,
-    FiltroGastosExtras, ContasAreceber, ContaApagarUpdate, Pagamentos,Parcelas, Fatura
+    FiltroGastosExtras, ContasAreceber, ContaApagarUpdate, Pagamentos,Parcelas, Fatura,
+    GastosExtrasDashboard
     )
 
 
@@ -28,4 +29,5 @@ urlpatterns = [
     path('relatorio-anual/', Relatorio_anual.as_view(), name='relatorio_anual'),
     path('fatura/', Fatura.as_view(), name='fatura'),
     path('filtro-gastos-extras/', FiltroGastosExtras.as_view(), name='filtro_gastos_extras'),
+    path('dashboard/', GastosExtrasDashboard.as_view(), name='dashboard'),
 ]

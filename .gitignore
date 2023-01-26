@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 db.sqlite3
 venv/
@@ -7,4 +8,16 @@ venv/
 .DS_Store
 media
 .env
+=======
+.vscode
+.ipynb_checkpoints
+db.sqlite3
+venv/
+*.sqlite3
+*.idea
+*pyc
+.DS_Store
+media
+.env
+>>>>>>> edu
 settings.py

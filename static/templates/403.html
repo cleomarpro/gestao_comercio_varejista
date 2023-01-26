@@ -1,0 +1,48 @@
+
+{% load static%}
+<!DOCTYPE html>
+
+<html lang= "pt-br" >
+<head >
+    <meta charcet="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title> VieWorld  </title>
+
+    <link rel="stylesheet" href= "{% static 'style/formAlerta.css'%}">
+
+    <meta charcet="UTF-8">
+  
+</head>
+<body>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<form class="mensagem_de_erro" style=" 
+    width:350px;
+    background-color:#60778a;
+    color: white;
+    margin:0% 25% 25% 25% ;
+    border: 1px solid #f5f5f0;
+    border-radius: 7px;
+    padding: 8px; "> 
+    
+        <h2 style="color: black;">VieWorld</h2>
+        <hr>
+        <h2> ERRO 403</h2>
+        <hr>
+    <p style="font-size: 20px; color: red;" >
+        Ops, algo deu errado, 
+        se isso continuar, entre em contato com nosco e informe o número do erro!
+    </p>
+
+    {{ request_path}}
+{{ exception }}
+<hr>
+{{today}}
+</form>
+</body>
+{{ request_path}}
+{{ exception }}

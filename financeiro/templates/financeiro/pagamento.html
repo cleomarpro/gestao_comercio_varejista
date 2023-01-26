@@ -1,0 +1,83 @@
+{% extends 'base.html'%}
+{% block main%}
+<!-- CDASTRO  DE PRODUTOS -->
+<br>
+  <h2 class="sub_tito" >&nbsp; PAGAMENTO 
+    <a href="{% url 'conta_areceber' %}">Voltar</a>
+  </h2>
+<form class='formulario' method="POST">
+    {% csrf_token %}
+          <P> Novo pagamento</P>
+      <hr>
+      <div>
+        <label> 
+          <b>Valor do débito:</b>R$ {{ conta.valor }} <br> 
+          &nbsp; <b>Saldo devedor:</b>R$ {{ conta.saldo_devedor }} <br>
+        </label>
+      </div> 
+      <div>
+      <label>
+      <b>Valor da parcela:</b>R$ {{ conta.valor_parcela }}  <br>
+          &nbsp;<b> Parcelas restantes:</b> {{conta.parcelas_restantes}} 
+        </label>
+      </div>
+      <div>
+          <label>
+             {%if conta.cliente.nome %}<b>Cliente:</b>R$ {{ conta.cliente.nome }}  <br> {%endif%}
+             {%if conta.cliente.cpf_cnpj %} &nbsp;<b> Cpf/Cnpj:</b> {{conta.cliente.cpf_cnpj}} {%endif%}
+          </label>
+        </div>
+      <hr>
+      <div>
+          <label>Observacão</label><br>
+        <input style=" width:200px;" type='text' id='observacao' name='observacao'>
+      </div>
+      
+         <hr>
+        <button  type="submit">Pagar</button>
+        
+</form>
+
+{% if mensagem_de_erro %}
+<div id="div_alerta" class="divAlerta" style='margin-top: 150px;'>
+    <a href="#" onclick="document.getElementById('div_alerta').style.display='none';">
+    <input class="butao_X" type="button" value="X" autofocus="autofocus", accesskey="x"> </a>
+    <form class='formAlerta'>
+        <label> ALERTA!</label>
+            <br>
+            <label style=" color: #EE3B3B; ";> {{mensagem_de_erro}} </label>
+            <br>
+            <label> Para feichar, pressione  ( Alt  + X ) !</label>
+            <br>
+    </form>
+ </div>
+ {%endif%}
+
+<br>
+    <table class="table">
+      <thead>
+        <tr>
+          <th >Id da conta</th>
+          <th class="col_table" >Observação</th>
+          <th >Pacelas pagas</th>
+          <th >Data do pagamento </th>
+          <th >Valor pago</th>
+
+
+        </tr>
+      </thead>
+      <tbody>
+        {% for pagamentos in pagamentos %}
+            <tr>
+                <td>{{ pagamentos.contas.id }}</td>
+                <td class="col_table">{{ pagamentos.observacao }}</td>
+                <td>{{ pagamentos.quantidade_de_parcelas }}</td>
+                <td>{{ pagamentos.data_hora  | date:'d/m/y H:i' }}</td>
+                <td>R$ {{ pagamentos.contas.valor_parcela | floatformat:2 }}</td>
+
+
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+{% endblock %}

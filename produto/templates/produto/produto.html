@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+
+{% block main %} 
+{% load static%}
+<br>
+
+    <h2 class="sub_tito" >&nbsp; PRODUTO
+        <a 
+            href="#" onclick="document.getElementById('form_up').style.display='block';">
+                Adicionar 
+        </a>
+        <div > 
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/frente_de_caixa.png' %}" width="500px" all=" ">
+                <a href="{% url 'atualizar-pedido' %}">FRENTE DE CAIXA </a>
+            </label> 
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/estoque.png' %}" >
+                <a href="{% url 'entrada-mercadoria' %}">ENTRADA</a>
+            </label>
+
+            <label class="sub_menu"> 
+                <img id="img_menu" src="{% static 'img/saida.png' %}" >
+                <a href="{% url 'saida_mercadoria' %}">SAIDA</a>
+            </label>
+        </div>
+    </h2>
+    {% if mensagen_de_erro %}
+        <form  id="form_up" class='formulario' style="display: block;" action="{% url 'produto' %}" method="POST" >
+    {% else %}
+        <form  id="form_up" class='formulario' style="display: none;" action="{% url 'produto' %}" method="POST" >
+    {% endif %}
+       
+        {% csrf_token %}
+
+        <a id="termo_buttao" href="#" onclick="document.getElementById
+        ('form_up').style.display='none';"> X</a>
+        <p> NOVO PRODUTO</p>
+
+        <hr> 
+        <div>       
+            <label> Nome</label> <br>
+                <input style=" width:200px;"  placeholder=" Nome..." type="text"
+                    id="nome" name="nome" required/>
+        </div>
+        <div>
+            <label> Categoria</label> <br>
+                <select style=" width:200px;" type="search" id="categoria_id"
+                    name="categoria_id" >
+                    <tr>
+                        <option value='1'> __Selecionar__</option>
+                    {% for categoria in categoria %}
+                            <option value='{{categoria.id}}'> {{categoria}}</option>
+                    {% endfor %}
+                    </tr>
+                </select>
+        </div>
+        <div>
+            <label> Promoção</label> <br>
+                <select style=" width:200px;" type="search" id="promocao"
+                    name="promocao" required>
+        </div>
+        <div>
+                        <option value='1'> __Selecionar__</option>
+                    {% for promocao in promocao %}
+                            <option value='{{promocao.id}}'> {{promocao.descricao}}</option>
+                    {% endfor %}
+                     </tr>
+                </select>
+        </div>
+        <div>
+            <label> Código do produto</label> <br>
+                <input style=" width:170px;"  placeholder=" Código do produto..." type="text"
+                    id="codigo" name="codigo"  required/>
+        </div>
+        <div>
+            <label> Valor de compra</label> <br>
+                <input style=" width:150px;"  placeholder="R$ 0,00 "
+                    type="text" data-js="money"id="valor_compra" name="valor_compra" required/>
+        </div>
+        <div>
+            <label>Lucro desejado/Valor venal</label> <br>
+                <input style=" width:100px;"  placeholder=" 00,00%" type="number"
+                step=".01" lang="nb" id="percentagem_de_lucro" name="percentagem_de_lucro" />
+               
+                <input style=" width:100px;"  placeholder="R$ 0,00 "
+                    type="text" data-js="money"id="valor_venal" name="valor_venal">
+        </div>
+       
+        <hr>
+                <button id="refresh" type="submit"> Salvar</button>
+    </form>
+
+
+<!-- Mensagem de erro -->
+        {% if mensagen_de_erro %}
+        <div id="div_alerta" class="divAlerta">
+            <a href="#" onclick="document.getElementById('div_alerta').style.display='none';">
+            <input class="butao_X" type="button" value="X" autofocus="autofocus", accesskey="x"> </a>
+            <form class='formAlerta'>
+                <label> ALERTA!</label>
+                    <br>
+                    <label style=" color: #EE3B3B; ";> {{mensagen_de_erro}} </label>
+                    <br>
+                    <label> Verifica o cdigo e tente novamente!</label>
+                    <br>
+                    <label> Para feichar, pressione  ( Alt  + X ) !</label>
+                    <br>
+            </form> 
+         </div>
+         {%endif%}
+         {% if mensagen_de_erro == false and produto.codigo != None%}
+         <div id="div_alerta" class="divAlerta" style="margin-top: 200px;">
+            <a href="#" onclick="document.getElementById('div_alerta').style.display='none';">
+            <input class="butao_X" type="button" value="X" autofocus="autofocus", accesskey="x"> </a>
+            <form class='formAlerta' style="background-color: chartreuse;">
+                    <br>
+                    <label style="color: black; font-size: 20px;"> 
+                        Cadastrado com sucesso!</label>
+                    <br>
+                   
+            </form>
+         </div>
+        {%endif%}
+<br>
+
+
+
+
+<!-- Formulário de busca de produtos -->
+    <form id="form_mobil" class='campo_de_busca' method="GET" action="{% url 'filtro-categoria' %}">
+        <a id="br_X_mobil" href="#" onclick="document.getElementById
+        ('form_mobil').style.display='none';"> X</a>
+        <div> 
+            <label>Buscar produto</label> <br>
+            <input type="search" id="produt" name="produt" placeholder="Código do produto">
+            <button  type="submit">Buscar</button>
+        </div>
+    
+        <div>
+            <label>Filtrar por categoria </label> <br>
+            <select  type="search" id="busca_categoria" name="busca_categoria" >
+                <tr >
+                    <option value=''> __Selecionar__</option>
+                {% for categoria in categoria %}
+                        <option  value='{{categoria.id}}'> -{{categoria}}</option>
+                {% endfor %}
+                </tr>
+            </select>
+            <button  type="submit">Filtrar</button>
+        </div>
+    </form> 
+
+    <a id="mostrar_filtros"
+            href="#" onclick="document.getElementById('form_mobil').style.display='block';">
+            Mostrar filtros 
+    </a>
+
+<!-- Tabela de produtos -->
+    <table class="table">
+     <thead>
+        <tr>
+            <th >Nome</th>
+            <th class="col_table">Categoria </th>
+            <th >Código</th>
+            <th class="col_table">Valor de compra</th>
+            <th class="col_table">Lucro estimado(%)</th>
+            <th >Valor venal</th>
+            <th >Em estoque</th>
+            <th class="col_table">Promoção</th>
+            <th >Ação </th>
+        </tr>
+    </thead>
+        <tbody>
+            {% for produto in produto %}
+                <tr>
+                    <td>{{ produto.nome }}</td>
+                    <td class="col_table">{{ produto.categoria.nome }}</td>
+                    <td>{{ produto.codigo }}</td>
+                    <td class="col_table">R$ {{ produto.valor_compra | floatformat:2 }}</td>
+                    <td class="col_table">{{ produto.percentagem_de_lucro | floatformat:2 }}'% </td>
+                    <td>R$ {{produto.valor_venal | floatformat:2 }}</td>
+                    <td>
+                        {% if  produto.estoque > 0 %}
+                        <label> {{ produto.estoque }}</label>
+                        {% else %}
+                        <label Style= 'color: red;'> {{ produto.estoque }} 
+                        </label>
+                        {% endif %}
+                    </td>
+                    <td class="col_table">{{ produto.promocao.descricao}}</td>
+
+                    {% if perms.produto.change_produto %}
+                        <td> <a href="{% url 'produto_update' produto.id %}">Editar</a> 
+                    {% endif %}
+
+                    {% if perms.produto.delete_produto %}
+                         <a href="{% url 'produto_delete' produto.id %}">Excluir</a> </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+{% endblock %}
+
+
+
+
+
