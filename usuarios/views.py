@@ -20,15 +20,7 @@ class NovoUsuario(View):
 
     def post(self, request):
         data = {}
-        data['password'] = request.POST['password']
-        data['username'] = request.POST['username']
-        data['email'] = request.POST['email']
-
-        usuario = User.objects.filter(username= request.POST['username'])or 0
-        if usuario != 0:
-            data['mensagen_de_erro_usuario'] = 'Usuário já existe!'
-            return render(
-                request, 'novo-usuario.html', data)
+       
         email = User.objects.filter(email= request.POST['email'])or 0
         if email != 0:
             data['mensagen_de_erro_email'] = 'E-mail já existe!'
@@ -37,14 +29,15 @@ class NovoUsuario(View):
         else:
             usuario = User.objects.create_user(
                 password= request.POST['password'],
-                username= request.POST['username'],
-                email= request.POST['email']
+                username= request.POST['email'],
+                email= request.POST['email'],
+                first_name = request.POST['nome_fantazia']
                 )
             permissao= Group.objects.get(name='Administrador') 
             permissao_add= usuario.groups.add(permissao)
             cliente = usuario.id 
             novo_usuario = Usuarios.objects.create(
-                usuario_cliente= cliente, user_id= cliente, plano_id= 1,
+                user_id= cliente, plano_id= 1,
                 cpf_cnpj= request.POST['cpf_cnpj'],
                 nome_fantazia= request.POST['nome_fantazia'])
             data['usuario'] = usuario
